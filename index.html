@@ -56,6 +56,22 @@
       background: #e0e0e0;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
+    /* Progress bar styles */
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: #eee;
+      border-radius: 5px;
+      margin: 24px 0 32px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #48c6ef 0%, #6f86d6 100%);
+      transition: width 0.15s linear;
+    }
     .content-placeholder {
       background: #fafafa;
       border: 1px dashed #bbb;
@@ -82,16 +98,22 @@
     <section>
       <h2>Gallery</h2>
       <div class="gallery">
-        <img src="assets/IMG_20240826_181059.jpg" alt="Gallery image 1" />
-        <img src="assets/IMG_20240826_181157.jpg" alt="Gallery image 2" />
-        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="Gallery image 3" />
-        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="Gallery image 4" />
+        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="HTM Glass Marketing 1" />
+        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="HTM Glass Marketing 2" />
+        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="HTM Glass Marketing 3" />
+        <img src="assets/IMG_20240826_181059.jpg" alt="Brand photo 1" />
+        <img src="assets/IMG_20240826_181157.jpg" alt="Brand photo 2" />
+        <img src="assets/IMG_20240826_181337.jpg" alt="Brand photo 3" />
       </div>
     </section>
+    <!-- Progress Bar (scroll-linked) -->
+    <div class="progress-container">
+      <div class="progress-bar" id="scrollProgressBar"></div>
+    </div>
+    <!-- End Progress Bar -->
     <section>
       <h2>About</h2>
       <div class="content-placeholder">[ Content here ]</div>
-      <p>EyeKonika provides unique services! A complete all-in-1 elete glass engraving production contract for your institution or company!</p>
     </section>
     <section>
       <h2>Services</h2>
@@ -102,5 +124,15 @@
       <div class="content-placeholder">[ Content here ]</div>
     </section>
   </main>
+  <script>
+    // Scroll-linked progress bar
+    window.addEventListener('scroll', function () {
+      const bar = document.getElementById('scrollProgressBar');
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = scrolled + '%';
+    });
+  </script>
 </body>
 </html>
