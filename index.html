@@ -5,28 +5,103 @@
   <title>Eyekonika</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    cursor: crosshair;
     body {
       background: #f0f0f0;
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
       padding: 0;
       color: #222;
+      cursor: crosshair;
     }
     header {
       background: #fff;
       padding: 2rem 0 1rem 0;
       text-align: center;
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
     }
-    header img {
+    .logo-img {
       max-width: 320px;
       width: 90vw;
       height: auto;
       display: block;
-      margin: 2rem auto 1rem auto;
+      margin: 2rem auto 0.5rem auto;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .header-row {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.2rem;
+      max-width: 320px;
+    }
+    .contact-btn {
+      background: #48c6ef;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7em 1.6em;
+      font-size: 1.1em;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      transition: background 0.2s;
+      animation: OpeningForTitleMaterial 1.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .contact-btn:active,
+    .contact-btn:focus {
+      outline: none;
+      background: #6f86d6;
+    }
+    @keyframes OpeningForTitleMaterial {
+      0% { animation-timing-function: ease-in; opacity: 0; transform: translateY(-250px);}
+      38% { animation-timing-function: ease-out; opacity: 1; transform: translateY(0);}
+      55% { animation-timing-function: ease-in; transform: translateY(-65px);}
+      72% { animation-timing-function: ease-out; transform: translateY(0);}
+      81% { animation-timing-function: ease-in; transform: translateY(-28px);}
+      90% { animation-timing-function: ease-out; transform: translateY(0);}
+      95% { animation-timing-function: ease-in; transform: translateY(-8px);}
+      100% { animation-timing-function: ease-out; transform: translateY(0);}
+    }
+    /* Scrolling animated gallery styles */
+    .scrolling-gallery {
+      width: 100%;
+      overflow: hidden;
+      margin: 3rem 0 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .gallery-row {
+      display: flex;
+      gap: 18px;
+      will-change: transform;
+    }
+    .gallery-row img {
+      width: 180px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+      background: #eee;
+      transition: transform 0.18s;
+      user-select: none;
+      pointer-events: none;
+    }
+    @media (max-width: 800px) {
+      .gallery-row img { width: 120px; height: 80px; }
+    }
+    @media (max-width: 500px) {
+      .gallery-row img { width: 90px; height: 60px; }
+      .logo-img { max-width: 95vw; }
+      .header-row { max-width: 95vw; }
     }
     main {
       max-width: 900px;
@@ -87,77 +162,60 @@
       color: #aaa;
       font-size: 1.1rem;
     }
-    @media (max-width: 600px) {
-      main { padding: 1rem; }
-      .gallery img { height: 100px; }
-      header img { max-width: 95vw; }
-    }
-    .contact-btn {
-  background: #48c6ef;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 0.7em 1.6em;
-  font-size: 1.1em;
-  font-family: inherit;
-  cursor: pointer;
-  margin-top: 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-  transition: background 0.2s;
-}
-
-.contact-btn:active,
-.contact-btn:focus {
-  outline: none;
-  background: #6f86d6;
-}
-
-/* Animation keyframes */
-@keyframes OpeningForTitleMaterial {
-  0% {
-    animation-timing-function: ease-in;
-    opacity: 0;
-    transform: translateY(-250px);
-  }
-  38% {
-    animation-timing-function: ease-out;
-    opacity: 1;
-    transform: translateY(0);
-  }
-  55% {
-    animation-timing-function: ease-in;
-    transform: translateY(-65px);
-  }
-  72% {
-    animation-timing-function: ease-out;
-    transform: translateY(0);
-  }
-  81% {
-    animation-timing-function: ease-in;
-    transform: translateY(-28px);
-  }
-  90% {
-    animation-timing-function: ease-out;
-    transform: translateY(0);
-  }
-  95% {
-    animation-timing-function: ease-in;
-    transform: translateY(-8px);
-  }
-  100% {
-    animation-timing-function: ease-out;
-    transform: translateY(0);
-  }
-}
   </style>
 </head>
 <body>
   <header>
-    <img src="assets/cropped logo.png" alt="Eyekonika Logo" />
+    <img src="assets/cropped logo.png" alt="Eyekonika Logo" class="logo-img" />
     <div class="header-row">
-       <a href="mailto:mkurrphoto@gmail.com" class="contact-btn" id="contactBtn">Contact</a>
-  </div>
+      <a href="mailto:mkurrphoto@gmail.com" class="contact-btn" id="contactBtn">Contact</a>
+    </div>
   </header>
+
+  <!-- Scrolling Animated Gallery -->
+  <section>
+    <h2>Animated Gallery</h2>
+    <div class="scrolling-gallery">
+      <div class="gallery-row" id="gallery-row-1">
+        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
+        <img src="assets/IMG_20240826_181059.jpg" alt="">
+        <img src="assets/IMG_20240826_181157.jpg" alt="">
+        <img src="assets/IMG_20240826_181337.jpg" alt="">
+        <img src="assets/final-01.jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
+      </div>
+      <div class="gallery-row" id="gallery-row-2">
+        <img src="assets/IMG_20240826_181157.jpg" alt="">
+        <img src="assets/IMG_20240826_181337.jpg" alt="">
+        <img src="assets/final-01.jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
+        <img src="assets/IMG_20240826_181059.jpg" alt="">
+        <img src="assets/IMG_20240826_181157.jpg" alt="">
+        <img src="assets/IMG_20240826_181337.jpg" alt="">
+        <img src="assets/final-01.jpg" alt="">
+      </div>
+      <div class="gallery-row" id="gallery-row-3">
+        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
+        <img src="assets/IMG_20240826_181337.jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
+        <img src="assets/IMG_20240826_181059.jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
+        <img src="assets/IMG_20240826_181157.jpg" alt="">
+        <img src="assets/IMG_20240826_181337.jpg" alt="">
+        <img src="assets/final-01.jpg" alt="">
+        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
+        <img src="assets/IMG_20240826_181059.jpg" alt="">
+      </div>
+    </div>
+  </section>
+  <!-- End Scrolling Animated Gallery -->
+
   <main>
     <section>
       <h2>Gallery</h2>
@@ -197,16 +255,15 @@
       const scrolled = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       bar.style.width = scrolled + '%';
     });
-  </script>
-  <script>
-  const contactBtn = document.getElementById('contactBtn');
-  contactBtn.addEventListener('click', function() {
-    contactBtn.style.animation = 'none';
-    // Force reflow to restart animation
-    void contactBtn.offsetWidth;
-    contactBtn.style.animation = 'OpeningForTitleMaterial 1.2s';
-  });
-</script>
 
+    // Scrolling animated gallery
+    window.addEventListener('scroll', function() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      // Adjust these speeds and directions for effect
+      document.getElementById('gallery-row-1').style.transform = `translateX(${-(scrollY * 0.5) % 900}px)`;
+      document.getElementById('gallery-row-2').style.transform = `translateX(${(scrollY * 0.7) % 900}px)`;
+      document.getElementById('gallery-row-3').style.transform = `translateX(${-(scrollY * 0.9) % 900}px)`;
+    });
+  </script>
 </body>
 </html>
