@@ -72,34 +72,38 @@
     }
     /* Scrolling animated gallery styles */
     .scrolling-gallery {
-      width: 100%;
+      width: 100vw;
       overflow: hidden;
       margin: 3rem 0 2rem 0;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 14px;
+      background: #f7f7f7;
+      padding: 10px 0;
     }
     .gallery-row {
       display: flex;
-      gap: 18px;
+      flex-wrap: nowrap;
       will-change: transform;
+      min-width: 100vw;
     }
     .gallery-row img {
-      width: 180px;
-      height: 120px;
+      width: 140px;
+      height: 90px;
       object-fit: cover;
       border-radius: 10px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.09);
       background: #eee;
-      transition: transform 0.18s;
+      margin-right: 16px;
       user-select: none;
       pointer-events: none;
+      flex-shrink: 0;
     }
-    @media (max-width: 800px) {
-      .gallery-row img { width: 120px; height: 80px; }
+    @media (max-width: 900px) {
+      .gallery-row img { width: 90px; height: 60px; }
     }
     @media (max-width: 500px) {
-      .gallery-row img { width: 90px; height: 60px; }
+      .gallery-row img { width: 66px; height: 44px; }
       .logo-img { max-width: 95vw; }
       .header-row { max-width: 95vw; }
     }
@@ -176,42 +180,24 @@
   <section>
     <h2>Animated Gallery</h2>
     <div class="scrolling-gallery">
-      <div class="gallery-row" id="gallery-row-1">
-        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
-        <img src="assets/IMG_20240826_181059.jpg" alt="">
-        <img src="assets/IMG_20240826_181157.jpg" alt="">
-        <img src="assets/IMG_20240826_181337.jpg" alt="">
-        <img src="assets/final-01.jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
-      </div>
-      <div class="gallery-row" id="gallery-row-2">
-        <img src="assets/IMG_20240826_181157.jpg" alt="">
-        <img src="assets/IMG_20240826_181337.jpg" alt="">
-        <img src="assets/final-01.jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
-        <img src="assets/IMG_20240826_181059.jpg" alt="">
-        <img src="assets/IMG_20240826_181157.jpg" alt="">
-        <img src="assets/IMG_20240826_181337.jpg" alt="">
-        <img src="assets/final-01.jpg" alt="">
-      </div>
-      <div class="gallery-row" id="gallery-row-3">
-        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
-        <img src="assets/IMG_20240826_181337.jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="">
-        <img src="assets/IMG_20240826_181059.jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="">
-        <img src="assets/IMG_20240826_181157.jpg" alt="">
-        <img src="assets/IMG_20240826_181337.jpg" alt="">
-        <img src="assets/final-01.jpg" alt="">
-        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="">
-        <img src="assets/IMG_20240826_181059.jpg" alt="">
-      </div>
+      <!-- 15 rows, each with repeated images (looped by JS) -->
+      <!-- We'll use 7 unique images, duplicated to fill each row -->
+      <!-- You can add more srcs as available in assets/ -->
+      <div class="gallery-row" id="gallery-row-1"></div>
+      <div class="gallery-row" id="gallery-row-2"></div>
+      <div class="gallery-row" id="gallery-row-3"></div>
+      <div class="gallery-row" id="gallery-row-4"></div>
+      <div class="gallery-row" id="gallery-row-5"></div>
+      <div class="gallery-row" id="gallery-row-6"></div>
+      <div class="gallery-row" id="gallery-row-7"></div>
+      <div class="gallery-row" id="gallery-row-8"></div>
+      <div class="gallery-row" id="gallery-row-9"></div>
+      <div class="gallery-row" id="gallery-row-10"></div>
+      <div class="gallery-row" id="gallery-row-11"></div>
+      <div class="gallery-row" id="gallery-row-12"></div>
+      <div class="gallery-row" id="gallery-row-13"></div>
+      <div class="gallery-row" id="gallery-row-14"></div>
+      <div class="gallery-row" id="gallery-row-15"></div>
     </div>
   </section>
   <!-- End Scrolling Animated Gallery -->
@@ -256,14 +242,60 @@
       bar.style.width = scrolled + '%';
     });
 
-    // Scrolling animated gallery
-    window.addEventListener('scroll', function() {
+    // Scrolling animated gallery - seamless infinite loop
+    const imageList = [
+      "assets/HTM - Glass - Marketing (1).jpg",
+      "assets/HTM - Glass - Marketing (2).jpg",
+      "assets/HTM - Glass - Marketing (3).jpg",
+      "assets/IMG_20240826_181059.jpg",
+      "assets/IMG_20240826_181157.jpg",
+      "assets/IMG_20240826_181337.jpg",
+      "assets/final-01.jpg",
+      "assets/cropped logo.png"
+    ];
+    // Fill each row with enough images to cover 2.5x the screen width (for seamless loop)
+    function fillGalleryRows() {
+      const rows = 15;
+      const imagesPerRow = Math.ceil(window.innerWidth / 140) * 3; // adjust multiplier for overlap
+      for (let i = 1; i <= rows; i++) {
+        const row = document.getElementById('gallery-row-' + i);
+        row.innerHTML = "";
+        for (let j = 0; j < imagesPerRow; j++) {
+          const img = document.createElement('img');
+          img.src = imageList[(j + i) % imageList.length];
+          img.alt = "";
+          row.appendChild(img);
+        }
+        // Duplicate for seamless looping
+        for (let j = 0; j < imagesPerRow; j++) {
+          const img = document.createElement('img');
+          img.src = imageList[(j + i) % imageList.length];
+          img.alt = "";
+          row.appendChild(img);
+        }
+      }
+    }
+    fillGalleryRows();
+    window.addEventListener('resize', fillGalleryRows);
+
+    // Animate rows with seamless looping
+    function animateGalleryRows() {
+      const baseWidth = 140 + 16; // img width + margin-right
+      const rows = 15;
       const scrollY = window.scrollY || window.pageYOffset;
-      // Adjust these speeds and directions for effect
-      document.getElementById('gallery-row-1').style.transform = `translateX(${-(scrollY * 0.5) % 900}px)`;
-      document.getElementById('gallery-row-2').style.transform = `translateX(${(scrollY * 0.7) % 900}px)`;
-      document.getElementById('gallery-row-3').style.transform = `translateX(${-(scrollY * 0.9) % 900}px)`;
-    });
+      for (let i = 1; i <= rows; i++) {
+        const row = document.getElementById('gallery-row-' + i);
+        // Alternate direction and speed per row
+        const direction = i % 2 === 0 ? 1 : -1;
+        const speed = 0.2 + 0.05 * i;
+        const rowWidth = row.scrollWidth / 2;
+        let translate = ((scrollY * speed * direction) % rowWidth);
+        if (translate < 0) translate += rowWidth;
+        row.style.transform = `translateX(${-translate}px)`;
+      }
+      requestAnimationFrame(animateGalleryRows);
+    }
+    animateGalleryRows();
   </script>
 </body>
 </html>
