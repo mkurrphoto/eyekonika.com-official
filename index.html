@@ -91,11 +91,69 @@
       .gallery img { height: 100px; }
       header img { max-width: 95vw; }
     }
+    .contact-btn {
+  background: #48c6ef;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7em 1.6em;
+  font-size: 1.1em;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  transition: background 0.2s;
+}
+
+.contact-btn:active,
+.contact-btn:focus {
+  outline: none;
+  background: #6f86d6;
+}
+
+/* Animation keyframes */
+@keyframes OpeningForTitleMaterial {
+  0% {
+    animation-timing-function: ease-in;
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+  38% {
+    animation-timing-function: ease-out;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  55% {
+    animation-timing-function: ease-in;
+    transform: translateY(-65px);
+  }
+  72% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+  81% {
+    animation-timing-function: ease-in;
+    transform: translateY(-28px);
+  }
+  90% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+  95% {
+    animation-timing-function: ease-in;
+    transform: translateY(-8px);
+  }
+  100% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+}
   </style>
 </head>
 <body>
   <header>
-    <img src="assets/final-01.jpg" alt="Eyekonika Logo" />
+    <img src="assets/final-01 - Copy.jpg" alt="Eyekonika Logo" />
+    <button class="contact-btn" id="contactBtn">Contact</button>
   </header>
   <main>
     <section>
@@ -137,5 +195,15 @@
       bar.style.width = scrolled + '%';
     });
   </script>
+  <script>
+  const contactBtn = document.getElementById('contactBtn');
+  contactBtn.addEventListener('click', function() {
+    contactBtn.style.animation = 'none';
+    // Force reflow to restart animation
+    void contactBtn.offsetWidth;
+    contactBtn.style.animation = 'OpeningForTitleMaterial 1.2s';
+  });
+</script>
+
 </body>
 </html>
