@@ -99,6 +99,36 @@
       pointer-events: none;
       flex-shrink: 0;
     }
+    /* Container to center the image */
+.scroll-image-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 100vh; /* starts offscreen at bottom */
+  margin-bottom: 100vh; /* ensures it scrolls out cleanly */
+}
+
+/* Image styling */
+.scroll-image {
+  height: 20vh; /* ~1/5 of viewport */
+  border: 5px solid gray;
+  object-fit: contain;
+
+  /* Scroll-driven animation */
+  animation: moveUp linear both;
+  animation-timeline: scroll();
+  animation-range: entry 100% exit 0%;
+}
+
+@keyframes moveUp {
+  from {
+    transform: translateY(100vh); /* start below viewport */
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100vh); /* move above viewport */
+    opacity: 0;
+  }
+}
     @media (max-width: 900px) {
       .gallery-row img { width: 90px; height: 60px; }
     }
@@ -200,6 +230,10 @@
     </div>
   </section>
   <!-- End Scrolling Animated Gallery -->
+
+   <div class="scroll-image-container">
+    <img src="assets/my-photo.png" alt="Scrolling Image" class="scroll-image">
+  </div>
 
   <main>
     <section>
