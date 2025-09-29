@@ -1,333 +1,209 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Eyekonika</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      background: #f0f0f0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #222;
-      cursor: crosshair;
-    }
-    header {
-      background: #fff;
-      padding: 2rem 0 1rem 0;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-    }
-    .logo-img {
-      max-width: 320px;
-      width: 90vw;
-      height: auto;
-      display: block;
-      margin: 2rem auto 0.5rem auto;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .header-row {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 0.2rem;
-      max-width: 320px;
-    }
-    .contact-btn {
-      background: #48c6ef;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.7em 1.6em;
-      font-size: 1.1em;
-      font-family: inherit;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-      transition: background 0.2s;
-      animation: OpeningForTitleMaterial 1.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .contact-btn:active,
-    .contact-btn:focus {
-      outline: none;
-      background: #6f86d6;
-    }
-    @keyframes OpeningForTitleMaterial {
-      0% { animation-timing-function: ease-in; opacity: 0; transform: translateY(-250px);}
-      38% { animation-timing-function: ease-out; opacity: 1; transform: translateY(0);}
-      55% { animation-timing-function: ease-in; transform: translateY(-65px);}
-      72% { animation-timing-function: ease-out; transform: translateY(0);}
-      81% { animation-timing-function: ease-in; transform: translateY(-28px);}
-      90% { animation-timing-function: ease-out; transform: translateY(0);}
-      95% { animation-timing-function: ease-in; transform: translateY(-8px);}
-      100% { animation-timing-function: ease-out; transform: translateY(0);}
-    }
-    /* Scrolling animated gallery styles */
-    .scrolling-gallery {
-      width: 100vw;
-      overflow: hidden;
-      margin: 3rem 0 2rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      background: #f7f7f7;
-      padding: 10px 0;
-    }
-    .gallery-row {
-      display: flex;
-      flex-wrap: nowrap;
-      will-change: transform;
-      min-width: 100vw;
-    }
-    .gallery-row img {
-      width: 140px;
-      height: 90px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.09);
-      background: #eee;
-      margin-right: 16px;
-      user-select: none;
-      pointer-events: none;
-      flex-shrink: 0;
-    }
-    /* Container to center the image */
-.scroll-image-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 100vh; /* starts offscreen at bottom */
-  margin-bottom: 100vh; /* ensures it scrolls out cleanly */
-}
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Hyperspace by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
 
-/* Image styling */
-.scroll-image {
-  height: 20vh; /* ~1/5 of viewport */
-  border: 5px solid gray;
-  object-fit: contain;
+		<!-- Sidebar -->
+			<section id="sidebar">
+				<div class="inner">
+					<nav>
+						<ul>
+							<li><a href="#intro">Welcome</a></li>
+							<li><a href="#one">Who we are</a></li>
+							<li><a href="#two">What we do</a></li>
+							<li><a href="#three">Get in touch</a></li>
+						</ul>
+					</nav>
+				</div>
+			</section>
 
-  /* Scroll-driven animation */
-  animation: moveUp linear both;
-  animation-timeline: scroll();
-  animation-range: entry 100% exit 0%;
-}
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-@keyframes moveUp {
-  from {
-    transform: translateY(100vh); /* start below viewport */
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100vh); /* move above viewport */
-    opacity: 0;
-  }
-}
-    @media (max-width: 900px) {
-      .gallery-row img { width: 90px; height: 60px; }
-    }
-    @media (max-width: 500px) {
-      .gallery-row img { width: 66px; height: 44px; }
-      .logo-img { max-width: 95vw; }
-      .header-row { max-width: 95vw; }
-    }
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-    }
-    section {
-      margin-bottom: 2.5rem;
-    }
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      font-weight: 600;
-      border-left: 4px solid #888;
-      padding-left: 0.5em;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .gallery img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 10px;
-      background: #e0e0e0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .progress-container {
-      width: 100%;
-      height: 8px;
-      background: #eee;
-      border-radius: 5px;
-      margin: 24px 0 32px 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #48c6ef 0%, #6f86d6 100%);
-      transition: width 0.15s linear;
-    }
-    .content-placeholder {
-      background: #fafafa;
-      border: 1px dashed #bbb;
-      height: 60px;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #aaa;
-      font-size: 1.1rem;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img src="assets/cropped logo.png" alt="Eyekonika Logo" class="logo-img" />
-    <div class="header-row">
-      <a href="mailto:mkurrphoto@gmail.com" class="contact-btn" id="contactBtn">Contact</a>
-    </div>
-  </header>
+				<!-- Intro -->
+					<section id="intro" class="wrapper style1 fullscreen fade-up">
+						<div class="inner">
+							<h1>Hyperspace</h1>
+							<p>Just another fine responsive site template designed by <a href="http://html5up.net">HTML5 UP</a><br />
+							and released for free under the <a href="http://html5up.net/license">Creative Commons</a>.</p>
+							<ul class="actions">
+								<li><a href="#one" class="button scrolly">Learn more</a></li>
+							</ul>
+						</div>
+					</section>
 
-  <!-- Scrolling Animated Gallery -->
-  <section>
-    <div class="scrolling-gallery">
-      <!-- 15 rows, each with repeated images (looped by JS) -->
-      <!-- We'll use 7 unique images, duplicated to fill each row -->
-      <!-- You can add more srcs as available in assets/ -->
-      <div class="gallery-row" id="gallery-row-1"></div>
-      <div class="gallery-row" id="gallery-row-2"></div>
-      <div class="gallery-row" id="gallery-row-3"></div>
-      <div class="gallery-row" id="gallery-row-4"></div>
-      <div class="gallery-row" id="gallery-row-5"></div>
-      <div class="gallery-row" id="gallery-row-6"></div>
-      <div class="gallery-row" id="gallery-row-7"></div>
-      <div class="gallery-row" id="gallery-row-8"></div>
-      <div class="gallery-row" id="gallery-row-9"></div>
-      <div class="gallery-row" id="gallery-row-10"></div>
-      <div class="gallery-row" id="gallery-row-11"></div>
-      <div class="gallery-row" id="gallery-row-12"></div>
-      <div class="gallery-row" id="gallery-row-13"></div>
-      <div class="gallery-row" id="gallery-row-14"></div>
-      <div class="gallery-row" id="gallery-row-15"></div>
-    </div>
-  </section>
-  <!-- End Scrolling Animated Gallery -->
+				<!-- One -->
+					<section id="one" class="wrapper style2 spotlights">
+						<section>
+							<a href="#" class="image"><img src="images/pic01.jpg" alt="" data-position="center center" /></a>
+							<div class="content">
+								<div class="inner">
+									<h2>Sed ipsum dolor</h2>
+									<p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus.</p>
+									<ul class="actions">
+										<li><a href="generic.html" class="button">Learn more</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+						<section>
+							<a href="#" class="image"><img src="images/pic02.jpg" alt="" data-position="top center" /></a>
+							<div class="content">
+								<div class="inner">
+									<h2>Feugiat consequat</h2>
+									<p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus.</p>
+									<ul class="actions">
+										<li><a href="generic.html" class="button">Learn more</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+						<section>
+							<a href="#" class="image"><img src="images/pic03.jpg" alt="" data-position="25% 25%" /></a>
+							<div class="content">
+								<div class="inner">
+									<h2>Ultricies aliquam</h2>
+									<p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus.</p>
+									<ul class="actions">
+										<li><a href="generic.html" class="button">Learn more</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+					</section>
 
-   <div class="scroll-image-container">
-    <img src="assets/IMG_20240826_181157.jpg" alt="Scrolling Image" class="scroll-image">
-  </div>
+				<!-- Two -->
+					<section id="two" class="wrapper style3 fade-up">
+						<div class="inner">
+							<h2>What we do</h2>
+							<p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus, lacus eget hendrerit bibendum, urna est aliquam sem, sit amet imperdiet est velit quis lorem.</p>
+							<div class="features">
+								<section>
+									<span class="icon solid major fa-code"></span>
+									<h3>Lorem ipsum amet</h3>
+									<p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+								</section>
+								<section>
+									<span class="icon solid major fa-lock"></span>
+									<h3>Aliquam sed nullam</h3>
+									<p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+								</section>
+								<section>
+									<span class="icon solid major fa-cog"></span>
+									<h3>Sed erat ullam corper</h3>
+									<p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+								</section>
+								<section>
+									<span class="icon solid major fa-desktop"></span>
+									<h3>Veroeros quis lorem</h3>
+									<p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+								</section>
+								<section>
+									<span class="icon solid major fa-link"></span>
+									<h3>Urna quis bibendum</h3>
+									<p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+								</section>
+								<section>
+									<span class="icon major fa-gem"></span>
+									<h3>Aliquam urna dapibus</h3>
+									<p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+								</section>
+							</div>
+							<ul class="actions">
+								<li><a href="generic.html" class="button">Learn more</a></li>
+							</ul>
+						</div>
+					</section>
 
-  <main>
-    <section>
-      <div class="gallery">
-        <img src="assets/HTM - Glass - Marketing (1).jpg" alt="HTM Glass Marketing 1" />
-        <img src="assets/HTM - Glass - Marketing (2).jpg" alt="HTM Glass Marketing 2" />
-        <img src="assets/HTM - Glass - Marketing (3).jpg" alt="HTM Glass Marketing 3" />
-        <img src="assets/IMG_20240826_181059.jpg" alt="Brand photo 1" />
-        <img src="assets/IMG_20240826_181157.jpg" alt="Brand photo 2" />
-        <img src="assets/IMG_20240826_181337.jpg" alt="Brand photo 3" />
-      </div>
-    </section>
-    <!-- Progress Bar (scroll-linked) -->
-    <div class="progress-container">
-      <div class="progress-bar" id="scrollProgressBar"></div>
-    </div>
-    <!-- End Progress Bar -->
-    <section>
-      <h2>About</h2>
-      <div class="content-placeholder">[ Content here ]</div>
-    </section>
-    <section>
-      <h2>Services</h2>
-      <div class="content-placeholder">[ Content here ]</div>
-    </section>
-    <section>
-      <h2>Contact</h2>
-      <div class="content-placeholder">[ Content here ]</div>
-    </section>
-  </main>
-  <script>
-    // Scroll-linked progress bar
-    window.addEventListener('scroll', function () {
-      const bar = document.getElementById('scrollProgressBar');
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrolled = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      bar.style.width = scrolled + '%';
-    });
+				<!-- Three -->
+					<section id="three" class="wrapper style1 fade-up">
+						<div class="inner">
+							<h2>Get in touch</h2>
+							<p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus, lacus eget hendrerit bibendum, urna est aliquam sem, sit amet imperdiet est velit quis lorem.</p>
+							<div class="split style1">
+								<section>
+									<form method="post" action="#">
+										<div class="fields">
+											<div class="field half">
+												<label for="name">Name</label>
+												<input type="text" name="name" id="name" />
+											</div>
+											<div class="field half">
+												<label for="email">Email</label>
+												<input type="text" name="email" id="email" />
+											</div>
+											<div class="field">
+												<label for="message">Message</label>
+												<textarea name="message" id="message" rows="5"></textarea>
+											</div>
+										</div>
+										<ul class="actions">
+											<li><a href="" class="button submit">Send Message</a></li>
+										</ul>
+									</form>
+								</section>
+								<section>
+									<ul class="contact">
+										<li>
+											<h3>Address</h3>
+											<span>12345 Somewhere Road #654<br />
+											Nashville, TN 00000-0000<br />
+											USA</span>
+										</li>
+										<li>
+											<h3>Email</h3>
+											<a href="#">user@untitled.tld</a>
+										</li>
+										<li>
+											<h3>Phone</h3>
+											<span>(000) 000-0000</span>
+										</li>
+										<li>
+											<h3>Social</h3>
+											<ul class="icons">
+												<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+												<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+												<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+												<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+												<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+											</ul>
+										</li>
+									</ul>
+								</section>
+							</div>
+						</div>
+					</section>
 
-    // Scrolling animated gallery - seamless infinite loop
-    const imageList = [
-      "assets/HTM - Glass - Marketing (1).jpg",
-      "assets/HTM - Glass - Marketing (2).jpg",
-      "assets/HTM - Glass - Marketing (3).jpg",
-      "assets/IMG_20240826_181059.jpg",
-      "assets/IMG_20240826_181157.jpg",
-      "assets/IMG_20240826_181337.jpg",
-      "assets/final-01.jpg",
-      "assets/cropped logo.png"
-    ];
-    // Fill each row with enough images to cover 2.5x the screen width (for seamless loop)
-    function fillGalleryRows() {
-      const rows = 15;
-      const imagesPerRow = Math.ceil(window.innerWidth / 140) * 3; // adjust multiplier for overlap
-      for (let i = 1; i <= rows; i++) {
-        const row = document.getElementById('gallery-row-' + i);
-        row.innerHTML = "";
-        for (let j = 0; j < imagesPerRow; j++) {
-          const img = document.createElement('img');
-          img.src = imageList[(j + i) % imageList.length];
-          img.alt = "";
-          row.appendChild(img);
-        }
-        // Duplicate for seamless looping
-        for (let j = 0; j < imagesPerRow; j++) {
-          const img = document.createElement('img');
-          img.src = imageList[(j + i) % imageList.length];
-          img.alt = "";
-          row.appendChild(img);
-        }
-      }
-    }
-    fillGalleryRows();
-    window.addEventListener('resize', fillGalleryRows);
+			</div>
 
-    // Animate rows with seamless looping
-    function animateGalleryRows() {
-      const baseWidth = 140 + 16; // img width + margin-right
-      const rows = 15;
-      const scrollY = window.scrollY || window.pageYOffset;
-      for (let i = 1; i <= rows; i++) {
-        const row = document.getElementById('gallery-row-' + i);
-        // Alternate direction and speed per row
-        const direction = i % 2 === 0 ? 1 : -1;
-        const speed = 0.2 + 0.05 * i;
-        const rowWidth = row.scrollWidth / 2;
-        let translate = ((scrollY * speed * direction) % rowWidth);
-        if (translate < 0) translate += rowWidth;
-        row.style.transform = `translateX(${-translate}px)`;
-      }
-      requestAnimationFrame(animateGalleryRows);
-    }
-    animateGalleryRows();
-  </script>
-</body>
+		<!-- Footer -->
+			<footer id="footer" class="wrapper style1-alt">
+				<div class="inner">
+					<ul class="menu">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
 </html>
