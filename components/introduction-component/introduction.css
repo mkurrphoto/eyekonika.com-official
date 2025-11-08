@@ -1,0 +1,10 @@
+.img-style {
+  display: block;
+  margin-left: 350px;
+  max-width: 600px;
+  height: auto;
+  width: 90%;
+  object-fit: cover;
+  padding-bottom: 33px;
+}
+
