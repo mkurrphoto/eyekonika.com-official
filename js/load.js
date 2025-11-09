@@ -1,6 +1,5 @@
 const parts = [
   { id: "sidebar", file: "components/sidebar-component/sidebar.html" },
-
   {
     id: "introduction",
     file: "components/introduction-component/introduction.html",
@@ -11,7 +10,8 @@ const parts = [
     id: "get-in-touch",
     file: "components/get-in-touch-component/get-in-touch.html",
   },
-  //   { id: 'footer', file: 'partials/footer.html' }
+  { id: "footer", file: "components/footer-component/footer.html" },
+  // { id: "header", file: "components/header-component/header.html" },
 ];
 
 Promise.all(
@@ -27,13 +27,13 @@ Promise.all(
     console.log("✅ All partials loaded!");
     // Now load scripts
     loadScriptsSequentially([
-      "assets/js/jquery.min.js",
-      "assets/js/jquery.scrollex.min.js",
-      "assets/js/jquery.scrolly.min.js",
-      "assets/js/browser.min.js",
-      "assets/js/breakpoints.min.js",
-      "assets/js/util.js",
-      "assets/js/main.js",
+      "js/vendor/jquery.min.js",
+      "js/vendor/jquery.scrollex.min.js",
+      "js/vendor/jquery.scrolly.min.js",
+      "js/vendor/browser.min.js",
+      "js/vendor/breakpoints.min.js",
+      "js/vendor/main.js",
+      "js/vendor/util.js",
       "js/particles.js",
       "js/app.js",
     ]);
