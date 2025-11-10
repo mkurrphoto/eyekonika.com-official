@@ -1,4 +1,5 @@
 const parts = [
+  // { id: "header", file: "components/header-component/header.html" },
   { id: "sidebar", file: "components/sidebar-component/sidebar.html" },
   {
     id: "introduction",
@@ -11,7 +12,6 @@ const parts = [
     file: "components/get-in-touch-component/get-in-touch.html",
   },
   { id: "footer", file: "components/footer-component/footer.html" },
-  // { id: "header", file: "components/header-component/header.html" },
 ];
 
 Promise.all(
@@ -27,6 +27,7 @@ Promise.all(
     console.log("✅ All partials loaded!");
     // Now load scripts
     loadScriptsSequentially([
+      "js/particles.js",
       "js/vendor/jquery.min.js",
       "js/vendor/jquery.scrollex.min.js",
       "js/vendor/jquery.scrolly.min.js",
@@ -34,7 +35,6 @@ Promise.all(
       "js/vendor/breakpoints.min.js",
       "js/vendor/main.js",
       "js/vendor/util.js",
-      "js/particles.js",
       "js/app.js",
     ]);
   })
@@ -55,11 +55,9 @@ function loadScriptsSequentially(scripts) {
     console.log(`Loaded: ${scripts[0]}`);
     loadScriptsSequentially(scripts.slice(1));
   };
-
   script.onerror = () => {
     console.error(`Failed to load: ${scripts[0]}`);
     loadScriptsSequentially(scripts.slice(1));
   };
-
   document.body.appendChild(script);
 }

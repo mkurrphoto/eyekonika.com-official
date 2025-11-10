@@ -24,3 +24,7 @@
 #header + #wrapper + #footer > .inner {
   margin: 0 auto;
 }
+/* background color */
+.wrapper.style1-alt {
+  background-color: #493382;
+}
