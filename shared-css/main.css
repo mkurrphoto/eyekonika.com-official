@@ -2960,9 +2960,6 @@ table.alt tfoot {
   background-color: #5e42a6;
 }
 
-.wrapper.style1-alt {
-  background-color: #493382;
-}
 
 .wrapper.style2 {
   background-color: #5052b5;
@@ -3078,99 +3075,7 @@ body.is-preload .wrapper.fade > .inner {
 
 /* Header */
 
-#header {
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: -ms-flex;
-  display: flex;
-  background-color: #5e42a6;
-  justify-content: space-between;
-  cursor: default;
-  padding: 1.75em 2em;
-}
 
-#header > .title {
-  border: 0;
-  color: #ffffff;
-  display: block;
-  font-size: 1.25em;
-  font-weight: bold;
-}
-
-#header > nav {
-  -moz-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  text-align: right;
-}
-
-#header > nav > ul {
-  margin: 0;
-  padding: 0;
-}
-
-#header > nav > ul > li {
-  display: inline-block;
-  margin-left: 1.75em;
-  padding: 0;
-  /* vertical-align: middle; */
-}
-
-#header > nav > ul > li:first-child {
-  margin-left: 0;
-}
-
-#header > nav > ul > li a {
-  border: 0;
-  color: rgba(255, 255, 255, 0.35);
-  display: inline-block;
-  font-size: 0.6em;
-  font-weight: bold;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-}
-
-#header > nav > ul > li a:hover {
-  color: rgba(255, 255, 255, 0.55);
-}
-
-#header > nav > ul > li a.active {
-  color: #ffffff;
-}
-
-@media screen and (max-width: 736px) {
-  #header {
-    padding: 1em 2em;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  #header {
-    display: block;
-    padding: 0 2em;
-    text-align: left;
-  }
-
-  #header .title {
-    font-size: 1.25em;
-    padding: 1em 0;
-  }
-
-  #header > nav {
-    border-top: solid 1px rgba(255, 255, 255, 0.15);
-    text-align: inherit;
-  }
-
-  #header > nav > ul > li {
-    margin-left: 1.5em;
-  }
-
-  #header > nav > ul > li a {
-    height: 6em;
-    line-height: 6em;
-  }
-}
 
 /* Wrapper (main) */
 
