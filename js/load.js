@@ -34,6 +34,7 @@ Promise.all(
       "js/vendor/main.js",
       "js/vendor/util.js",
       "js/app.js",
+      "js/email-send.js",
     ]);
   })
   .then(() => {
