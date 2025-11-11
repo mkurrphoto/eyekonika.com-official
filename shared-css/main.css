@@ -2776,7 +2776,6 @@ body.is-ie .spotlights > section {
   justify-content: center;
   width: 50em;
   flex: 1;
-
 }
 
 .spotlights > section > .content > .inner {
@@ -2960,7 +2959,6 @@ table.alt tfoot {
   background-color: #5e42a6;
 }
 
-
 .wrapper.style2 {
   background-color: #5052b5;
 }
@@ -3074,8 +3072,6 @@ body.is-preload .wrapper.fade > .inner {
 }
 
 /* Header */
-
-
 
 /* Wrapper (main) */
 

@@ -1,5 +1,4 @@
 const parts = [
-  // { id: "header", file: "components/header-component/header.html" },
   { id: "sidebar", file: "components/sidebar-component/sidebar.html" },
   {
     id: "introduction",
@@ -13,7 +12,6 @@ const parts = [
   },
   { id: "footer", file: "components/footer-component/footer.html" },
 ];
-
 Promise.all(
   parts.map((part) =>
     fetch(part.file)
@@ -50,13 +48,10 @@ function loadScriptsSequentially(scripts) {
   const script = document.createElement("script");
   script.src = scripts[0];
   script.defer = true;
-
   script.onload = () => {
-    console.log(`Loaded: ${scripts[0]}`);
     loadScriptsSequentially(scripts.slice(1));
   };
   script.onerror = () => {
-    console.error(`Failed to load: ${scripts[0]}`);
     loadScriptsSequentially(scripts.slice(1));
   };
   document.body.appendChild(script);
