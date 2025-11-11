@@ -1,5 +1,4 @@
-
-<section id="three" class="wrapper style1 fade-up">
+<section id="three" class="wrapper style1">
   <div class="inner">
     <h2>Get in touch</h2>
     <p>
@@ -9,28 +8,50 @@
       quis lorem.
     </p>
     <div class="split style1">
-      <section>
-        <form method="post" action="#">
-          <div class="fields">
-            <div class="field half">
-              <label for="name">Name</label>
-              <input type="text" name="name" id="name" />
-            </div>
-            <div class="field half">
-              <label for="email">Email</label>
-              <input type="text" name="email" id="email" />
-            </div>
-            <div class="field">
-              <label for="message">Message</label>
-              <textarea name="message" id="message" rows="5"></textarea>
-            </div>
-          </div>
-          <ul class="actions">
-            <li><a href="" class="button submit">Send Message</a></li>
-          </ul>
+      <section class="form-section">
+        <form
+          id="contactForm"
+          action="https://formspree.io/f/mgvrenla"
+          method="POST"
+        >
+          <label>
+            Name:
+            <input type="text" name="name" required />
+          </label>
+
+          <label>
+            Email:
+            <input id="email" type="email" name="email" required />
+          </label>
+
+          <label>
+            Subject:
+            <input type="text" name="subject" required />
+          </label>
+
+          <label>
+            Message:
+            <textarea name="message" required></textarea>
+          </label>
+
+          <!-- <input
+            type="hidden"
+            name="_autoresponse"
+            value="Thank you for contacting us! We'll reply soon."
+          /> -->
+
+          <button style="display: block" id="send" type="submit">Send</button>
         </form>
+
+        <!-- this message is hidden by default -->
+        <p
+          id="form-status"
+          style="display: none; color: green; font-weight: 600"
+        >
+          ✅ Your message has been sent!
+        </p>
       </section>
-      <section>
+      <!-- <section>
         <ul class="contact">
           <li>
             <h3>Address</h3>
@@ -79,7 +100,7 @@
             </ul>
           </li>
         </ul>
-      </section>
+      </section> -->
     </div>
   </div>
 </section>
