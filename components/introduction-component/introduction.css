@@ -37,6 +37,10 @@
 #intro p {
   font-size: 1.25em;
 }
+.title{
+  /* display: flex; */
+  gap: 1px;
+}
 
 @media screen and (max-width: 980px) {
   #intro p br {

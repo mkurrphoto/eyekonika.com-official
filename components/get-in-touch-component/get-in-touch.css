@@ -6,7 +6,7 @@ section.form-section {
 
 form {
   width: 100%;
-  max-width: 500px;
+  max-width: 700px;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -16,14 +16,20 @@ form {
   padding: 25px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* soft shadow */
 }
-
-label {
+.form-container {
   display: flex;
-  flex-direction: column;
+  gap: 20px;
+}
+
+input {
+  width: 330px;
   font-weight: 500;
   color: white;
 }
 
+.message {
+  width: 100%;
+}
 input,
 textarea {
   margin-top: 5px;
@@ -42,8 +48,9 @@ textarea::placeholder {
 }
 
 textarea {
+  width: 100%;
   resize: vertical;
-  min-height: 100px;
+  min-height: 150px;
 }
 
 button {
@@ -55,12 +62,22 @@ button {
   align-self: flex-start;
 }
 
-
 button:hover {
   background: #1f1fb056;
 }
 
 /* ✅ Responsive */
+@media (max-width: 900px) {
+  .form-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  input {
+    width: 100%;
+  }
+}
+
 @media (max-width: 600px) {
   section.form-section {
     padding: 1.5rem 1rem;
@@ -71,7 +88,27 @@ button:hover {
     padding: 20px;
   }
 
+  input,
+  textarea {
+    font-size: 14px;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+
   button {
     width: 100%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  p {
+    font-size: 0.9rem;
   }
 }

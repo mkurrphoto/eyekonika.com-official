@@ -14,29 +14,22 @@
           action="https://formspree.io/f/movyqgop"
           method="POST"
         >
-          <label>
-            Name:
-            <input type="text" name="name" required />
-          </label>
-          <label>
-            Last Name:
-            <input type="text" name="last-name" required />
-          </label>
+          <div class="form-container">
+            <input type="text" name="name"  placeholder="Name" />
+            <input type="text" name="last-name"  placeholder="Last Name" />
+          </div>
+          <div class="form-container">
+            <input
+              id="email"
+              type="email"
+              name="email"
+              required
+              placeholder="Email@example.com"
+            />
+            <input type="text" name="subject" required placeholder="Subject" />
+          </div>
 
-          <label>
-            Email:
-            <input id="email" type="email" name="email" required />
-          </label>
-
-          <label>
-            Subject:
-            <input type="text" name="subject" required />
-          </label>
-
-          <label>
-            Message:
-            <textarea name="message" required></textarea>
-          </label>
+          <textarea name="message" required placeholder="Write Your Message Here"></textarea>
           <!-- AutoResponse -->
           <!-- <input
             type="hidden"
@@ -48,12 +41,12 @@
         </form>
 
         <!-- this message is hidden by default -->
-        <p
+        <!-- <p
           id="form-status"
           style="display: none; color: green; font-weight: 600"
         >
           ✅ Your message has been sent!
-        </p>
+        </p> -->
       </section>
       <!-- <section>
         <ul class="contact">
