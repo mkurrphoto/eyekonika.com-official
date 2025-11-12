@@ -1,30 +1,210 @@
-#sidebar + #wrapper + #footer {
-  margin-left: 18em;
+/* === Base Styles === */
+.site-footer {
+  background: #2f1f53;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  padding: 2.3rem 2rem 1.5rem calc(260px + 5vw);
+  padding-bottom: 0;
 }
 
-@media screen and (max-width: 1280px) {
-  #sidebar + #wrapper + #footer {
-    margin-left: 0;
-  }
-}
-
-#footer > .inner a {
-  border-bottom-color: rgba(255, 255, 255, 0.15);
-}
-
-#footer > .inner a:hover {
-  border-bottom-color: transparent;
-}
-
-#footer > .inner .menu {
-  font-size: 0.8em;
-  color: rgba(255, 255, 255, 0.15);
-}
-
-#header + #wrapper + #footer > .inner {
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  max-width: 920px;
   margin: 0 auto;
 }
-/* background color */
-.wrapper.style1-alt {
-  background-color: #493382;
+
+/* === Logo === */
+.footer-logo img {
+  width: 180px;
+  height: auto;
+  opacity: 0.95;
+  transition: opacity 0.3s ease;
 }
+.footer-logo img:hover {
+  opacity: 1;
+}
+
+/* === Social Icons === */
+.footer-socials {
+  display: flex;
+  gap: 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+.footer-socials a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* === Contact Info === */
+.footer-contact {
+  text-align: left;
+  line-height: 1.6;
+}
+.footer-contact p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #ddd;
+}
+.footer-contact a {
+  color: #bbb;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.footer-contact a:hover {
+  color: white;
+}
+
+/* === Separator === */
+.footer-sep {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 1.5rem auto;
+  width: calc(100% - 280px); /* match padding-left area */
+  transition: width 0.3s ease;
+}
+
+/* === Bottom Section === */
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  color: #ccc;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.footer-links a {
+  text-decoration: none;
+  color: #ccc;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-copy {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+.footer-copy a {
+  color: #bbb;
+  text-decoration: underline dotted;
+}
+.footer-copy a:hover {
+  color: white;
+}
+.dot {
+  opacity: 0.5;
+}
+
+/* === Responsive Fixes === */
+
+/* Tablet - sidebar disappears or collapses */
+
+@media (max-width: 1280px) {
+  .site-footer {
+    padding-left: 0px;
+  }
+  .footer-inner {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 5rem;
+    max-width: 1100px;
+  }
+  @media (max-width: 850px) {
+    .site-footer {
+      padding: 2rem 1.5rem 1rem 1.5rem;
+    }
+
+    .footer-inner {
+      gap: 2rem;
+    }
+
+    .footer-socials {
+      gap: 10px;
+    }
+
+    .footer-socials a {
+      width: 38px;
+      height: 38px;
+      font-size: 14px;
+    }
+
+    .footer-logo img {
+      width: 140px;
+    }
+
+    .footer-contact p {
+      font-size: 0.9rem;
+    }
+  }
+
+  /* === Mobile (max-width: 600px) === */
+  @media (max-width: 700px) {
+    .site-footer {
+      padding: 1.8rem 1rem 1rem 1rem;
+    }
+
+    .footer-inner {
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      display: none; /* hides logo only on mobile */
+    }
+
+    .footer-socials a {
+      width: 34px;
+      height: 34px;
+      font-size: 13px;
+    }
+
+    .footer-contact p {
+      font-size: 0.85rem;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+    }
+
+    .footer-sep {
+      width: 90%;
+      margin: 1.2rem auto;
+    }
+  }
+}
+/* mobile */
