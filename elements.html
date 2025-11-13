@@ -23,12 +23,18 @@
     <!-- Header -->
     <!-- <header id="header"></header> -->
     <header id="header" class="header">
-      <a href="index.html" class="title">Hyperspace</a>
-      <nav>
+      <div class="menu-title">
+        <button id="menuToggle" class="menu-btn">☰</button>
+        <a href="index.html" class="title">Hyperspace</a>
+      </div>
+
+      <nav id="nav" class="main-nav">
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="generic.html" class="active">Generic</a></li>
-          <li><a href="elements.html">Elements</a></li>
+          <li class="links"><a href="index.html">Home</a></li>
+          <li class="links">
+            <a href="generic.html">Generic</a>
+          </li>
+          <li class="links"><a href="elements.html">Elements</a></li>
         </ul>
       </nav>
     </header>
