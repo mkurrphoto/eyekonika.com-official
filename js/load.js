@@ -17,7 +17,9 @@ Promise.all(
     fetch(part.file)
       .then((res) => res.text())
       .then((html) => {
-        document.getElementById(part.id).innerHTML = html;
+        const el = document.getElementById(part.id)
+        if (el) el.innerHTML = html
+        
       })
   )
 )
@@ -25,7 +27,7 @@ Promise.all(
     console.log("✅ All partials loaded!");
     // Now load scripts
     loadScriptsSequentially([
-      "js/particles.js",
+      
       "js/vendor/jquery.min.js",
       "js/vendor/jquery.scrollex.min.js",
       "js/vendor/jquery.scrolly.min.js",
