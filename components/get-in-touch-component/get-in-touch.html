@@ -15,11 +15,22 @@
           method="POST"
         >
           <div class="form-container">
-            <input type="text" name="name"  placeholder="Name" />
-            <input type="text" name="last-name"  placeholder="Last Name" />
+            <input
+              class="form-inputs"
+              type="text"
+              name="name"
+              placeholder="Name"
+            />
+            <input
+              class="form-inputs"
+              type="text"
+              name="last-name"
+              placeholder="Last Name"
+            />
           </div>
           <div class="form-container">
             <input
+              class="form-inputs"
               id="email"
               type="email"
               name="email"
@@ -29,7 +40,12 @@
             <input type="text" name="subject" required placeholder="Subject" />
           </div>
 
-          <textarea name="message" required placeholder="Write Your Message Here"></textarea>
+          <textarea
+            class="form-inputs"
+            name="message"
+            required
+            placeholder="Write Your Message Here"
+          ></textarea>
           <!-- AutoResponse -->
           <!-- <input
             type="hidden"
@@ -39,65 +55,7 @@
 
           <button style="display: block" id="send" type="submit">Send</button>
         </form>
-
-        <!-- this message is hidden by default -->
-        <!-- <p
-          id="form-status"
-          style="display: none; color: green; font-weight: 600"
-        >
-          ✅ Your message has been sent!
-        </p> -->
       </section>
-      <!-- <section>
-        <ul class="contact">
-          <li>
-            <h3>Address</h3>
-            <span
-              >12345 Somewhere Road #654<br />
-              Nashville, TN 00000-0000<br />
-              USA</span
-            >
-          </li>
-          <li>
-            <h3>Email</h3>
-            <a href="#">user@untitled.tld</a>
-          </li>
-          <li>
-            <h3>Phone</h3>
-            <span>(000) 000-0000</span>
-          </li>
-          <li>
-            <h3>Social</h3>
-            <ul class="icons">
-              <li>
-                <a href="#" class="icon brands fa-twitter"
-                  ><span class="label">Twitter</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands fa-facebook-f"
-                  ><span class="label">Facebook</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands fa-github"
-                  ><span class="label">GitHub</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands fa-instagram"
-                  ><span class="label">Instagram</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands fa-linkedin-in"
-                  ><span class="label">LinkedIn</span></a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </section> -->
     </div>
   </div>
 </section>

@@ -17,26 +17,17 @@ Promise.all(
     fetch(part.file)
       .then((res) => res.text())
       .then((html) => {
-        const el = document.getElementById(part.id)
-        if (el) el.innerHTML = html
-        
+        const el = document.getElementById(part.id);
+        if (el) {
+          el.innerHTML = html;
+        }
       })
   )
 )
   .then(() => {
     console.log("✅ All partials loaded!");
-    // Now load scripts
     loadScriptsSequentially([
-      
-      "js/vendor/jquery.min.js",
-      "js/vendor/jquery.scrollex.min.js",
-      "js/vendor/jquery.scrolly.min.js",
-      "js/vendor/browser.min.js",
-      "js/vendor/breakpoints.min.js",
       "js/vendor/main.js",
-      "js/vendor/util.js",
-      "js/app.js",
-      "js/email-send.js",
     ]);
   })
   .then(() => {
@@ -58,4 +49,26 @@ function loadScriptsSequentially(scripts) {
     loadScriptsSequentially(scripts.slice(1));
   };
   document.body.appendChild(script);
+}
+
+function loadParticles(containerId) {
+  particlesJS(containerId, {
+    particles: {
+      number: { value: 60 },
+      color: { value: "#ffffff" },
+      shape: { type: "circle" },
+      opacity: { value: 0.6, random: true },
+      size: { value: 3, random: true },
+      line_linked: { enable: false },
+      move: { speed: 1.2 },
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: false },
+        onclick: { enable: false },
+      },
+    },
+    retina_detect: true,
+  });
 }
