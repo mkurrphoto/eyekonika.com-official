@@ -1,0 +1,6 @@
+#two {
+  z-index: 1;
+}
+#two::before {
+  background: #000 !important; /* or the exact bg color of this section */
+}
