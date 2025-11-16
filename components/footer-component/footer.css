@@ -147,7 +147,9 @@ body.generic .footer-sep{
     gap: 5rem;
     max-width: 1100px;
   }
+  
   @media (max-width: 850px) {
+    
     .site-footer {
       padding: 2rem 1.5rem 1rem 1.5rem;
     }
