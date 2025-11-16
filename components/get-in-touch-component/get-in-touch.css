@@ -9,7 +9,6 @@
   background-image: url("/images/photo-backgrounds/pexels-apasaric-325185.jpg");
   background-repeat: no-repeat;
   background-position: top center;
-  background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
 }
@@ -89,6 +88,12 @@ button:hover {
   .form-container {
     flex-direction: column;
     gap: 10px;
+  }
+
+  #three::before {
+    background-attachment: scroll !important;
+    background-position: center !important;
+    background-size: cover !important;
   }
 
   input {
