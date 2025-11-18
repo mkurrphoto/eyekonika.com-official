@@ -12,6 +12,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
+    <link rel="stylesheet" href="shared-css/loading.css">
     <link rel="stylesheet" href="shared-css/main.css" />
     <noscript
       ><link rel="stylesheet" href="shared-css/noscript.css"
@@ -27,11 +28,19 @@
     />
     <link rel="stylesheet" href="components/footer-component/footer.css" />
     <link rel="stylesheet" href="components/sidebar-component/sidebar.css " />
-    <link rel="stylesheet" href="components/what-we-do-component/what-we-do.css " />
+    <link
+      rel="stylesheet"
+      href="components/what-we-do-component/what-we-do.css "
+    />
     <link rel="stylesheet" href="shared-css/particles.css" />
     <link rel="icon" type="image/png" href="images/favicon.png" />
   </head>
   <body class="index is-preload">
+    <div id="preloader">
+      <div class="loader-orb"></div>
+      <div class="loader-text">Eyekonika.com</div>
+    </div>
+
     <div id="particles-js"></div>
     <div id="sidebar"></div>
     <!-- Wrapper -->
@@ -51,6 +60,8 @@
     <!-- Footer -->
 
     <div id="footer"></div>
+
+    <script src="js/loading-page.js"></script>
 
     <!-- Scripts -->
     <script src="js/particles.js"></script>
