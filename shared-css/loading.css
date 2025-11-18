@@ -1,0 +1,16 @@
+/* Eyekonika text */
+.loader-text {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: white;
+  letter-spacing: 3px;
+  font-family: "Poppins", sans-serif;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* Hide when loading is done */
+#preloader.hide {
+  opacity: 0;
+  pointer-events: none;
+}

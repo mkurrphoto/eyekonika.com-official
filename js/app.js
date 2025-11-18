@@ -108,3 +108,4 @@ function loadCoolParticles() {
 document.addEventListener("DOMContentLoaded", () => {
   loadCoolParticles();
 });
+
