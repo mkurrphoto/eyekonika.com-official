@@ -1,11 +1,280 @@
-#one{
-  z-index: 2;
+.timeline-section {
+  padding-top: 150px;
+  padding-bottom: 0px;
+  background: #513d9e;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  min-height: 100vh; /* at least full screen */
+  height: auto; /* allow shrinking */
 }
 
-.image {
-  width: 100%;
-}
-img {
-  width: 100%;
+/* VERTICAL LINE */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 4px;
   height: 100%;
+  background: linear-gradient(to bottom, #b298ff, #6a4ddd);
+  opacity: 0.35;
+  border-radius: 4px;
 }
+.timeline-item.background {
+  padding-top: 140px;
+  padding-bottom: 140px;
+
+  background-size: 100% 170%;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.background {
+  position: relative;
+  overflow: hidden;
+  background-image: url("/images/photo-backgrounds/pexels-apasaric-325185.jpg");
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-size: 100% 150%;
+}
+
+/* ITEM WRAPPER */
+.timeline-items {
+  display: flex;
+  flex-direction: column;
+  gap: 200px;
+  position: relative;
+  z-index: 10;
+}
+
+/* ITEM */
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  /* hidden initially */
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 0.8s ease;
+  padding: 10px;
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* LEFT / RIGHT */
+.timeline-item.left {
+  flex-direction: row-reverse;
+}
+
+.timeline-item.right {
+  flex-direction: row;
+}
+
+/* DOT */
+.timeline-dot {
+  width: 22px;
+  height: 22px;
+  background: #b298ff;
+  border-radius: 50%;
+  box-shadow: 0 0 20px #b298ff;
+}
+.timeline-item.background > .timeline-dot {
+  display: none;
+}
+
+/* CARD */
+.timeline-card {
+  width: 40%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(178, 152, 255, 0.4);
+  padding: 25px 30px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 10px;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+}
+.btn-container > a {
+  min-width: 25%;
+}
+.timeline-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  background: #7e43d1;
+  color: white;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: .2s ease;
+}
+
+.timeline-btn:hover {
+  background: #3a76e0;
+}
+
+
+.img-date {
+  width: 100%;
+  position: relative;
+}
+
+.img-date img {
+  width: 140px;
+  float: left;
+  margin: 40px 20px 20px 0; /* <-- this centers it vertically */
+  border-radius: 12px;
+  object-fit: cover;
+  shape-outside: inset(0);
+}
+.img-date .timeline-card > img {
+  width: 200px;
+  height: 200px;
+}
+
+.timeline-card h3 p {
+  color: #cdbaff;
+  margin-bottom: 10px;
+}
+
+.timeline-card p {
+  color: #eee;
+  line-height: 1.5;
+}
+/* TABLET FIX — keep layout same but scale everything down */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  /* Make cards narrower so whole block looks smaller */
+  .timeline-card {
+    width: 35% !important;   
+    padding: 18px !important;
+  }
+
+  /* Make image visibly smaller */
+  .img-date img {
+    width: 90px !important;
+    margin: 25px 15px 15px 0 !important;
+  }
+
+  /* Slightly reduce text size */
+  .timeline-card h3 {
+    font-size: 1rem !important;
+  }
+
+  .timeline-card p {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Reduce spacing between items (tablet is shorter) */
+  .timeline-items {
+    gap: 110px !important;
+  }
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  /* Hide line & dots */
+  .timeline-line,
+  .timeline-dot {
+    display: none !important;
+  }
+  @media (max-width: 768px) {
+
+  /* Make the whole card layout centered on mobile */
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 14px;
+    width: 100%;
+  }
+
+  /* Center button container */
+  .btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  /* Make the button centered */
+  .btn-container > button {
+    margin: 0 auto !important;
+    display: block;
+    padding: 0;
+  }
+}
+
+
+  /* Column layout */
+  .timeline-item {
+    flex-direction: column !important;
+    align-items: center !important;       /* center the whole item */
+    text-align: center !important;
+    gap: 20px;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  /* Card smaller + centered */
+  .timeline-card {
+    width: 85% !important;                /* smaller width */
+    margin: 0 auto !important;            /* centered */
+    padding: 18px !important;
+  }
+
+  /* Image stacked on top */
+  .img-date {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;       /* center image + text */
+  }
+
+  .img-date img {
+    float: none !important;
+    width: 80px !important;               /* smaller image */
+    margin: 0 0 12px 0 !important;
+  }
+
+  /* Text below image */
+  .img-date div {
+    width: 100%;
+  }
+
+  /* Font adjustments */
+  .timeline-card h3 {
+    font-size: 1rem !important;
+  }
+  .timeline-card p {
+    font-size: 0.9rem !important;
+  }
+
+  /* Reduce spacing between items */
+  .timeline-items {
+    gap: 100px !important;
+  }
+
+  /* Background block also centered */
+  .timeline-item.background {
+    padding: 20px !important;
+    border-radius: 16px !important;
+  }
+}
+

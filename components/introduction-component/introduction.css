@@ -17,7 +17,6 @@
   background-attachment: fixed;
 }
 
-
 #particles-js {
   position: absolute;
   top: 0;
@@ -27,7 +26,9 @@
   z-index: 1; /* below text, above background */
   pointer-events: none; /* lets you click links through particles */
 }
-
+.actions {
+  margin-top: 35px;
+}
 #intro .inner {
   position: relative;
   z-index: 2; /* ensures content sits above particles */
@@ -38,18 +39,46 @@
 #intro p {
   font-size: 1.25em;
 }
-.title{
+.title {
   /* display: flex; */
   gap: 1px;
 }
+.scroll-down {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10%;
+}
+.scroll-down > h2,
+p {
+  margin: 0;
+}
+.scroll-down > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-top: 10px;
+  gap: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+}
+.scroll-down > a:hover {
+  color: rgb(213, 80, 213);
+}
+.scroll-down > a > img {
+  width: 20px;
+}
 
 @media screen and (max-width: 980px) {
+
   #intro p br {
     display: none;
   }
 }
 
 @media screen and (max-width: 736px) {
+
   #intro p {
     font-size: 1em;
   }
