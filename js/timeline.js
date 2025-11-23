@@ -25,6 +25,10 @@ function initTimelineReveal() {
 }
 
 function initSidebarScrollLock() {
+  if (window.innerWidth <= 1280) {
+    console.log("Fullscreen sidebar logic disabled on mobile/tablet.");
+    return;
+  }
   const sidebar = document.getElementById("sidebar");
   const wrapper = document.getElementById("wrapper");
   const timeline = document.getElementById("timeline");
@@ -37,17 +41,15 @@ function initSidebarScrollLock() {
     const vh = window.innerHeight;
 
     // FASTER & SMOOTHER THRESHOLDS
-    const ENTER_TOP = vh * 0.80;     // earlier
-    const ENTER_BOTTOM = vh * 0.50;  // earlier
+    const ENTER_TOP = vh * 0.8; // earlier
+    const ENTER_BOTTOM = vh * 0.5; // earlier
 
-    const EXIT_TOP = vh * 0.98;      // exits earlier
-    const EXIT_BOTTOM = vh * 0.20;
+    const EXIT_TOP = vh * 0.98; // exits earlier
+    const EXIT_BOTTOM = vh * 0.2;
 
-    const insideEnter =
-      rect.top < ENTER_TOP && rect.bottom > ENTER_BOTTOM;
+    const insideEnter = rect.top < ENTER_TOP && rect.bottom > ENTER_BOTTOM;
 
-    const outsideExit =
-      rect.bottom < EXIT_BOTTOM || rect.top > EXIT_TOP;
+    const outsideExit = rect.bottom < EXIT_BOTTOM || rect.top > EXIT_TOP;
 
     // ENTER
     if (state === "normal" && insideEnter) {
