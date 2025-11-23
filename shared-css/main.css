@@ -3116,6 +3116,9 @@ body.is-preload .wrapper.fade > .inner {
 #wrapper {
   transition: margin-left 0.55s ease-in-out;
 }
+#wrapper {
+  margin-left: 0;
+}
 
 /* NORMAL wrapper */
 #wrapper {
