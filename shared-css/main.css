@@ -3113,10 +3113,19 @@ body.is-preload .wrapper.fade > .inner {
   opacity: 0;
 }
 
-/* Wrapper (main) */
+#wrapper {
+  transition: margin-left 0.55s ease-in-out;
+}
 
-#sidebar + #wrapper {
-  margin-left: 18em;
+/* NORMAL wrapper */
+#wrapper {
+  margin-left: 17em;
+  transition: margin-left 0.4s ease;
+}
+
+/* WRAPPER expands when timeline active */
+#wrapper.expand-wrapper {
+  margin-left: 0 !important;
 }
 
 @media screen and (max-width: 1280px) {
@@ -3132,7 +3141,7 @@ body.is-preload .wrapper.fade > .inner {
   }
 }
 
-#header + #wrapper > .wrapper > .inner {
+#header +  .inner {
   margin: 0 auto;
 }
 .parallax {
