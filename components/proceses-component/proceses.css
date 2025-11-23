@@ -53,7 +53,10 @@
 .timeline-item.left.background.visible{
   height: 700px;
 }
-
+.scroll-anchor {
+  height: 80px;  /* adjust depending on header height */
+  margin-top: -80px;
+}
 /* ITEM WRAPPER */
 .timeline-items {
   display: flex;
