@@ -38,6 +38,17 @@
   opacity: 1;
   width: 100%;
 }
+#sidebar {
+  transition: transform 0.55s ease-in-out, opacity 0.55s ease-in-out;
+}
+.sidebar.hide-sidebar {
+  transition: all 0.10s ease-in-out !important;
+}
+#sidebar.hide-sidebar {
+  transform: translateX(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
 
 body.is-ie #sidebar > .inner {
   height: 100%;
@@ -288,6 +299,9 @@ body.is-preload #sidebar nav ul li {
     top: 0;
     width: 100%;
   }
+  #wrapper {
+    margin: 0;
+  }
 
   #sidebar > .inner {
     -moz-flex-direction: row;
@@ -336,6 +350,19 @@ body.is-preload #sidebar nav ul li {
     background-color: #b74e91;
   }
 }
+
+/* ===========================
+    FULLSCREEN TIMELINE MODE
+   =========================== */
+
+.sidebar.hide-sidebar {
+  opacity: 0 !important;
+  transform: translateX(-100%) !important;
+  pointer-events: none !important;
+  transition: all 0.4s ease;
+}
+
+/* Expand the timeline wrapper to full width */
 
 @media screen and (max-width: 736px) {
   #sidebar {

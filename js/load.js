@@ -1,5 +1,5 @@
 const parts = [
-  { id: "sidebar", file: "components/sidebar-component/sidebar.html" },
+  { id:"sidebar-selector", file: "components/sidebar-component/sidebar.html" },
   {
     id: "introduction",
     file: "components/introduction-component/introduction.html",
