@@ -3,5 +3,5 @@ window.addEventListener("load", function () {
     const loader = document.getElementById("preloader");
     loader.classList.add("hide");
     setTimeout(() => loader.remove(), 700);
-  }, 1000); // Force 2-second delay for testing
+  }, 1300);
 });

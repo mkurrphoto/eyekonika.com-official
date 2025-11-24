@@ -33,7 +33,7 @@ Promise.all(
   .then(() => {
     setTimeout(() => {
       window.scrollBy(0, 1);
-    }, 200);
+    }, 300);
   });
 
 function loadScriptsSequentially(scripts) {
