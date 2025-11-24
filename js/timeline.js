@@ -3,7 +3,7 @@ window.addEventListener("load", () => {
     initTimelineReveal();
     initSidebarScrollLock();
     initIntroObserver();
-  }, 200);
+  }, 300);
 });
 
 function initTimelineReveal() {
