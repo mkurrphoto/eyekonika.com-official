@@ -142,7 +142,61 @@
 .timeline-btn:hover {
   background: #3a76e0;
 }
-
+.container{
+  gap: 10px;
+  perspective: 500px;
+  height: 600px;
+  transition: 1.2s ease;
+  transform: scale(0.9);
+  background-color: black;;
+  width: 30%;
+  margin: auto;
+}
+.container img{
+  width: 30vw;
+  height: 30vh;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.backImage{
+  width: 100%;
+  background-color: black;
+  position: relative;
+}
+.item{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.4s ease;
+  cursor: pointer; 
+}
+.item-1{
+  z-index: 3;
+}
+.item-2{
+  transform: translate(-50%, -70%) scale(0.9);
+  z-index: 2;
+}
+.item-3{
+  transform: translate(-50%, -90%) scale(0.8);
+  z-index: 1;
+}
+.container:hover{
+  transform: scale(1);
+}
+.container:hover .item-1{
+  transform: translate(-80%, -50%) scale(1) rotateY(-40deg);
+}
+.container:hover .item-2{
+  transform: translate(-60%, -50%) scale(0.9) rotateY(-40deg);
+}
+.container:hover .item-3{
+  transform: translate(-40%, -50%) scale(0.9) rotateY(-40deg);
+}
+.item:hover{
+  margin-top: -50px;
+}
 .img-date {
   width: 100%;
   position: relative;
@@ -288,4 +342,11 @@
     padding: 20px !important;
     border-radius: 16px !important;
   }
+}
+
+@media (min-width: 320px) and (max-width: 768px) {
+  .container img{
+    width: 250px;
+  }
+  
 }
