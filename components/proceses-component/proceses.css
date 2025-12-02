@@ -79,19 +79,9 @@
 
 .timeline-item.visible {
   opacity: 1;
-  transform: translateY(0);
   padding-left: 6%;
 }
 
-/* LEFT / RIGHT */
-.timeline-item.left {
-  padding-right: 6%;
-  flex-direction: row-reverse;
-}
-
-.timeline-item.right {
-  flex-direction: row;
-}
 
 /* DOT */
 .timeline-dot {
@@ -105,9 +95,12 @@
   display: none;
 }
 
+.custom{
+  width: 40%;
+}
+
 /* CARD */
 .timeline-card {
-  width: 40%;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(178, 152, 255, 0.4);
   /* padding: 10px 10px; */
@@ -118,7 +111,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  /* padding: 10px; */
+  padding: 10px;
 }
 .btn-container {
   display: flex;
@@ -224,12 +217,63 @@
   color: #eee;
   line-height: 1.5;
 }
-
+.timeline{
+  height: auto;
+  padding: 40px auto 40px auto;
+  margin-bottom: 10vh;
+}
+.container{
+  display: flex;
+  gap: 10px;
+  perspective: 500px;
+  transition: 1.2s ease;
+  transform: scale(0.9);
+  position: relative;
+  padding: 20%;
+}
+.container img{
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.item{
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.4s ease;
+  cursor: pointer; 
+}
+.item-1{
+  z-index: 4;
+}
+.item-2{
+  transform: translate(-50%, -70%) scale(0.9);
+  z-index: 3;
+}
+.item-3{
+  transform: translate(-50%, -90%) scale(0.8);
+  z-index: 2;
+}
+.container:hover{
+  transform: scale(1);
+}
+.container:hover .item-1{
+  transform: translate(-80%, -50%) scale(1) rotateY(-40deg);
+}
+.container:hover .item-2{
+  transform: translate(-60%, -50%) scale(0.9) rotateY(-40deg);
+}
+.container:hover .item-3{
+  transform: translate(-40%, -50%) scale(0.9) rotateY(-40deg);
+}
+.item:hover{
+  margin-top: -60px;
+}
 /* TABLET FIX — keep layout same but scale everything down */
 @media (min-width: 768px) and (max-width: 1024px) {
   /* Make cards narrower so whole block looks smaller */
   .timeline-card {
-    width: 35% !important;
     padding: 18px !important;
   }
 
@@ -253,6 +297,12 @@
   .timeline-items {
     gap: 110px !important;
   }
+
+  
+  .timeline{
+    height: auto;
+    padding: 160px auto 40px auto;
+  }
 }
 
 /* MOBILE */
@@ -271,6 +321,10 @@
       justify-content: center !important;
       gap: 14px;
       width: 100%;
+    }
+
+    .container{
+      padding: 30%;
     }
 
     /* Center button container */
@@ -301,11 +355,10 @@
 
   /* Card smaller + centered */
   .timeline-card {
-    width: 85% !important; /* smaller width */
+    width: 83vw !important; /* smaller width */
     margin: 0 auto !important; /* centered */
     padding: 18px !important;
   }
-
   /* Image stacked on top */
   .img-date {
     display: flex !important;
