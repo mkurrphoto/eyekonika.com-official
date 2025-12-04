@@ -34,6 +34,12 @@ Promise.all(
     setTimeout(() => {
       window.scrollBy(0, 1);
     }, 300);
+    // Initialize page swipe after components are loaded
+    setTimeout(() => {
+      if (window.initPageSwipe) {
+        window.initPageSwipe();
+      }
+    }, 400);
   });
 
 function loadScriptsSequentially(scripts) {
