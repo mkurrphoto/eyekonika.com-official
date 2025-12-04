@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const slideTitle = document.querySelector('.slide-title');
     const numberOfItems = 3;
     let currentIndex = 0;
+    let isTransitioning = false; // Prevent rapid transitions
+    let scrollTimeout = null; // Throttle scroll events
 
     // Helper: random accent color for background and title
     function getRandomColor() {
@@ -59,6 +61,46 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
+    // Function to navigate to a specific slide
+    function goToSlide(newIndex) {
+        // Prevent navigation if already transitioning or same index
+        if (isTransitioning || newIndex === currentIndex || newIndex < 0 || newIndex >= numberOfItems) {
+            return;
+        }
+
+        isTransitioning = true;
+
+        // Update nav items
+        document
+            .querySelectorAll(".nav-item-wrapper")
+            .forEach((nav) => nav.classList.remove("active"));
+        const navItems = document.querySelectorAll(".nav-item-wrapper");
+        if (navItems[newIndex]) {
+            navItems[newIndex].classList.add("active");
+        }
+
+        // Move slides container based on index
+        const translateXValue = -newIndex * 100;
+        gsap.to(slidesContainer, {
+            x: `${translateXValue}vw`,
+            duration: 1.8,
+            ease: "smooth",
+            onComplete: () => {
+                isTransitioning = false;
+            }
+        });
+
+        const newColor = getRandomColor();
+        gsap.to(bgOverlay, {
+            backgroundColor: newColor,
+            duration: 1.8,
+            ease: "smooth"
+        });
+
+        updateTitle(newIndex, newColor);
+        currentIndex = newIndex;
+    }
+
     // Ensure slides container width matches number of items
     if (slidesContainer) {
         slidesContainer.style.width = `${numberOfItems * 100}vw`;
@@ -80,32 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Click handler for each nav item
         navItemWrapper.addEventListener("click", () => {
-            if(i === currentIndex ) {
-                return;
-            }
-
-            document
-                .querySelectorAll(".nav-item-wrapper")
-                .forEach((nav) => nav.classList.remove("active"));
-            navItemWrapper.classList.add("active");
-
-            // Move slides container based on index
-            const translateXValue = -i * 100;
-            gsap.to(slidesContainer, {
-                x : `${translateXValue}vw`,
-                duration: 1.8,
-                ease : "smooth"
-            })
-
-            const newColor = getRandomColor();
-            gsap.to(bgOverlay, {
-                backgroundColor : newColor,
-                duration : 1.8,
-                ease : "smooth"
-            })
-            
-            updateTitle(i, newColor);
-            currentIndex = i;
+            goToSlide(i);
         })
 
         const slide = document.createElement("div");
@@ -127,5 +144,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     updateTitle(0, getComputedStyle(bgOverlay).backgroundColor)
+
+    // Mouse wheel scroll handler
+    let wheelDelta = 0;
+    const wheelThreshold = 50; // Minimum scroll delta to trigger slide change
+
+    window.addEventListener("wheel", (e) => {
+        // Prevent default page scrolling
+        e.preventDefault();
+
+        // Accumulate wheel delta
+        wheelDelta += e.deltaY;
+
+        // Clear existing timeout
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+
+        // Throttle scroll events
+        scrollTimeout = setTimeout(() => {
+            if (Math.abs(wheelDelta) > wheelThreshold) {
+                if (wheelDelta > 0) {
+                    // Scrolled down - go to next slide
+                    goToSlide(currentIndex + 1);
+                } else {
+                    // Scrolled up - go to previous slide
+                    goToSlide(currentIndex - 1);
+                }
+                wheelDelta = 0; // Reset delta
+            }
+        }, 100);
+    }, { passive: false });
 
 })
