@@ -1,6 +1,7 @@
 /* === Base Styles === */
 .site-footer {
-  background: #2f1f53;
+  /* background: #2f1f53; */
+  background-color: black;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
   font-family: "Poppins", sans-serif;

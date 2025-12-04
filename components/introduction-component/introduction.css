@@ -14,7 +14,12 @@
   background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed; /* Fallback for browsers without smooth scroll */
+}
+
+/* When smooth scroll is active, background-attachment will be overridden by JS */
+.smooth-scroll-active #intro {
+  background-attachment: scroll;
 }
 
 #particles-js {
@@ -87,5 +92,17 @@ p {
 @media screen and (max-width: 1280px) {
   #intro {
     background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+  }
+}
+
+/* Additional mobile optimizations */
+@media screen and (max-width: 768px) {
+  #intro {
+    background-attachment: scroll !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
   }
 }
