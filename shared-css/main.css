@@ -189,7 +189,8 @@ html {
 }
 
 body {
-  background: #312450;
+  /* background: #312450; */
+  background-color: black;
 }
 
 body.is-preload *,
@@ -2055,7 +2056,8 @@ input[type="button"].primary,
 button.primary,
 .button.primary {
   background-color: #ffffff;
-  color: #312450 !important;
+  /* color: #312450 !important; */
+  color: black !important;
 }
 
 input[type="submit"].primary:after,
@@ -2400,7 +2402,8 @@ button:hover:active:after,
   display: block;
   background: #ffffff;
   border-radius: 100%;
-  color: #312450;
+  /* color: #312450; */
+  color: black;
   text-align: center;
   line-height: 2.5em;
   margin: 0 0 1.3em 0;

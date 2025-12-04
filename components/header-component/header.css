@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #5e42a6; /* Hyperspace purple */
+  background: black; /* Hyperspace purple */
   padding: 1.5em 2em;
   position: relative;
   z-index: 1000;
@@ -91,12 +91,12 @@
     text-decoration: dotted underline;
     border-radius: 8%;
     text-underline-offset: 5px;
-    background-color:#683ed2;
+    background-color: black;
     text-align: left;
   }
   .header nav ul li a {
     font-size: 14px;
-    color: #4c20bd;
+    color: black;
   }
   .links:hover {
     text-decoration: none;
