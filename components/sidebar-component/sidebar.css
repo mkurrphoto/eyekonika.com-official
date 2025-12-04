@@ -1,6 +1,7 @@
 #sidebar {
   padding: 2.5em 2.5em 0.5em 2.5em;
-  background: #312450;
+  /* background: #312450; */
+  background-color: black;
   cursor: default;
   height: 100vh;
   left: 0;
@@ -286,6 +287,12 @@ body.is-preload #sidebar nav ul li {
   -ms-transform: translateY(2em);
   transform: translateY(2em);
   opacity: 0;
+}
+
+/* Enhanced float-in animation support */
+#sidebar nav ul li {
+  will-change: transform, opacity;
+  transform-origin: center center;
 }
 
 @media screen and (max-width: 1280px) {

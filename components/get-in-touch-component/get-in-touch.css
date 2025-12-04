@@ -10,7 +10,12 @@
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed; /* Fallback for browsers without smooth scroll */
+}
+
+/* When smooth scroll is active, background-attachment will be overridden by JS */
+.smooth-scroll-active #three {
+  background-attachment: scroll;
 }
 
 #particles-js {
@@ -90,7 +95,7 @@ button:hover {
     gap: 10px;
   }
 
-  #three::before {
+  #three {
     background-attachment: scroll !important;
     background-position: center !important;
     background-size: cover !important;
