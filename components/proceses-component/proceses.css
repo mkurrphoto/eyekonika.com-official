@@ -911,6 +911,11 @@ body.swipe-page-left #preloader {
   opacity: 0.8;
 }
 
+.more:hover{
+  background-color: black;
+  color: white!important;
+}
+
 @keyframes gradientShift {
   0%, 100% {
     background-position: 0% 50%;
