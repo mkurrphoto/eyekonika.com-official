@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const translateXValue = -newIndex * 100;
         gsap.to(slidesContainer, {
             x: `${translateXValue}vw`,
-            duration: 1.8,
+            duration: 0.6,
             ease: "smooth",
             onComplete: () => {
                 isTransitioning = false;
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const newColor = getRandomColor();
         gsap.to(bgOverlay, {
             backgroundColor: newColor,
-            duration: 1.8,
+            duration: 0.7,
             ease: "smooth"
         });
 
@@ -155,10 +155,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Accumulate wheel delta
         wheelDelta += e.deltaY;
-
+        console.log(currentIndex);
         // Clear existing timeout
         if (scrollTimeout) {
             clearTimeout(scrollTimeout);
+        }
+        if(currentIndex === 0 && wheelDelta < 0){
+            goToSlide(numberOfItems - 1);
+        }
+        if(currentIndex === numberOfItems - 1 && wheelDelta > 0){
+            goToSlide(0);
         }
 
         // Throttle scroll events
