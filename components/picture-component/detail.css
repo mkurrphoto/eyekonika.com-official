@@ -17,7 +17,8 @@ body {
     overflow: hidden;
 }
 
-nav, footer {
+nav,
+footer {
     position: fixed;
     left: 0;
     width: 100vw;
@@ -117,19 +118,19 @@ nav a#logo {
     align-items: center;
 }
 
-.slide .img{
+.slide .img {
     width: 50%;
     height: 50%;
     opacity: 0.75;
 }
 
-img{
+img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.slide-title{
+.slide-title {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -141,25 +142,25 @@ img{
     pointer-events: none;
 }
 
-.slide-title-row{
+.slide-title-row {
     flex: 1;
     width: 100%;
     display: flex;
 }
 
-.slide-title-row:nth-child(2){
+.slide-title-row:nth-child(2) {
     position: relative;
     left: 4em;
 }
 
-.letter{
+.letter {
     flex: 1;
     height: 100%;
     padding-left: 2em;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-} 
+}
 
-.letter span{
+.letter span {
     position: relative;
     display: inline-block;
     font-family: "Timmons NY 2.005";
@@ -167,22 +168,61 @@ img{
     filter: brightness(0.25) saturate(0.75);
 }
 
-@media (max-width : 900px) {
+@media screen and (max-width: 1024px) {
+    .letter span {
+        font-size: 200px;
+    }
+}
+
+@media screen and (max-width: 900px) {
     .slider-nav {
         width: 40%;
+        left: 57%;
     }
-    .slide .img{
+
+    .slide .img {
         width: 80%;
         height: 75%;
     }
+
     .slide-title {
         left: 47.5%;
         height: 25%;
     }
-    .slide-title-row:nth-child(2){
+
+    .slide-title-row:nth-child(2) {
         left: 0;
     }
-    .letter span{
-        font-size: 100px;
+
+    .letter span {
+        font-size: 130px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    nav a#logo {
+        font-size: 29px;
+    }
+
+    .slider-nav {
+        width: 20%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .letter span {
+        font-size: 75px !important;
+    }
+}
+
+
+@media screen and (max-width: 425px) {
+    .letter span {
+        font-size: 60px !important;
+    }
+
+    nav a#logo {
+        font-size: 20px !important;
+        padding-top: 6px;
     }
 }

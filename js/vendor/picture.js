@@ -127,15 +127,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const slide = document.createElement("div");
         slide.classList.add("slide");
-        if( i === 0 ){
-            slide.classList.add("active"); 
+        if (i === 0) {
+            slide.classList.add("active");
         }
 
         const imgWrapper = document.createElement("div");
         imgWrapper.classList.add("img");
 
         const img = document.createElement("img");
-        img.src = `images/picture/${i+1}.jpg`;
+        img.src = `images/picture/${i + 1}.jpg`;
         img.alt = "";
 
         imgWrapper.appendChild(img);
@@ -160,10 +160,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (scrollTimeout) {
             clearTimeout(scrollTimeout);
         }
-        if(currentIndex === 0 && wheelDelta < 0){
+        if (currentIndex === 0 && wheelDelta < 0) {
             goToSlide(numberOfItems - 1);
         }
-        if(currentIndex === numberOfItems - 1 && wheelDelta > 0){
+        if (currentIndex === numberOfItems - 1 && wheelDelta > 0) {
             goToSlide(0);
         }
 
