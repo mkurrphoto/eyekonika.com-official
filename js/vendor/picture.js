@@ -145,41 +145,115 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateTitle(0, getComputedStyle(bgOverlay).backgroundColor)
 
-    // Mouse wheel scroll handler
+    // Detect if device is touch-enabled
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    // Mouse wheel scroll handler (desktop only)
     let wheelDelta = 0;
     const wheelThreshold = 50; // Minimum scroll delta to trigger slide change
 
-    window.addEventListener("wheel", (e) => {
-        // Prevent default page scrolling
-        e.preventDefault();
+    if (!isTouchDevice) {
+        window.addEventListener("wheel", (e) => {
+            // Prevent default page scrolling
+            e.preventDefault();
 
-        // Accumulate wheel delta
-        wheelDelta += e.deltaY;
-        console.log(currentIndex);
-        // Clear existing timeout
-        if (scrollTimeout) {
-            clearTimeout(scrollTimeout);
-        }
-        if (currentIndex === 0 && wheelDelta < 0) {
-            goToSlide(numberOfItems - 1);
-        }
-        if (currentIndex === numberOfItems - 1 && wheelDelta > 0) {
-            goToSlide(0);
-        }
-
-        // Throttle scroll events
-        scrollTimeout = setTimeout(() => {
-            if (Math.abs(wheelDelta) > wheelThreshold) {
-                if (wheelDelta > 0) {
-                    // Scrolled down - go to next slide
-                    goToSlide(currentIndex + 1);
-                } else {
-                    // Scrolled up - go to previous slide
-                    goToSlide(currentIndex - 1);
-                }
-                wheelDelta = 0; // Reset delta
+            // Accumulate wheel delta
+            wheelDelta += e.deltaY;
+            // Clear existing timeout
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
             }
-        }, 100);
+            if (currentIndex === 0 && wheelDelta < 0) {
+                goToSlide(numberOfItems - 1);
+            }
+            if (currentIndex === numberOfItems - 1 && wheelDelta > 0) {
+                goToSlide(0);
+            }
+
+            // Throttle scroll events
+            scrollTimeout = setTimeout(() => {
+                if (Math.abs(wheelDelta) > wheelThreshold) {
+                    if (wheelDelta > 0) {
+                        // Scrolled down - go to next slide
+                        goToSlide(currentIndex + 1);
+                    } else {
+                        // Scrolled up - go to previous slide
+                        goToSlide(currentIndex - 1);
+                    }
+                    wheelDelta = 0; // Reset delta
+                }
+            }, 100);
+        }, { passive: false });
+    }
+
+    // Touch/swipe handler for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    const swipeThreshold = 50; // Minimum distance for swipe
+    const verticalSwipeThreshold = 80; // Minimum vertical scroll to trigger slide change
+
+    const container = document.querySelector('.container');
+    
+    container.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+        if (isTransitioning) return;
+        
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // Determine swipe direction based on which axis has more movement
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Horizontal swipe
+            if (Math.abs(deltaX) > swipeThreshold) {
+                e.preventDefault();
+                
+                if (deltaX > 0) {
+                    // Swiped right - go to previous slide
+                    if (currentIndex === 0) {
+                        goToSlide(numberOfItems - 1);
+                    } else {
+                        goToSlide(currentIndex - 1);
+                    }
+                } else {
+                    // Swiped left - go to next slide
+                    if (currentIndex === numberOfItems - 1) {
+                        goToSlide(0);
+                    } else {
+                        goToSlide(currentIndex + 1);
+                    }
+                }
+            }
+        } else {
+            // Vertical swipe
+            if (Math.abs(deltaY) > verticalSwipeThreshold) {
+                e.preventDefault();
+                
+                if (deltaY < 0) {
+                    // Swiped up - go to next slide
+                    if (currentIndex === numberOfItems - 1) {
+                        goToSlide(0);
+                    } else {
+                        goToSlide(currentIndex + 1);
+                    }
+                } else {
+                    // Swiped down - go to previous slide
+                    if (currentIndex === 0) {
+                        goToSlide(numberOfItems - 1);
+                    } else {
+                        goToSlide(currentIndex - 1);
+                    }
+                }
+            }
+        }
     }, { passive: false });
 
 })

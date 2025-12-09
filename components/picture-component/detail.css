@@ -181,8 +181,9 @@ img {
     }
 
     .slide .img {
-        width: 80%;
-        height: 75%;
+        width: 90%;
+        height: 60%;
+        max-height: 60vh;
     }
 
     .slide-title {
@@ -207,11 +208,23 @@ img {
     .slider-nav {
         width: 20%;
     }
+
+    .slide .img {
+        width: 95%;
+        height: 55%;
+        max-height: 55vh;
+    }
 }
 
 @media screen and (max-width: 600px) {
     .letter span {
         font-size: 75px !important;
+    }
+
+    .slide .img {
+        width: 95%;
+        height: 50%;
+        max-height: 50vh;
     }
 }
 
@@ -224,5 +237,11 @@ img {
     nav a#logo {
         font-size: 20px !important;
         padding-top: 6px;
+    }
+
+    .slide .img {
+        width: 95%;
+        height: 45%;
+        max-height: 45vh;
     }
 }
