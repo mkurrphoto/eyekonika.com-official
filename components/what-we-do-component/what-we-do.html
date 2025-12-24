@@ -1,104 +1,24 @@
-<section id="two" class="wrapper style3">
-  
-  <div class="inner">
-    <h2>Testimonials</h2>
-
-    <div class="testimonials grid">
-      <article class="story reveal" tabindex="0">
-        <div class="media">
-          <img src="/images/testimonials/person1.jpg" alt="Ava Morales" loading="lazy">
-        </div>
-        <blockquote>"Eyekonika captured our exhibit perfectly — the clarity and colour were beyond what I expected."</blockquote>
-        <p class="by">— Ava Morales <a href="/stories/ava-morales.html" class="full-story">Full story</a></p>
-      </article>
-
-      <article class="story reveal" tabindex="0">
-        <div class="media">
-          <img src="/images/testimonials/person2.jpg" alt="Liam Chen" loading="lazy">
-        </div>
-        <blockquote>"Fast, professional, and detail-oriented. The scanning service saved us weeks of work."</blockquote>
-        <p class="by">— Liam Chen <a href="/stories/liam-chen.html" class="full-story">Full story</a></p>
-      </article>
-
-      <article class="story reveal" tabindex="0">
-        <div class="media">
-          <img src="/images/testimonials/person3.jpg" alt="Nora Patel" loading="lazy">
-        </div>
-        <blockquote>"Their design consultation transformed our gallery experience for visitors."</blockquote>
-        <p class="by">— Nora Patel <a href="/stories/nora-patel.html" class="full-story">Full story</a></p>
-      </article>
+<div class="slider">
+  <input type="radio" name="slider" title="slide1" checked="checked" class="slider__nav"/>
+  <input type="radio" name="slider" title="slide2" class="slider__nav"/>
+  <input type="radio" name="slider" title="slide3" class="slider__nav"/>
+  <input type="radio" name="slider" title="slide4" class="slider__nav"/>
+  <div class="slider__inner">
+    <div class="slider__contents"><i class="slider__image fa fa-codepen"></i>
+      <h2 class="slider__caption">codepen</h2>
+      <p class="slider__txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At cupiditate omnis possimus illo quos, corporis minima!</p>
     </div>
-
-    <div class="scroll-hint">
-      <span class="dot"></span>
-      <span class="text">Scroll for more</span>
+    <div class="slider__contents"><i class="slider__image fa fa-newspaper-o"></i>
+      <h2 class="slider__caption">newspaper-o</h2>
+      <p class="slider__txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At cupiditate omnis possimus illo quos, corporis minima!</p>
     </div>
-
+    <div class="slider__contents"><i class="slider__image fa fa-television"></i>
+      <h2 class="slider__caption">television</h2>
+      <p class="slider__txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At cupiditate omnis possimus illo quos, corporis minima!</p>
+    </div>
+    <div class="slider__contents"><i class="slider__image fa fa-diamond"></i>
+      <h2 class="slider__caption">diamond</h2>
+      <p class="slider__txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At cupiditate omnis possimus illo quos, corporis minima!</p>
+    </div>
   </div>
-
-  <style>
-    /* Compact testimonials grid that matches the site's simple style */
-    .testimonials.grid{
-      display:flex;
-      gap:1.25rem;
-      justify-content:center;
-      align-items:flex-start;
-      flex-wrap:wrap;
-      margin-top:1.5rem;
-    }
-    .story{
-      background:var(--panel-bg, rgba(255,255,255,0.02));
-      border-radius:8px;
-      padding:1rem;
-      width:calc(33% - 0.8rem);
-      min-width:220px;
-      box-shadow:0 6px 18px rgba(10,10,10,0.06);
-      display:flex;
-      flex-direction:column;
-      gap:0.6rem;
-      text-align:left;
-      transition:transform .28s ease, box-shadow .28s ease;
-    }
-    .story:focus, .story:hover{ transform:translateY(-6px); box-shadow:0 14px 30px rgba(10,10,10,0.12); }
-    .media{ width:56px; height:56px; border-radius:50%; overflow:hidden; flex:0 0 56px; }
-    .media img{ width:100%; height:100%; object-fit:cover; display:block; }
-    blockquote{ font-style:normal; color:var(--text-muted, #dcdcdc); margin:0; font-size:0.95rem; line-height:1.3; }
-    .by{ margin:0; font-size:0.85rem; color:var(--text, #fff); }
-    .by .full-story{ margin-left:0.5rem; font-weight:600; color:var(--accent, #7bd389); text-decoration:underline; }
-
-    /* Reveal animation (used with IntersectionObserver) */
-    .reveal{ opacity:0; transform:translateY(18px) scale(.995); transition:opacity .6s cubic-bezier(.2,.9,.3,1), transform .6s cubic-bezier(.2,.9,.3,1); }
-    .reveal.in-view{ opacity:1; transform:none; }
-
-    /* Small scroll hint to encourage interaction */
-    .scroll-hint{ display:flex; gap:.6rem; align-items:center; justify-content:center; margin-top:1rem; opacity:.9; }
-    .scroll-hint .dot{ width:10px; height:10px; border-radius:50%; background:var(--accent, #7bd389); animation: bounce 1.6s infinite; }
-    .scroll-hint .text{ font-size:0.85rem; color:var(--text-muted, #cfcfcf); }
-    @keyframes bounce{ 0%{transform:translateY(0)} 50%{transform:translateY(6px)} 100%{transform:translateY(0)} }
-
-    /* Responsive tweaks */
-    @media (max-width:880px){ .story{ width:calc(50% - 0.8rem); } }
-    @media (max-width:600px){ .story{ width:100%; } .media{ width:48px; height:48px; } }
-  </style>
-
-  <script>
-    (function(){
-      // Lightweight reveal-on-scroll using IntersectionObserver
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting){
-            e.target.classList.add('in-view');
-            // If you want the reveal to run only once per element
-            io.unobserve(e.target);
-          }
-        });
-      }, {threshold: 0.18});
-
-      document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
-
-      // Make the whole story card keyboard-focusable for accessibility
-      document.querySelectorAll('.story').forEach(s => s.setAttribute('role','article'));
-    })();
-  </script>
-
-</section>
+</div>
