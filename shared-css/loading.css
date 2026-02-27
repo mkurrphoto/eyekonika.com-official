@@ -1,4 +1,4 @@
-/* Eyekonika text */
+280/* Eyekonika text */
 .loader-text {
   margin-top: 20px;
   font-size: 1.2rem;
@@ -16,7 +16,7 @@
 }
 
 .loader-gif {
-  width: 120px;
-  height: 120px;
+  width: 280px;
+  height: 280px;
   object-fit: contain;
 }
