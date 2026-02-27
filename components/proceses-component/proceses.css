@@ -697,6 +697,18 @@ body.swipe-page-left #preloader {
   }
 }
 
+@media (max-width: 1400px) {
+  .timeline-item.left .timeline-card::after,
+  .timeline-item.right .timeline-card::after {
+    display: none !important;
+  }
+
+  .timeline-item.left .timeline-card:hover::after,
+  .timeline-item.right .timeline-card:hover::after {
+    display: none !important;
+  }
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
 
