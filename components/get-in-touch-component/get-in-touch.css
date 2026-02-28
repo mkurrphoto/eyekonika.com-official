@@ -6,6 +6,7 @@
 #three {
   position: relative;
   overflow: hidden;
+  background-color: #060a14;
   background-image: url("/images/photo-backgrounds/pexels-apasaric-325185.jpg");
   background-repeat: no-repeat;
   background-position: top center;
