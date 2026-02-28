@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Begin — Eyekonika</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared-css/journey.css" />
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css" />
+</head>
+<body>
+  <a href="index.html" class="journey-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    <span>Eyekonika</span>
+  </a>
+
+  <!-- journey.html contents go here -->
+
+<!-- Progress dots -->
+<nav class="journey-progress" aria-label="Journey progress">
+  <div class="progress-dot active" data-scene="0"></div>
+  <div class="progress-dot" data-scene="1"></div>
+  <div class="progress-dot" data-scene="2"></div>
+  <div class="progress-dot" data-scene="3"></div>
+  <div class="progress-dot" data-scene="4"></div>
+</nav>
+
+<!-- Scene counter -->
+<div class="scene-counter"><span id="scene-num">01</span> / 05</div>
+
+<!-- Cursor glow -->
+<div class="cursor-glow" id="cursor-glow"></div>
+
+<!-- ============================================
+     HORIZONTAL ACT — cinematic opening
+     ============================================ -->
+<div id="journey-horizontal">
+  <div class="h-track" id="h-track">
+
+    <!-- SCENE 1 — The idea -->
+    <div class="journey-scene" id="scene-1">
+      <!-- Ambient orbs -->
+      <div class="ambient-orb" style="width:600px;height:600px;top:-100px;right:-100px;--dur:25s;opacity:0.6;"></div>
+      <div class="ambient-orb" style="width:300px;height:300px;bottom:50px;left:10%;--dur:18s;opacity:0.4;"></div>
+
+      <!-- Geometric graphics -->
+      <div class="geo-orb" style="width:180px;height:180px;top:15%;right:12%;transform:translateY(-20px);"></div>
+      <div class="geo-cross" style="width:50px;height:50px;top:20%;left:8%;"></div>
+      <div class="geo-cross" style="width:30px;height:30px;bottom:25%;right:18%;"></div>
+      <div class="geo-dots" style="width:180px;height:180px;bottom:15%;left:5%;border-radius:4px;"></div>
+      <div class="geo-bracket tl" style="top:18%;left:18%;transform:translate(-10px,-10px);"></div>
+      <div class="geo-bracket br" style="bottom:18%;right:18%;transform:translate(10px,10px);"></div>
+      <div class="geo-line-h" style="width:120px;bottom:30%;left:60%;"></div>
+
+      <div class="scene-content">
+        <div class="kinetic-line">
+          <span class="word-reveal">Every</span>
+          <span class="word-reveal">piece</span>
+        </div>
+        <div class="kinetic-line" style="margin-top:0.3rem;">
+          <span class="word-reveal">begins</span>
+          <span class="word-reveal">with</span>
+          <span class="word-reveal">an</span>
+          <span class="word-reveal accent">idea.</span>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="scroll-hint-h" id="scroll-hint-h">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- SCENE 2 — Not a product -->
+    <div class="journey-scene" id="scene-2">
+      <div class="ambient-orb" style="width:500px;height:500px;top:20%;left:-80px;--dur:22s;opacity:0.5;"></div>
+
+      <!-- Large glass rect suggestion -->
+      <div class="geo-rect" style="width:280px;height:380px;right:8%;top:50%;transform:translateY(-50%) translateX(30px);border-color:rgba(178,152,255,0.15);"></div>
+      <div class="geo-rect" style="width:240px;height:320px;right:calc(8% + 20px);top:50%;transform:translateY(-46%) translateX(20px);border-color:rgba(178,152,255,0.08);"></div>
+      <div class="geo-bracket tl" style="top:calc(50% - 200px);right:calc(8% + 4px);transform:translate(10px,-10px);"></div>
+      <div class="geo-bracket br" style="bottom:calc(50% - 195px);right:calc(8%);transform:translate(-10px,10px);"></div>
+      <div class="geo-dots" style="width:120px;height:120px;top:15%;left:45%;border-radius:3px;"></div>
+      <div class="geo-cross" style="width:40px;height:40px;bottom:20%;left:40%;"></div>
+
+      <div class="scene-content" style="max-width:700px;">
+        <p class="scene-eyebrow">The beginning</p>
+        <div class="kinetic-line" style="margin-top:1.5rem;">
+          <span class="word-reveal thin">Not a product.</span>
+        </div>
+        <div class="kinetic-line">
+          <span class="word-reveal thin">Not an order form.</span>
+        </div>
+        <div class="kinetic-line" style="margin-top:2rem;">
+          <span class="word-reveal large">An <em>idea.</em></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 3 — The image -->
+    <div class="journey-scene" id="scene-3">
+      <div class="ambient-orb" style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-50%);--dur:30s;opacity:0.35;"></div>
+
+      <!-- Layered glass frames suggesting a piece -->
+      <div class="geo-shard" style="width:320px;height:220px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-3deg);--rot:-3deg;border-radius:4px;"></div>
+      <div class="geo-shard" style="width:280px;height:190px;top:50%;left:50%;transform:translate(-48%,-52%) rotate(2deg);--rot:2deg;border-radius:4px;opacity:0.4;"></div>
+
+      <div class="geo-line-h" style="width:200px;top:25%;left:50%;transform:translateX(-50%);"></div>
+      <div class="geo-line-h" style="width:200px;bottom:25%;left:50%;transform:translateX(-50%);"></div>
+      <div class="geo-cross" style="width:60px;height:60px;top:15%;right:15%;"></div>
+      <div class="geo-cross" style="width:40px;height:40px;bottom:20%;left:12%;"></div>
+      <div class="geo-dots" style="width:200px;height:100px;bottom:10%;right:5%;border-radius:3px;"></div>
+
+      <div class="scene-content centered">
+        <p class="scene-eyebrow">The form it takes</p>
+        <div class="kinetic-line">
+          <span class="word-reveal">Light</span>
+          <span class="word-reveal">captured</span>
+        </div>
+        <div class="kinetic-line">
+          <span class="word-reveal">inside</span>
+          <span class="word-reveal accent">glass.</span>
+        </div>
+        <div class="scene-divider" style="margin-top:1rem;">
+          <div class="scene-divider-inner"></div>
+        </div>
+        <p class="scene-subtext">
+          A subsurface engraving exists beneath the surface —
+          unreachable, permanent, alive only when light finds it.
+        </p>
+      </div>
+    </div>
+
+    <!-- SCENE 4 — Permanent -->
+    <div class="journey-scene" id="scene-4">
+      <div class="ambient-orb" style="width:450px;height:450px;bottom:-50px;right:5%;--dur:20s;opacity:0.5;"></div>
+
+      <!-- Split layout graphics -->
+      <div class="geo-orb" style="width:300px;height:300px;left:5%;top:50%;transform:translateY(-50%) translateX(-20px);"></div>
+      <div class="geo-rect" style="width:180px;height:240px;left:calc(5% + 60px);top:50%;transform:translateY(-50%) translateX(-20px);"></div>
+      <div class="geo-bracket tl" style="top:calc(50% - 125px);left:calc(5% + 55px);transform:translate(-10px,-10px);"></div>
+      <div class="geo-bracket br" style="bottom:calc(50% - 125px);left:calc(5% + 175px);transform:translate(10px,10px);"></div>
+      <div class="geo-dots" style="width:150px;height:150px;top:10%;right:8%;border-radius:3px;"></div>
+      <div class="geo-line-h" style="width:80px;bottom:35%;right:12%;"></div>
+      <div class="geo-cross" style="width:45px;height:45px;top:18%;left:45%;"></div>
+
+      <div class="scene-content" style="padding-left:42vw;max-width:1000px;">
+        <p class="scene-eyebrow">What it means</p>
+        <div class="kinetic-line" style="margin-top:1.5rem;">
+          <span class="word-reveal">The image</span>
+        </div>
+        <div class="kinetic-line">
+          <span class="word-reveal">lives inside</span>
+        </div>
+        <div class="kinetic-line">
+          <span class="word-reveal">the</span>
+          <span class="word-reveal accent">material.</span>
+        </div>
+        <div class="kinetic-line secondary-line" style="margin-top:2rem;">
+          <span class="word-reveal">Permanent.</span>
+          <span class="word-reveal">Unrepeatable.</span>
+          <span class="word-reveal">Yours.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 5 — The turn -->
+    <div class="journey-scene" id="scene-5">
+      <div class="ambient-orb" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);--dur:28s;opacity:0.4;"></div>
+
+      <!-- Converging lines suggesting a funnel/journey beginning -->
+      <div class="geo-line-h" style="width:300px;top:30%;left:50%;transform:translateX(-50%);"></div>
+      <div class="geo-line-h" style="width:180px;bottom:30%;left:50%;transform:translateX(-50%);"></div>
+      <div class="geo-cross" style="width:70px;height:70px;top:18%;left:10%;"></div>
+      <div class="geo-cross" style="width:50px;height:50px;bottom:20%;right:10%;"></div>
+      <div class="geo-bracket tl" style="top:20%;left:20%;transform:translate(-10px,-10px);"></div>
+      <div class="geo-bracket tr" style="top:20%;right:20%;transform:translate(10px,-10px);"></div>
+      <div class="geo-bracket bl" style="bottom:20%;left:20%;transform:translate(-10px,10px);"></div>
+      <div class="geo-bracket br" style="bottom:20%;right:20%;transform:translate(10px,10px);"></div>
+      <div class="geo-dots" style="width:250px;height:250px;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;opacity:0.3;"></div>
+
+      <div class="scene-content centered">
+        <div class="kinetic-line">
+          <span class="word-reveal thin">Every piece</span>
+        </div>
+        <div class="kinetic-line">
+          <span class="word-reveal thin">starts somewhere.</span>
+        </div>
+        <div class="scene-divider" style="margin-top:1.5rem;">
+          <div class="scene-divider-inner"></div>
+        </div>
+        <div class="kinetic-line question-line" style="margin-top:1rem;">
+          <span class="word-reveal">Where does</span>
+        </div>
+        <div class="kinetic-line question-line">
+          <span class="word-reveal accent">yours</span>
+          <span class="word-reveal">begin?</span>
+        </div>
+        <!-- Scroll down hint -->
+        <div class="scroll-hint-v" id="scroll-hint-v" style="position:relative;bottom:auto;left:auto;transform:none;margin-top:3rem;">
+          <span>Continue</span>
+          <div class="scroll-hint-v-line"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /h-track -->
+</div><!-- /journey-horizontal -->
+
+
+<!-- ============================================
+     VERTICAL ACT — the form journey
+     ============================================ -->
+<div id="journey-vertical">
+
+  <!-- Bridge -->
+  <div class="v-scene" id="v-bridge">
+    <div class="scene-content centered">
+      <p class="scene-eyebrow" id="bridge-eyebrow">Tell us a little about yourself.</p>
+    </div>
+    <div class="geo-line-h" style="width:100px;bottom:40%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+  </div>
+
+  <!-- V-SCENE 6: Name + Email -->
+  <div class="v-scene" id="v-scene-6">
+    <div class="geo-cross" style="width:50px;height:50px;top:15%;left:8%;position:absolute;"></div>
+    <div class="geo-dots" style="width:150px;height:150px;bottom:15%;right:6%;border-radius:3px;position:absolute;"></div>
+    <div class="geo-bracket tl" style="top:20%;right:15%;position:absolute;transform:translate(10px,-10px);"></div>
+
+    <div class="scene-content centered">
+      <div class="journey-fields" id="fields-6">
+        <div class="journey-field-group">
+          <input type="text" class="journey-input" id="j-name" placeholder="Your name" autocomplete="off" />
+          <div class="field-underline"></div>
+        </div>
+        <div class="journey-field-group">
+          <input type="email" class="journey-input" id="j-email" placeholder="Your email" autocomplete="off" />
+          <div class="field-underline"></div>
+        </div>
+      </div>
+      <button class="journey-continue" id="continue-1">
+        <span>Continue</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- V-SCENE 7: Occasion -->
+  <div class="v-scene" id="v-scene-7" style="display:none;">
+    <div class="geo-shard" style="width:200px;height:280px;right:8%;top:50%;transform:translateY(-50%) rotate(2deg);--rot:2deg;position:absolute;"></div>
+    <div class="geo-cross" style="width:40px;height:40px;top:20%;left:10%;position:absolute;"></div>
+    <div class="geo-dots" style="width:120px;height:120px;bottom:20%;left:5%;border-radius:3px;position:absolute;"></div>
+
+    <div class="scene-content centered">
+      <div class="kinetic-line question-line">
+        <span class="word-reveal">What is the</span>
+        <span class="word-reveal accent">occasion?</span>
+      </div>
+      <div class="journey-choices" id="occasion-choices" style="margin-top:1rem;">
+        <div class="journey-choice" data-value="memorial">
+          <span class="choice-label">A memorial or dedication</span>
+          <div class="choice-border"></div>
+          <span class="choice-arrow">→</span>
+        </div>
+        <div class="journey-choice" data-value="institutional">
+          <span class="choice-label">An institutional commission</span>
+          <div class="choice-border"></div>
+          <span class="choice-arrow">→</span>
+        </div>
+        <div class="journey-choice" data-value="gift">
+          <span class="choice-label">A gift or personal piece</span>
+          <div class="choice-border"></div>
+          <span class="choice-arrow">→</span>
+        </div>
+        <div class="journey-choice" data-value="other">
+          <span class="choice-label">Something else entirely</span>
+          <div class="choice-border"></div>
+          <span class="choice-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- V-SCENE 8: Describe the space -->
+  <div class="v-scene" id="v-scene-8" style="display:none;">
+    <div class="geo-rect" style="width:200px;height:260px;left:6%;top:50%;transform:translateY(-50%) translateX(-20px);position:absolute;"></div>
+    <div class="geo-bracket tl" style="top:15%;right:10%;position:absolute;transform:translate(10px,-10px);"></div>
+    <div class="geo-bracket br" style="bottom:15%;right:10%;position:absolute;transform:translate(-10px,10px);"></div>
+    <div class="geo-line-h" style="width:80px;top:25%;left:10%;position:absolute;"></div>
+
+    <div class="scene-content centered">
+      <p class="scene-eyebrow" id="scene-8-eyebrow">Help us see it.</p>
+      <div class="kinetic-line question-line" style="margin-top:0.5rem;">
+        <span class="word-reveal">Describe the</span>
+        <span class="word-reveal accent">space.</span>
+      </div>
+      <p class="scene-subtext">The light, the feeling, what it means to the people who enter it.</p>
+      <div class="journey-fields" id="fields-8" style="max-width:560px;">
+        <div class="journey-field-group wide">
+          <textarea class="journey-textarea" id="j-space" placeholder="Tell us..."></textarea>
+        </div>
+      </div>
+      <button class="journey-continue" id="continue-2">
+        <span>Continue</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- V-SCENE 9: Timeline -->
+  <div class="v-scene" id="v-scene-9" style="display:none;">
+    <div class="geo-orb" style="width:250px;height:250px;right:8%;bottom:10%;position:absolute;transform:translateY(20px);"></div>
+    <div class="geo-cross" style="width:55px;height:55px;top:15%;left:12%;position:absolute;"></div>
+    <div class="geo-dots" style="width:180px;height:90px;top:12%;right:10%;border-radius:3px;position:absolute;"></div>
+
+    <div class="scene-content centered">
+      <div class="kinetic-line">
+        <span class="word-reveal thin">One last thing.</span>
+      </div>
+      <p class="scene-eyebrow" style="margin-top:2rem;">When are you hoping to have it ready?</p>
+      <div class="journey-choices" id="timeline-choices" style="margin-top:0.5rem;">
+        <div class="journey-choice" data-value="asap">
+          <span class="choice-label">As soon as possible</span>
+          <div class="choice-border"></div>
+          <span class="choice-arrow">→</span>
+        </div>
+        <div class="journey-choice" data-value="months">
+          <span class="choice-label">Within a few months</span>
+          <div class="choice-border"></div>
+          <span class="choice-arrow">→</span>
+        </div>
+        <div class="journey-choice" data-value="planning">
+          <span class="choice-label">Still in the planning stage</span>
+          <div class="choice-border"></div>
+          <span class="choice-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- V-SCENE 10: Final card -->
+  <div class="v-scene" id="v-scene-10" style="display:none;">
+    <div class="geo-line-h" style="width:120px;top:20%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+    <div class="geo-bracket tl" style="top:15%;left:8%;position:absolute;transform:translate(-10px,-10px);"></div>
+    <div class="geo-bracket br" style="bottom:15%;right:8%;position:absolute;transform:translate(10px,10px);"></div>
+
+    <div class="scene-content centered">
+      <div class="journey-final-card" id="final-card">
+        <div class="final-eyebrow">That's a beautiful beginning.</div>
+        <div class="final-rule"></div>
+        <p class="final-text">There are a few practical things we'd like to understand before we speak.</p>
+
+        <form id="journeyForm" action="https://formspree.io/f/movyqgop" method="POST">
+          <input type="hidden" id="j-hidden-name" name="name" />
+          <input type="hidden" id="j-hidden-email" name="email" />
+          <input type="hidden" id="j-hidden-occasion" name="occasion" />
+          <input type="hidden" id="j-hidden-space" name="space-description" />
+          <input type="hidden" id="j-hidden-timeline" name="timeline" />
+
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <label class="final-label">What scale are you imagining?</label>
+            <input type="text" name="scale" class="final-input" placeholder="Small desk piece, large installation..." />
+          </div>
+
+          <div class="submit-magnetic">
+            <button type="submit" class="journey-submit">
+              <span>When you're ready</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- V-SCENE 11: Confirmation -->
+  <div class="v-scene" id="v-scene-11" style="display:none;">
+    <div class="geo-line-h" style="width:300px;top:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+    <div class="geo-line-h" style="width:160px;bottom:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+
+    <div class="scene-content centered">
+      <div class="confirmation-wrap">
+        <p class="confirm-main" id="confirm-main">We'll be in touch.</p>
+        <p class="confirm-sub" id="confirm-sub">Usually within a day.</p>
+        <div class="confirm-rule" id="confirm-rule"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /journey-vertical -->
+
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/journey.js"></script>
+</body>
+</html>
