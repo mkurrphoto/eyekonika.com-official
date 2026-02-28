@@ -4,17 +4,13 @@
 
 .timeline-section {
   position: relative;
-  background-color: #000;
-  background-image: url("../../images/photo-backgrounds/timeline-background-dark.jpg");
-  background-attachment: fixed;
-  background-position: center;
-  background-size: cover;
-  padding: 120px 0 80px;
+  background: linear-gradient(160deg, #06030f 0%, #0d0622 55%, #060a16 100%);
+  padding: 120px 0 100px;
   min-height: 100vh;
   font-family: "Poppins", sans-serif;
+  overflow: hidden;
 }
 
-/* Scroll anchor */
 .scroll-anchor {
   position: absolute;
   top: 0;
@@ -26,7 +22,7 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
+  width: 2px;
   height: 100%;
   background: rgba(178, 152, 255, 0.15);
   z-index: 0;
@@ -42,47 +38,27 @@
 }
 
 /* =============================================
-   TIMELINE ITEM BASE
+   TIMELINE ITEM — steps 1-4
    ============================================= */
 
 .timeline-item {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 40px 0;
   position: relative;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  width: 100%;
+  min-height: 260px;
+  padding: 40px 0;
 }
 
-.timeline-item.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Left: card on left, icon at center */
-.timeline-item.left {
-  flex-direction: row-reverse;
-  justify-content: flex-end;
-}
-
-/* Right: icon at center, card on right */
-.timeline-item.right {
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
-/* ---- Dot (fallback, hidden when icon present) ---- */
+/* Dot (hidden when icon is present) */
 .timeline-dot {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 14px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #b298ff;
-  border: 2px solid rgba(178, 152, 255, 0.4);
+  box-shadow: 0 0 10px rgba(178, 152, 255, 0.5);
   z-index: 2;
 }
 
@@ -94,9 +70,9 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: calc(50% + 1.25rem);
-  bottom: calc(-50% + 1.25rem);
-  width: 4px;
+  top: calc(50% + 22px);
+  bottom: -40px;
+  width: 2px;
   z-index: 1;
 }
 
@@ -104,18 +80,18 @@
   position: absolute;
   inset: 0;
   background: rgba(178, 152, 255, 0.1);
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 .timeline-progress-line {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
   height: 0;
-  border-radius: 2px;
+  border-radius: 1px;
   background: linear-gradient(to bottom, #b298ff, #6a4ddd);
-  box-shadow: 0 0 8px rgba(178, 152, 255, 0.6);
+  box-shadow: 0 0 6px rgba(178, 152, 255, 0.5);
   transition: height 0s linear;
 }
 
@@ -132,10 +108,10 @@
 }
 
 .timeline-icon {
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(10, 5, 25, 0.8);
+  background: rgba(8, 4, 20, 0.9);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(178, 152, 255, 0.3);
@@ -143,49 +119,52 @@
   align-items: center;
   justify-content: center;
   color: #b298ff;
-  transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .timeline-item.complete .timeline-icon {
-  background: rgba(106, 77, 221, 0.25);
+  background: rgba(106, 77, 221, 0.3);
   border-color: rgba(178, 152, 255, 0.6);
-  transform: translate(-50%, -50%) scale(1.08);
-  box-shadow: 0 0 16px rgba(178, 152, 255, 0.3);
+  box-shadow: 0 0 20px rgba(178, 152, 255, 0.3);
 }
 
 /* =============================================
-   CARD
+   CARD  — position: absolute anchored from center
    ============================================= */
 
 .timeline-card {
-  width: 42%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(50% - 80px); /* fits within one half, 80px gap from center */
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 36px 32px;
-  background: rgba(8, 4, 20, 0.75);
+  gap: 14px;
+  padding: 32px 28px;
+  background: rgba(8, 4, 20, 0.78);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(178, 152, 255, 0.18);
+  border: 1px solid rgba(178, 152, 255, 0.16);
   border-radius: 20px;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 4px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
               box-shadow 0.35s ease,
               border-color 0.35s ease;
-  position: relative;
   overflow: hidden;
 }
 
-/* Left card: push to left of center line */
+/* Left item: card anchored to right edge of left half */
 .timeline-item.left .timeline-card {
-  margin-right: calc(50% + 40px);
+  right: calc(50% + 44px);
+  left: auto;
 }
 
-/* Right card: push to right of center line */
+/* Right item: card anchored to left edge of right half */
 .timeline-item.right .timeline-card {
-  margin-left: calc(50% + 40px);
+  left: calc(50% + 44px);
+  right: auto;
 }
 
 .timeline-card::before {
@@ -193,19 +172,19 @@
   position: absolute;
   inset: 0;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(178, 152, 255, 0.06) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(178, 152, 255, 0.06) 0%, transparent 55%);
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
 }
 
 .timeline-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  border-color: rgba(178, 152, 255, 0.35);
+  transform: translateY(calc(-50% - 8px)) scale(1.02);
+  border-color: rgba(178, 152, 255, 0.32);
   box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.5),
-    0 0 32px rgba(178, 152, 255, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(178, 152, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 .timeline-card:hover::before {
@@ -223,7 +202,7 @@
 
 /* ---- Step title ---- */
 .step-title {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #fff;
   margin: 0;
@@ -232,8 +211,8 @@
 
 /* ---- Step description ---- */
 .step-desc {
-  font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.58);
   line-height: 1.75;
   margin: 0;
 }
@@ -242,17 +221,17 @@
 .timeline-btn {
   display: inline-block;
   align-self: flex-start;
-  padding: 10px 24px;
+  padding: 9px 22px;
   background: linear-gradient(135deg, #7e43d1 0%, #6a4ddd 100%);
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   text-decoration: none;
   border-radius: 10px;
-  border: 1px solid rgba(178, 152, 255, 0.25);
-  box-shadow: 0 4px 12px rgba(126, 67, 209, 0.3);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  border: 1px solid rgba(178, 152, 255, 0.2);
+  box-shadow: 0 3px 10px rgba(126, 67, 209, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   position: relative;
   overflow: hidden;
 }
@@ -260,41 +239,41 @@
 .timeline-btn::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
   transition: left 0.45s ease;
 }
 
-.timeline-btn:hover::before {
-  left: 100%;
-}
+.timeline-btn:hover::before { left: 100%; }
 
 .timeline-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(126, 67, 209, 0.5);
+  box-shadow: 0 6px 18px rgba(126, 67, 209, 0.5);
   background: linear-gradient(135deg, #9255e8 0%, #7e60f0 100%);
   color: #fff;
 }
 
 /* =============================================
-   CLIMAX PANEL (STEP 5)
+   CLIMAX PANEL — step 5
    ============================================= */
 
 .timeline-item.climax {
+  min-height: auto;
+  padding: 60px 60px 80px;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 40px 80px;
-  margin-top: 20px;
+  gap: 0;
 }
 
 .climax-dot {
   position: relative;
   left: auto;
+  top: auto;
   transform: none;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
+  flex-shrink: 0;
   box-shadow: 0 0 16px rgba(178, 152, 255, 0.5);
 }
 
@@ -302,12 +281,12 @@
   position: relative;
   width: 100%;
   max-width: 1100px;
-  min-height: 500px;
+  height: 520px;
   border-radius: 24px;
   overflow: hidden;
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(178, 152, 255, 0.15);
+    0 0 0 1px rgba(178, 152, 255, 0.12);
   cursor: pointer;
 }
 
@@ -320,21 +299,23 @@
   object-fit: cover;
   object-position: center;
   transition: transform 0.7s ease;
+  z-index: 0;
 }
 
 .climax-panel:hover .climax-featured-image {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 /* Glass overlay */
 .climax-glass-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     135deg,
-    rgba(8, 4, 20, 0.72) 0%,
-    rgba(8, 4, 20, 0.45) 50%,
-    rgba(8, 4, 20, 0.65) 100%
+    rgba(6, 3, 15, 0.75) 0%,
+    rgba(6, 3, 15, 0.45) 50%,
+    rgba(6, 3, 15, 0.65) 100%
   );
   transition: background 0.5s ease;
 }
@@ -342,35 +323,35 @@
 .climax-panel:hover .climax-glass-overlay {
   background: linear-gradient(
     135deg,
-    rgba(8, 4, 20, 0.55) 0%,
-    rgba(8, 4, 20, 0.3) 50%,
-    rgba(8, 4, 20, 0.5) 100%
+    rgba(6, 3, 15, 0.5) 0%,
+    rgba(6, 3, 15, 0.25) 50%,
+    rgba(6, 3, 15, 0.45) 100%
   );
 }
 
-/* Center content (always visible) */
+/* Center content (always visible, fades out on hover) */
 .climax-content {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 500px;
   padding: 60px 40px;
-  gap: 16px;
+  gap: 14px;
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .climax-panel:hover .climax-content {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-10px);
   pointer-events: none;
 }
 
 .climax-eyebrow {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #b298ff;
@@ -379,18 +360,18 @@
 }
 
 .climax-title {
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 800;
   color: #fff;
   margin: 0;
   line-height: 1.1;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
 }
 
 .climax-subtitle {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.65);
-  max-width: 520px;
+  color: rgba(255, 255, 255, 0.62);
+  max-width: 480px;
   margin: 0;
   line-height: 1.7;
 }
@@ -398,65 +379,62 @@
 /* Text block — slides in from left on hover */
 .climax-text-block {
   position: absolute;
-  left: 40px;
+  left: 36px;
   top: 50%;
-  transform: translateY(-50%) translateX(-20px);
-  width: 280px;
-  padding: 28px;
-  background: rgba(8, 4, 20, 0.82);
+  transform: translateY(-50%) translateX(-16px);
+  width: 260px;
+  padding: 24px;
+  background: rgba(6, 3, 15, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(178, 152, 255, 0.2);
+  border: 1px solid rgba(178, 152, 255, 0.18);
   border-radius: 16px;
   z-index: 3;
   opacity: 0;
-  transition: opacity 0.45s ease 0.1s, transform 0.45s ease 0.1s;
+  transition: opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s;
 }
 
 .climax-text-block p {
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.72);
   line-height: 1.7;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
 }
 
-.climax-text-block p:last-child {
-  margin-bottom: 0;
-}
+.climax-text-block p:last-child { margin-bottom: 0; }
 
 .climax-panel:hover .climax-text-block {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
 }
 
-/* Logo block — slides in from right on hover */
+/* Logo — slides in from right on hover */
 .climax-logo {
   position: absolute;
-  right: 40px;
+  right: 36px;
   top: 50%;
-  transform: translateY(-50%) translateX(20px);
+  transform: translateY(-50%) translateX(16px);
   z-index: 3;
   opacity: 0;
-  transition: opacity 0.45s ease 0.18s, transform 0.45s ease 0.18s;
+  transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
 }
 
 .climax-logo-inner {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: rgba(8, 4, 20, 0.82);
+  width: 200px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: rgba(6, 3, 15, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(178, 152, 255, 0.2);
+  border: 1px solid rgba(178, 152, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
 }
 
 .climax-logo-img {
   width: 100%;
-  height: auto;
+  max-height: 80px;
   object-fit: contain;
   filter: brightness(1.1);
 }
@@ -467,141 +445,121 @@
 }
 
 /* =============================================
-   SIDEBAR SCROLL LOCK
+   SIDEBAR SCROLL LOCK (desktop only)
    ============================================= */
 
-#sidebar.hide-sidebar {
-  transform: translateX(-120%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-#wrapper.expand-wrapper {
-  margin-left: 0 !important;
-  width: 100% !important;
+@media (min-width: 1281px) {
+  #wrapper.expand-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
 }
 
 /* =============================================
    RESPONSIVE
    ============================================= */
 
-/* Tablet and smaller: disable fixed background */
-@media (max-width: 1280px) {
-  .timeline-section {
-    background-attachment: scroll;
-  }
-}
-
-/* Tablet */
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (max-width: 1100px) {
   .timeline-card {
-    width: 44%;
-    padding: 28px 24px;
+    width: calc(50% - 60px);
   }
-
-  .step-title {
-    font-size: 1.15rem;
-  }
-
-  .climax-panel {
-    min-height: 420px;
-  }
-
-  .climax-content {
-    min-height: 420px;
-  }
+  .timeline-item.left .timeline-card  { right: calc(50% + 32px); }
+  .timeline-item.right .timeline-card { left: calc(50% + 32px); }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .timeline-section {
-    background-attachment: scroll;
     padding: 80px 0 60px;
   }
 
+  /* Move line to left rail */
   .timeline-line {
-    left: 24px;
+    left: 28px;
     transform: none;
   }
 
   .timeline-item {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    padding: 30px 20px 30px 60px;
-    gap: 16px;
+    min-height: auto;
+    padding: 20px 20px 20px 64px;
   }
 
-  .timeline-item.left .timeline-card,
-  .timeline-item.right .timeline-card {
-    margin: 0;
+  /* Cards become full width block elements */
+  .timeline-card {
+    position: relative;
+    top: auto;
+    left: auto !important;
+    right: auto !important;
+    transform: none;
     width: 100%;
   }
 
+  .timeline-card:hover {
+    transform: none;
+  }
+
+  /* Icons on left rail */
   .timeline-icon-container {
-    left: 24px;
-    top: 38px;
+    left: 28px;
+    top: 32px;
     transform: translateX(-50%);
   }
 
   .timeline-dot {
-    left: 24px;
+    left: 28px;
+    top: 32px;
     transform: translateX(-50%);
   }
 
   .timeline-progress-line-container {
-    left: 24px;
+    left: 28px;
     transform: none;
+    top: 56px;
+    bottom: 0;
   }
 
-  .step-title {
-    font-size: 1.15rem;
-  }
+  .step-title { font-size: 1.1rem; }
+  .step-desc  { font-size: 0.86rem; }
 
-  .step-desc {
-    font-size: 0.88rem;
-  }
-
-  /* Climax panel on mobile */
+  /* Climax on mobile */
   .timeline-item.climax {
     padding: 40px 16px 60px;
   }
 
   .climax-panel {
-    min-height: 340px;
+    height: 280px;
     border-radius: 16px;
   }
 
-  .climax-content {
-    min-height: 340px;
-    padding: 40px 24px;
-  }
+  .climax-title { font-size: 1.5rem; }
+  .climax-subtitle { font-size: 0.88rem; }
 
-  .climax-title {
-    font-size: 1.8rem;
-  }
-
-  .climax-text-block {
-    position: relative;
-    left: auto;
-    top: auto;
+  /* Show side panels as static blocks below the image panel on mobile */
+  .climax-text-block,
+  .climax-logo {
+    position: static;
     transform: none;
-    width: 100%;
-    margin-top: 16px;
     opacity: 1;
+    width: 100%;
+    margin-top: 12px;
+    border-radius: 12px;
   }
 
   .climax-logo {
-    position: relative;
-    right: auto;
-    top: auto;
-    transform: none;
     display: flex;
     justify-content: center;
-    margin-top: 16px;
-    opacity: 1;
+  }
+
+  .climax-logo-inner {
+    width: 160px;
   }
 
   .climax-panel:hover .climax-content {
+    opacity: 1;
+    transform: none;
+  }
+
+  .climax-panel:hover .climax-text-block,
+  .climax-panel:hover .climax-logo {
     opacity: 1;
     transform: none;
   }
