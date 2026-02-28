@@ -349,41 +349,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Page Swipe Effect - Move entire visible screen to the right */
-body.swipe-page-right {
-  overflow: hidden;
-}
-
-/* Move all visible page elements to the right in one smooth swipe */
-body.swipe-page-right #wrapper,
-body.swipe-page-right #footer,
-body.swipe-page-right #sidebar,
-body.swipe-page-right #particles-js,
-body.swipe-page-right #preloader {
-  transform: translateX(100%);
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
-
-/* Page Swipe Effect - Move entire visible screen to the left */
-body.swipe-page-left {
-  overflow: hidden;
-  position: relative;
-}
-
-/* Move all visible page elements to the left in one smooth swipe */
-body.swipe-page-left #wrapper,
-body.swipe-page-left #footer,
-body.swipe-page-left #sidebar,
-body.swipe-page-left #particles-js,
-body.swipe-page-left #preloader {
-  transform: translateX(-130%);
-  opacity: 0.8;
-  transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform, opacity;
-}
-
 .img-date {
   width: 100%;
   position: relative;
