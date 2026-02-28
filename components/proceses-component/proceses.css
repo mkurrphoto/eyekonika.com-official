@@ -815,11 +815,6 @@ body.swipe-page-left #preloader {
   }
 }
 
-@media (min-width: 320px) and (max-width: 768px) {
-  .container img {
-    width: 250px;
-  }
-}
 
 /* Tablet and smaller screens - adjust background attachment */
 @media (max-width: 1280px) {
@@ -2402,11 +2397,6 @@ body.swipe-page-left #preloader {
   }
 }
 
-@media (min-width: 320px) and (max-width: 768px) {
-  .container img {
-    width: 250px;
-  }
-}
 
 /* Tablet and smaller screens - adjust background attachment */
 @media (max-width: 1280px) {
