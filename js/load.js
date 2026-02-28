@@ -5,6 +5,7 @@ const parts = [
     file: "components/introduction-component/introduction.html",
   },
   { id: "proceses", file: "components/proceses-component/proceses.html" },
+  { id: "gallery", file: "components/gallery-component/gallery.html" },
   { id: "what-we-do", file: "components/what-we-do-component/what-we-do.html" },
   {
     id: "get-in-touch",
