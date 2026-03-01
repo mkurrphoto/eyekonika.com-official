@@ -1,7 +1,9 @@
 window.addEventListener("load", () => {
   setTimeout(() => {
     initTimelineIcons();
-    initTimelineReveal();
+    initSectionHeadingReveal();
+    initTimelineScrollDriven();
+    initImageCardParallax();
     initSidebarScrollLock();
     initIntroObserver();
     initClimaxParallax();
@@ -9,135 +11,209 @@ window.addEventListener("load", () => {
   }, 300);
 });
 
+/* =============================================
+   ICON — hide dot when icon container is present
+   ============================================= */
+
 function initTimelineIcons() {
-  // Hide dots when icon containers are present
-  const items = document.querySelectorAll(".timeline-item");
-  items.forEach((item) => {
-    const iconContainer = item.querySelector(".timeline-icon-container");
-    if (iconContainer) {
+  document.querySelectorAll(".timeline-item").forEach((item) => {
+    if (item.querySelector(".timeline-icon-container")) {
       const dot = item.querySelector(".timeline-dot");
       if (dot) dot.style.display = "none";
     }
   });
 }
 
-function initTimelineReveal() {
-  const items = document.querySelectorAll(".timeline-item");
-  let animationTimeouts = [];
-  let isLooping = false;
+/* =============================================
+   SECTION HEADING — fade + slide up on scroll
+   ============================================= */
 
-  // Mark all items visible immediately
-  items.forEach((item) => item.classList.add("visible"));
+function initSectionHeadingReveal() {
+  const heading = document.querySelector(".timeline-heading");
+  if (!heading) return;
 
-  function resetItemAnimation(item) {
-    item.classList.remove("complete");
-    const progressLine = item.querySelector(".timeline-progress-line");
-    if (progressLine) {
-      progressLine.style.transition = "height 0s linear";
-      progressLine.style.height = "0px";
-    }
-  }
-
-  function animateItem(item) {
-    item.classList.add("complete");
-    const progressLine = item.querySelector(".timeline-progress-line");
-    if (progressLine) {
-      progressLine.style.transition = "height 0s linear";
-      progressLine.style.height = "0px";
-      void progressLine.offsetHeight;
-      requestAnimationFrame(() => {
-        progressLine.style.transition = "height 2.5s linear";
-        progressLine.style.height = "calc(100% - 1.25rem + 1.5rem)";
-      });
-    }
-  }
-
-  function reverseAnimateItem(item) {
-    item.classList.remove("complete");
-    const progressLine = item.querySelector(".timeline-progress-line");
-    if (progressLine) {
-      progressLine.style.transition = "height 0.3s linear";
-      progressLine.style.height = "0px";
-    }
-  }
-
-  function clearAllTimeouts() {
-    animationTimeouts.forEach((t) => clearTimeout(t));
-    animationTimeouts = [];
-  }
-
-  function startAnimationLoop() {
-    if (isLooping) return;
-    isLooping = true;
-
-    function runLoop() {
-      const sortedItems = Array.from(items)
-        .filter((item) => item.querySelector(".timeline-progress-line-container") !== null)
-        .sort((a, b) => {
-          return (
-            parseInt(a.getAttribute("data-index") || "999") -
-            parseInt(b.getAttribute("data-index") || "999")
-          );
-        });
-
-      if (sortedItems.length === 0) {
-        isLooping = false;
-        return;
+  if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.fromTo(
+      heading,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: heading,
+          start: "top 85%",
+          once: true,
+        },
       }
-
-      sortedItems.forEach((item) => resetItemAnimation(item));
-      void document.body.offsetHeight;
-
-      let currentIndex = 0;
-
-      function animateNext() {
-        if (!isLooping) return;
-        if (currentIndex >= sortedItems.length) {
-          const timeout = setTimeout(() => {
-            if (isLooping) reverseAnimation();
-            else isLooping = false;
-          }, 2500);
-          animationTimeouts.push(timeout);
-          return;
-        }
-        animateItem(sortedItems[currentIndex]);
-        currentIndex++;
-        const timeout = setTimeout(animateNext, 2500);
-        animationTimeouts.push(timeout);
-      }
-
-      function reverseAnimation() {
-        if (!isLooping) return;
-        const reversedItems = [...sortedItems].reverse();
-        let reverseIndex = 0;
-
-        function reverseNext() {
-          if (!isLooping) return;
-          if (reverseIndex >= reversedItems.length) {
-            const timeout = setTimeout(() => {
-              if (isLooping) runLoop();
-              else isLooping = false;
-            }, 100);
-            animationTimeouts.push(timeout);
-            return;
+    );
+  } else {
+    // Fallback: IntersectionObserver
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            heading.style.opacity = "1";
+            heading.style.transform = "none";
+            observer.unobserve(heading);
           }
-          reverseAnimateItem(reversedItems[reverseIndex]);
-          reverseIndex++;
-          const timeout = setTimeout(reverseNext, 100);
-          animationTimeouts.push(timeout);
-        }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    heading.style.opacity = "0";
+    heading.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+    heading.style.transform = "translateY(30px)";
+    observer.observe(heading);
+  }
+}
 
-        reverseNext();
-      }
+/* =============================================
+   SCROLL-DRIVEN CARD REVEALS
+   Each step slides in from its side as user scrolls
+   Progress lines fill via .complete CSS class
+   ============================================= */
 
-      animateNext();
-    }
+function initTimelineScrollDriven() {
+  const items = document.querySelectorAll(".timeline-item:not(.climax)");
+  if (!items.length) return;
 
-    runLoop();
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Mobile: IntersectionObserver stagger reveal
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible", "complete");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    items.forEach((item) => observer.observe(item));
+    return;
   }
 
-  startAnimationLoop();
+  // Desktop: GSAP ScrollTrigger reveal
+  if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+    // Fallback: show all immediately
+    items.forEach((item) => item.classList.add("visible", "complete"));
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  items.forEach((item) => {
+    const isLeft = item.classList.contains("left");
+    const card = item.querySelector(".timeline-card");
+    const iconContainer = item.querySelector(".timeline-icon-container");
+
+    // Set initial hidden state via GSAP (no flash since this runs sync on load)
+    gsap.set(card, { opacity: 0, x: isLeft ? -60 : 60 });
+    if (iconContainer) gsap.set(iconContainer, { opacity: 0, scale: 0.5 });
+
+    // Animate in on scroll
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: item,
+        start: "top 78%",
+        once: true,
+        onEnter: () => item.classList.add("visible"),
+      },
+    });
+
+    // Icon pops in first
+    if (iconContainer) {
+      tl.to(iconContainer, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.45,
+        ease: "back.out(2.5)",
+      }, 0);
+    }
+
+    // Card slides in with a spring
+    tl.to(
+      card,
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.75,
+        ease: "power3.out",
+      },
+      iconContainer ? 0.1 : 0
+    );
+
+    // Progress line fills after card lands
+    tl.call(
+      () => item.classList.add("complete"),
+      [],
+      0.5
+    );
+  });
 }
+
+/* =============================================
+   IMAGE CARD — mouse-tracking parallax
+   Shifts the image inside each hovered card
+   ============================================= */
+
+function initImageCardParallax() {
+  const section = document.querySelector(".timeline-section");
+  if (!section) return;
+
+  // Track which item is currently hovered
+  let activeItem = null;
+
+  section.addEventListener("mouseover", (e) => {
+    const item = e.target.closest(".timeline-item:not(.climax)");
+    activeItem = item || null;
+  });
+
+  section.addEventListener("mousemove", (e) => {
+    if (!activeItem) return;
+
+    const imageCard = activeItem.querySelector(".timeline-image-card");
+    if (!imageCard) return;
+
+    const rect = imageCard.getBoundingClientRect();
+    if (rect.width === 0) return; // card not visible yet
+
+    const dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+    const dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+
+    const img = imageCard.querySelector(".timeline-image-card-img");
+    if (img) {
+      img.style.transform = `translate(${dx * 6}px, ${dy * 5}px) scale(1.06)`;
+    }
+  });
+
+  section.addEventListener("mouseleave", () => {
+    activeItem = null;
+    section.querySelectorAll(".timeline-image-card-img").forEach((img) => {
+      img.style.transform = "scale(1.04)";
+    });
+  });
+
+  // Reset when leaving an item
+  section.addEventListener("mouseout", (e) => {
+    const item = e.target.closest(".timeline-item:not(.climax)");
+    if (item && !item.contains(e.relatedTarget)) {
+      const img = item.querySelector(".timeline-image-card-img");
+      if (img) img.style.transform = "scale(1.04)";
+    }
+  });
+}
+
+/* =============================================
+   SIDEBAR SCROLL LOCK
+   Hides sidebar + expands wrapper while timeline is in view
+   ============================================= */
 
 function initSidebarScrollLock() {
   if (window.innerWidth <= 1280) return;
@@ -194,6 +270,11 @@ function initSidebarScrollLock() {
   setupScrollListener();
 }
 
+/* =============================================
+   INTRO OBSERVER
+   Re-shows sidebar when intro section is visible
+   ============================================= */
+
 function initIntroObserver() {
   const intro = document.getElementById("intro");
   const sidebar = document.getElementById("sidebar");
@@ -214,6 +295,11 @@ function initIntroObserver() {
 
   observer.observe(intro);
 }
+
+/* =============================================
+   CLIMAX PARALLAX
+   Subtle vertical parallax on the climax featured image
+   ============================================= */
 
 function initClimaxParallax() {
   const featuredImage = document.querySelector(".climax-featured-image");
@@ -255,8 +341,11 @@ function initClimaxParallax() {
   updateParallax();
 }
 
+/* =============================================
+   CLIMAX HOVER — fallback for browsers without :has()
+   ============================================= */
+
 function initClimaxHover() {
-  // Fallback for browsers without :has() selector support
   if (CSS.supports('selector(:has(*))')) return;
 
   const panel = document.querySelector(".climax-panel");

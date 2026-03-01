@@ -5,8 +5,7 @@
 .timeline-section {
   position: relative;
   background: linear-gradient(160deg, #06030f 0%, #0d0622 55%, #060a16 100%);
-  padding: 120px 0 100px;
-  min-height: 100vh;
+  padding: 80px 0 100px;
   font-family: "Poppins", sans-serif;
   overflow: hidden;
 }
@@ -14,6 +13,35 @@
 .scroll-anchor {
   position: absolute;
   top: 0;
+}
+
+/* =============================================
+   SECTION HEADING
+   ============================================= */
+
+.timeline-heading {
+  text-align: center;
+  padding: 0 20px 60px;
+  will-change: opacity, transform;
+}
+
+.timeline-heading-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #b298ff;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+
+.timeline-heading-title {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 40px rgba(178, 152, 255, 0.15);
 }
 
 /* ---- Vertical center line ---- */
@@ -46,6 +74,7 @@
   width: 100%;
   min-height: 260px;
   padding: 40px 0;
+  will-change: opacity, transform;
 }
 
 /* Dot (hidden when icon is present) */
@@ -95,6 +124,12 @@
   transition: height 0s linear;
 }
 
+/* Scroll-driven fill: set by JS adding .complete */
+.timeline-item.complete .timeline-progress-line {
+  height: calc(100% - 1.25rem + 1.5rem);
+  transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* =============================================
    ICON
    ============================================= */
@@ -105,6 +140,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
+  will-change: opacity, transform;
 }
 
 .timeline-icon {
@@ -136,7 +172,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: calc(50% - 80px); /* fits within one half, 80px gap from center */
+  width: calc(50% - 80px);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -153,6 +189,7 @@
               box-shadow 0.35s ease,
               border-color 0.35s ease;
   overflow: hidden;
+  will-change: transform;
 }
 
 /* Left item: card anchored to right edge of left half */
@@ -252,6 +289,104 @@
   box-shadow: 0 6px 18px rgba(126, 67, 209, 0.5);
   background: linear-gradient(135deg, #9255e8 0%, #7e60f0 100%);
   color: #fff;
+}
+
+/* =============================================
+   IMAGE CARD — appears on hover, opposite side
+   ============================================= */
+
+.timeline-image-card {
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 80px);
+  height: 220px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(8, 4, 20, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(178, 152, 255, 0.28);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.55),
+    0 0 24px rgba(178, 152, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* Hidden by default */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 2;
+  will-change: opacity, transform;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease,
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s ease;
+}
+
+/* Left item: image card sits in the right half, slides in from right */
+.timeline-item.left .timeline-image-card {
+  left: calc(50% + 44px);
+  transform: translateY(-50%) translateX(50px);
+}
+
+/* Right item: image card sits in the left half, slides in from left */
+.timeline-item.right .timeline-image-card {
+  right: calc(50% + 44px);
+  transform: translateY(-50%) translateX(-50px);
+}
+
+/* Reveal on hover — trigger is the whole .timeline-item */
+.timeline-item.left:hover .timeline-image-card {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+  box-shadow:
+    0 12px 50px rgba(0, 0, 0, 0.6),
+    0 0 32px rgba(178, 152, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.timeline-item.right:hover .timeline-image-card {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+  box-shadow:
+    0 12px 50px rgba(0, 0, 0, 0.6),
+    0 0 32px rgba(178, 152, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* Image fills the card — parallax applied via JS transform */
+.timeline-image-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.04);
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+/* Purple glow overlay — pulses on hover */
+.timeline-image-card-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(178, 152, 255, 0.18) 0%, transparent 55%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.timeline-item:hover .timeline-image-card-glow {
+  opacity: 1;
+  animation: imageCardGlowPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes imageCardGlowPulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
 }
 
 /* =============================================
@@ -456,20 +591,55 @@
 }
 
 /* =============================================
+   REDUCED MOTION — skip translate, just fade
+   ============================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-item.left .timeline-image-card,
+  .timeline-item.right .timeline-image-card {
+    transform: translateY(-50%) !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .timeline-image-card-glow {
+    animation: none !important;
+  }
+
+  .timeline-card {
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .timeline-card:hover {
+    transform: translateY(-50%);
+  }
+}
+
+/* =============================================
    RESPONSIVE
    ============================================= */
 
 @media (max-width: 1100px) {
-  .timeline-card {
+  .timeline-card,
+  .timeline-image-card {
     width: calc(50% - 60px);
   }
-  .timeline-item.left .timeline-card  { right: calc(50% + 32px); }
-  .timeline-item.right .timeline-card { left: calc(50% + 32px); }
+  .timeline-item.left .timeline-card   { right: calc(50% + 32px); }
+  .timeline-item.right .timeline-card  { left: calc(50% + 32px); }
+  .timeline-item.left .timeline-image-card  { left: calc(50% + 32px); }
+  .timeline-item.right .timeline-image-card { right: calc(50% + 32px); }
 }
 
 @media (max-width: 768px) {
   .timeline-section {
-    padding: 80px 0 60px;
+    padding: 60px 0 60px;
+  }
+
+  .timeline-heading {
+    padding: 0 20px 40px;
+  }
+
+  .timeline-heading-title {
+    font-size: 2rem;
   }
 
   /* Move line to left rail */
@@ -483,7 +653,7 @@
     padding: 20px 20px 20px 64px;
   }
 
-  /* Cards become full width block elements */
+  /* Cards become full-width block elements */
   .timeline-card {
     position: relative;
     top: auto;
@@ -519,6 +689,30 @@
 
   .step-title { font-size: 1.1rem; }
   .step-desc  { font-size: 0.86rem; }
+
+  /* Image card: stacked above card, always visible, no hover required */
+  .timeline-image-card {
+    position: relative;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    width: 100%;
+    height: 160px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 16px rgba(178, 152, 255, 0.1);
+  }
+
+  .timeline-image-card-glow {
+    opacity: 0.5;
+    animation: none;
+  }
 
   /* Climax on mobile */
   .timeline-item.climax {
