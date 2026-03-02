@@ -250,14 +250,14 @@ body.is-ie #sidebar > .inner {
 }
 
 #sidebar nav a:before {
-  background: #3c2c62;
+  background: #0f172a;
 }
 
 #sidebar nav a:after {
-  background-image: -moz-linear-gradient(to right, #5e42a6, #b74e91);
-  background-image: -webkit-linear-gradient(to right, #5e42a6, #b74e91);
-  background-image: -ms-linear-gradient(to right, #5e42a6, #b74e91);
-  background-image: linear-gradient(to right, #5e42a6, #b74e91);
+  background-image: -moz-linear-gradient(to right, #1e3a8a, #0ea5e9);
+  background-image: -webkit-linear-gradient(to right, #1e3a8a, #0ea5e9);
+  background-image: -ms-linear-gradient(to right, #1e3a8a, #0ea5e9);
+  background-image: linear-gradient(to right, #1e3a8a, #0ea5e9);
   -moz-transition: max-width 0.2s ease;
   -webkit-transition: max-width 0.2s ease;
   -ms-transition: max-width 0.2s ease;
@@ -354,7 +354,7 @@ body.is-preload #sidebar nav ul li {
 
   #sidebar nav a:after {
     background-image: none;
-    background-color: #b74e91;
+    background-color: #0ea5e9;
   }
 }
 

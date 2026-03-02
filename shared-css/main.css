@@ -227,7 +227,7 @@ body.is-preload *:after {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: radial-gradient(circle, #8f4cff 0%, #5a3ba7 70%);
+  background: radial-gradient(circle, #3b82f6 0%, #1e40af 70%);
   filter: blur(2px);
   animation: pulse 1.5s infinite ease-in-out;
 }
@@ -350,10 +350,10 @@ h1.major {
 }
 
 h1.major:after {
-  background-image: -moz-linear-gradient(to right, #5e42a6, #b74e91);
-  background-image: -webkit-linear-gradient(to right, #5e42a6, #b74e91);
-  background-image: -ms-linear-gradient(to right, #5e42a6, #b74e91);
-  background-image: linear-gradient(to right, #5e42a6, #b74e91);
+  background-image: -moz-linear-gradient(to right, #1e3a8a, #0ea5e9);
+  background-image: -webkit-linear-gradient(to right, #1e3a8a, #0ea5e9);
+  background-image: -ms-linear-gradient(to right, #1e3a8a, #0ea5e9);
+  background-image: linear-gradient(to right, #1e3a8a, #0ea5e9);
   -moz-transition: max-width 0.2s ease;
   -webkit-transition: max-width 0.2s ease;
   -ms-transition: max-width 0.2s ease;
@@ -2414,19 +2414,19 @@ button:hover:active:after,
 }
 
 .wrapper.style1 .icon.major:before {
-  color: #5e42a6;
+  color: #1e3a8a;
 }
 
 .wrapper.style1-alt .icon.major:before {
-  color: #493382;
+  color: #1e3a8a;
 }
 
 .wrapper.style2 .icon.major:before {
-  color: #5052b5;
+  color: #1d4ed8;
 }
 
 .wrapper.style2-alt .icon.major:before {
-  color: #3e4094;
+  color: #1e40af;
 }
 
 .wrapper.style3 .icon.major:before {
@@ -2997,15 +2997,15 @@ table.alt tfoot {
 }
 
 .wrapper.alt {
-  background-color: #261c3e;
+  background-color: #020617;
 }
 
 .wrapper.style1 {
-  background-color: #5e42a6;
+  background-color: #1e3a8a;
 }
 
 .wrapper.style2 {
-  background-color: #5052b5;
+  background-color: #1d4ed8;
 }
 
 .wrapper.style2-alt {
