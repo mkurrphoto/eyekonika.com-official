@@ -19,9 +19,6 @@
   background-attachment: scroll;
 }
 
-#particles-js {
-  z-index: 1;
-}
 section.form-section {
   display: flex;
   justify-content: center;

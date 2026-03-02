@@ -22,21 +22,12 @@
   background-attachment: scroll;
 }
 
-#particles-js {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1; /* below text, above background */
-  pointer-events: none; /* lets you click links through particles */
-}
 .actions {
   margin-top: 35px;
 }
 #intro .inner {
   position: relative;
-  z-index: 2; /* ensures content sits above particles */
+  z-index: 2;
   text-align: center;
   color: white; /* or whatever fits */
 }

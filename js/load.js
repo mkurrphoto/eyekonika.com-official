@@ -57,25 +57,3 @@ function loadScriptsSequentially(scripts) {
   };
   document.body.appendChild(script);
 }
-
-function loadParticles(containerId) {
-  particlesJS(containerId, {
-    particles: {
-      number: { value: 60 },
-      color: { value: "#ffffff" },
-      shape: { type: "circle" },
-      opacity: { value: 0.6, random: true },
-      size: { value: 3, random: true },
-      line_linked: { enable: false },
-      move: { speed: 1.2 },
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: { enable: false },
-        onclick: { enable: false },
-      },
-    },
-    retina_detect: true,
-  });
-}
