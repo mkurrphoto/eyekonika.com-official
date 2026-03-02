@@ -190,26 +190,30 @@
 
   window.addEventListener('touchmove', function(e) {
     touchMoved = true;
-  }, { passive: true });
+    // Block native page scroll while in horizontal — JS handles all navigation
+    if (state.inHorizontal) e.preventDefault();
+  }, { passive: false });
 
   window.addEventListener('touchend', function(e) {
     if (!state.inHorizontal || !touchMoved) return;
     var dx = touchStartX - e.changedTouches[0].clientX;
     var dy = touchStartY - e.changedTouches[0].clientY;
+    var absDx = Math.abs(dx);
+    var absDy = Math.abs(dy);
 
-    // Only act on horizontal swipes
-    if (Math.abs(dx) < Math.abs(dy)) return;
-    if (Math.abs(dx) < 40) return;
+    // Require minimum movement in either axis
+    if (absDx < 30 && absDy < 30) return;
 
-    if (dx > 0) {
-      // Swipe left = forward
+    // Both horizontal (left/right) and vertical (up/down) navigate scenes
+    var goForward = absDx >= absDy ? dx > 0 : dy > 0;
+
+    if (goForward) {
       if (state.currentScene < state.totalHScenes - 1) {
         goToScene(state.currentScene + 1);
       } else {
         transitionToVertical();
       }
     } else {
-      // Swipe right = back
       if (state.currentScene > 0) {
         goToScene(state.currentScene - 1);
       }
@@ -495,7 +499,8 @@
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) {
       hSection.style.overflow = 'hidden';
-      hSection.style.touchAction = 'pan-y'; // allow vertical touch to pass through if needed
+      // Mobile: intercept vertical swipes for scene nav; desktop: allow trackpad pan
+    hSection.style.touchAction = window.innerWidth <= 768 ? 'none' : 'pan-y';
     }
 
     // Kick off scene 1
