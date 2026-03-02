@@ -714,47 +714,97 @@
     animation: none;
   }
 
-  /* Climax on mobile */
+  /* Climax on mobile — stacked card layout */
   .timeline-item.climax {
     padding: 40px 16px 60px;
   }
 
+  /* Panel becomes a flex column — no fixed height, no overflow clip */
   .climax-panel {
-    height: 280px;
+    height: auto;
+    overflow: hidden;
     border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(6, 3, 15, 0.92);
+    cursor: default;
+  }
+
+  /* Featured image: pull into normal flow at the top */
+  .climax-featured-image {
+    position: relative !important;
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    flex-shrink: 0;
+    transform: none !important;
+    transition: none;
+  }
+
+  /* Hide the glass overlay — content is below the image now */
+  .climax-glass-overlay {
+    display: none;
+  }
+
+  /* Content block: pulled out of absolute overlay into normal flow */
+  .climax-content {
+    position: relative;
+    inset: auto;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto;
+    padding: 24px 20px 12px;
+    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: none;
   }
 
   .climax-title { font-size: 1.5rem; }
   .climax-subtitle { font-size: 0.88rem; }
 
-  /* Show side panels as static blocks below the image panel on mobile */
-  .climax-text-block,
-  .climax-logo {
-    position: static;
+  /* Text block: stacked below content */
+  .climax-text-block {
+    position: relative;
+    top: auto;
+    left: auto;
     transform: none;
     opacity: 1;
-    width: 100%;
-    margin-top: 12px;
-    border-radius: 12px;
+    width: auto;
+    padding: 12px 20px 16px;
+    margin-top: 0;
+    border-radius: 0;
+    border-top: 1px solid rgba(178, 152, 255, 0.1);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: none;
   }
 
+  /* Logo: stacked below text block */
   .climax-logo {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    opacity: 1;
     display: flex;
     justify-content: center;
+    padding: 16px 20px 20px;
+    transition: none;
   }
 
   .climax-logo-inner {
-    width: 160px;
+    width: 140px;
   }
 
-  .climax-panel:hover .climax-content {
-    opacity: 1;
-    transform: none;
-  }
-
-  .climax-panel:hover .climax-text-block,
-  .climax-panel:hover .climax-logo {
-    opacity: 1;
-    transform: none;
-  }
+  /* Disable all hover effects on climax panel — they don't make sense on touch */
+  .climax-panel:hover .climax-featured-image { transform: none !important; }
+  .climax-panel:hover .climax-glass-overlay  { display: none; }
+  .climax-panel:hover .climax-content        { opacity: 1 !important; transform: none !important; }
+  .climax-panel:hover .climax-text-block     { opacity: 1; transform: none; }
+  .climax-panel:hover .climax-logo           { opacity: 1; transform: none; }
 }
