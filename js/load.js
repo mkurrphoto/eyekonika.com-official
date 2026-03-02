@@ -27,33 +27,34 @@ Promise.all(
 )
   .then(() => {
     console.log("✅ All partials loaded!");
-    loadScriptsSequentially([
-      "js/vendor/main.js",
-    ]);
-  })
-  .then(() => {
-    setTimeout(() => {
+    loadScriptsSequentially(["js/vendor/main.js"], () => {
+      // Trigger scroll *after* vendor/main.js has loaded and scrollex has
+      // had a chance to initialize — ensures #intro.inactive is removed
+      // for sections already in the viewport on page load.
       window.scrollBy(0, 1);
-    }, 300);
-    // Initialize page swipe after components are loaded
-    setTimeout(() => {
-      if (window.initPageSwipe) {
-        window.initPageSwipe();
-      }
-    }, 400);
+      // Initialize page swipe after components are loaded
+      setTimeout(() => {
+        if (window.initPageSwipe) {
+          window.initPageSwipe();
+        }
+      }, 100);
+    });
   });
 
-function loadScriptsSequentially(scripts) {
-  if (scripts.length === 0) return;
+function loadScriptsSequentially(scripts, onComplete) {
+  if (scripts.length === 0) {
+    if (onComplete) onComplete();
+    return;
+  }
 
   const script = document.createElement("script");
   script.src = scripts[0];
   script.defer = true;
   script.onload = () => {
-    loadScriptsSequentially(scripts.slice(1));
+    loadScriptsSequentially(scripts.slice(1), onComplete);
   };
   script.onerror = () => {
-    loadScriptsSequentially(scripts.slice(1));
+    loadScriptsSequentially(scripts.slice(1), onComplete);
   };
   document.body.appendChild(script);
 }
