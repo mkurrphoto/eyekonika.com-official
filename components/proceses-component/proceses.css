@@ -629,7 +629,7 @@
   .timeline-item.right .timeline-image-card { right: calc(50% + 32px); }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .timeline-section {
     padding: 60px 0 60px;
   }
@@ -651,20 +651,21 @@
   .timeline-item {
     min-height: auto;
     padding: 20px 20px 20px 64px;
+    overflow-x: hidden;
   }
 
   /* Cards become full-width block elements */
   .timeline-card {
-    position: relative;
-    top: auto;
+    position: relative !important;
+    top: auto !important;
     left: auto !important;
     right: auto !important;
-    transform: none;
+    transform: none !important;
     width: 100%;
   }
 
   .timeline-card:hover {
-    transform: none;
+    transform: none !important;
   }
 
   /* Icons on left rail */
@@ -690,9 +691,9 @@
   .step-title { font-size: 1.1rem; }
   .step-desc  { font-size: 0.86rem; }
 
-  /* Image card: stacked above card, always visible, no hover required */
+  /* Image card: stacked below text card, always visible, no hover required */
   .timeline-image-card {
-    position: relative;
+    position: relative !important;
     top: auto !important;
     left: auto !important;
     right: auto !important;
@@ -700,9 +701,10 @@
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
-    width: 100%;
+    width: 100% !important;
     height: 160px;
-    margin-bottom: 14px;
+    margin-bottom: 0;
+    margin-top: 14px;
     border-radius: 14px;
     box-shadow:
       0 4px 20px rgba(0, 0, 0, 0.4),
@@ -719,9 +721,9 @@
     padding: 40px 16px 60px;
   }
 
-  /* Panel becomes a flex column — no fixed height, no overflow clip */
+  /* Panel becomes a flex column — no fixed height */
   .climax-panel {
-    height: auto;
+    height: auto !important;
     overflow: hidden;
     border-radius: 16px;
     display: flex;
@@ -744,16 +746,19 @@
 
   /* Hide the glass overlay — content is below the image now */
   .climax-glass-overlay {
-    display: none;
+    display: none !important;
   }
 
   /* Content block: pulled out of absolute overlay into normal flow */
   .climax-content {
-    position: relative;
-    inset: auto;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
     opacity: 1 !important;
     transform: none !important;
-    pointer-events: auto;
+    pointer-events: auto !important;
     padding: 24px 20px 12px;
     gap: 8px;
     display: flex;
@@ -768,11 +773,11 @@
 
   /* Text block: stacked below content */
   .climax-text-block {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    opacity: 1;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
     width: auto;
     padding: 12px 20px 16px;
     margin-top: 0;
@@ -786,11 +791,11 @@
 
   /* Logo: stacked below text block */
   .climax-logo {
-    position: relative;
-    top: auto;
-    right: auto;
-    transform: none;
-    opacity: 1;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
     display: flex;
     justify-content: center;
     padding: 16px 20px 20px;
@@ -803,8 +808,8 @@
 
   /* Disable all hover effects on climax panel — they don't make sense on touch */
   .climax-panel:hover .climax-featured-image { transform: none !important; }
-  .climax-panel:hover .climax-glass-overlay  { display: none; }
-  .climax-panel:hover .climax-content        { opacity: 1 !important; transform: none !important; }
-  .climax-panel:hover .climax-text-block     { opacity: 1; transform: none; }
-  .climax-panel:hover .climax-logo           { opacity: 1; transform: none; }
+  .climax-panel:hover .climax-glass-overlay  { display: none !important; }
+  .climax-panel:hover .climax-content        { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
+  .climax-panel:hover .climax-text-block     { opacity: 1 !important; transform: none !important; }
+  .climax-panel:hover .climax-logo           { opacity: 1 !important; transform: none !important; }
 }

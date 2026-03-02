@@ -80,7 +80,7 @@ function initTimelineScrollDriven() {
   const items = document.querySelectorAll(".timeline-item:not(.climax)");
   if (!items.length) return;
 
-  const isMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 900;
 
   if (isMobile) {
     // Mobile: IntersectionObserver stagger reveal
@@ -164,6 +164,7 @@ function initTimelineScrollDriven() {
    ============================================= */
 
 function initImageCardParallax() {
+  if (window.innerWidth <= 900) return;
   const section = document.querySelector(".timeline-section");
   if (!section) return;
 
