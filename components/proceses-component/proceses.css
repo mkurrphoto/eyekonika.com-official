@@ -631,7 +631,7 @@
 
 @media (max-width: 900px) {
   .timeline-section {
-    padding: 60px 0 60px;
+    padding: 60px 0 20px;
   }
 
   .timeline-heading {
@@ -718,7 +718,7 @@
 
   /* Climax on mobile — stacked card layout */
   .timeline-item.climax {
-    padding: 40px 16px 60px;
+    padding: 20px 16px 16px;
   }
 
   /* Panel becomes a flex column — no fixed height */

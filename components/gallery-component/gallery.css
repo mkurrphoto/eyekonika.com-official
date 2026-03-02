@@ -202,9 +202,9 @@ body.swipe-page-left #preloader {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .gallery-section {
-    padding: 60px 24px 80px;
+    padding: 40px 24px 80px;
     gap: 48px;
   }
 
