@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>Eyekonika</title>
+  <title>Eyekonika — Premium 3D Laser-Engraved Glass Art</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="description" content="Eyekonika crafts premium 3D laser-engraved glass pieces for corporate gifts, elite memorabilia, institutional commissions, and personal keepsakes. Iconic, eye-catching, and built to last." />
+  <link rel="canonical" href="https://eyekonika.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://eyekonika.com/" />
+  <meta property="og:title" content="Eyekonika — Premium 3D Laser-Engraved Glass Art" />
+  <meta property="og:description" content="Premium 3D laser-engraved glass pieces for corporate gifts, elite memorabilia, institutional commissions, and personal keepsakes." />
+  <meta property="og:image" content="https://eyekonika.com/images/photo-backgrounds/timeline-background-hq-alt.jpg" />
+  <meta property="og:site_name" content="Eyekonika" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Eyekonika — Premium 3D Laser-Engraved Glass Art" />
+  <meta name="twitter:description" content="Premium 3D laser-engraved glass pieces for corporate gifts, elite memorabilia, institutional commissions, and personal keepsakes." />
+  <meta name="twitter:image" content="https://eyekonika.com/images/photo-backgrounds/timeline-background-hq-alt.jpg" />
   <link rel="stylesheet" href="shared-css/loading.css" />
   <link rel="stylesheet" href="shared-css/main.css" />
   <noscript>
@@ -19,6 +35,61 @@
   <link rel="stylesheet" href="components/what-we-do-component/what-we-do.css " />
   <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css" />
   <link rel="icon" type="image/png" href="images/favicon.png" />
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://eyekonika.com/#organization",
+        "name": "Eyekonika",
+        "url": "https://eyekonika.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://eyekonika.com/images/logo-index-transparent.png"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+1-315-000-0000",
+          "email": "contact@eyekonika.com",
+          "contactType": "customer service"
+        },
+        "sameAs": [
+          "https://www.instagram.com/eyekonika_official/",
+          "https://www.linkedin.com/in/matthew-kurr-profile/"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://eyekonika.com/#website",
+        "url": "https://eyekonika.com",
+        "name": "Eyekonika",
+        "publisher": { "@id": "https://eyekonika.com/#organization" }
+      },
+      {
+        "@type": "Service",
+        "@id": "https://eyekonika.com/#service",
+        "name": "3D Laser-Engraved Glass Art",
+        "provider": { "@id": "https://eyekonika.com/#organization" },
+        "description": "Premium subsurface 3D laser engraving in K9 optical glass for corporate gifts, elite memorabilia, institutional commissions, fundraising, and personal keepsakes.",
+        "serviceType": "Custom Glass Engraving",
+        "areaServed": "Worldwide",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Eyekonika Glass Engraving Services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corporate Gifts & Branded Memorabilia" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Institutional & Artistic Commissions" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "High-Value Fundraising Pieces" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Personal Keepsakes & Memorials" } }
+          ]
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body class="index is-preload">
