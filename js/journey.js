@@ -389,6 +389,8 @@
     if (state.journeyStarted) return;
     state.journeyStarted = true;
 
+    document.body.classList.add('journey-active');
+
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) {
       hSection.style.overflow = 'hidden';
@@ -400,14 +402,15 @@
 
   function init() {
     if (isStandalone) {
-      // begin.html — start immediately
+      // begin.html — start immediately, journey-active added in startJourney()
       startJourney();
     } else {
       // Embedded in index.html — observe viewport
       var hSection = document.getElementById('journey-horizontal');
+      var embedRoot = document.querySelector('.journey-embed-root') || hSection;
       if (!hSection) return;
 
-      // Start animations when section is 50% visible
+      // Start animations when horizontal section is 50% visible
       var startObs = new IntersectionObserver(function(entries) {
         if (entries[0].intersectionRatio >= 0.5) {
           startJourney();
@@ -416,21 +419,48 @@
       }, { threshold: 0.5 });
       startObs.observe(hSection);
 
-      // Manage scroll interception + Lenis pause/resume
+      // journey-active: show float-footer + hide sidebar whenever any part of journey is in view
+      var activeObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          document.body.classList.add('journey-active');
+        } else {
+          document.body.classList.remove('journey-active');
+        }
+      }, { threshold: 0 });
+      activeObs.observe(embedRoot);
+
+      // Manage Lenis pause/resume for horizontal scroll lock
       var scrollObs = new IntersectionObserver(function(entries) {
         var ratio = entries[0].intersectionRatio;
         var wasVisible = journeyVisible;
         journeyVisible = ratio >= 0.9;
 
         if (journeyVisible && state.inHorizontal) {
-          // Entering horizontal section — pause Lenis
           if (window.lenis) window.lenis.stop();
         } else if (wasVisible && !journeyVisible) {
-          // Leaving horizontal section — resume Lenis
           if (window.lenis) window.lenis.start();
         }
       }, { threshold: [0, 0.5, 0.9, 1.0] });
       scrollObs.observe(hSection);
+    }
+
+    // Float-footer mobile tap toggle
+    var floatFooter = document.getElementById('float-footer');
+    var ffLogo = document.getElementById('ff-logo');
+    if (floatFooter && ffLogo) {
+      ffLogo.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          e.stopPropagation();
+          floatFooter.classList.toggle('open');
+        }
+      });
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768 && floatFooter.classList.contains('open')) {
+          if (!floatFooter.contains(e.target)) {
+            floatFooter.classList.remove('open');
+          }
+        }
+      });
     }
   }
 

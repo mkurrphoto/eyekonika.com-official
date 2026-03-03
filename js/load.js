@@ -8,11 +8,6 @@ const parts = [
   { id: "gallery", file: "components/gallery-component/gallery.html" },
   { id: "what-we-do", file: "components/what-we-do-component/what-we-do.html" },
   { id: "journey", file: "components/journey-component/journey.html" },
-  {
-    id: "get-in-touch",
-    file: "components/get-in-touch-component/get-in-touch.html",
-  },
-  { id: "footer", file: "components/footer-component/footer.html" },
 ];
 Promise.all(
   parts.map((part) =>
