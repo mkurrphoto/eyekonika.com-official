@@ -8,58 +8,82 @@
 </head>
 <body data-step="prototype">
   <main class="step-shell">
+
     <div class="topbar">
       <div class="crumbs">Eyekonika / Process / Step 03</div>
-      <a href="../../index.html#timeline" class="pill-btn">← Back to timeline</a>
+      <a href="../../index.html#timeline" class="back-link">← Back to timeline</a>
     </div>
 
     <nav class="progress-rail" aria-label="Process steps">
-      <a href="../vision/">01 Vision</a>
-      <a href="../discovery/">02 Discovery</a>
-      <a class="active" href="../prototype/">03 Prototype</a>
-      <a href="../production/">04 Production</a>
+      <a class="rail-step" href="../vision/">
+        <span class="rail-num">01</span>
+        <span class="rail-label">Vision</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../discovery/">
+        <span class="rail-num">02</span>
+        <span class="rail-label">Discovery</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step active" href="../prototype/">
+        <span class="rail-num">03</span>
+        <span class="rail-label">Prototype</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../production/">
+        <span class="rail-num">04</span>
+        <span class="rail-label">Production</span>
+      </a>
     </nav>
 
-    <section class="hero">
+    <section class="hero reveal">
       <article class="panel">
-        <p class="step-kicker">Step 03 — Prototype</p>
-        <h1>See it from every angle before we make it.</h1>
-        <p>Prototype is your confidence layer. We validate visual depth, detail hierarchy, and spatial balance with digital proofing (and optional physical sampling) so approval feels decisive.</p>
+        <span class="eyebrow">Step 03 — Prototype</span>
+        <h1>See it from every angle before it exists.</h1>
+        <p>Prototype is the moment the concept becomes something you can evaluate with confidence. We build a precise digital representation of your piece — one that shows how depth, light, and geometry will interact inside real optical glass — and we refine it until your approval is decisive, not tentative.</p>
       </article>
-      <div class="hero-media" style="background-image:url('../../images/pexels-ian-lavrinovich-85166578-8976859.jpg')"></div>
+      <div class="hero-img" style="background-image:url('../../images/pexels-ian-lavrinovich-85166578-8976859.jpg')"></div>
     </section>
 
-    <section class="grid-2">
-      <article class="panel">
-        <h2>Mockup rotator</h2>
-        <div class="rotator-wrap">
-          <div class="rotator" id="rotator"></div>
-        </div>
-        <label for="rotate">Rotate preview</label>
-        <input id="rotate" type="range" min="-45" max="45" value="0" />
-      </article>
+    <div class="section-heading reveal">
+      <span class="eyebrow">What you receive</span>
+      <h2>Three deliverables before a single piece is made</h2>
+    </div>
 
-      <article class="panel">
-        <h2>Depth translation comparison</h2>
-        <div class="compare">
-          <div class="before">
-            <h3>Flat source artwork</h3>
-            <p>Brand vector and reference sketch.</p>
-          </div>
-          <div class="after" id="compareAfter">
-            <h3>3D engraving interpretation</h3>
-            <p>Layered depth map and light-reactive geometry.</p>
-          </div>
-        </div>
-        <label for="compareRange">Reveal 3D interpretation</label>
-        <input id="compareRange" type="range" min="0" max="100" value="50" />
+    <div class="grid-3">
+      <article class="panel reveal">
+        <div class="card-icon">⬡</div>
+        <h3>Digital Proof</h3>
+        <p>A rendered representation of the engraved design as it will appear inside the glass — including light-reactive geometry, perspective, and depth layering. Not an approximation. A precise simulation of the physical result.</p>
       </article>
-    </section>
+      <article class="panel reveal reveal-delay-1">
+        <div class="card-icon">◈</div>
+        <h3>Depth Map Review</h3>
+        <p>We walk through the depth map — the three-dimensional point-cloud that tells the laser where to engrave — so you can understand exactly how detail hierarchy, shadow, and foreground-to-background relationships have been interpreted.</p>
+      </article>
+      <article class="panel reveal reveal-delay-2">
+        <div class="card-icon">✦</div>
+        <h3>Revision Rounds</h3>
+        <p>Your feedback is incorporated into subsequent proofs until the result is precisely what the Vision and Discovery sessions described. We do not move to production until you have signed off — in writing — on a final proof you are fully satisfied with.</p>
+      </article>
+    </div>
+
+    <div class="quote-pull reveal">
+      <blockquote>
+        "Confidence at the approval stage is not a formality. It is the last moment to shape the piece. We treat it that way."
+      </blockquote>
+    </div>
+
+    <div class="narrative reveal">
+      <h3>How approval works</h3>
+      <p>Once you have reviewed the digital proof and depth map, and any revisions have been incorporated, we issue a formal sign-off document. Your signature on that document is the gate that opens production. Nothing is manufactured before it. Once production begins on approved work, the specification is fixed — which is why Prototype exists: to make the point of commitment one you arrive at with complete clarity, not one you cross by default.</p>
+    </div>
 
     <div class="footer-nav">
-      <a class="pill-btn" href="../discovery/">← Back to Discovery</a>
-      <a class="pill-btn" href="../production/">Continue to Production →</a>
+      <a class="nav-btn" href="../discovery/">← Back to Discovery</a>
+      <a class="nav-btn" href="../production/">Continue to Production →</a>
     </div>
+
   </main>
   <script src="../../js/process-step.js"></script>
 </body>

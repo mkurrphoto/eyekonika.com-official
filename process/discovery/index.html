@@ -8,74 +8,81 @@
 </head>
 <body data-step="discovery">
   <main class="step-shell">
+
     <div class="topbar">
       <div class="crumbs">Eyekonika / Process / Step 02</div>
-      <a href="../../index.html#timeline" class="pill-btn">← Back to timeline</a>
+      <a href="../../index.html#timeline" class="back-link">← Back to timeline</a>
     </div>
 
     <nav class="progress-rail" aria-label="Process steps">
-      <a href="../vision/">01 Vision</a>
-      <a class="active" href="../discovery/">02 Discovery</a>
-      <a href="../prototype/">03 Prototype</a>
-      <a href="../production/">04 Production</a>
+      <a class="rail-step" href="../vision/">
+        <span class="rail-num">01</span>
+        <span class="rail-label">Vision</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step active" href="../discovery/">
+        <span class="rail-num">02</span>
+        <span class="rail-label">Discovery</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../prototype/">
+        <span class="rail-num">03</span>
+        <span class="rail-label">Prototype</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../production/">
+        <span class="rail-num">04</span>
+        <span class="rail-label">Production</span>
+      </a>
     </nav>
 
-    <section class="hero">
+    <section class="hero reveal">
       <article class="panel">
-        <p class="step-kicker">Step 02 — Discovery</p>
-        <h1>We sit with your idea and remove every unknown.</h1>
-        <p>Discovery clarifies what your piece must do: where it is displayed, how it's lit, how many are needed, and what quality signal it must communicate. That clarity drives a precise quote.</p>
+        <span class="eyebrow">Step 02 — Discovery</span>
+        <h1>We remove every unknown before a single quote is written.</h1>
+        <p>Discovery is methodical. We map the environment, the occasion, the scale, and the decision process — not because we need to fill a form, but because every one of these variables has a direct bearing on what your piece should be and what it should cost. Surprises at this stage cost nothing. Surprises after production begins cost everything.</p>
       </article>
-      <div class="hero-media" style="background-image:url('../../images/pexels-andre-furtado-43594-370717.jpg')"></div>
+      <div class="hero-img" style="background-image:url('../../images/pexels-andre-furtado-43594-370717.jpg')"></div>
     </section>
 
-    <section class="grid-2">
-      <article class="panel">
-        <h2>Scope readiness</h2>
-        <label><input class="scope-check" type="checkbox" /> Intended use-case defined</label>
-        <label><input class="scope-check" type="checkbox" /> Display environment known</label>
-        <label><input class="scope-check" type="checkbox" /> Quantity range selected</label>
-        <label><input class="scope-check" type="checkbox" /> Deadline constraints provided</label>
-        <label><input class="scope-check" type="checkbox" /> Decision stakeholders identified</label>
+    <div class="section-heading reveal">
+      <span class="eyebrow">What we map</span>
+      <h2>Four variables that define the scope of every commission</h2>
+    </div>
 
-        <div class="meter" aria-label="Scope completeness">
-          <span id="scopeMeter"></span>
-        </div>
-        <p id="scopeLabel" class="summary"></p>
+    <div class="grid-4">
+      <article class="panel reveal">
+        <div class="card-icon">⬡</div>
+        <h3>Environment</h3>
+        <p>Where will the piece live? Ambient light, display angles, surface material, room scale — all of these change how depth and detail behave inside optical glass. We understand the setting before we design for it.</p>
       </article>
-
-      <article class="panel">
-        <h2>Non-binding configuration estimator</h2>
-        <label for="qty">Quantity range</label>
-        <select id="qty">
-          <option value="1">1–25</option>
-          <option value="2">26–100</option>
-          <option value="3">101–300</option>
-          <option value="4">300+</option>
-        </select>
-
-        <label for="complexity">Design complexity</label>
-        <select id="complexity">
-          <option value="1">Minimal</option>
-          <option value="2">Moderate</option>
-          <option value="3">High-detail</option>
-        </select>
-
-        <label for="finish">Finish & presentation</label>
-        <select id="finish">
-          <option value="1">Standard premium</option>
-          <option value="2">Enhanced display package</option>
-          <option value="3">Collector presentation set</option>
-        </select>
-
-        <p class="summary">Estimated engagement tier: <strong id="tier">Signature Tier</strong></p>
+      <article class="panel reveal reveal-delay-1">
+        <div class="card-icon">◎</div>
+        <h3>Purpose &amp; Occasion</h3>
+        <p>Is this a once-in-a-generation award, an annual recognition, a corporate gift, or a commemorative edition? Purpose defines the emotional register. Occasion defines the timeline. Both define what the piece must achieve.</p>
       </article>
-    </section>
+      <article class="panel reveal reveal-delay-2">
+        <div class="card-icon">⊞</div>
+        <h3>Scale &amp; Logistics</h3>
+        <p>One centrepiece or five hundred individual gifts? Dispatched to a single venue or shipped internationally? Scale and logistics shape production planning, quality controls, and the form the final pieces take.</p>
+      </article>
+      <article class="panel reveal reveal-delay-3">
+        <div class="card-icon">◷</div>
+        <h3>Decision Timeline</h3>
+        <p>Who is involved in approval, and when do they need to see what? Understanding the decision structure from the outset means the prototype and approval process is built around your organisation — not ours.</p>
+      </article>
+    </div>
+
+    <div class="narrative reveal">
+      <h3>Why there is no estimate here</h3>
+      <p>Every Eyekonika commission is different. A single collector piece for a private individual and a run of three hundred corporate awards for a global institution are not variants of the same product — they require entirely different approaches to design, production planning, and quality verification. Providing a number before Discovery is complete would mean providing a number that is not accurate. We do not do that. Once Discovery concludes, the quote we produce reflects exactly what your piece requires — and nothing it does not.</p>
+    </div>
 
     <div class="footer-nav">
-      <a class="pill-btn" href="../vision/">← Back to Vision</a>
-      <a class="pill-btn" href="../prototype/">Continue to Prototype →</a>
+      <a class="nav-btn" href="../vision/">← Back to Vision</a>
+      <a class="nav-btn" href="../prototype/">Continue to Prototype →</a>
     </div>
+
   </main>
   <script src="../../js/process-step.js"></script>
 </body>

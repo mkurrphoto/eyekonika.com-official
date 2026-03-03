@@ -8,58 +8,115 @@
 </head>
 <body data-step="production">
   <main class="step-shell">
+
     <div class="topbar">
       <div class="crumbs">Eyekonika / Process / Step 04</div>
-      <a href="../../index.html#timeline" class="pill-btn">← Back to timeline</a>
+      <a href="../../index.html#timeline" class="back-link">← Back to timeline</a>
     </div>
 
     <nav class="progress-rail" aria-label="Process steps">
-      <a href="../vision/">01 Vision</a>
-      <a href="../discovery/">02 Discovery</a>
-      <a href="../prototype/">03 Prototype</a>
-      <a class="active" href="../production/">04 Production</a>
+      <a class="rail-step" href="../vision/">
+        <span class="rail-num">01</span>
+        <span class="rail-label">Vision</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../discovery/">
+        <span class="rail-num">02</span>
+        <span class="rail-label">Discovery</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../prototype/">
+        <span class="rail-num">03</span>
+        <span class="rail-label">Prototype</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step active" href="../production/">
+        <span class="rail-num">04</span>
+        <span class="rail-label">Production</span>
+      </a>
     </nav>
 
-    <section class="hero">
+    <section class="hero reveal">
       <article class="panel">
-        <p class="step-kicker">Step 04 — Production</p>
+        <span class="eyebrow">Step 04 — Production</span>
         <h1>Made to an exacting standard, at any scale.</h1>
-        <p>Your approved concept enters controlled production: calibrated subsurface engraving in premium K9 optical glass, with quality verification at every stage from prep through finishing.</p>
+        <p>Your approved concept enters controlled production: calibrated subsurface engraving in premium K9 optical glass, with quality verification at every stage from material selection through to finished packaging. The piece that leaves is exactly the piece that was approved.</p>
       </article>
-      <div class="hero-media" style="background-image:url('../../images/pexels-dmitriy_mir-77351353-11107914.jpg')"></div>
+      <div class="hero-img" style="background-image:url('../../images/pexels-dmitriy_mir-77351353-11107914.jpg')"></div>
     </section>
 
-    <section class="grid-2">
-      <article class="panel">
-        <h2>Production scrubber</h2>
-        <div class="stages" role="tablist" aria-label="Production stages">
-          <button class="stage-btn active" data-stage="prep">Prep</button>
-          <button class="stage-btn" data-stage="calib">Calibration</button>
-          <button class="stage-btn" data-stage="engrave">Engraving</button>
-          <button class="stage-btn" data-stage="inspect">Inspection</button>
-          <button class="stage-btn" data-stage="finish">Finishing</button>
-        </div>
+    <div class="section-heading reveal">
+      <span class="eyebrow">Five stages</span>
+      <h2>Production from first material to final dispatch</h2>
+    </div>
 
+    <div class="reveal">
+      <nav class="stage-nav" role="tablist" aria-label="Production stages">
+        <button class="stage-btn active" data-stage="prep" role="tab" aria-selected="true">
+          <span class="stage-icon">🔷</span>
+          Prep
+        </button>
+        <button class="stage-btn" data-stage="calib" role="tab" aria-selected="false">
+          <span class="stage-icon">⚡</span>
+          Calibration
+        </button>
+        <button class="stage-btn" data-stage="engrave" role="tab" aria-selected="false">
+          <span class="stage-icon">✦</span>
+          Engraving
+        </button>
+        <button class="stage-btn" data-stage="inspect" role="tab" aria-selected="false">
+          <span class="stage-icon">◎</span>
+          Inspection
+        </button>
+        <button class="stage-btn" data-stage="finish" role="tab" aria-selected="false">
+          <span class="stage-icon">◈</span>
+          Finishing
+        </button>
+      </nav>
+
+      <div class="stage-content panel">
         <h3 id="stageTitle">Material Prep</h3>
-        <p id="stageDesc" class="summary">K9 optical glass is selected, cleaned, and measured for optical clarity.</p>
-      </article>
+        <p id="stageDesc">K9 optical glass blanks are selected and inspected for internal clarity. Each piece is cleaned and measured to specification before a single laser path is configured.</p>
+      </div>
+    </div>
 
-      <article class="panel">
-        <h2>Quality checkpoints</h2>
-        <ul>
-          <li>Laser power and focus window validation before each run.</li>
-          <li>Depth fidelity checks against approved proof references.</li>
-          <li>Clarity and edge artifact inspection before packaging.</li>
-          <li>Consistency controls for single pieces and high-volume batches.</li>
-        </ul>
-        <p class="summary">Every unit follows the same quality rubric regardless of quantity.</p>
+    <div class="section-heading reveal">
+      <span class="eyebrow">Quality pillars</span>
+      <h2>What we verify at every point of production</h2>
+    </div>
+
+    <div class="grid-4">
+      <article class="panel reveal">
+        <div class="card-icon">⬡</div>
+        <h3>Laser Validation</h3>
+        <p>Power, frequency, and focus window are verified against a calibration baseline before each production run begins. Parameters are logged and held on file.</p>
       </article>
-    </section>
+      <article class="panel reveal reveal-delay-1">
+        <div class="card-icon">◎</div>
+        <h3>Depth Fidelity</h3>
+        <p>Every engraved piece is checked against the approved depth map to confirm that three-dimensional geometry matches the signed-off proof precisely.</p>
+      </article>
+      <article class="panel reveal reveal-delay-2">
+        <div class="card-icon">✦</div>
+        <h3>Edge &amp; Clarity</h3>
+        <p>Technicians inspect each piece for edge sharpness, internal clarity, and the absence of artefacts before it is cleared for finishing and packaging.</p>
+      </article>
+      <article class="panel reveal reveal-delay-3">
+        <div class="card-icon">⊞</div>
+        <h3>Batch Consistency</h3>
+        <p>For multi-unit commissions, consistency controls ensure that the first piece and the last piece are indistinguishable — regardless of production volume.</p>
+      </article>
+    </div>
+
+    <div class="closing reveal">
+      <p>Your piece. Exactly as approved.</p>
+    </div>
 
     <div class="footer-nav">
-      <a class="pill-btn" href="../prototype/">← Back to Prototype</a>
-      <a class="pill-btn" href="../../index.html#timeline">Back to timeline →</a>
+      <a class="nav-btn" href="../prototype/">← Back to Prototype</a>
+      <a class="nav-btn" href="../../index.html#timeline">Back to timeline →</a>
     </div>
+
   </main>
   <script src="../../js/process-step.js"></script>
 </body>

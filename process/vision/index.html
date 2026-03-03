@@ -8,59 +8,82 @@
 </head>
 <body data-step="vision">
   <main class="step-shell">
+
     <div class="topbar">
       <div class="crumbs">Eyekonika / Process / Step 01</div>
-      <a href="../../index.html#timeline" class="pill-btn">← Back to timeline</a>
+      <a href="../../index.html#timeline" class="back-link">← Back to timeline</a>
     </div>
 
     <nav class="progress-rail" aria-label="Process steps">
-      <a class="active" href="../vision/">01 Vision</a>
-      <a href="../discovery/">02 Discovery</a>
-      <a href="../prototype/">03 Prototype</a>
-      <a href="../production/">04 Production</a>
+      <a class="rail-step active" href="../vision/">
+        <span class="rail-num">01</span>
+        <span class="rail-label">Vision</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../discovery/">
+        <span class="rail-num">02</span>
+        <span class="rail-label">Discovery</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../prototype/">
+        <span class="rail-num">03</span>
+        <span class="rail-label">Prototype</span>
+      </a>
+      <span class="rail-connector" aria-hidden="true"></span>
+      <a class="rail-step" href="../production/">
+        <span class="rail-num">04</span>
+        <span class="rail-label">Production</span>
+      </a>
     </nav>
 
-    <section class="hero">
+    <section class="hero reveal">
       <article class="panel">
-        <p class="step-kicker">Step 01 — Vision</p>
-        <h1>It starts with a feeling, then we shape it into direction.</h1>
-        <p>Your first session should feel easy and inspiring. We translate instinct into a clear creative path for a glass piece that carries prestige and lasting symbolic value.</p>
+        <span class="eyebrow">Step 01 — Vision</span>
+        <h1>It starts with a feeling.</h1>
+        <p>Your first session is not a briefing form. It is a conversation — open, unhurried — where we listen for the feeling a piece must carry. Prestige. Legacy. Belonging. Gratitude. We translate that feeling into a creative direction before a single measurement is taken.</p>
       </article>
-      <div class="hero-media" style="background-image:url('../../images/pexels-eberhardgross-691668(2).jpg')"></div>
+      <div class="hero-img" style="background-image:url('../../images/pexels-eberhardgross-691668(2).jpg')"></div>
     </section>
 
-    <section class="grid-2">
-      <article class="panel">
-        <h2>Concept starter</h2>
-        <label for="projectName">Project name</label>
-        <input id="projectName" placeholder="Founder's Circle Award" />
-        <label for="audience">Primary audience</label>
-        <input id="audience" placeholder="Collectors, sponsors, leadership" />
+    <div class="section-heading reveal">
+      <span class="eyebrow">What we explore together</span>
+      <h2>Three lines of inquiry that shape every piece</h2>
+    </div>
 
-        <label for="toneSlider">Aesthetic direction: <strong id="toneValue">Balanced</strong></label>
-        <input id="toneSlider" type="range" min="0" max="100" value="52" />
-
-        <label>Use-case focus</label>
-        <div id="visionUseCases" class="badge-list">
-          <button class="badge active" data-value="Commemorative launch">Commemorative launch</button>
-          <button class="badge" data-value="Collector piece">Collector piece</button>
-          <button class="badge" data-value="Fundraising centerpiece">Fundraising centerpiece</button>
-          <button class="badge" data-value="Executive gifting">Executive gifting</button>
-        </div>
+    <div class="grid-3">
+      <article class="panel reveal">
+        <div class="card-icon">◇</div>
+        <h3>Your Story</h3>
+        <p>Every commission has an origin. We want to understand it — the milestone being marked, the relationship being honoured, the institution being represented. The story becomes the invisible architecture of the piece.</p>
       </article>
-
-      <article class="panel">
-        <h2>Live concept profile</h2>
-        <p class="summary" id="visionSummary"></p>
-        <p class="summary">Selected focus: <strong id="visionUseCase">Commemorative launch</strong></p>
-        <p class="summary">Next, we'll convert this direction into concrete variables in Discovery: size, depth, finishing, lighting, and quantity planning.</p>
+      <article class="panel reveal reveal-delay-1">
+        <div class="card-icon">◈</div>
+        <h3>Your Audience</h3>
+        <p>Who will encounter this piece? A board room, a gala stage, a collector's shelf, a personal study? The audience shapes the visual language — what reads at distance, what rewards closer attention, what communicates before a word is spoken.</p>
       </article>
-    </section>
+      <article class="panel reveal reveal-delay-2">
+        <div class="card-icon">✦</div>
+        <h3>Your Legacy</h3>
+        <p>Glass endures. We ask what this piece should still communicate in twenty years — what the person receiving it should feel every time they see it. The answer shapes quality decisions that cannot be revisited after production begins.</p>
+      </article>
+    </div>
+
+    <div class="quote-pull reveal">
+      <blockquote>
+        "The most important creative decisions happen before the first sketch. What we are really designing is the feeling left behind after someone looks away."
+      </blockquote>
+    </div>
+
+    <div class="narrative reveal">
+      <h3>What happens after Vision</h3>
+      <p>At the close of Vision, we have a shared sense of direction — not a spec sheet, not a budget, not a timeline. Those come later, and they come correctly, because they are built on a foundation we have both contributed to. The next step, Discovery, is where that direction becomes a precise set of requirements. Every variable that affects production and pricing is mapped before a quote is ever written.</p>
+    </div>
 
     <div class="footer-nav">
-      <a class="pill-btn" href="../../index.html#timeline">← Timeline</a>
-      <a class="pill-btn" href="../discovery/">Continue to Discovery →</a>
+      <a class="nav-btn" href="../../index.html#timeline">← Timeline</a>
+      <a class="nav-btn" href="../discovery/">Continue to Discovery →</a>
     </div>
+
   </main>
   <script src="../../js/process-step.js"></script>
 </body>
