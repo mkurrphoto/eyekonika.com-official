@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="shared-css/journey.css" />
   <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css" />
 </head>
-<body>
+<body class="is-journey">
   <a href="index.html" class="journey-back">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -216,7 +216,7 @@
 
 
 <!-- ============================================
-     VERTICAL ACT — the form journey
+     VERTICAL ACT — clean post-scroll form
      ============================================ -->
 <div id="journey-vertical">
 
@@ -228,162 +228,66 @@
     <div class="geo-line-h" style="width:100px;bottom:40%;left:50%;transform:translateX(-50%);position:absolute;"></div>
   </div>
 
-  <!-- V-SCENE 6: Name + Email -->
-  <div class="v-scene" id="v-scene-6">
+  <!-- Form section: 3-field clean form with trust signals -->
+  <div class="v-scene" id="v-scene-6" style="display:none;">
     <div class="geo-cross" style="width:50px;height:50px;top:15%;left:8%;position:absolute;"></div>
     <div class="geo-dots" style="width:150px;height:150px;bottom:15%;right:6%;border-radius:3px;position:absolute;"></div>
     <div class="geo-bracket tl" style="top:20%;right:15%;position:absolute;transform:translate(10px,-10px);"></div>
+    <div class="ambient-orb" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);--dur:28s;opacity:0.3;"></div>
 
     <div class="scene-content centered">
-      <div class="journey-fields" id="fields-6">
-        <div class="journey-field-group">
-          <input type="text" class="journey-input" id="j-name" placeholder="Your name" autocomplete="off" />
-          <div class="field-underline"></div>
-        </div>
-        <div class="journey-field-group">
-          <input type="email" class="journey-input" id="j-email" placeholder="Your email" autocomplete="off" />
-          <div class="field-underline"></div>
-        </div>
+      <!-- Trust signal: logo strip above form -->
+      <div class="trust-strip" id="trust-strip">
+        <span class="trust-label">Trusted by institutions, churches &amp; nonprofits</span>
       </div>
-      <button class="journey-continue" id="continue-1">
-        <span>Continue</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
 
-  <!-- V-SCENE 7: Occasion -->
-  <div class="v-scene" id="v-scene-7" style="display:none;">
-    <div class="geo-shard" style="width:200px;height:280px;right:8%;top:50%;transform:translateY(-50%) rotate(2deg);--rot:2deg;position:absolute;"></div>
-    <div class="geo-cross" style="width:40px;height:40px;top:20%;left:10%;position:absolute;"></div>
-    <div class="geo-dots" style="width:120px;height:120px;bottom:20%;left:5%;border-radius:3px;position:absolute;"></div>
-
-    <div class="scene-content centered">
-      <div class="kinetic-line question-line">
-        <span class="word-reveal">What is the</span>
-        <span class="word-reveal accent">occasion?</span>
+      <div class="form-heading-wrap">
+        <div class="scene-divider"><div class="scene-divider-inner" id="form-divider"></div></div>
+        <p class="form-section-heading">Start the conversation.</p>
       </div>
-      <div class="journey-choices" id="occasion-choices" style="margin-top:1rem;">
-        <div class="journey-choice" data-value="memorial">
-          <span class="choice-label">A memorial or dedication</span>
-          <div class="choice-border"></div>
-          <span class="choice-arrow">→</span>
-        </div>
-        <div class="journey-choice" data-value="institutional">
-          <span class="choice-label">An institutional commission</span>
-          <div class="choice-border"></div>
-          <span class="choice-arrow">→</span>
-        </div>
-        <div class="journey-choice" data-value="gift">
-          <span class="choice-label">A gift or personal piece</span>
-          <div class="choice-border"></div>
-          <span class="choice-arrow">→</span>
-        </div>
-        <div class="journey-choice" data-value="other">
-          <span class="choice-label">Something else entirely</span>
-          <div class="choice-border"></div>
-          <span class="choice-arrow">→</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- V-SCENE 8: Describe the space -->
-  <div class="v-scene" id="v-scene-8" style="display:none;">
-    <div class="geo-rect" style="width:200px;height:260px;left:6%;top:50%;transform:translateY(-50%) translateX(-20px);position:absolute;"></div>
-    <div class="geo-bracket tl" style="top:15%;right:10%;position:absolute;transform:translate(10px,-10px);"></div>
-    <div class="geo-bracket br" style="bottom:15%;right:10%;position:absolute;transform:translate(-10px,10px);"></div>
-    <div class="geo-line-h" style="width:80px;top:25%;left:10%;position:absolute;"></div>
+      <form id="landingForm" action="https://formspree.io/f/movyqgop" method="POST" class="landing-form">
+        <!-- Honeypot anti-spam field -->
+        <input type="text" name="_gotcha" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;" aria-hidden="true" />
 
-    <div class="scene-content centered">
-      <p class="scene-eyebrow" id="scene-8-eyebrow">Help us see it.</p>
-      <div class="kinetic-line question-line" style="margin-top:0.5rem;">
-        <span class="word-reveal">Describe the</span>
-        <span class="word-reveal accent">space.</span>
-      </div>
-      <p class="scene-subtext">The light, the feeling, what it means to the people who enter it.</p>
-      <div class="journey-fields" id="fields-8" style="max-width:560px;">
-        <div class="journey-field-group wide">
-          <textarea class="journey-textarea" id="j-space" placeholder="Tell us..."></textarea>
-        </div>
-      </div>
-      <button class="journey-continue" id="continue-2">
-        <span>Continue</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- V-SCENE 9: Timeline -->
-  <div class="v-scene" id="v-scene-9" style="display:none;">
-    <div class="geo-orb" style="width:250px;height:250px;right:8%;bottom:10%;position:absolute;transform:translateY(20px);"></div>
-    <div class="geo-cross" style="width:55px;height:55px;top:15%;left:12%;position:absolute;"></div>
-    <div class="geo-dots" style="width:180px;height:90px;top:12%;right:10%;border-radius:3px;position:absolute;"></div>
-
-    <div class="scene-content centered">
-      <div class="kinetic-line">
-        <span class="word-reveal thin">One last thing.</span>
-      </div>
-      <p class="scene-eyebrow" style="margin-top:2rem;">When are you hoping to have it ready?</p>
-      <div class="journey-choices" id="timeline-choices" style="margin-top:0.5rem;">
-        <div class="journey-choice" data-value="asap">
-          <span class="choice-label">As soon as possible</span>
-          <div class="choice-border"></div>
-          <span class="choice-arrow">→</span>
-        </div>
-        <div class="journey-choice" data-value="months">
-          <span class="choice-label">Within a few months</span>
-          <div class="choice-border"></div>
-          <span class="choice-arrow">→</span>
-        </div>
-        <div class="journey-choice" data-value="planning">
-          <span class="choice-label">Still in the planning stage</span>
-          <div class="choice-border"></div>
-          <span class="choice-arrow">→</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- V-SCENE 10: Final card -->
-  <div class="v-scene" id="v-scene-10" style="display:none;">
-    <div class="geo-line-h" style="width:120px;top:20%;left:50%;transform:translateX(-50%);position:absolute;"></div>
-    <div class="geo-bracket tl" style="top:15%;left:8%;position:absolute;transform:translate(-10px,-10px);"></div>
-    <div class="geo-bracket br" style="bottom:15%;right:8%;position:absolute;transform:translate(10px,10px);"></div>
-
-    <div class="scene-content centered">
-      <div class="journey-final-card" id="final-card">
-        <div class="final-eyebrow">That's a beautiful beginning.</div>
-        <div class="final-rule"></div>
-        <p class="final-text">There are a few practical things we'd like to understand before we speak.</p>
-
-        <form id="journeyForm" action="https://formspree.io/f/movyqgop" method="POST">
-          <input type="hidden" id="j-hidden-name" name="name" />
-          <input type="hidden" id="j-hidden-email" name="email" />
-          <input type="hidden" id="j-hidden-occasion" name="occasion" />
-          <input type="hidden" id="j-hidden-space" name="space-description" />
-          <input type="hidden" id="j-hidden-timeline" name="timeline" />
-
-          <div style="display:flex;flex-direction:column;gap:0.6rem;">
-            <label class="final-label">What scale are you imagining?</label>
-            <input type="text" name="scale" class="final-input" placeholder="Small desk piece, large installation..." />
+        <div class="journey-fields" id="fields-6">
+          <div class="journey-field-group">
+            <label class="field-label" for="j-name">Name</label>
+            <input type="text" class="journey-input" name="name" id="j-name" placeholder="Your name" autocomplete="name" required />
+            <div class="field-underline"></div>
           </div>
-
-          <div class="submit-magnetic">
-            <button type="submit" class="journey-submit">
-              <span>When you're ready</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </button>
+          <div class="journey-field-group">
+            <label class="field-label" for="j-email">Email</label>
+            <input type="email" class="journey-input" name="email" id="j-email" placeholder="Your email" autocomplete="email" required />
+            <div class="field-underline"></div>
           </div>
-        </form>
+          <div class="journey-field-group">
+            <label class="field-label" for="j-project">Project</label>
+            <input type="text" class="journey-input" name="project" id="j-project" placeholder="Briefly describe your project" required />
+            <div class="field-underline"></div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="landing-submit">
+            <span>Tell Us About Your Project</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <a href="contact.html" class="book-call-link">Ready to book a call instead?</a>
+        </div>
+      </form>
+
+      <!-- Trust signal: testimonial below form -->
+      <div class="trust-testimonial">
+        <div class="testimonial-line"></div>
+        <blockquote class="testimonial-text">"Eyekonika delivered custom pieces for our dedication wall — on time, exactly as envisioned."</blockquote>
+        <cite class="testimonial-cite">— A past client</cite>
       </div>
     </div>
   </div>
 
-  <!-- V-SCENE 11: Confirmation -->
-  <div class="v-scene" id="v-scene-11" style="display:none;">
+  <!-- Confirmation -->
+  <div class="v-scene" id="v-scene-confirm" style="display:none;">
     <div class="geo-line-h" style="width:300px;top:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
     <div class="geo-line-h" style="width:160px;bottom:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
 
@@ -392,6 +296,10 @@
         <p class="confirm-main" id="confirm-main">We'll be in touch.</p>
         <p class="confirm-sub" id="confirm-sub">Usually within a day.</p>
         <div class="confirm-rule" id="confirm-rule"></div>
+        <a href="index.html" class="journey-back" style="position:relative;top:auto;left:auto;margin-top:2.5rem;font-size:0.65rem;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:14px;height:14px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to Eyekonika
+        </a>
       </div>
     </div>
   </div>

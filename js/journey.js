@@ -1,29 +1,38 @@
 /* ============================================
-   EYEKONIKA — CONTACT JOURNEY JS v3
-   Fixed: scroll debounce, back nav, mobile form
+   EYEKONIKA — CONTACT JOURNEY JS v4
+   Simplified: clean 3-field post-scroll form
+   Embedded support via IntersectionObserver
    ============================================ */
 
 (function () {
   'use strict';
 
+  // Bail if no journey track on this page
+  var track = document.getElementById('h-track');
+  if (!track) return;
+
+  // ---- Mode detection ----
+  // begin.html has class="is-journey" on body; index.html does not
+  var isStandalone = document.body.classList.contains('is-journey');
+  var journeyVisible = isStandalone; // embedded starts invisible
+
   // ---- State ----
-  const state = {
+  var state = {
     currentScene: 0,
     totalHScenes: 5,
     inHorizontal: true,
     transitioning: false,
-    name: '', email: '', occasion: '', space: '', timeline: ''
+    journeyStarted: false
   };
 
   // ---- Elements ----
-  const track = document.getElementById('h-track');
-  const progressDots = document.querySelectorAll('.progress-dot');
-  const sceneNum = document.getElementById('scene-num');
+  var progressDots = document.querySelectorAll('.progress-dot');
+  var sceneNum = document.getElementById('scene-num');
 
   // ---- Cursor glow ----
-  const glowEl = document.getElementById('cursor-glow');
-  let glowX = 0, glowY = 0, mouseX = 0, mouseY = 0;
-  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+  var glowEl = document.getElementById('cursor-glow');
+  var glowX = 0, glowY = 0, mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; });
   (function animateGlow() {
     glowX += (mouseX - glowX) * 0.08;
     glowY += (mouseY - glowY) * 0.08;
@@ -90,7 +99,6 @@
 
     triggerHScene(index);
 
-    // Unlock after transition completes
     setTimeout(function() { state.transitioning = false; }, 1200);
   }
 
@@ -142,15 +150,14 @@
 
   // ============================================
   // SCROLL / SWIPE / KEYBOARD INPUT
-  // Debounced: one action per gesture
+  // Only active when journeyVisible && inHorizontal
   // ============================================
 
-  // Wheel — accumulate delta, fire once per gesture
   var wheelAccum = 0;
   var wheelTimer = null;
 
   window.addEventListener('wheel', function(e) {
-    if (!state.inHorizontal) return;
+    if (!state.inHorizontal || !journeyVisible) return;
     e.preventDefault();
 
     wheelAccum += e.deltaY + e.deltaX;
@@ -160,21 +167,18 @@
       if (Math.abs(wheelAccum) < 20) { wheelAccum = 0; return; }
 
       if (wheelAccum > 0) {
-        // Forward
         if (state.currentScene < state.totalHScenes - 1) {
           goToScene(state.currentScene + 1);
         } else {
           transitionToVertical();
         }
       } else {
-        // Back
         if (state.currentScene > 0) {
           goToScene(state.currentScene - 1);
         }
       }
       wheelAccum = 0;
     }, 50);
-
   }, { passive: false });
 
   // Touch swipe
@@ -190,21 +194,18 @@
 
   window.addEventListener('touchmove', function(e) {
     touchMoved = true;
-    // Block native page scroll while in horizontal — JS handles all navigation
-    if (state.inHorizontal) e.preventDefault();
+    if (state.inHorizontal && journeyVisible) e.preventDefault();
   }, { passive: false });
 
   window.addEventListener('touchend', function(e) {
-    if (!state.inHorizontal || !touchMoved) return;
+    if (!state.inHorizontal || !journeyVisible || !touchMoved) return;
     var dx = touchStartX - e.changedTouches[0].clientX;
     var dy = touchStartY - e.changedTouches[0].clientY;
     var absDx = Math.abs(dx);
     var absDy = Math.abs(dy);
 
-    // Require minimum movement in either axis
     if (absDx < 30 && absDy < 30) return;
 
-    // Both horizontal (left/right) and vertical (up/down) navigate scenes
     var goForward = absDx >= absDy ? dx > 0 : dy > 0;
 
     if (goForward) {
@@ -222,7 +223,7 @@
 
   // Keyboard
   window.addEventListener('keydown', function(e) {
-    if (!state.inHorizontal || state.transitioning) return;
+    if (!state.inHorizontal || !journeyVisible || state.transitioning) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
       if (state.currentScene < state.totalHScenes - 1) {
@@ -254,13 +255,15 @@
     state.transitioning = true;
     state.inHorizontal = false;
 
+    // Resume Lenis smooth scroll
+    if (window.lenis) window.lenis.start();
+
     // Fade out chrome
     var progress = document.querySelector('.journey-progress');
     var counter = document.querySelector('.scene-counter');
     if (progress) { progress.style.transition = 'opacity 0.8s ease'; progress.style.opacity = '0'; }
     if (counter) { counter.style.transition = 'opacity 0.8s ease'; counter.style.opacity = '0'; }
 
-    // Scroll to vertical
     var vSection = document.getElementById('journey-vertical');
     setTimeout(function() {
       if (vSection) vSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -292,7 +295,6 @@
           scene.style.transition = 'opacity 1.2s ease, transform 1.2s cubic-bezier(0.16,1,0.3,1)';
           scene.style.opacity = '1';
           scene.style.transform = 'translateY(0)';
-
           setTimeout(function() {
             scene.scrollIntoView({ behavior: 'smooth', block: 'center' });
             triggerVScene(id);
@@ -317,194 +319,119 @@
 
       case 'v-scene-6':
         setTimeout(function() {
+          var trustStrip = document.getElementById('trust-strip');
+          var heading = scene.querySelector('.form-section-heading');
+          var formDivider = document.getElementById('form-divider');
           var fields = document.getElementById('fields-6');
-          var btn = document.getElementById('continue-1');
-          if (fields) fields.classList.add('revealed');
-          if (btn) btn.classList.add('revealed');
-        }, 600);
-        break;
+          var actions = scene.querySelector('.form-actions');
+          var testimonial = scene.querySelector('.trust-testimonial');
 
-      case 'v-scene-7':
-        setTimeout(function() {
-          revealWords(scene, 0);
-          scene.querySelectorAll('.journey-choice').forEach(function(c, i) {
-            setTimeout(function() { c.classList.add('revealed'); }, 400 + i * 120);
-          });
+          if (trustStrip) trustStrip.classList.add('revealed');
+          if (formDivider) formDivider.classList.add('revealed');
+          if (heading) setTimeout(function() { heading.classList.add('revealed'); }, 300);
+          if (fields)  setTimeout(function() { fields.classList.add('revealed'); }, 600);
+          if (actions) setTimeout(function() { actions.classList.add('revealed'); }, 1000);
+          if (testimonial) setTimeout(function() { testimonial.classList.add('revealed'); }, 1600);
         }, 300);
         break;
 
-      case 'v-scene-8':
-        setTimeout(function() {
-          revealEl(scene.querySelector('.scene-eyebrow'), 0);
-          revealWords(scene, 300);
-          setTimeout(function() {
-            revealEl(scene.querySelector('.scene-subtext'), 0);
-            var fields = document.getElementById('fields-8');
-            var btn = document.getElementById('continue-2');
-            if (fields) fields.classList.add('revealed');
-            if (btn) btn.classList.add('revealed');
-          }, 800);
-        }, 300);
-        break;
-
-      case 'v-scene-9':
-        setTimeout(function() {
-          revealWords(scene.querySelector('.kinetic-line'), 0);
-          setTimeout(function() {
-            revealEl(scene.querySelector('.scene-eyebrow'), 0);
-            scene.querySelectorAll('.journey-choice').forEach(function(c, i) {
-              setTimeout(function() { c.classList.add('revealed'); }, 200 + i * 120);
-            });
-          }, 600);
-        }, 300);
-        break;
-
-      case 'v-scene-10':
-        setTimeout(function() {
-          var card = document.getElementById('final-card');
-          if (card) card.classList.add('revealed');
-          initMagnetic();
-        }, 500);
-        break;
-
-      case 'v-scene-11':
+      case 'v-scene-confirm':
         setTimeout(function() {
           revealEl(document.getElementById('confirm-main'), 0);
-          revealEl(document.getElementById('confirm-sub'), 0);
-          revealEl(document.getElementById('confirm-rule'), 0);
+          revealEl(document.getElementById('confirm-sub'), 400);
+          revealEl(document.getElementById('confirm-rule'), 800);
         }, 400);
         break;
     }
   }
 
   // ============================================
-  // FORM INTERACTIONS
+  // FORM SUBMISSION
   // ============================================
 
-  // Continue 1
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('#continue-1')) return;
-    var name = document.getElementById('j-name');
-    var email = document.getElementById('j-email');
-    var nVal = name ? name.value.trim() : '';
-    var eVal = email ? email.value.trim() : '';
-
-    if (!nVal || !eVal) {
-      shake(document.getElementById('fields-6'));
-      return;
-    }
-    state.name = nVal;
-    state.email = eVal;
-    showVScene('v-scene-7');
-  });
-
-  // Occasion choices
-  document.addEventListener('click', function(e) {
-    var choice = e.target.closest('#occasion-choices .journey-choice');
-    if (!choice) return;
-    document.querySelectorAll('#occasion-choices .journey-choice').forEach(function(c) {
-      c.classList.remove('selected');
-    });
-    choice.classList.add('selected');
-    state.occasion = choice.dataset.value;
-
-    var eyebrowMap = {
-      memorial: "Tell us about who you're remembering.",
-      institutional: 'Help us understand the space.',
-      gift: 'Help us see the occasion.',
-      other: 'Help us see your vision.'
-    };
-    var eyebrow = document.getElementById('scene-8-eyebrow');
-    if (eyebrow) eyebrow.textContent = eyebrowMap[state.occasion] || 'Help us see it.';
-
-    showVScene('v-scene-8', 350);
-  });
-
-  // Continue 2
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('#continue-2')) return;
-    var space = document.getElementById('j-space');
-    var sVal = space ? space.value.trim() : '';
-    if (!sVal) { shake(document.getElementById('fields-8')); return; }
-    state.space = sVal;
-    showVScene('v-scene-9');
-  });
-
-  // Timeline choices
-  document.addEventListener('click', function(e) {
-    var choice = e.target.closest('#timeline-choices .journey-choice');
-    if (!choice) return;
-    document.querySelectorAll('#timeline-choices .journey-choice').forEach(function(c) {
-      c.classList.remove('selected');
-    });
-    choice.classList.add('selected');
-    state.timeline = choice.dataset.value;
-    showVScene('v-scene-10', 350);
-  });
-
-  // Form submit
   document.addEventListener('submit', function(e) {
-    if (e.target.id !== 'journeyForm') return;
+    if (e.target.id !== 'landingForm') return;
     e.preventDefault();
 
-    document.getElementById('j-hidden-name').value = state.name;
-    document.getElementById('j-hidden-email').value = state.email;
-    document.getElementById('j-hidden-occasion').value = state.occasion;
-    document.getElementById('j-hidden-space').value = state.space;
-    document.getElementById('j-hidden-timeline').value = state.timeline;
+    var btn = e.target.querySelector('.landing-submit');
+    if (btn) {
+      btn.disabled = true;
+      var span = btn.querySelector('span');
+      if (span) span.textContent = 'Sending\u2026';
+    }
 
     fetch(e.target.action, {
       method: 'POST',
       body: new FormData(e.target),
       headers: { 'Accept': 'application/json' }
-    }).then(function(res) {
-      afterSubmit();
+    }).then(function() {
+      afterLandingSubmit();
     }).catch(function() {
-      afterSubmit();
+      afterLandingSubmit();
     });
   });
 
-  function afterSubmit() {
-    var s10 = document.getElementById('v-scene-10');
-    if (s10) {
-      s10.style.transition = 'opacity 1s ease';
-      s10.style.opacity = '0';
-      setTimeout(function() { s10.style.display = 'none'; }, 1000);
+  function afterLandingSubmit() {
+    var s6 = document.getElementById('v-scene-6');
+    if (s6) {
+      s6.style.transition = 'opacity 1s ease';
+      s6.style.opacity = '0';
+      setTimeout(function() { s6.style.display = 'none'; }, 1000);
     }
-    showVScene('v-scene-11', 800);
-  }
-
-  // Magnetic submit button
-  function initMagnetic() {
-    var wrap = document.querySelector('.submit-magnetic');
-    if (!wrap) return;
-    wrap.addEventListener('mousemove', function(e) {
-      var rect = wrap.getBoundingClientRect();
-      var x = (e.clientX - rect.left - rect.width / 2) * 0.2;
-      var y = (e.clientY - rect.top - rect.height / 2) * 0.2;
-      wrap.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-    });
-    wrap.addEventListener('mouseleave', function() {
-      wrap.style.transition = 'transform 0.7s cubic-bezier(0.76,0,0.24,1)';
-      wrap.style.transform = 'translate(0,0)';
-    });
+    showVScene('v-scene-confirm', 800);
   }
 
   // ============================================
   // INIT
   // ============================================
 
-  function init() {
-    // Prevent native scroll on horizontal section
+  function startJourney() {
+    if (state.journeyStarted) return;
+    state.journeyStarted = true;
+
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) {
       hSection.style.overflow = 'hidden';
-      // Mobile: intercept vertical swipes for scene nav; desktop: allow trackpad pan
-    hSection.style.touchAction = window.innerWidth <= 768 ? 'none' : 'pan-y';
+      hSection.style.touchAction = window.innerWidth <= 768 ? 'none' : 'pan-y';
     }
 
-    // Kick off scene 1
     goToScene(0);
+  }
+
+  function init() {
+    if (isStandalone) {
+      // begin.html — start immediately
+      startJourney();
+    } else {
+      // Embedded in index.html — observe viewport
+      var hSection = document.getElementById('journey-horizontal');
+      if (!hSection) return;
+
+      // Start animations when section is 50% visible
+      var startObs = new IntersectionObserver(function(entries) {
+        if (entries[0].intersectionRatio >= 0.5) {
+          startJourney();
+          startObs.disconnect();
+        }
+      }, { threshold: 0.5 });
+      startObs.observe(hSection);
+
+      // Manage scroll interception + Lenis pause/resume
+      var scrollObs = new IntersectionObserver(function(entries) {
+        var ratio = entries[0].intersectionRatio;
+        var wasVisible = journeyVisible;
+        journeyVisible = ratio >= 0.9;
+
+        if (journeyVisible && state.inHorizontal) {
+          // Entering horizontal section — pause Lenis
+          if (window.lenis) window.lenis.stop();
+        } else if (wasVisible && !journeyVisible) {
+          // Leaving horizontal section — resume Lenis
+          if (window.lenis) window.lenis.start();
+        }
+      }, { threshold: [0, 0.5, 0.9, 1.0] });
+      scrollObs.observe(hSection);
+    }
   }
 
   if (document.readyState === 'loading') {

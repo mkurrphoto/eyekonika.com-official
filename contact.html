@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Contact — Eyekonika</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="description" content="Start a conversation with Eyekonika. Tell us about your project and we'll be in touch within a day." />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-css/journey.css" />
+  <link rel="stylesheet" href="contact.css" />
+</head>
+<body class="is-contact">
+
+  <!-- Back navigation -->
+  <a href="index.html" class="journey-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    <span>Eyekonika</span>
+  </a>
+
+  <main class="contact-wrap">
+
+    <!-- Page header -->
+    <header class="contact-header">
+      <p class="scene-eyebrow" style="opacity:1;transform:none;">Reach out</p>
+      <h1 class="contact-title">Start the conversation.</h1>
+      <p class="contact-sub">Tell us about your project and we'll typically be in touch within a day.</p>
+    </header>
+
+    <!-- Trust logos strip -->
+    <div class="contact-trust-logos">
+      <span class="trust-label">Trusted by institutions, churches &amp; nonprofits</span>
+    </div>
+
+    <!-- Body: form + calendly -->
+    <div class="contact-body">
+
+      <!-- Left: Form -->
+      <div class="contact-form-col">
+
+        <!-- Confirmation state (shown after submit) -->
+        <div class="contact-confirm" id="contact-confirm">
+          <p class="contact-confirm-main">We'll be in touch.</p>
+          <p class="contact-confirm-sub">Usually within a day.</p>
+          <a href="index.html" class="book-call-link" style="margin-top:1rem;">&#8592; Back to Eyekonika</a>
+        </div>
+
+        <!-- Form -->
+        <form id="contactPageForm" action="https://formspree.io/f/movyqgop" method="POST">
+          <!-- Honeypot anti-spam -->
+          <input type="text" name="_gotcha" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;" aria-hidden="true" />
+
+          <div class="c-field">
+            <label class="field-label" for="cp-name">Name <span class="req">*</span></label>
+            <input type="text" class="journey-input" name="name" id="cp-name"
+              placeholder="Your full name" autocomplete="name" required />
+            <div class="field-underline"></div>
+          </div>
+
+          <div class="c-field">
+            <label class="field-label" for="cp-email">Email <span class="req">*</span></label>
+            <input type="email" class="journey-input" name="email" id="cp-email"
+              placeholder="Your email address" autocomplete="email" required />
+            <div class="field-underline"></div>
+          </div>
+
+          <div class="c-field">
+            <label class="field-label" for="cp-org">Organization</label>
+            <input type="text" class="journey-input" name="organization" id="cp-org"
+              placeholder="Church, company, or institution" autocomplete="organization" />
+            <div class="field-underline"></div>
+          </div>
+
+          <div class="c-field">
+            <label class="field-label">Project type</label>
+            <div class="c-radio-group">
+              <label class="c-radio">
+                <input type="radio" name="project-type" value="memorial" />
+                Memorial / Dedication
+              </label>
+              <label class="c-radio">
+                <input type="radio" name="project-type" value="donor-wall" />
+                Donor Wall
+              </label>
+              <label class="c-radio">
+                <input type="radio" name="project-type" value="corporate" />
+                Corporate Award
+              </label>
+              <label class="c-radio">
+                <input type="radio" name="project-type" value="other" />
+                Other
+              </label>
+            </div>
+          </div>
+
+          <div class="c-field">
+            <label class="field-label" for="cp-qty">Estimated quantity</label>
+            <input type="text" class="journey-input" name="quantity" id="cp-qty"
+              placeholder="e.g. 50, 200, or unsure" />
+            <div class="field-underline"></div>
+          </div>
+
+          <div class="c-field">
+            <label class="field-label" for="cp-project">Tell us about your project</label>
+            <input type="text" class="journey-input" name="project" id="cp-project"
+              placeholder="A brief description" />
+            <div class="field-underline"></div>
+          </div>
+
+          <div class="form-actions" style="opacity:1;transform:none;">
+            <button type="submit" class="landing-submit c-submit" id="cp-submit">
+              <span>Send My Project Details</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="18">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <!-- Testimonials -->
+        <div class="contact-testimonials">
+          <div class="trust-testimonial" style="opacity:1;transform:none;text-align:left;align-items:flex-start;">
+            <div class="testimonial-line"></div>
+            <blockquote class="testimonial-text">"Eyekonika delivered custom pieces for our dedication wall — on time, exactly as envisioned. The quality exceeded our expectations."</blockquote>
+            <cite class="testimonial-cite">— A past client</cite>
+          </div>
+          <div class="trust-testimonial" style="opacity:1;transform:none;text-align:left;align-items:flex-start;">
+            <div class="testimonial-line"></div>
+            <blockquote class="testimonial-text">"From concept to delivery, the experience was seamless. Every piece told exactly the story we needed it to."</blockquote>
+            <cite class="testimonial-cite">— Another past client</cite>
+          </div>
+        </div>
+
+      </div><!-- /contact-form-col -->
+
+      <!-- Right: Calendly -->
+      <div class="contact-calendly-col">
+        <h2 class="calendly-heading">Prefer to schedule a call?</h2>
+        <div class="calendly-divider"></div>
+        <p class="calendly-sub">
+          Book a 15-minute conversation to discuss your project directly.
+          No commitment required — just a chance to talk through your vision.
+        </p>
+        <div class="calendly-cta">
+          <a href="https://calendly.com/eyekonika" target="_blank" rel="noopener noreferrer" class="calendly-link-btn">
+            <span>Open Booking Calendar</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <p class="calendly-note">Opens in a new tab. Pick a time that works for you.</p>
+        </div>
+      </div><!-- /contact-calendly-col -->
+
+    </div><!-- /contact-body -->
+  </main>
+
+  <script>
+    // Contact page form handler
+    (function() {
+      var form = document.getElementById('contactPageForm');
+      var confirmEl = document.getElementById('contact-confirm');
+      var submitBtn = document.getElementById('cp-submit');
+
+      if (!form) return;
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          var span = submitBtn.querySelector('span');
+          if (span) span.textContent = 'Sending\u2026';
+        }
+
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        }).then(function() {
+          showConfirm();
+        }).catch(function() {
+          showConfirm();
+        });
+      });
+
+      function showConfirm() {
+        form.style.transition = 'opacity 0.8s ease';
+        form.style.opacity = '0';
+        setTimeout(function() {
+          form.style.display = 'none';
+          if (confirmEl) confirmEl.classList.add('visible');
+        }, 800);
+      }
+    })();
+  </script>
+
+</body>
+</html>

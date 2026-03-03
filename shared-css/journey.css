@@ -541,6 +541,183 @@ body::after {
   will-change: left, top;
 }
 
+/* ============================================
+   POST-SCROLL FORM SECTION
+   ============================================ */
+
+/* Suppress grain overlay on index.html (body.index) */
+body.index::after { content: none; }
+
+/* ============================================
+   EMBEDDED JOURNEY LAYOUT (inside #wrapper)
+   #wrapper has margin-left:17em on desktop for the sidebar.
+   Break #journey out to full viewport width using negative margin.
+   ============================================ */
+body.index #journey {
+  margin-left: -17em;
+  width: 100vw;
+}
+
+/* When timeline expands wrapper to full width, reset journey too */
+body.index .expand-wrapper #journey {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* Tablet / mobile — #wrapper has no sidebar margin */
+@media screen and (max-width: 1280px) {
+  body.index #journey {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* The journey section's background should match the page dark theme */
+body.index #journey {
+  background: var(--dark);
+}
+
+/* Trust strip */
+.trust-strip {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+.trust-strip.revealed { opacity: 1; transform: translateY(0); }
+
+.trust-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--p);
+  font-weight: 400;
+}
+
+/* Form heading */
+.form-heading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.form-section-heading {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 200;
+  color: var(--w);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+}
+.form-section-heading.revealed { opacity: 1; transform: translateY(0); }
+
+/* Landing form wrapper */
+.landing-form { width: 100%; max-width: 480px; position: relative; }
+
+/* Field labels */
+.field-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--p);
+  font-weight: 400;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+/* Form actions (button + de-emphasized link) */
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.4rem;
+  padding-top: 1rem;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.form-actions.revealed { opacity: 1; transform: translateY(0); }
+
+/* Submit button */
+.landing-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: transparent;
+  border: 1px solid rgba(96,165,250,0.3);
+  padding: 0.9rem 2rem;
+  font-family: var(--font);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--w-dim);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
+}
+.landing-submit svg { transition: transform 0.4s var(--ease); }
+.landing-submit:hover {
+  color: var(--p);
+  border-color: var(--p);
+  background: rgba(96,165,250,0.04);
+}
+.landing-submit:hover svg { transform: translateX(5px); }
+.landing-submit:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
+/* Book-a-call link — visually subordinate secondary CTA */
+.book-call-link {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+  text-decoration: none;
+  font-weight: 300;
+  border-bottom: 1px solid transparent;
+  transition: color 0.4s ease, border-color 0.4s ease;
+}
+.book-call-link:hover {
+  color: var(--w-dim);
+  border-bottom-color: rgba(255,255,255,0.12);
+}
+
+/* Trust testimonial below form */
+.trust-testimonial {
+  max-width: 420px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+.trust-testimonial.revealed { opacity: 1; transform: translateY(0); }
+
+.testimonial-line { width: 24px; height: 1px; background: var(--p-dim); }
+
+.testimonial-text {
+  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+  font-weight: 300;
+  color: var(--w-dim);
+  line-height: 1.85;
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+
+.testimonial-cite {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--p);
+  font-style: normal;
+  font-weight: 400;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .journey-back { top: 1.5rem; left: 1.5rem; }
