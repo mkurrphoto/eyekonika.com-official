@@ -14,6 +14,13 @@
 
   document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
+  /* ── Back-to-index links: save scroll target before navigating ── */
+  document.querySelectorAll('a[href*="index.html"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      sessionStorage.setItem('returnSection', 'timeline');
+    });
+  });
+
   /* ── Production stage tabs ── */
   if (document.body.dataset.step === 'production') {
     const stageData = {

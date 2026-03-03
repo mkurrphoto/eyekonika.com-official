@@ -32,10 +32,19 @@ Promise.all(
       // had a chance to initialize — ensures #intro.inactive is removed
       // for sections already in the viewport on page load.
       window.scrollBy(0, 1);
-      // Initialize page swipe after components are loaded
+
       setTimeout(() => {
         if (window.initPageSwipe) {
           window.initPageSwipe();
+        }
+
+        // Restore scroll position for return navigation (from step pages or pictures.html).
+        // sessionStorage key takes priority; location.hash is the fallback.
+        const scrollTarget = sessionStorage.getItem('returnSection') || location.hash.replace('#', '');
+        if (scrollTarget) {
+          sessionStorage.removeItem('returnSection');
+          const el = document.getElementById(scrollTarget);
+          if (el) el.scrollIntoView({ behavior: 'instant' });
         }
       }, 100);
     });
