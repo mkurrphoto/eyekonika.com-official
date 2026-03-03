@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Process • Prototype | Eyekonika</title>
+  <link rel="stylesheet" href="../../shared-css/process-step.css" />
+</head>
+<body data-step="prototype">
+  <main class="step-shell">
+    <div class="topbar">
+      <div class="crumbs">Eyekonika / Process / Step 03</div>
+      <a href="../../index.html#timeline" class="pill-btn">← Back to timeline</a>
+    </div>
+
+    <nav class="progress-rail" aria-label="Process steps">
+      <a href="../vision/">01 Vision</a>
+      <a href="../discovery/">02 Discovery</a>
+      <a class="active" href="../prototype/">03 Prototype</a>
+      <a href="../production/">04 Production</a>
+    </nav>
+
+    <section class="hero">
+      <article class="panel">
+        <p class="step-kicker">Step 03 — Prototype</p>
+        <h1>See it from every angle before we make it.</h1>
+        <p>Prototype is your confidence layer. We validate visual depth, detail hierarchy, and spatial balance with digital proofing (and optional physical sampling) so approval feels decisive.</p>
+      </article>
+      <div class="hero-media" style="background-image:url('../../images/pexels-ian-lavrinovich-85166578-8976859.jpg')"></div>
+    </section>
+
+    <section class="grid-2">
+      <article class="panel">
+        <h2>Mockup rotator</h2>
+        <div class="rotator-wrap">
+          <div class="rotator" id="rotator"></div>
+        </div>
+        <label for="rotate">Rotate preview</label>
+        <input id="rotate" type="range" min="-45" max="45" value="0" />
+      </article>
+
+      <article class="panel">
+        <h2>Depth translation comparison</h2>
+        <div class="compare">
+          <div class="before">
+            <h3>Flat source artwork</h3>
+            <p>Brand vector and reference sketch.</p>
+          </div>
+          <div class="after" id="compareAfter">
+            <h3>3D engraving interpretation</h3>
+            <p>Layered depth map and light-reactive geometry.</p>
+          </div>
+        </div>
+        <label for="compareRange">Reveal 3D interpretation</label>
+        <input id="compareRange" type="range" min="0" max="100" value="50" />
+      </article>
+    </section>
+
+    <div class="footer-nav">
+      <a class="pill-btn" href="../discovery/">← Back to Discovery</a>
+      <a class="pill-btn" href="../production/">Continue to Production →</a>
+    </div>
+  </main>
+  <script src="../../js/process-step.js"></script>
+</body>
+</html>
