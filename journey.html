@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Begin Your Journey — Eyekonika</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="description" content="Begin the conversation. Tell us about your glass engraving project — a work that lives inside the material, permanent and unrepeatable." />
+  <link rel="canonical" href="https://eyekonika.com/journey.html" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Begin Your Journey — Eyekonika" />
+  <meta property="og:description" content="Begin the conversation. Tell us about your glass engraving project — permanent, unrepeatable, yours." />
+  <meta property="og:url"         content="https://eyekonika.com/journey.html" />
+  <meta property="og:image"       content="https://eyekonika.com/images/og-preview.jpg" />
   <link rel="icon" type="image/png" href="images/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&display=swap" rel="stylesheet">
@@ -265,8 +272,8 @@
 
     <!-- Confirmation -->
     <div class="v-scene" id="v-scene-confirm" style="display:none;">
-      <div class="geo-line-h" style="width:300px;top:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
-      <div class="geo-line-h" style="width:160px;bottom:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+      <div class="geo-line-h" style="width:300px;top:10%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+      <div class="geo-line-h" style="width:160px;bottom:10%;left:50%;transform:translateX(-50%);position:absolute;"></div>
 
       <div class="scene-content centered">
         <div class="confirmation-wrap">
@@ -274,17 +281,23 @@
           <p class="confirm-sub" id="confirm-sub">Usually within a day.</p>
           <div class="confirm-rule" id="confirm-rule"></div>
           <nav class="confirm-nav" id="confirm-nav">
-            <button class="confirm-nav-btn" data-target="intro">Back to Home</button>
+            <a class="confirm-nav-btn" href="index.html">Back to Home</a>
             <span class="confirm-nav-sep"></span>
-            <button class="confirm-nav-btn" data-target="what-we-do">Testimonials</button>
+            <a class="confirm-nav-btn" href="/testimonials">Testimonials</a>
             <span class="confirm-nav-sep"></span>
-            <button class="confirm-nav-btn" data-target="proceses">Process</button>
+            <a class="confirm-nav-btn" href="process/vision/">Process</a>
           </nav>
         </div>
       </div>
     </div>
 
   </div><!-- /journey-vertical -->
+
+  <!-- Home orbit button — visible on all scenes -->
+  <a href="index.html" class="home-orbit" id="home-orbit" aria-label="Back to Home">
+    <img src="images/small-logo-cube-only.png" alt="Eyekonika" />
+    <span class="home-orbit-label">Back to Home</span>
+  </a>
 
   <script src="js/journey.js"></script>
 </body>

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Exclude template/dev pages
+Disallow: /elements.html
+Disallow: /generic.html
+Disallow: /waiting-page.html
+Disallow: /begin.html
+
+Sitemap: https://eyekonika.com/sitemap.xml

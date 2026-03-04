@@ -216,29 +216,31 @@
   window.addEventListener('keydown', function(e) {
     if (!state.inJourney) return;
 
-    // Let all keys pass through normally when a form field has focus
-    var tag = document.activeElement && document.activeElement.tagName;
+    // Always let focused form fields handle their own keyboard input.
+    // Use e.target (the element that received the event) — more reliable
+    // than document.activeElement for keydown timing.
+    var tag = e.target && e.target.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
     if (state.journeyComplete) { e.preventDefault(); return; }
 
-    // Block all native page-scroll keys
-    var scrollKeys = [' ', 'PageDown', 'PageUp', 'Home', 'End'];
-    if (scrollKeys.indexOf(e.key) !== -1) {
-      e.preventDefault();
-      // Space acts as forward navigation
-      if (e.key === ' ' && !state.transitioning && state.inHorizontal) {
-        if (state.currentScene < state.totalHScenes - 1) {
-          goToScene(state.currentScene + 1);
-        } else {
-          transitionToVertical();
-        }
-      }
-      return;
-    }
-
-    if (state.transitioning) return;
-
     if (state.inHorizontal) {
+      // Horizontal: intercept scroll keys and arrows for scene navigation.
+      // e.preventDefault() is ONLY called here, never in the vertical branch,
+      // so space can never be blocked inside the form.
+      var scrollKeys = [' ', 'PageDown', 'PageUp', 'Home', 'End'];
+      if (scrollKeys.indexOf(e.key) !== -1) {
+        e.preventDefault();
+        if (e.key === ' ' && !state.transitioning) {
+          if (state.currentScene < state.totalHScenes - 1) {
+            goToScene(state.currentScene + 1);
+          } else {
+            transitionToVertical();
+          }
+        }
+        return;
+      }
+      if (state.transitioning) return;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         if (state.currentScene < state.totalHScenes - 1) {
@@ -252,7 +254,9 @@
         if (state.currentScene > 0) goToScene(state.currentScene - 1);
       }
     } else {
-      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      // Vertical (form) section: only ArrowUp/Left returns to horizontal.
+      // Every other key — including space — passes through freely.
+      if ((e.key === 'ArrowUp' || e.key === 'ArrowLeft') && !state.transitioning) {
         e.preventDefault();
         transitionToHorizontal();
       }
@@ -269,13 +273,6 @@
 
   // Confirm-screen nav buttons — tear down the journey then scroll to target section
   function navigateFromConfirm(destId) {
-    // Standalone journey.html: set return target + slide back down to index.html
-    if (isStandalone) {
-      sessionStorage.setItem('returnSection', destId);
-      document.body.classList.add('slide-down-exit');
-      setTimeout(function () { window.location.href = 'index.html'; }, 750);
-      return;
-    }
     state.inJourney = false;
     document.body.classList.remove('journey-active');
     unlockScroll();
@@ -295,13 +292,26 @@
     }
   }
 
+  function handleConfirmNav(e, btn) {
+    e.preventDefault();
+    if (isStandalone) {
+      // Standalone journey.html: navigate directly to the <a> href with slide-down
+      var href = btn.getAttribute('href') || 'index.html';
+      document.body.classList.add('slide-down-exit');
+      setTimeout(function () { window.location.href = href; }, 750);
+    } else {
+      // Embedded: scroll to section on same page
+      navigateFromConfirm(btn.getAttribute('data-target'));
+    }
+  }
+
   document.addEventListener('click', function(e) {
     var btn = e.target.closest('.confirm-nav-btn');
-    if (btn) { navigateFromConfirm(btn.getAttribute('data-target')); return; }
+    if (btn) handleConfirmNav(e, btn);
   });
   document.addEventListener('touchend', function(e) {
     var btn = e.target.closest('.confirm-nav-btn');
-    if (btn) { e.preventDefault(); navigateFromConfirm(btn.getAttribute('data-target')); return; }
+    if (btn) handleConfirmNav(e, btn);
   }, { passive: false });
 
   // Escape button — event delegation on both click (desktop) and touchend (mobile).
@@ -696,9 +706,9 @@
 
   function init() {
     if (isStandalone) {
-      // Back button — slide page down and return to gallery on index.html
+      // Back button + home orbit — slide page down and return to index.html
       document.addEventListener('click', function (e) {
-        var backBtn = e.target.closest('.journey-back');
+        var backBtn = e.target.closest('.journey-back, .home-orbit');
         if (!backBtn) return;
         e.preventDefault();
         sessionStorage.setItem('returnSection', 'gallery');
