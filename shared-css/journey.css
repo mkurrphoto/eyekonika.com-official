@@ -327,7 +327,7 @@ body.journey-active .journey-progress {
 
 /* Scene counter */
 .scene-counter {
-  position: fixed; bottom: 5rem; left: 1.75rem;
+  position: fixed; bottom: 2.5rem; left: 2.5rem;
   font-size: 0.65rem; letter-spacing: 0.2em;
   color: var(--w-dim); z-index: 100;
   opacity: 0; pointer-events: none;
@@ -570,11 +570,12 @@ body.journey-active .scene-counter { opacity: 1; }
 .confirm-nav-btn:hover { color: var(--p); }
 .confirm-nav-btn:hover::after { width: 100%; }
 
-/* Home orbit button */
+/* Home orbit button — replaces the text back button at top-left */
+.journey-back { display: none; }
+
 .home-orbit {
   position: fixed;
-  bottom: 1.75rem;
-  left: 1.75rem;
+  top: 2rem; left: 2rem;
   z-index: 9000;
   display: flex;
   align-items: center;
@@ -583,16 +584,15 @@ body.journey-active .scene-counter { opacity: 1; }
   cursor: pointer;
 }
 .home-orbit img {
-  width: 38px; height: 38px;
+  width: 36px; height: 36px;
   border-radius: 50%;
-  object-fit: cover;
-  opacity: 0.5;
+  object-fit: contain;
+  opacity: 0.75;
   transition: opacity 0.35s ease;
   display: block;
-  background: rgba(96,165,250,0.08);
-  border: 1px solid rgba(96,165,250,0.25);
-  box-shadow: 0 0 0 1px rgba(96,165,250,0.08);
+  border: 1px solid rgba(96,165,250,0.3);
   padding: 5px;
+  box-sizing: border-box;
 }
 .home-orbit-label {
   font-family: var(--font);
@@ -606,7 +606,7 @@ body.journey-active .scene-counter { opacity: 1; }
   transform: translateX(-6px);
   transition: opacity 0.35s ease, transform 0.35s var(--ease);
 }
-.home-orbit:hover img { opacity: 0.85; }
+.home-orbit:hover img { opacity: 1; }
 .home-orbit:hover .home-orbit-label { opacity: 1; transform: translateX(0); }
 
 /* Grain */
