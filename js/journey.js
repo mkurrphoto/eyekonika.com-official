@@ -260,10 +260,18 @@
     });
   });
 
-  // Escape button — event delegation: immune to load-order timing
+  // Escape button — event delegation on both click (desktop) and touchend (mobile).
+  // touchmove e.preventDefault() can suppress click on mobile, so touchend is the
+  // reliable path for touch devices.
   document.addEventListener('click', function(e) {
     if (e.target.closest('#journey-escape-btn')) escapeJourney();
   });
+  document.addEventListener('touchend', function(e) {
+    if (e.target.closest('#journey-escape-btn')) {
+      e.preventDefault(); // prevent ghost click
+      escapeJourney();
+    }
+  }, { passive: false });
 
   // ============================================
   // TRANSITIONS: HORIZONTAL ↔ VERTICAL
