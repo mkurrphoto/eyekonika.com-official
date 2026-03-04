@@ -175,6 +175,8 @@
       } else {
         if (state.currentScene > 0) {
           goToScene(state.currentScene - 1);
+        } else {
+          escapeJourney();
         }
       }
       wheelAccum = 0;
@@ -217,6 +219,8 @@
     } else {
       if (state.currentScene > 0) {
         goToScene(state.currentScene - 1);
+      } else {
+        escapeJourney();
       }
     }
   }, { passive: true });
@@ -234,7 +238,11 @@
     }
     if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
-      if (state.currentScene > 0) goToScene(state.currentScene - 1);
+      if (state.currentScene > 0) {
+        goToScene(state.currentScene - 1);
+      } else {
+        escapeJourney();
+      }
     }
   });
 
@@ -393,6 +401,18 @@
     }
   }
 
+  // Releases the horizontal scroll lock so the user can scroll back up the page.
+  // Called when swiping/scrolling backward on scene 0.
+  function escapeJourney() {
+    state.inHorizontal = false;
+    journeyVisible = false;
+    var hSection = document.getElementById('journey-horizontal');
+    if (hSection) hSection.style.touchAction = '';
+    if (!isStandalone && window.lenis) window.lenis.start();
+    setSidebarHidden(false);
+    document.body.classList.remove('journey-active');
+  }
+
   function startJourney() {
     if (state.journeyStarted) return;
     state.journeyStarted = true;
@@ -420,26 +440,29 @@
       var embedRoot = document.querySelector('.journey-embed-root') || hSection;
       if (!hSection) return;
 
-      // When journey is 25% visible, snap it fully into view then lock and start.
-      // This prevents the frozen half-screen state caused by stopping Lenis mid-scroll.
-      var startObs = new IntersectionObserver(function(entries) {
-        if (entries[0].intersectionRatio >= 0.25 && !state.journeyStarted) {
-          startObs.disconnect();
-          if (window.lenis) {
-            window.lenis.scrollTo(hSection, {
-              duration: 0.5,
-              lock: true,
-              onComplete: startJourney
-            });
-            // Safety net in case onComplete doesn't fire
-            setTimeout(startJourney, 700);
-          } else {
-            hSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(startJourney, 600);
+      // Desktop (Lenis): hook directly into Lenis's scroll loop. Fires synchronously
+      // every frame, so we can start the journey the exact moment the section fully
+      // covers the viewport — no async gap, no half-screen lock.
+      // Mobile (no Lenis): IntersectionObserver at 0.85 (address bar hides on scroll).
+      if (window.lenis) {
+        var lenisStartHandler = function() {
+          if (state.journeyStarted) return;
+          var rect = hSection.getBoundingClientRect();
+          if (rect.top <= 2 && rect.bottom >= window.innerHeight - 2) {
+            window.lenis.off('scroll', lenisStartHandler);
+            startJourney();
           }
-        }
-      }, { threshold: [0.25] });
-      startObs.observe(hSection);
+        };
+        window.lenis.on('scroll', lenisStartHandler);
+      } else {
+        var startObs = new IntersectionObserver(function(entries) {
+          if (entries[0].intersectionRatio >= 0.85 && !state.journeyStarted) {
+            startJourney();
+            startObs.disconnect();
+          }
+        }, { threshold: [0.85] });
+        startObs.observe(hSection);
+      }
 
       // journey-active: controls progress dots/counter visibility.
       // Sidebar is hidden inside startJourney() after snap, not here on first pixel.
