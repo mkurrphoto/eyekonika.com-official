@@ -589,6 +589,10 @@ body.journey-active .scene-counter { opacity: 1; }
   opacity: 0.5;
   transition: opacity 0.35s ease;
   display: block;
+  background: rgba(96,165,250,0.08);
+  border: 1px solid rgba(96,165,250,0.25);
+  box-shadow: 0 0 0 1px rgba(96,165,250,0.08);
+  padding: 5px;
 }
 .home-orbit-label {
   font-family: var(--font);
