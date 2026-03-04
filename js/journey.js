@@ -420,20 +420,32 @@
       var embedRoot = document.querySelector('.journey-embed-root') || hSection;
       if (!hSection) return;
 
-      // Start animations when horizontal section is 50% visible
+      // When journey is 25% visible, snap it fully into view then lock and start.
+      // This prevents the frozen half-screen state caused by stopping Lenis mid-scroll.
       var startObs = new IntersectionObserver(function(entries) {
-        if (entries[0].intersectionRatio >= 0.5) {
-          startJourney();
+        if (entries[0].intersectionRatio >= 0.25 && !state.journeyStarted) {
           startObs.disconnect();
+          if (window.lenis) {
+            window.lenis.scrollTo(hSection, {
+              duration: 0.5,
+              lock: true,
+              onComplete: startJourney
+            });
+            // Safety net in case onComplete doesn't fire
+            setTimeout(startJourney, 700);
+          } else {
+            hSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(startJourney, 600);
+          }
         }
-      }, { threshold: 0.5 });
+      }, { threshold: [0.25] });
       startObs.observe(hSection);
 
-      // journey-active: hide sidebar whenever any part of journey is in view
+      // journey-active: controls progress dots/counter visibility.
+      // Sidebar is hidden inside startJourney() after snap, not here on first pixel.
       var activeObs = new IntersectionObserver(function(entries) {
         if (entries[0].isIntersecting) {
           document.body.classList.add('journey-active');
-          setSidebarHidden(true);
         } else {
           document.body.classList.remove('journey-active');
           setSidebarHidden(false);
