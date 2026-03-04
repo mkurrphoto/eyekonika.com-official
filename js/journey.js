@@ -1,33 +1,33 @@
 /* ============================================
-   EYEKONIKA — CONTACT JOURNEY JS v4
-   Simplified: clean 3-field post-scroll form
-   Embedded support via IntersectionObserver
+   EYEKONIKA — CONTACT JOURNEY JS v5
+   Bidirectional navigation; Lenis frozen throughout.
+   Escape button + replay on re-entry.
    ============================================ */
 
 (function () {
   'use strict';
 
-  // Bail if no journey track on this page
   var track = document.getElementById('h-track');
   if (!track) return;
 
-  // ---- Mode detection ----
-  // begin.html has class="is-journey" on body; index.html does not
   var isStandalone = document.body.classList.contains('is-journey');
-  var journeyVisible = isStandalone; // embedded starts invisible
 
   // ---- State ----
   var state = {
-    currentScene: 0,
-    totalHScenes: 5,
-    inHorizontal: true,
-    transitioning: false,
+    currentScene  : 0,
+    totalHScenes  : 5,
+    inHorizontal  : true,
+    inJourney     : false,   // true while anywhere inside the journey
+    transitioning : false,
     journeyStarted: false
   };
 
   // ---- Elements ----
   var progressDots = document.querySelectorAll('.progress-dot');
-  var sceneNum = document.getElementById('scene-num');
+  var sceneNum     = document.getElementById('scene-num');
+
+  // snap-entry timer
+  var snapTimer = null;
 
   // ---- Cursor glow ----
   var glowEl = document.getElementById('cursor-glow');
@@ -68,17 +68,6 @@
     });
   }
 
-  function shake(el) {
-    if (!el) return;
-    var seq = [-6, 6, -4, 4, -2, 2, 0];
-    seq.forEach(function(x, i) {
-      setTimeout(function() {
-        el.style.transition = 'transform 0.08s ease';
-        el.style.transform = 'translateX(' + x + 'px)';
-      }, i * 80);
-    });
-  }
-
   // ============================================
   // HORIZONTAL NAVIGATION
   // ============================================
@@ -88,9 +77,9 @@
     if (state.transitioning) return;
 
     state.transitioning = true;
-    state.currentScene = index;
+    state.currentScene  = index;
 
-    if (track) track.style.transform = 'translateX(-' + (index * 100) + 'vw)';
+    track.style.transform = 'translateX(-' + (index * 100) + 'vw)';
 
     progressDots.forEach(function(d, i) {
       d.classList.toggle('active', i === index);
@@ -149,35 +138,37 @@
   }
 
   // ============================================
-  // SCROLL / SWIPE / KEYBOARD INPUT
-  // Only active when journeyVisible && inHorizontal
+  // INPUT HANDLERS
+  // Single guard: state.inJourney
+  // Sub-routing on state.inHorizontal
   // ============================================
 
   var wheelAccum = 0;
   var wheelTimer = null;
 
   window.addEventListener('wheel', function(e) {
-    if (!state.inHorizontal || !journeyVisible) return;
+    if (!state.inJourney) return;
     e.preventDefault();
 
     wheelAccum += e.deltaY + e.deltaX;
-
     clearTimeout(wheelTimer);
     wheelTimer = setTimeout(function() {
       if (Math.abs(wheelAccum) < 20) { wheelAccum = 0; return; }
 
-      if (wheelAccum > 0) {
-        if (state.currentScene < state.totalHScenes - 1) {
-          goToScene(state.currentScene + 1);
+      if (state.inHorizontal) {
+        if (wheelAccum > 0) {
+          if (state.currentScene < state.totalHScenes - 1) {
+            goToScene(state.currentScene + 1);
+          } else {
+            transitionToVertical();
+          }
         } else {
-          transitionToVertical();
+          if (state.currentScene > 0) goToScene(state.currentScene - 1);
+          // scene 0: nowhere to go — escape button is the only exit
         }
       } else {
-        if (state.currentScene > 0) {
-          goToScene(state.currentScene - 1);
-        } else {
-          escapeJourney();
-        }
+        // Vertical section: only backward navigation
+        if (wheelAccum < 0) transitionToHorizontal();
       }
       wheelAccum = 0;
     }, 50);
@@ -186,62 +177,72 @@
   // Touch swipe
   var touchStartX = 0;
   var touchStartY = 0;
-  var touchMoved = false;
+  var touchMoved  = false;
+  var touchOnForm = false;
 
   window.addEventListener('touchstart', function(e) {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
-    touchMoved = false;
+    touchMoved  = false;
+    // Don't intercept touches that start inside the form (mobile scrolling)
+    touchOnForm = !!e.target.closest('#landingForm');
   }, { passive: true });
 
   window.addEventListener('touchmove', function(e) {
     touchMoved = true;
-    if (state.inHorizontal && journeyVisible) e.preventDefault();
+    if (state.inJourney && !touchOnForm) e.preventDefault();
   }, { passive: false });
 
   window.addEventListener('touchend', function(e) {
-    if (!state.inHorizontal || !journeyVisible || !touchMoved) return;
-    var dx = touchStartX - e.changedTouches[0].clientX;
-    var dy = touchStartY - e.changedTouches[0].clientY;
+    if (!state.inJourney || !touchMoved || touchOnForm) return;
+    var dx    = touchStartX - e.changedTouches[0].clientX;
+    var dy    = touchStartY - e.changedTouches[0].clientY;
     var absDx = Math.abs(dx);
     var absDy = Math.abs(dy);
-
     if (absDx < 30 && absDy < 30) return;
 
     var goForward = absDx >= absDy ? dx > 0 : dy > 0;
 
-    if (goForward) {
-      if (state.currentScene < state.totalHScenes - 1) {
-        goToScene(state.currentScene + 1);
+    if (state.inHorizontal) {
+      if (goForward) {
+        if (state.currentScene < state.totalHScenes - 1) {
+          goToScene(state.currentScene + 1);
+        } else {
+          transitionToVertical();
+        }
       } else {
-        transitionToVertical();
+        if (state.currentScene > 0) goToScene(state.currentScene - 1);
+        // scene 0: nowhere to go — escape button is the only exit
       }
     } else {
-      if (state.currentScene > 0) {
-        goToScene(state.currentScene - 1);
-      } else {
-        escapeJourney();
-      }
+      // Vertical: backward swipe returns to horizontal
+      if (!goForward) transitionToHorizontal();
     }
   }, { passive: true });
 
   // Keyboard
   window.addEventListener('keydown', function(e) {
-    if (!state.inHorizontal || !journeyVisible || state.transitioning) return;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (state.currentScene < state.totalHScenes - 1) {
-        goToScene(state.currentScene + 1);
-      } else {
-        transitionToVertical();
+    if (!state.inJourney || state.transitioning) return;
+
+    if (state.inHorizontal) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (state.currentScene < state.totalHScenes - 1) {
+          goToScene(state.currentScene + 1);
+        } else {
+          transitionToVertical();
+        }
       }
-    }
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (state.currentScene > 0) {
-        goToScene(state.currentScene - 1);
-      } else {
-        escapeJourney();
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (state.currentScene > 0) goToScene(state.currentScene - 1);
+        // scene 0: nowhere to go — escape button is the only exit
+      }
+    } else {
+      // Vertical: ArrowUp returns to horizontal
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        transitionToHorizontal();
       }
     }
   });
@@ -254,23 +255,26 @@
     });
   });
 
+  // Escape button
+  var escapeBtn = document.getElementById('journey-escape-btn');
+  if (escapeBtn) escapeBtn.addEventListener('click', escapeJourney);
+
   // ============================================
-  // TRANSITION: HORIZONTAL → VERTICAL
+  // TRANSITIONS: HORIZONTAL ↔ VERTICAL
   // ============================================
 
   function transitionToVertical() {
     if (!state.inHorizontal || state.transitioning) return;
     state.transitioning = true;
-    state.inHorizontal = false;
+    state.inHorizontal  = false;
 
-    // Resume Lenis smooth scroll
-    if (window.lenis) window.lenis.start();
+    // Lenis stays stopped — do NOT resume here
 
     // Fade out chrome
     var progress = document.querySelector('.journey-progress');
-    var counter = document.querySelector('.scene-counter');
+    var counter  = document.querySelector('.scene-counter');
     if (progress) { progress.style.transition = 'opacity 0.8s ease'; progress.style.opacity = '0'; }
-    if (counter) { counter.style.transition = 'opacity 0.8s ease'; counter.style.opacity = '0'; }
+    if (counter)  { counter.style.transition  = 'opacity 0.8s ease'; counter.style.opacity  = '0'; }
 
     var vSection = document.getElementById('journey-vertical');
     setTimeout(function() {
@@ -279,6 +283,23 @@
       showVScene('v-scene-6', 800);
       setTimeout(function() { state.transitioning = false; }, 900);
     }, 500);
+  }
+
+  function transitionToHorizontal() {
+    if (state.inHorizontal || state.transitioning) return;
+    state.transitioning = true;
+    state.inHorizontal  = true;
+
+    // Restore chrome (clear inline overrides; CSS body.journey-active rule takes over)
+    var progress = document.querySelector('.journey-progress');
+    var counter  = document.querySelector('.scene-counter');
+    if (progress) { progress.style.transition = 'opacity 0.8s ease'; progress.style.opacity = ''; }
+    if (counter)  { counter.style.transition  = 'opacity 0.8s ease'; counter.style.opacity  = ''; }
+
+    var hSection = document.getElementById('journey-horizontal');
+    if (hSection) hSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    setTimeout(function() { state.transitioning = false; }, 1200);
   }
 
   // ============================================
@@ -291,16 +312,16 @@
       var scene = document.getElementById(id);
       if (!scene) return;
 
-      scene.style.display = 'flex';
-      scene.style.opacity = '0';
-      scene.style.transform = 'translateY(30px)';
+      scene.style.display    = 'flex';
+      scene.style.opacity    = '0';
+      scene.style.transform  = 'translateY(30px)';
       scene.style.transition = 'none';
 
       requestAnimationFrame(function() {
         requestAnimationFrame(function() {
           scene.style.transition = 'opacity 1.2s ease, transform 1.2s cubic-bezier(0.16,1,0.3,1)';
-          scene.style.opacity = '1';
-          scene.style.transform = 'translateY(0)';
+          scene.style.opacity    = '1';
+          scene.style.transform  = 'translateY(0)';
           setTimeout(function() {
             scene.scrollIntoView({ behavior: 'smooth', block: 'center' });
             triggerVScene(id);
@@ -325,18 +346,18 @@
 
       case 'v-scene-6':
         setTimeout(function() {
-          var trustStrip = document.getElementById('trust-strip');
-          var heading = scene.querySelector('.form-section-heading');
+          var trustStrip  = document.getElementById('trust-strip');
+          var heading     = scene.querySelector('.form-section-heading');
           var formDivider = document.getElementById('form-divider');
-          var fields = document.getElementById('fields-6');
-          var actions = scene.querySelector('.form-actions');
+          var fields      = document.getElementById('fields-6');
+          var actions     = scene.querySelector('.form-actions');
           var testimonial = scene.querySelector('.trust-testimonial');
 
-          if (trustStrip) trustStrip.classList.add('revealed');
+          if (trustStrip)  trustStrip.classList.add('revealed');
           if (formDivider) formDivider.classList.add('revealed');
-          if (heading) setTimeout(function() { heading.classList.add('revealed'); }, 300);
-          if (fields)  setTimeout(function() { fields.classList.add('revealed'); }, 600);
-          if (actions) setTimeout(function() { actions.classList.add('revealed'); }, 1000);
+          if (heading)    setTimeout(function() { heading.classList.add('revealed');    }, 300);
+          if (fields)     setTimeout(function() { fields.classList.add('revealed');     }, 600);
+          if (actions)    setTimeout(function() { actions.classList.add('revealed');    }, 1000);
           if (testimonial) setTimeout(function() { testimonial.classList.add('revealed'); }, 1600);
         }, 300);
         break;
@@ -359,36 +380,31 @@
     if (e.target.id !== 'landingForm') return;
     e.preventDefault();
 
-    var btn = e.target.querySelector('.landing-submit');
-    if (btn) {
-      btn.disabled = true;
-      var span = btn.querySelector('span');
-      if (span) span.textContent = 'Sending\u2026';
-    }
+    var btn  = e.target.querySelector('.landing-submit');
+    var span = btn && btn.querySelector('span');
+    if (btn)  btn.disabled = true;
+    if (span) span.textContent = 'Sending\u2026';
 
     fetch(e.target.action, {
       method: 'POST',
       body: new FormData(e.target),
       headers: { 'Accept': 'application/json' }
-    }).then(function() {
-      afterLandingSubmit();
-    }).catch(function() {
-      afterLandingSubmit();
-    });
+    }).then(afterLandingSubmit).catch(afterLandingSubmit);
   });
 
   function afterLandingSubmit() {
     var s6 = document.getElementById('v-scene-6');
     if (s6) {
       s6.style.transition = 'opacity 1s ease';
-      s6.style.opacity = '0';
+      s6.style.opacity    = '0';
       setTimeout(function() { s6.style.display = 'none'; }, 1000);
     }
     showVScene('v-scene-confirm', 800);
+    // Escape button remains visible for the user to exit when ready
   }
 
   // ============================================
-  // INIT
+  // SIDEBAR HELPER
   // ============================================
 
   function setSidebarHidden(hidden) {
@@ -401,21 +417,15 @@
     }
   }
 
-  // Releases the horizontal scroll lock so the user can scroll back up the page.
-  // Called when swiping/scrolling backward on scene 0.
-  function escapeJourney() {
-    state.inHorizontal = false;
-    journeyVisible = false;
-    var hSection = document.getElementById('journey-horizontal');
-    if (hSection) hSection.style.touchAction = '';
-    if (!isStandalone && window.lenis) window.lenis.start();
-    setSidebarHidden(false);
-    document.body.classList.remove('journey-active');
-  }
+  // ============================================
+  // JOURNEY CONTROL
+  // ============================================
 
   function startJourney() {
     if (state.journeyStarted) return;
     state.journeyStarted = true;
+    state.inJourney      = true;
+    state.inHorizontal   = true;
 
     document.body.classList.add('journey-active');
     setSidebarHidden(true);
@@ -423,74 +433,145 @@
 
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) {
-      hSection.style.overflow = 'hidden';
+      hSection.style.overflow    = 'hidden';
       hSection.style.touchAction = 'none';
     }
 
     goToScene(0);
   }
 
-  function init() {
-    if (isStandalone) {
-      // begin.html — start immediately, journey-active added in startJourney()
-      startJourney();
+  function escapeJourney() {
+    if (!state.inJourney && !state.journeyStarted) return; // nothing to escape from
+
+    state.inJourney = false;
+    document.body.classList.remove('journey-active');
+    setSidebarHidden(false);
+    if (!isStandalone && window.lenis) window.lenis.start();
+
+    var hSection = document.getElementById('journey-horizontal');
+    if (hSection) hSection.style.touchAction = '';
+
+    // Scroll to gallery (or timeline as fallback), then reset for replay
+    var dest = document.getElementById('gallery') || document.getElementById('timeline');
+    if (dest && window.lenis) {
+      window.lenis.scrollTo(dest, {
+        duration: 1.2,
+        onComplete: function() { resetJourney(); }
+      });
+    } else if (dest) {
+      dest.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(resetJourney, 1500);
     } else {
-      // Embedded in index.html — observe viewport
-      var hSection = document.getElementById('journey-horizontal');
-      var embedRoot = document.querySelector('.journey-embed-root') || hSection;
-      if (!hSection) return;
+      resetJourney();
+    }
+  }
 
-      // Desktop (Lenis): hook directly into Lenis's scroll loop. Fires synchronously
-      // every frame, so we can start the journey the exact moment the section fully
-      // covers the viewport — no async gap, no half-screen lock.
-      // Mobile (no Lenis): IntersectionObserver at 0.85 (address bar hides on scroll).
-      if (window.lenis) {
-        var lenisStartHandler = function() {
-          if (state.journeyStarted) return;
-          var rect = hSection.getBoundingClientRect();
-          if (rect.top <= 2 && rect.bottom >= window.innerHeight - 2) {
-            window.lenis.off('scroll', lenisStartHandler);
-            startJourney();
-          }
-        };
-        window.lenis.on('scroll', lenisStartHandler);
-      } else {
-        var startObs = new IntersectionObserver(function(entries) {
-          if (entries[0].intersectionRatio >= 0.85 && !state.journeyStarted) {
-            startJourney();
-            startObs.disconnect();
-          }
-        }, { threshold: [0.85] });
-        startObs.observe(hSection);
-      }
+  function resetJourney() {
+    // Reset sub-state (journeyStarted last so guard holds during scroll-to-dest)
+    state.currentScene  = 0;
+    state.inHorizontal  = true;
+    state.transitioning = false;
+    // state.inJourney already false from escapeJourney
 
-      // journey-active: controls progress dots/counter visibility.
-      // Sidebar is hidden inside startJourney() after snap, not here on first pixel.
-      var activeObs = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting) {
-          document.body.classList.add('journey-active');
-        } else {
-          document.body.classList.remove('journey-active');
-          setSidebarHidden(false);
-        }
-      }, { threshold: 0 });
-      activeObs.observe(embedRoot);
+    // Reset track position
+    track.style.transform = 'translateX(0)';
 
-      // Manage journeyVisible flag and Lenis resume
-      // Lenis is stopped in startJourney(); here we only need to resume it
-      // when the horizontal section leaves view (scroll past or back up)
-      var scrollObs = new IntersectionObserver(function(entries) {
-        var ratio = entries[0].intersectionRatio;
-        var wasVisible = journeyVisible;
-        journeyVisible = ratio >= 0.5;
+    // Reset progress dots and counter
+    progressDots.forEach(function(d, i) { d.classList.toggle('active', i === 0); });
+    if (sceneNum) sceneNum.textContent = '01';
 
-        if (wasVisible && !journeyVisible) {
-          if (window.lenis) window.lenis.start();
-        }
-      }, { threshold: [0, 0.5, 1.0] });
-      scrollObs.observe(hSection);
+    // Clear inline opacity overrides left by transitionToVertical
+    var progress = document.querySelector('.journey-progress');
+    var counter  = document.querySelector('.scene-counter');
+    if (progress) { progress.style.opacity = ''; progress.style.transition = ''; }
+    if (counter)  { counter.style.opacity  = ''; counter.style.transition  = ''; }
+
+    // Reset vertical section
+    var vScene6      = document.getElementById('v-scene-6');
+    var vSceneConfirm = document.getElementById('v-scene-confirm');
+    [vScene6, vSceneConfirm].forEach(function(el) {
+      if (!el) return;
+      el.style.display    = 'none';
+      el.style.opacity    = '';
+      el.style.transform  = '';
+      el.style.transition = '';
+    });
+
+    // Strip all reveal classes from the entire journey embed
+    var embedRoot = document.querySelector('.journey-embed-root');
+    if (embedRoot) {
+      embedRoot.querySelectorAll('.revealed').forEach(function(el) {
+        el.classList.remove('revealed');
+      });
+      // scroll-hint-v uses .visible
+      var hintV = document.getElementById('scroll-hint-v');
+      if (hintV) hintV.classList.remove('visible');
     }
 
+    // Reset form
+    var form = document.getElementById('landingForm');
+    if (form) {
+      form.reset();
+      var btn  = form.querySelector('.landing-submit');
+      var span = btn && btn.querySelector('span');
+      if (btn)  btn.disabled = false;
+      if (span) span.textContent = 'Tell Us About Your Project';
+    }
+
+    // Allow re-entry: must be last
+    state.journeyStarted = false;
+    snapTimer = null;
+  }
+
+  // ============================================
+  // INIT
+  // ============================================
+
+  function init() {
+    if (isStandalone) {
+      startJourney();
+      return;
+    }
+
+    var hSection = document.getElementById('journey-horizontal');
+    if (!hSection) return;
+
+    // Observe the horizontal section.
+    // When >25 % in view, wait 1 s then:
+    //   — hide the sidebar immediately (so it's gone before the snap completes)
+    //   — use Lenis to snap viewer to the section, then start journey.
+    // Cancels if the section drops below 25 % before the timer fires.
+    // Journey is the last section, so no "scrolled past" case to guard.
+    var startObs = new IntersectionObserver(function(entries) {
+      var ratio = entries[0].intersectionRatio;
+
+      if (ratio >= 0.25 && !state.journeyStarted && !snapTimer) {
+        snapTimer = setTimeout(function() {
+          snapTimer = null;
+          if (state.journeyStarted) return;
+          // Hide sidebar now — it will be fully slid away by the time the snap completes
+          setSidebarHidden(true);
+          if (window.lenis) {
+            window.lenis.scrollTo(hSection, {
+              duration  : 1.0,
+              onComplete: function() {
+                if (!state.journeyStarted) startJourney();
+              }
+            });
+          } else {
+            hSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(startJourney, 800);
+          }
+        }, 1000);
+      } else if (ratio < 0.25 && snapTimer) {
+        clearTimeout(snapTimer);
+        snapTimer = null;
+        // Restore sidebar if the user scrolled back up before snap fired
+        if (!state.journeyStarted) setSidebarHidden(false);
+      }
+    }, { threshold: [0, 0.1, 0.25, 0.5] });
+
+    startObs.observe(hSection);
   }
 
   if (document.readyState === 'loading') {
