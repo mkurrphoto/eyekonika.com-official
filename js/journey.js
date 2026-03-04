@@ -508,20 +508,22 @@
     // Must be above sidebar (z-index: 10000). No overflow:hidden here —
     // fixed inset:0 can't overflow, and overflow:hidden on a stacking context
     // clips position:fixed descendants in Chrome/Safari (browser bug).
-    el.style.zIndex   = '10001';
-    el.style.overflow = '';
+    el.style.zIndex           = '10001';
+    el.style.overflow         = '';
+    el.style.backgroundColor  = '#030712'; // opaque — prevents gallery showing through
   }
 
   function clearOverlay() {
     var el = document.querySelector('.journey-embed-root');
     if (!el) return;
-    el.style.position = '';
-    el.style.top      = '';
-    el.style.left     = '';
-    el.style.right    = '';
-    el.style.bottom   = '';
-    el.style.zIndex   = '';
-    el.style.overflow = '';
+    el.style.position        = '';
+    el.style.top             = '';
+    el.style.left            = '';
+    el.style.right           = '';
+    el.style.bottom          = '';
+    el.style.zIndex          = '';
+    el.style.overflow        = '';
+    el.style.backgroundColor = '';
   }
 
   // Set up journey-vertical as an absolute panel inside the overlay.
@@ -694,24 +696,40 @@
     var hSection = document.getElementById('journey-horizontal');
     if (!hSection) return;
 
-    // When journey section is 25%+ in view, wait 1 s then activate the overlay.
-    // Timer cancels if section drops below 25% before firing (user scrolled away).
+    // When journey is 20%+ in view, snap-scroll it fully into frame (gallery out
+    // of view), then activate the overlay. Lenis onComplete fires startJourney so
+    // the transition only locks in after the page is in the right position.
     var startObs = new IntersectionObserver(function(entries) {
       var ratio = entries[0].intersectionRatio;
 
-      if (ratio >= 0.25 && !state.journeyStarted && !snapTimer) {
+      if (ratio >= 0.20 && !state.journeyStarted && !snapTimer) {
         snapTimer = setTimeout(function() {
           snapTimer = null;
           if (state.journeyStarted) return;
           setSidebarHidden(true);
-          startJourney();
-        }, 1000);
-      } else if (ratio < 0.25 && snapTimer) {
+
+          if (window.lenis) {
+            // Scroll journey to top of viewport (clears gallery), then start.
+            window.lenis.scrollTo(hSection, {
+              duration : 0.65,
+              onComplete: function() {
+                if (!state.journeyStarted) startJourney();
+              }
+            });
+          } else {
+            // Mobile / no Lenis: instant scroll then start
+            hSection.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(function() {
+              if (!state.journeyStarted) startJourney();
+            }, 500);
+          }
+        }, 300);
+      } else if (ratio < 0.20 && snapTimer) {
         clearTimeout(snapTimer);
         snapTimer = null;
         if (!state.journeyStarted) setSidebarHidden(false);
       }
-    }, { threshold: [0, 0.1, 0.25, 0.5] });
+    }, { threshold: [0, 0.1, 0.20, 0.25, 0.5] });
 
     startObs.observe(hSection);
   }
