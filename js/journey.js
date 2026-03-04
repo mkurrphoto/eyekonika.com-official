@@ -214,6 +214,10 @@
   window.addEventListener('keydown', function(e) {
     if (!state.inJourney) return;
 
+    // Let all keys pass through normally when a form field has focus
+    var tag = document.activeElement && document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
     // Block all native page-scroll keys
     var scrollKeys = [' ', 'PageDown', 'PageUp', 'Home', 'End'];
     if (scrollKeys.indexOf(e.key) !== -1) {
