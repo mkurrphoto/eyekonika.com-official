@@ -353,11 +353,6 @@ body.journey-active .scene-counter { opacity: 1; }
   pointer-events: none;
 }
 
-#v-bridge {
-  min-height: 50vh;
-  background: linear-gradient(to bottom, var(--dark) 0%, var(--dark2) 50%, var(--dark) 100%);
-  display: flex; align-items: center; justify-content: center;
-}
 
 /* ============================================
    FORM ELEMENTS
@@ -763,12 +758,13 @@ body.journey-active {
   overflow: hidden;
 }
 
-/* The embed-root becomes a fixed fullscreen layer */
+/* The embed-root becomes a fixed fullscreen layer — must beat sidebar (z-index:10000).
+   No overflow:hidden: fixed inset:0 can't overflow, and overflow:hidden on a
+   stacking context clips position:fixed descendants (Chrome/Safari bug). */
 body.journey-active .journey-embed-root {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 500;
-  /* No overflow:hidden here so fixed children (dots, escape btn) aren't clipped */
+  z-index: 10001;
 }
 
 /* Keep #journey from collapsing in the page flow when embed-root is fixed */
@@ -799,10 +795,14 @@ body.journey-active .v-scene {
   overflow-y: auto; /* allow internal scroll on very small screens */
 }
 
-/* Stack order: bridge behind form, confirm on top */
-body.journey-active #v-bridge        { z-index: 1; }
-body.journey-active #v-scene-6       { z-index: 2; }
-body.journey-active #v-scene-confirm { z-index: 3; }
+/* v-scene-6 is the primary form scene; confirm overlays it after submission */
+body.journey-active #v-scene-6       { z-index: 1; }
+body.journey-active #v-scene-confirm {
+  z-index: 2;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: none; /* shown via JS after form submit */
+}
 
 /* ============================================
    ESCAPE BUTTON

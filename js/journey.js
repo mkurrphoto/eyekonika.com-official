@@ -286,8 +286,7 @@
     if (vSection) vSection.style.transform = 'translateY(0)';
 
     setTimeout(function() {
-      triggerVScene('v-bridge');
-      showVScene('v-scene-6', 800);
+      triggerVScene('v-scene-6');
       setTimeout(function() { state.transitioning = false; }, 900);
     }, 300);
   }
@@ -348,10 +347,6 @@
     revealGeos(scene, 250);
 
     switch (id) {
-      case 'v-bridge':
-        setTimeout(function() { revealEl(document.getElementById('bridge-eyebrow'), 0); }, 500);
-        break;
-
       case 'v-scene-6':
         setTimeout(function() {
           var trustStrip  = document.getElementById('trust-strip');
@@ -401,13 +396,23 @@
   });
 
   function afterLandingSubmit() {
+    // Fade out the form, then show the confirm scene on top (absolute overlay)
     var s6 = document.getElementById('v-scene-6');
     if (s6) {
-      s6.style.transition = 'opacity 1s ease';
+      s6.style.transition = 'opacity 0.8s ease';
       s6.style.opacity    = '0';
-      setTimeout(function() { s6.style.display = 'none'; }, 1000);
     }
-    showVScene('v-scene-confirm', 800);
+    var confirm = document.getElementById('v-scene-confirm');
+    if (confirm) {
+      confirm.style.display    = 'flex';
+      confirm.style.opacity    = '0';
+      confirm.style.transition = 'none';
+      setTimeout(function() {
+        confirm.style.transition = 'opacity 1.2s ease';
+        confirm.style.opacity    = '1';
+        triggerVScene('v-scene-confirm');
+      }, 700);
+    }
   }
 
   // ============================================
@@ -452,8 +457,11 @@
     el.style.left     = '0';
     el.style.right    = '0';
     el.style.bottom   = '0';
-    el.style.zIndex   = '9000';   // well above everything on the page
-    el.style.overflow = 'hidden';
+    // Must be above sidebar (z-index: 10000). No overflow:hidden here —
+    // fixed inset:0 can't overflow, and overflow:hidden on a stacking context
+    // clips position:fixed descendants in Chrome/Safari (browser bug).
+    el.style.zIndex   = '10001';
+    el.style.overflow = '';
   }
 
   function clearOverlay() {
@@ -520,8 +528,10 @@
     // Prepare vertical panel (starts below viewport)
     applyVerticalPanel();
 
-    // Stop Lenis smooth scroll
-    if (!isStandalone && window.lenis) window.lenis.stop();
+    // Destroy Lenis entirely — lenis.stop() still processes wheel events
+    // and can fire one more scrollTo() before the stopped flag takes effect.
+    // destroyLenis() removes all listeners; reinitLenis() restores on exit.
+    if (!isStandalone && window.destroyLenis) window.destroyLenis();
 
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) {
@@ -548,18 +558,20 @@
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) hSection.style.touchAction = '';
 
-    // Resume Lenis
-    if (!isStandalone && window.lenis) window.lenis.start();
+    // Reinstate Lenis smooth scroll
+    if (!isStandalone && window.reinitLenis) window.reinitLenis();
 
     // Reset state for replay (1 s snap-entry delay prevents instant re-trigger)
     resetJourney();
 
-    // Scroll up to gallery — the safe landing zone above the journey
+    // Scroll up to gallery — reinitLenis is async (ticker delay), so use
+    // a small wait before calling lenis.scrollTo; fall back to native.
     var dest = document.getElementById('gallery') || document.getElementById('timeline');
-    if (dest && window.lenis) {
-      window.lenis.scrollTo(dest, { duration: 1.0 });
-    } else if (dest) {
-      dest.scrollIntoView({ behavior: 'smooth' });
+    if (dest) {
+      setTimeout(function() {
+        if (window.lenis) window.lenis.scrollTo(dest, { duration: 1.0 });
+        else dest.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
   }
 
@@ -579,15 +591,19 @@
     if (counter)  { counter.style.opacity  = ''; counter.style.transition  = ''; }
 
     // Reset v-scenes
+    // v-scene-6 is always present (no display:none); confirm overlay is hidden
     var vScene6       = document.getElementById('v-scene-6');
     var vSceneConfirm = document.getElementById('v-scene-confirm');
-    [vScene6, vSceneConfirm].forEach(function(el) {
-      if (!el) return;
-      el.style.display    = 'none';
-      el.style.opacity    = '';
-      el.style.transform  = '';
-      el.style.transition = '';
-    });
+    if (vScene6) {
+      vScene6.style.opacity    = '';
+      vScene6.style.transform  = '';
+      vScene6.style.transition = '';
+    }
+    if (vSceneConfirm) {
+      vSceneConfirm.style.display    = 'none';
+      vSceneConfirm.style.opacity    = '';
+      vSceneConfirm.style.transition = '';
+    }
 
     // Strip all reveal classes
     var embedRoot = document.querySelector('.journey-embed-root');

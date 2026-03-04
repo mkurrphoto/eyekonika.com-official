@@ -205,3 +205,18 @@ function updateLenisExport() {
   window.lenis = lenis;
 }
 
+// Journey integration: destroy / reinit Lenis without touching this file's internals
+window.destroyLenis = function () {
+  if (lenis) {
+    lenis.destroy();
+    lenis = null;
+    window.lenis = null;
+  }
+};
+
+window.reinitLenis = function () {
+  if (!lenis && window.innerWidth > 900) {
+    initSmoothScroll();
+  }
+};
+
