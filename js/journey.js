@@ -15,12 +15,13 @@
 
   // ---- State ----
   var state = {
-    currentScene  : 0,
-    totalHScenes  : 5,
-    inHorizontal  : true,
-    inJourney     : false,
-    transitioning : false,
-    journeyStarted: false
+    currentScene   : 0,
+    totalHScenes   : 5,
+    inHorizontal   : true,
+    inJourney      : false,
+    transitioning  : false,
+    journeyStarted : false,
+    journeyComplete: false   // true after form submit — locks all navigation
   };
 
   // ---- Cached elements (queried once at load; components are already in DOM) ----
@@ -143,6 +144,7 @@
   window.addEventListener('wheel', function(e) {
     if (!state.inJourney) return;
     e.preventDefault();
+    if (state.journeyComplete) return; // locked at confirmation screen
 
     wheelAccum += e.deltaY + e.deltaX;
     clearTimeout(wheelTimer);
@@ -185,7 +187,7 @@
   }, { passive: false });
 
   window.addEventListener('touchend', function(e) {
-    if (!state.inJourney || !touchMoved) return;
+    if (!state.inJourney || !touchMoved || state.journeyComplete) return;
     var dx    = touchStartX - e.changedTouches[0].clientX;
     var dy    = touchStartY - e.changedTouches[0].clientY;
     var absDx = Math.abs(dx);
@@ -217,6 +219,7 @@
     // Let all keys pass through normally when a form field has focus
     var tag = document.activeElement && document.activeElement.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (state.journeyComplete) { e.preventDefault(); return; }
 
     // Block all native page-scroll keys
     var scrollKeys = [' ', 'PageDown', 'PageUp', 'Home', 'End'];
@@ -263,6 +266,36 @@
       goToScene(i);
     });
   });
+
+  // Confirm-screen nav buttons — tear down the journey then scroll to target section
+  function navigateFromConfirm(destId) {
+    state.inJourney = false;
+    document.body.classList.remove('journey-active');
+    unlockScroll();
+    clearOverlay();
+    clearVerticalPanel();
+    setSidebarHidden(false);
+    var hSection = document.getElementById('journey-horizontal');
+    if (hSection) hSection.style.touchAction = '';
+    if (!isStandalone && window.reinitLenis) window.reinitLenis();
+    resetJourney();
+    var dest = document.getElementById(destId);
+    if (dest) {
+      setTimeout(function() {
+        if (window.lenis) window.lenis.scrollTo(dest, { duration: 1.0 });
+        else dest.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.confirm-nav-btn');
+    if (btn) { navigateFromConfirm(btn.getAttribute('data-target')); return; }
+  });
+  document.addEventListener('touchend', function(e) {
+    var btn = e.target.closest('.confirm-nav-btn');
+    if (btn) { e.preventDefault(); navigateFromConfirm(btn.getAttribute('data-target')); return; }
+  }, { passive: false });
 
   // Escape button — event delegation on both click (desktop) and touchend (mobile).
   // touchmove e.preventDefault() can suppress click on mobile, so touchend is the
@@ -382,6 +415,7 @@
           revealEl(document.getElementById('confirm-main'), 0);
           revealEl(document.getElementById('confirm-sub'), 400);
           revealEl(document.getElementById('confirm-rule'), 800);
+          revealEl(document.getElementById('confirm-nav'), 1800);
         }, 400);
         break;
     }
@@ -408,6 +442,8 @@
   });
 
   function afterLandingSubmit() {
+    state.journeyComplete = true; // lock all journey navigation
+
     // Fade out the form, then show the confirm scene on top (absolute overlay)
     var s6 = document.getElementById('v-scene-6');
     if (s6) {
@@ -588,9 +624,10 @@
   }
 
   function resetJourney() {
-    state.currentScene  = 0;
-    state.inHorizontal  = true;
-    state.transitioning = false;
+    state.currentScene    = 0;
+    state.inHorizontal    = true;
+    state.transitioning   = false;
+    state.journeyComplete = false;
 
     // Reset h-track and chrome
     track.style.transform = 'translateX(0)';
@@ -615,6 +652,8 @@
       vSceneConfirm.style.display    = 'none';
       vSceneConfirm.style.opacity    = '';
       vSceneConfirm.style.transition = '';
+      var nav = document.getElementById('confirm-nav');
+      if (nav) nav.classList.remove('revealed');
     }
 
     // Strip all reveal classes
