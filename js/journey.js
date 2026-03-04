@@ -276,13 +276,15 @@
     if (progress) { progress.style.transition = 'opacity 0.8s ease'; progress.style.opacity = '0'; }
     if (counter)  { counter.style.transition  = 'opacity 0.8s ease'; counter.style.opacity  = '0'; }
 
+    // Slide the vertical panel up via CSS transform — no page scroll at all
     var vSection = document.getElementById('journey-vertical');
+    if (vSection) vSection.classList.add('v-active');
+
     setTimeout(function() {
-      if (vSection) vSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       triggerVScene('v-bridge');
       showVScene('v-scene-6', 800);
       setTimeout(function() { state.transitioning = false; }, 900);
-    }, 500);
+    }, 300);
   }
 
   function transitionToHorizontal() {
@@ -296,8 +298,9 @@
     if (progress) { progress.style.transition = 'opacity 0.8s ease'; progress.style.opacity = ''; }
     if (counter)  { counter.style.transition  = 'opacity 0.8s ease'; counter.style.opacity  = ''; }
 
-    var hSection = document.getElementById('journey-horizontal');
-    if (hSection) hSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Slide vertical panel back down — no page scroll
+    var vSection = document.getElementById('journey-vertical');
+    if (vSection) vSection.classList.remove('v-active');
 
     setTimeout(function() { state.transitioning = false; }, 1200);
   }
@@ -311,6 +314,11 @@
     setTimeout(function() {
       var scene = document.getElementById(id);
       if (!scene) return;
+      // Already fully visible — don't re-animate (user navigated back then forward)
+      if (scene.style.display === 'flex' && parseFloat(scene.style.opacity || '0') >= 1) {
+        triggerVScene(id);
+        return;
+      }
 
       scene.style.display    = 'flex';
       scene.style.opacity    = '0';
@@ -322,10 +330,8 @@
           scene.style.transition = 'opacity 1.2s ease, transform 1.2s cubic-bezier(0.16,1,0.3,1)';
           scene.style.opacity    = '1';
           scene.style.transform  = 'translateY(0)';
-          setTimeout(function() {
-            scene.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            triggerVScene(id);
-          }, 150);
+          // No scrollIntoView — scene is inside the fixed overlay, already in view
+          setTimeout(function() { triggerVScene(id); }, 150);
         });
       });
     }, delay);
@@ -487,8 +493,10 @@
     if (counter)  { counter.style.opacity  = ''; counter.style.transition  = ''; }
 
     // Reset vertical section
-    var vScene6      = document.getElementById('v-scene-6');
+    var vSection      = document.getElementById('journey-vertical');
+    var vScene6       = document.getElementById('v-scene-6');
     var vSceneConfirm = document.getElementById('v-scene-confirm');
+    if (vSection) vSection.classList.remove('v-active');
     [vScene6, vSceneConfirm].forEach(function(el) {
       if (!el) return;
       el.style.display    = 'none';
@@ -549,24 +557,15 @@
         snapTimer = setTimeout(function() {
           snapTimer = null;
           if (state.journeyStarted) return;
-          // Hide sidebar now — it will be fully slid away by the time the snap completes
+          // Hide sidebar as the journey overlay appears
           setSidebarHidden(true);
-          if (window.lenis) {
-            window.lenis.scrollTo(hSection, {
-              duration  : 1.0,
-              onComplete: function() {
-                if (!state.journeyStarted) startJourney();
-              }
-            });
-          } else {
-            hSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(startJourney, 800);
-          }
+          // Start immediately — fixed overlay covers the full screen, no page scroll needed
+          startJourney();
         }, 1000);
       } else if (ratio < 0.25 && snapTimer) {
         clearTimeout(snapTimer);
         snapTimer = null;
-        // Restore sidebar if the user scrolled back up before snap fired
+        // Restore sidebar if user scrolled back before snap fired
         if (!state.journeyStarted) setSidebarHidden(false);
       }
     }, { threshold: [0, 0.1, 0.25, 0.5] });

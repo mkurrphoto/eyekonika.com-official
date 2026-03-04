@@ -753,6 +753,58 @@ body.index #journey {
 }
 
 /* ============================================
+   FIXED OVERLAY SYSTEM
+   When journey-active, embed-root becomes a fixed fullscreen overlay.
+   All navigation is CSS transforms — zero page scrolling.
+   ============================================ */
+
+/* Prevent native scroll in all forms while journey is active */
+body.journey-active {
+  overflow: hidden;
+}
+
+/* The embed-root becomes a fixed fullscreen layer */
+body.journey-active .journey-embed-root {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 500;
+  /* No overflow:hidden here so fixed children (dots, escape btn) aren't clipped */
+}
+
+/* Keep #journey from collapsing in the page flow when embed-root is fixed */
+body.index #journey {
+  min-height: 100vh;
+}
+
+/* Vertical panel: absolute within the fixed embed-root, starts off-screen below */
+body.journey-active #journey-vertical {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  transform: translateY(100%);
+  transition: transform 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+  overflow: hidden;
+}
+
+/* Slide the vertical panel into view */
+body.journey-active #journey-vertical.v-active {
+  transform: translateY(0);
+}
+
+/* v-scenes: stacked full-screen inside the vertical panel */
+body.journey-active .v-scene {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  min-height: 100%;
+  overflow-y: auto; /* allow internal scroll on very small screens */
+}
+
+/* Stack order: bridge behind form, confirm on top */
+body.journey-active #v-bridge        { z-index: 1; }
+body.journey-active #v-scene-6       { z-index: 2; }
+body.journey-active #v-scene-confirm { z-index: 3; }
+
+/* ============================================
    ESCAPE BUTTON
    Fixed upper-right; visible whenever body.journey-active.
    Hidden on standalone begin.html.
