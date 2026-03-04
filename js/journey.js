@@ -385,11 +385,20 @@
   // INIT
   // ============================================
 
+  // Uses the existing sidebar.css hide-sidebar class (has !important, proven mechanism)
+  function setSidebarHidden(hidden) {
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
+    sidebar.classList.toggle('hide-sidebar', hidden);
+  }
+
   function startJourney() {
     if (state.journeyStarted) return;
     state.journeyStarted = true;
 
     document.body.classList.add('journey-active');
+    // On standalone (begin.html) the sidebar doesn't exist, this is a no-op
+    setSidebarHidden(true);
 
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) {
@@ -423,8 +432,10 @@
       var activeObs = new IntersectionObserver(function(entries) {
         if (entries[0].isIntersecting) {
           document.body.classList.add('journey-active');
+          setSidebarHidden(true);
         } else {
           document.body.classList.remove('journey-active');
+          setSidebarHidden(false);
         }
       }, { threshold: 0 });
       activeObs.observe(embedRoot);
@@ -444,8 +455,14 @@
       scrollObs.observe(hSection);
     }
 
-    // Float-footer mobile tap toggle
+    // Move float-footer to document.body root so position:fixed is never
+    // broken by a CSS transform stacking context on #wrapper or ancestors
     var floatFooter = document.getElementById('float-footer');
+    if (floatFooter && floatFooter.parentNode !== document.body) {
+      document.body.appendChild(floatFooter);
+    }
+
+    // Float-footer mobile tap toggle
     var ffLogo = document.getElementById('ff-logo');
     if (floatFooter && ffLogo) {
       ffLogo.addEventListener('click', function(e) {

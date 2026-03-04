@@ -553,12 +553,8 @@ body.index::after { content: none; }
    Hides sidebar, repositions progress dots
    ============================================ */
 
-/* Hide the Hyperspace sidebar while journey is active */
-body.journey-active #sidebar {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
+/* Sidebar hiding is handled via JS (toggles .hide-sidebar class directly on #sidebar)
+   which uses the existing sidebar.css rules with !important */
 
 /* Move progress dots to left side (clear of float-footer on the right) */
 .journey-progress {
@@ -585,6 +581,7 @@ body.journey-active .journey-progress {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s ease;
+  overflow: hidden;
 }
 
 body.journey-active .float-footer {
