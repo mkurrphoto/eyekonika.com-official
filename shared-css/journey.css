@@ -185,9 +185,9 @@ body {
   position: absolute;
   border: 1px solid rgba(96,165,250,0.18);
   opacity: 0;
-  transition: opacity 1.6s ease, transform 1.6s var(--ease-out);
+  transition: opacity 1.6s ease;
 }
-.geo-rect.revealed { opacity: 1; transform: none !important; }
+.geo-rect.revealed { opacity: 1; }
 
 .geo-orb {
   position: absolute; border-radius: 50%;
@@ -195,9 +195,9 @@ body {
   background: radial-gradient(circle at 35% 35%,
     rgba(96,165,250,0.1) 0%, transparent 65%);
   opacity: 0;
-  transition: opacity 1.8s ease, transform 1.8s var(--ease-out);
+  transition: opacity 1.8s ease;
 }
-.geo-orb.revealed { opacity: 1; transform: none !important; }
+.geo-orb.revealed { opacity: 1; }
 
 .geo-line-h {
   position: absolute; height: 1px;
@@ -312,6 +312,11 @@ body {
   transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 0.6rem;
   z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+body.journey-active .journey-progress {
+  opacity: 1; pointer-events: auto;
 }
 .progress-dot {
   width: 4px; height: 4px; border-radius: 50%;
@@ -325,7 +330,10 @@ body {
   position: fixed; bottom: 2.5rem; left: 2.5rem;
   font-size: 0.65rem; letter-spacing: 0.2em;
   color: var(--w-dim); z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease;
 }
+body.journey-active .scene-counter { opacity: 1; }
 .scene-counter span { color: var(--p); }
 
 /* ============================================
@@ -553,255 +561,13 @@ body.index::after { content: none; }
    Hides sidebar, repositions progress dots
    ============================================ */
 
-/* Sidebar hiding is handled via JS (toggles .hide-sidebar class directly on #sidebar)
-   which uses the existing sidebar.css rules with !important */
-
-/* Move progress dots to left side (clear of float-footer on the right) */
-.journey-progress {
-  transition: left 0.4s var(--ease-out), right 0.4s var(--ease-out), opacity 0.4s ease;
-}
-body.journey-active .journey-progress {
-  right: auto;
-  left: 1.5rem;
-}
-
-/* ============================================
-   FLOATING FOOTER
-   Logo trigger → side sliver (desktop)
-                → bottom bar (mobile)
-   ============================================ */
-
-.float-footer {
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100vh;
-  width: 52px;
-  z-index: 400;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-  overflow: hidden;
-}
-
-body.journey-active .float-footer {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Logo — always peeking at bottom of the strip */
-.ff-logo {
-  position: absolute;
-  bottom: 1.8rem;
-  right: 0;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.7;
-  transition: opacity 0.4s ease;
-  z-index: 2;
-  cursor: pointer;
-}
-
-.ff-logo img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  display: block;
-}
-
-.float-footer:hover .ff-logo,
-.float-footer.open .ff-logo {
-  opacity: 0.9;
-}
-
-/* Sliver panel — slides in from right */
-.ff-panel {
-  position: absolute;
-  inset: 0;
-  background: rgba(3, 7, 18, 0.92);
-  border-left: 1px solid rgba(96, 165, 250, 0.08);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  transform: translateX(100%);
-  transition: transform 0.5s var(--ease-out);
-  display: flex;
-  align-items: stretch;
-}
-
-.float-footer:hover .ff-panel {
-  transform: translateX(0);
-}
-
-/* Inner content — vertical stack */
-.ff-inner {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.2rem;
-  padding: 2rem 0 5.5rem;
-  opacity: 0;
-  transition: opacity 0.25s ease 0.2s;
-}
-
-.float-footer:hover .ff-inner {
-  opacity: 1;
-}
-
-/* Copyright text — rotated vertical, reads bottom-to-top */
-.ff-copy {
-  font-family: var(--font);
-  font-size: 0.55rem;
-  font-weight: 300;
-  letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.3);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  text-transform: uppercase;
-  white-space: nowrap;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  user-select: none;
-}
-
-.ff-divider {
-  width: 1px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.07);
-  flex-shrink: 0;
-}
-
-/* Icon links */
-.ff-icon-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  color: rgba(255, 255, 255, 0.38);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  flex-shrink: 0;
-}
-
-.ff-icon-link svg {
-  width: 14px;
-  height: 14px;
-}
-
-.ff-icon-link:hover {
-  color: var(--p);
-}
-
-/* ---- Mobile — horizontal bottom bar ---- */
-@media (max-width: 768px) {
-  .float-footer {
-    top: auto;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    /* Container itself is non-interactive; children handle their own events */
-    pointer-events: none;
-  }
-
-  body.journey-active .float-footer {
-    pointer-events: none;
-  }
-
-  .ff-logo {
-    position: fixed;
-    right: 1rem;
-    bottom: calc(1rem + env(safe-area-inset-bottom));
-    left: auto;
-    top: auto;
-    width: 36px;
-    height: 36px;
-    pointer-events: auto;
-  }
-
-  .ff-logo img {
-    width: 26px;
-    height: 26px;
-  }
-
-  /* Panel becomes horizontal bottom bar */
-  .ff-panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    height: calc(52px + env(safe-area-inset-bottom));
-    width: 100%;
-    transform: translateY(100%);
-    border-left: none;
-    border-top: 1px solid rgba(96, 165, 250, 0.08);
-    pointer-events: auto;
-  }
-
-  /* Suppress desktop hover behaviour on mobile */
-  .float-footer:hover .ff-panel {
-    transform: translateY(100%);
-  }
-
-  .float-footer.open .ff-panel {
-    transform: translateY(0) !important;
-  }
-
-  .ff-inner {
-    flex-direction: row;
-    justify-content: center;
-    padding: 0 1.5rem;
-    padding-bottom: env(safe-area-inset-bottom);
-    gap: 1.6rem;
-    height: 52px;
-    opacity: 0;
-    transition: opacity 0.25s ease 0.15s;
-  }
-
-  /* Suppress desktop hover on inner */
-  .float-footer:hover .ff-inner {
-    opacity: 0;
-  }
-
-  .float-footer.open .ff-inner {
-    opacity: 1 !important;
-  }
-
-  .ff-copy {
-    writing-mode: horizontal-tb;
-    transform: none;
-    flex: 0;
-    font-size: 0.6rem;
-  }
-
-  .ff-divider {
-    width: 20px;
-    height: 1px;
-  }
-
-  .ff-icon-link {
-    width: 36px;
-    height: 36px;
-    pointer-events: auto;
-  }
-
-  .ff-icon-link svg {
-    width: 16px;
-    height: 16px;
-  }
-}
+/* Sidebar hiding uses class-based .hide-sidebar (same as timeline) */
 
 /* ============================================
    EMBEDDED JOURNEY LAYOUT (inside #wrapper)
    #wrapper has margin-left:17em on desktop for the sidebar.
    Break #journey out to full viewport width using negative margin.
+   Sidebar is hidden via .hide-sidebar class (same as timeline).
    ============================================ */
 body.index #journey {
   margin-left: -17em;

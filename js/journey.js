@@ -268,10 +268,8 @@
     setTimeout(function() {
       if (vSection) vSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       triggerVScene('v-bridge');
-      setTimeout(function() {
-        triggerVScene('v-scene-6');
-        state.transitioning = false;
-      }, 800);
+      showVScene('v-scene-6', 800);
+      setTimeout(function() { state.transitioning = false; }, 900);
     }, 500);
   }
 
@@ -385,11 +383,14 @@
   // INIT
   // ============================================
 
-  // Uses the existing sidebar.css hide-sidebar class (has !important, proven mechanism)
   function setSidebarHidden(hidden) {
     var sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
-    sidebar.classList.toggle('hide-sidebar', hidden);
+    if (hidden) {
+      sidebar.classList.add('hide-sidebar');
+    } else {
+      sidebar.classList.remove('hide-sidebar');
+    }
   }
 
   function startJourney() {
@@ -397,13 +398,13 @@
     state.journeyStarted = true;
 
     document.body.classList.add('journey-active');
-    // On standalone (begin.html) the sidebar doesn't exist, this is a no-op
     setSidebarHidden(true);
+    if (!isStandalone && window.lenis) window.lenis.stop();
 
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) {
       hSection.style.overflow = 'hidden';
-      hSection.style.touchAction = window.innerWidth <= 768 ? 'none' : 'pan-y';
+      hSection.style.touchAction = 'none';
     }
 
     goToScene(0);
@@ -428,7 +429,7 @@
       }, { threshold: 0.5 });
       startObs.observe(hSection);
 
-      // journey-active: show float-footer + hide sidebar whenever any part of journey is in view
+      // journey-active: hide sidebar whenever any part of journey is in view
       var activeObs = new IntersectionObserver(function(entries) {
         if (entries[0].isIntersecting) {
           document.body.classList.add('journey-active');
@@ -440,45 +441,21 @@
       }, { threshold: 0 });
       activeObs.observe(embedRoot);
 
-      // Manage Lenis pause/resume for horizontal scroll lock
+      // Manage journeyVisible flag and Lenis resume
+      // Lenis is stopped in startJourney(); here we only need to resume it
+      // when the horizontal section leaves view (scroll past or back up)
       var scrollObs = new IntersectionObserver(function(entries) {
         var ratio = entries[0].intersectionRatio;
         var wasVisible = journeyVisible;
-        journeyVisible = ratio >= 0.9;
+        journeyVisible = ratio >= 0.5;
 
-        if (journeyVisible && state.inHorizontal) {
-          if (window.lenis) window.lenis.stop();
-        } else if (wasVisible && !journeyVisible) {
+        if (wasVisible && !journeyVisible) {
           if (window.lenis) window.lenis.start();
         }
-      }, { threshold: [0, 0.5, 0.9, 1.0] });
+      }, { threshold: [0, 0.5, 1.0] });
       scrollObs.observe(hSection);
     }
 
-    // Move float-footer to document.body root so position:fixed is never
-    // broken by a CSS transform stacking context on #wrapper or ancestors
-    var floatFooter = document.getElementById('float-footer');
-    if (floatFooter && floatFooter.parentNode !== document.body) {
-      document.body.appendChild(floatFooter);
-    }
-
-    // Float-footer mobile tap toggle
-    var ffLogo = document.getElementById('ff-logo');
-    if (floatFooter && ffLogo) {
-      ffLogo.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-          e.stopPropagation();
-          floatFooter.classList.toggle('open');
-        }
-      });
-      document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768 && floatFooter.classList.contains('open')) {
-          if (!floatFooter.contains(e.target)) {
-            floatFooter.classList.remove('open');
-          }
-        }
-      });
-    }
   }
 
   if (document.readyState === 'loading') {
