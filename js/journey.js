@@ -1,7 +1,8 @@
 /* ============================================
-   EYEKONIKA — CONTACT JOURNEY JS v5
-   Bidirectional navigation; Lenis frozen throughout.
-   Escape button + replay on re-entry.
+   EYEKONIKA — CONTACT JOURNEY JS v6
+   Fixed fullscreen overlay.
+   All scroll prevention via inline styles.
+   All transitions via inline style (no CSS class dependency).
    ============================================ */
 
 (function () {
@@ -17,16 +18,15 @@
     currentScene  : 0,
     totalHScenes  : 5,
     inHorizontal  : true,
-    inJourney     : false,   // true while anywhere inside the journey
+    inJourney     : false,
     transitioning : false,
     journeyStarted: false
   };
 
-  // ---- Elements ----
+  // ---- Cached elements (queried once at load; components are already in DOM) ----
   var progressDots = document.querySelectorAll('.progress-dot');
   var sceneNum     = document.getElementById('scene-num');
 
-  // snap-entry timer
   var snapTimer = null;
 
   // ---- Cursor glow ----
@@ -123,12 +123,8 @@
         break;
       case 4:
         revealWords(scene.querySelector('.kinetic-line'), 200);
-        setTimeout(function() {
-          revealEl(scene.querySelector('.scene-divider-inner'), 0);
-        }, 700);
-        setTimeout(function() {
-          revealWords(scene.querySelector('.question-line'), 0);
-        }, 1100);
+        setTimeout(function() { revealEl(scene.querySelector('.scene-divider-inner'), 0); }, 700);
+        setTimeout(function() { revealWords(scene.querySelector('.question-line'), 0); }, 1100);
         setTimeout(function() {
           var hint = document.getElementById('scroll-hint-v');
           if (hint) hint.classList.add('visible');
@@ -138,9 +134,7 @@
   }
 
   // ============================================
-  // INPUT HANDLERS
-  // Single guard: state.inJourney
-  // Sub-routing on state.inHorizontal
+  // INPUT HANDLERS — guard: state.inJourney
   // ============================================
 
   var wheelAccum = 0;
@@ -164,37 +158,34 @@
           }
         } else {
           if (state.currentScene > 0) goToScene(state.currentScene - 1);
-          // scene 0: nowhere to go — escape button is the only exit
+          // scene 0, backward: escape button is the only exit
         }
       } else {
-        // Vertical section: only backward navigation
+        // Vertical: backward only
         if (wheelAccum < 0) transitionToHorizontal();
       }
       wheelAccum = 0;
     }, 50);
   }, { passive: false });
 
-  // Touch swipe
-  var touchStartX = 0;
-  var touchStartY = 0;
+  // Touch
+  var touchStartX = 0, touchStartY = 0;
   var touchMoved  = false;
-  var touchOnForm = false;
 
   window.addEventListener('touchstart', function(e) {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchMoved  = false;
-    // Don't intercept touches that start inside the form (mobile scrolling)
-    touchOnForm = !!e.target.closest('#landingForm');
   }, { passive: true });
 
   window.addEventListener('touchmove', function(e) {
     touchMoved = true;
-    if (state.inJourney && !touchOnForm) e.preventDefault();
+    // Only hard-prevent in horizontal — vertical needs native scroll for form content
+    if (state.inJourney && state.inHorizontal) e.preventDefault();
   }, { passive: false });
 
   window.addEventListener('touchend', function(e) {
-    if (!state.inJourney || !touchMoved || touchOnForm) return;
+    if (!state.inJourney || !touchMoved) return;
     var dx    = touchStartX - e.changedTouches[0].clientX;
     var dy    = touchStartY - e.changedTouches[0].clientY;
     var absDx = Math.abs(dx);
@@ -212,17 +203,33 @@
         }
       } else {
         if (state.currentScene > 0) goToScene(state.currentScene - 1);
-        // scene 0: nowhere to go — escape button is the only exit
       }
     } else {
-      // Vertical: backward swipe returns to horizontal
-      if (!goForward) transitionToHorizontal();
+      // In vertical: upward swipe (goForward === false on vertical axis) returns to horizontal
+      if (!goForward && absDy > absDx) transitionToHorizontal();
     }
   }, { passive: true });
 
   // Keyboard
   window.addEventListener('keydown', function(e) {
-    if (!state.inJourney || state.transitioning) return;
+    if (!state.inJourney) return;
+
+    // Block all native page-scroll keys
+    var scrollKeys = [' ', 'PageDown', 'PageUp', 'Home', 'End'];
+    if (scrollKeys.indexOf(e.key) !== -1) {
+      e.preventDefault();
+      // Space acts as forward navigation
+      if (e.key === ' ' && !state.transitioning && state.inHorizontal) {
+        if (state.currentScene < state.totalHScenes - 1) {
+          goToScene(state.currentScene + 1);
+        } else {
+          transitionToVertical();
+        }
+      }
+      return;
+    }
+
+    if (state.transitioning) return;
 
     if (state.inHorizontal) {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
@@ -236,10 +243,8 @@
       if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         e.preventDefault();
         if (state.currentScene > 0) goToScene(state.currentScene - 1);
-        // scene 0: nowhere to go — escape button is the only exit
       }
     } else {
-      // Vertical: ArrowUp returns to horizontal
       if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
         transitionToHorizontal();
@@ -255,12 +260,14 @@
     });
   });
 
-  // Escape button
-  var escapeBtn = document.getElementById('journey-escape-btn');
-  if (escapeBtn) escapeBtn.addEventListener('click', escapeJourney);
+  // Escape button — event delegation: immune to load-order timing
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('#journey-escape-btn')) escapeJourney();
+  });
 
   // ============================================
   // TRANSITIONS: HORIZONTAL ↔ VERTICAL
+  // All via inline style — no CSS class dependency
   // ============================================
 
   function transitionToVertical() {
@@ -268,17 +275,15 @@
     state.transitioning = true;
     state.inHorizontal  = false;
 
-    // Lenis stays stopped — do NOT resume here
-
     // Fade out chrome
     var progress = document.querySelector('.journey-progress');
     var counter  = document.querySelector('.scene-counter');
     if (progress) { progress.style.transition = 'opacity 0.8s ease'; progress.style.opacity = '0'; }
     if (counter)  { counter.style.transition  = 'opacity 0.8s ease'; counter.style.opacity  = '0'; }
 
-    // Slide the vertical panel up via CSS transform — no page scroll at all
+    // Slide vertical panel up — driven by inline style (CSS inline beats any class rule)
     var vSection = document.getElementById('journey-vertical');
-    if (vSection) vSection.classList.add('v-active');
+    if (vSection) vSection.style.transform = 'translateY(0)';
 
     setTimeout(function() {
       triggerVScene('v-bridge');
@@ -292,15 +297,15 @@
     state.transitioning = true;
     state.inHorizontal  = true;
 
-    // Restore chrome (clear inline overrides; CSS body.journey-active rule takes over)
+    // Restore chrome
     var progress = document.querySelector('.journey-progress');
     var counter  = document.querySelector('.scene-counter');
     if (progress) { progress.style.transition = 'opacity 0.8s ease'; progress.style.opacity = ''; }
     if (counter)  { counter.style.transition  = 'opacity 0.8s ease'; counter.style.opacity  = ''; }
 
-    // Slide vertical panel back down — no page scroll
+    // Slide vertical panel back down
     var vSection = document.getElementById('journey-vertical');
-    if (vSection) vSection.classList.remove('v-active');
+    if (vSection) vSection.style.transform = 'translateY(100%)';
 
     setTimeout(function() { state.transitioning = false; }, 1200);
   }
@@ -314,7 +319,7 @@
     setTimeout(function() {
       var scene = document.getElementById(id);
       if (!scene) return;
-      // Already fully visible — don't re-animate (user navigated back then forward)
+      // Already visible — skip re-animation (back→forward navigation)
       if (scene.style.display === 'flex' && parseFloat(scene.style.opacity || '0') >= 1) {
         triggerVScene(id);
         return;
@@ -330,7 +335,6 @@
           scene.style.transition = 'opacity 1.2s ease, transform 1.2s cubic-bezier(0.16,1,0.3,1)';
           scene.style.opacity    = '1';
           scene.style.transform  = 'translateY(0)';
-          // No scrollIntoView — scene is inside the fixed overlay, already in view
           setTimeout(function() { triggerVScene(id); }, 150);
         });
       });
@@ -345,9 +349,7 @@
 
     switch (id) {
       case 'v-bridge':
-        setTimeout(function() {
-          revealEl(document.getElementById('bridge-eyebrow'), 0);
-        }, 500);
+        setTimeout(function() { revealEl(document.getElementById('bridge-eyebrow'), 0); }, 500);
         break;
 
       case 'v-scene-6':
@@ -361,9 +363,9 @@
 
           if (trustStrip)  trustStrip.classList.add('revealed');
           if (formDivider) formDivider.classList.add('revealed');
-          if (heading)    setTimeout(function() { heading.classList.add('revealed');    }, 300);
-          if (fields)     setTimeout(function() { fields.classList.add('revealed');     }, 600);
-          if (actions)    setTimeout(function() { actions.classList.add('revealed');    }, 1000);
+          if (heading)    setTimeout(function() { heading.classList.add('revealed');     }, 300);
+          if (fields)     setTimeout(function() { fields.classList.add('revealed');      }, 600);
+          if (actions)    setTimeout(function() { actions.classList.add('revealed');     }, 1000);
           if (testimonial) setTimeout(function() { testimonial.classList.add('revealed'); }, 1600);
         }, 300);
         break;
@@ -406,7 +408,6 @@
       setTimeout(function() { s6.style.display = 'none'; }, 1000);
     }
     showVScene('v-scene-confirm', 800);
-    // Escape button remains visible for the user to exit when ready
   }
 
   // ============================================
@@ -416,11 +417,85 @@
   function setSidebarHidden(hidden) {
     var sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
-    if (hidden) {
-      sidebar.classList.add('hide-sidebar');
-    } else {
-      sidebar.classList.remove('hide-sidebar');
-    }
+    if (hidden) { sidebar.classList.add('hide-sidebar'); }
+    else        { sidebar.classList.remove('hide-sidebar'); }
+  }
+
+  // ============================================
+  // SCROLL LOCK / UNLOCK
+  // Applied to both html AND body via inline style.
+  // Inline style beats any CSS rule, and locking both
+  // covers all browsers (scroll root differs by browser).
+  // ============================================
+
+  function lockScroll() {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow            = 'hidden';
+  }
+
+  function unlockScroll() {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow            = '';
+  }
+
+  // ============================================
+  // OVERLAY HELPERS
+  // The embed-root becomes a fixed fullscreen layer.
+  // Set / clear via inline style — no CSS class dependency.
+  // ============================================
+
+  function applyOverlay() {
+    var el = document.querySelector('.journey-embed-root');
+    if (!el) return;
+    el.style.position = 'fixed';
+    el.style.top      = '0';
+    el.style.left     = '0';
+    el.style.right    = '0';
+    el.style.bottom   = '0';
+    el.style.zIndex   = '9000';   // well above everything on the page
+    el.style.overflow = 'hidden';
+  }
+
+  function clearOverlay() {
+    var el = document.querySelector('.journey-embed-root');
+    if (!el) return;
+    el.style.position = '';
+    el.style.top      = '';
+    el.style.left     = '';
+    el.style.right    = '';
+    el.style.bottom   = '';
+    el.style.zIndex   = '';
+    el.style.overflow = '';
+  }
+
+  // Set up journey-vertical as an absolute panel inside the overlay.
+  // Driven by inline style so CSS class rules can't interfere.
+  function applyVerticalPanel() {
+    var el = document.getElementById('journey-vertical');
+    if (!el) return;
+    el.style.position   = 'absolute';
+    el.style.top        = '0';
+    el.style.left       = '0';
+    el.style.right      = '0';
+    el.style.bottom     = '0';
+    el.style.transform  = 'translateY(100%)';           // starts off-screen below
+    el.style.transition = 'transform 1.1s cubic-bezier(0.76, 0, 0.24, 1)';
+    el.style.overflow   = 'hidden';
+    el.style.willChange = 'transform';
+  }
+
+  function clearVerticalPanel() {
+    var el = document.getElementById('journey-vertical');
+    if (!el) return;
+    el.style.position   = '';
+    el.style.top        = '';
+    el.style.left       = '';
+    el.style.right      = '';
+    el.style.bottom     = '';
+    el.style.transform  = '';
+    el.style.transition = '';
+    el.style.overflow   = '';
+    el.style.willChange = '';
   }
 
   // ============================================
@@ -435,6 +510,17 @@
 
     document.body.classList.add('journey-active');
     setSidebarHidden(true);
+
+    // Lock scroll on BOTH html and body (covers all browsers)
+    lockScroll();
+
+    // Apply fixed fullscreen overlay via inline style (immune to CSS specificity)
+    applyOverlay();
+
+    // Prepare vertical panel (starts below viewport)
+    applyVerticalPanel();
+
+    // Stop Lenis smooth scroll
     if (!isStandalone && window.lenis) window.lenis.stop();
 
     var hSection = document.getElementById('journey-horizontal');
@@ -447,56 +533,54 @@
   }
 
   function escapeJourney() {
-    if (!state.inJourney && !state.journeyStarted) return; // nothing to escape from
+    if (!state.inJourney && !state.journeyStarted) return;
 
     state.inJourney = false;
     document.body.classList.remove('journey-active');
+
+    // Restore scroll, overlay, vertical panel
+    unlockScroll();
+    clearOverlay();
+    clearVerticalPanel();
+
     setSidebarHidden(false);
-    if (!isStandalone && window.lenis) window.lenis.start();
 
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) hSection.style.touchAction = '';
 
-    // Scroll to gallery (or timeline as fallback), then reset for replay
+    // Resume Lenis
+    if (!isStandalone && window.lenis) window.lenis.start();
+
+    // Reset state for replay (1 s snap-entry delay prevents instant re-trigger)
+    resetJourney();
+
+    // Scroll up to gallery — the safe landing zone above the journey
     var dest = document.getElementById('gallery') || document.getElementById('timeline');
     if (dest && window.lenis) {
-      window.lenis.scrollTo(dest, {
-        duration: 1.2,
-        onComplete: function() { resetJourney(); }
-      });
+      window.lenis.scrollTo(dest, { duration: 1.0 });
     } else if (dest) {
       dest.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(resetJourney, 1500);
-    } else {
-      resetJourney();
     }
   }
 
   function resetJourney() {
-    // Reset sub-state (journeyStarted last so guard holds during scroll-to-dest)
     state.currentScene  = 0;
     state.inHorizontal  = true;
     state.transitioning = false;
-    // state.inJourney already false from escapeJourney
 
-    // Reset track position
+    // Reset h-track and chrome
     track.style.transform = 'translateX(0)';
-
-    // Reset progress dots and counter
     progressDots.forEach(function(d, i) { d.classList.toggle('active', i === 0); });
     if (sceneNum) sceneNum.textContent = '01';
 
-    // Clear inline opacity overrides left by transitionToVertical
     var progress = document.querySelector('.journey-progress');
     var counter  = document.querySelector('.scene-counter');
     if (progress) { progress.style.opacity = ''; progress.style.transition = ''; }
     if (counter)  { counter.style.opacity  = ''; counter.style.transition  = ''; }
 
-    // Reset vertical section
-    var vSection      = document.getElementById('journey-vertical');
+    // Reset v-scenes
     var vScene6       = document.getElementById('v-scene-6');
     var vSceneConfirm = document.getElementById('v-scene-confirm');
-    if (vSection) vSection.classList.remove('v-active');
     [vScene6, vSceneConfirm].forEach(function(el) {
       if (!el) return;
       el.style.display    = 'none';
@@ -505,13 +589,12 @@
       el.style.transition = '';
     });
 
-    // Strip all reveal classes from the entire journey embed
+    // Strip all reveal classes
     var embedRoot = document.querySelector('.journey-embed-root');
     if (embedRoot) {
       embedRoot.querySelectorAll('.revealed').forEach(function(el) {
         el.classList.remove('revealed');
       });
-      // scroll-hint-v uses .visible
       var hintV = document.getElementById('scroll-hint-v');
       if (hintV) hintV.classList.remove('visible');
     }
@@ -526,7 +609,7 @@
       if (span) span.textContent = 'Tell Us About Your Project';
     }
 
-    // Allow re-entry: must be last
+    // Allow re-entry — must be last
     state.journeyStarted = false;
     snapTimer = null;
   }
@@ -544,12 +627,8 @@
     var hSection = document.getElementById('journey-horizontal');
     if (!hSection) return;
 
-    // Observe the horizontal section.
-    // When >25 % in view, wait 1 s then:
-    //   — hide the sidebar immediately (so it's gone before the snap completes)
-    //   — use Lenis to snap viewer to the section, then start journey.
-    // Cancels if the section drops below 25 % before the timer fires.
-    // Journey is the last section, so no "scrolled past" case to guard.
+    // When journey section is 25%+ in view, wait 1 s then activate the overlay.
+    // Timer cancels if section drops below 25% before firing (user scrolled away).
     var startObs = new IntersectionObserver(function(entries) {
       var ratio = entries[0].intersectionRatio;
 
@@ -557,15 +636,12 @@
         snapTimer = setTimeout(function() {
           snapTimer = null;
           if (state.journeyStarted) return;
-          // Hide sidebar as the journey overlay appears
           setSidebarHidden(true);
-          // Start immediately — fixed overlay covers the full screen, no page scroll needed
           startJourney();
         }, 1000);
       } else if (ratio < 0.25 && snapTimer) {
         clearTimeout(snapTimer);
         snapTimer = null;
-        // Restore sidebar if user scrolled back before snap fired
         if (!state.journeyStarted) setSidebarHidden(false);
       }
     }, { threshold: [0, 0.1, 0.25, 0.5] });
