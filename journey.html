@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Begin Your Journey — Eyekonika</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared-css/journey.css" />
+  <link rel="stylesheet" href="shared-css/page-transitions.css" />
+</head>
+<body class="is-journey">
+
+  <!-- Back button — JS intercepts click for slide-down exit to index.html -->
+  <a href="index.html" class="journey-back" id="journey-back-btn" aria-label="Back to Eyekonika">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    <span>Eyekonika</span>
+  </a>
+
+  <!-- Progress dots -->
+  <nav class="journey-progress" aria-label="Journey progress">
+    <div class="progress-dot active" data-scene="0"></div>
+    <div class="progress-dot" data-scene="1"></div>
+    <div class="progress-dot" data-scene="2"></div>
+    <div class="progress-dot" data-scene="3"></div>
+    <div class="progress-dot" data-scene="4"></div>
+  </nav>
+
+  <!-- Scene counter -->
+  <div class="scene-counter"><span id="scene-num">01</span> / 05</div>
+
+  <!-- Cursor glow -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
+  <!-- Escape button — hidden on standalone via CSS (body.is-journey .journey-escape-btn { display:none }) -->
+  <button class="journey-escape-btn" id="journey-escape-btn" aria-label="Back to gallery">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <!-- ============================================
+       HORIZONTAL ACT — cinematic opening
+       ============================================ -->
+  <div id="journey-horizontal">
+    <div class="h-track" id="h-track">
+
+      <!-- SCENE 1 — The idea -->
+      <div class="journey-scene" id="scene-1">
+        <div class="ambient-orb" style="width:600px;height:600px;top:-100px;right:-100px;--dur:25s;opacity:0.6;"></div>
+        <div class="ambient-orb" style="width:300px;height:300px;bottom:50px;left:10%;--dur:18s;opacity:0.4;"></div>
+        <div class="geo-orb" style="width:180px;height:180px;top:15%;right:12%;transform:translateY(-20px);"></div>
+        <div class="geo-cross" style="width:50px;height:50px;top:20%;left:8%;"></div>
+        <div class="geo-cross" style="width:30px;height:30px;bottom:25%;right:18%;"></div>
+        <div class="geo-dots" style="width:180px;height:180px;bottom:15%;left:5%;border-radius:4px;"></div>
+        <div class="geo-bracket tl" style="top:18%;left:18%;transform:translate(-10px,-10px);"></div>
+        <div class="geo-bracket br" style="bottom:18%;right:18%;transform:translate(10px,10px);"></div>
+        <div class="geo-line-h" style="width:120px;bottom:30%;left:60%;"></div>
+
+        <div class="scene-content">
+          <div class="kinetic-line">
+            <span class="word-reveal">Every</span>
+            <span class="word-reveal">piece</span>
+          </div>
+          <div class="kinetic-line" style="margin-top:0.3rem;">
+            <span class="word-reveal">begins</span>
+            <span class="word-reveal">with</span>
+            <span class="word-reveal">an</span>
+            <span class="word-reveal accent">idea.</span>
+          </div>
+        </div>
+
+        <div class="scroll-hint-h" id="scroll-hint-h">
+          <span>Scroll</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- SCENE 2 — Not a product -->
+      <div class="journey-scene" id="scene-2">
+        <div class="ambient-orb" style="width:500px;height:500px;top:20%;left:-80px;--dur:22s;opacity:0.5;"></div>
+        <div class="geo-rect" style="width:280px;height:380px;right:8%;top:50%;transform:translateY(-50%) translateX(30px);border-color:rgba(178,152,255,0.15);"></div>
+        <div class="geo-rect" style="width:240px;height:320px;right:calc(8% + 20px);top:50%;transform:translateY(-46%) translateX(20px);border-color:rgba(178,152,255,0.08);"></div>
+        <div class="geo-bracket tl" style="top:calc(50% - 200px);right:calc(8% + 4px);transform:translate(10px,-10px);"></div>
+        <div class="geo-bracket br" style="bottom:calc(50% - 195px);right:calc(8%);transform:translate(-10px,10px);"></div>
+        <div class="geo-dots" style="width:120px;height:120px;top:15%;left:45%;border-radius:3px;"></div>
+        <div class="geo-cross" style="width:40px;height:40px;bottom:20%;left:40%;"></div>
+
+        <div class="scene-content" style="max-width:700px;">
+          <p class="scene-eyebrow">The beginning</p>
+          <div class="kinetic-line" style="margin-top:1.5rem;">
+            <span class="word-reveal thin">Not a product.</span>
+          </div>
+          <div class="kinetic-line">
+            <span class="word-reveal thin">Not an order form.</span>
+          </div>
+          <div class="kinetic-line" style="margin-top:2rem;">
+            <span class="word-reveal large">An <em>idea.</em></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 3 — The image -->
+      <div class="journey-scene" id="scene-3">
+        <div class="ambient-orb" style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-50%);--dur:30s;opacity:0.35;"></div>
+        <div class="geo-shard" style="width:320px;height:220px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-3deg);--rot:-3deg;border-radius:4px;"></div>
+        <div class="geo-shard" style="width:280px;height:190px;top:50%;left:50%;transform:translate(-48%,-52%) rotate(2deg);--rot:2deg;border-radius:4px;opacity:0.4;"></div>
+        <div class="geo-line-h" style="width:200px;top:25%;left:50%;transform:translateX(-50%);"></div>
+        <div class="geo-line-h" style="width:200px;bottom:25%;left:50%;transform:translateX(-50%);"></div>
+        <div class="geo-cross" style="width:60px;height:60px;top:15%;right:15%;"></div>
+        <div class="geo-cross" style="width:40px;height:40px;bottom:20%;left:12%;"></div>
+        <div class="geo-dots" style="width:200px;height:100px;bottom:10%;right:5%;border-radius:3px;"></div>
+
+        <div class="scene-content centered">
+          <p class="scene-eyebrow">The form it takes</p>
+          <div class="kinetic-line">
+            <span class="word-reveal">Light</span>
+            <span class="word-reveal">captured</span>
+          </div>
+          <div class="kinetic-line">
+            <span class="word-reveal">inside</span>
+            <span class="word-reveal accent">glass.</span>
+          </div>
+          <div class="scene-divider" style="margin-top:1rem;">
+            <div class="scene-divider-inner"></div>
+          </div>
+          <p class="scene-subtext">
+            A subsurface engraving exists beneath the surface —
+            unreachable, permanent, alive only when light finds it.
+          </p>
+        </div>
+      </div>
+
+      <!-- SCENE 4 — Permanent -->
+      <div class="journey-scene" id="scene-4">
+        <div class="ambient-orb" style="width:450px;height:450px;bottom:-50px;right:5%;--dur:20s;opacity:0.5;"></div>
+        <div class="geo-orb" style="width:300px;height:300px;left:5%;top:50%;transform:translateY(-50%) translateX(-20px);"></div>
+        <div class="geo-rect" style="width:180px;height:240px;left:calc(5% + 60px);top:50%;transform:translateY(-50%) translateX(-20px);"></div>
+        <div class="geo-bracket tl" style="top:calc(50% - 125px);left:calc(5% + 55px);transform:translate(-10px,-10px);"></div>
+        <div class="geo-bracket br" style="bottom:calc(50% - 125px);left:calc(5% + 175px);transform:translate(10px,10px);"></div>
+        <div class="geo-dots" style="width:150px;height:150px;top:10%;right:8%;border-radius:3px;"></div>
+        <div class="geo-line-h" style="width:80px;bottom:35%;right:12%;"></div>
+        <div class="geo-cross" style="width:45px;height:45px;top:18%;left:45%;"></div>
+
+        <div class="scene-content" style="padding-left:42vw;max-width:1000px;">
+          <p class="scene-eyebrow">What it means</p>
+          <div class="kinetic-line" style="margin-top:1.5rem;">
+            <span class="word-reveal">The image</span>
+          </div>
+          <div class="kinetic-line">
+            <span class="word-reveal">lives inside</span>
+          </div>
+          <div class="kinetic-line">
+            <span class="word-reveal">the</span>
+            <span class="word-reveal accent">material.</span>
+          </div>
+          <div class="kinetic-line secondary-line" style="margin-top:2rem;">
+            <span class="word-reveal">Permanent.</span>
+            <span class="word-reveal">Unrepeatable.</span>
+            <span class="word-reveal">Yours.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 5 — The turn -->
+      <div class="journey-scene" id="scene-5">
+        <div class="ambient-orb" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);--dur:28s;opacity:0.4;"></div>
+        <div class="geo-line-h" style="width:300px;top:30%;left:50%;transform:translateX(-50%);"></div>
+        <div class="geo-line-h" style="width:180px;bottom:30%;left:50%;transform:translateX(-50%);"></div>
+        <div class="geo-cross" style="width:70px;height:70px;top:18%;left:10%;"></div>
+        <div class="geo-cross" style="width:50px;height:50px;bottom:20%;right:10%;"></div>
+        <div class="geo-bracket tl" style="top:20%;left:20%;transform:translate(-10px,-10px);"></div>
+        <div class="geo-bracket tr" style="top:20%;right:20%;transform:translate(10px,-10px);"></div>
+        <div class="geo-bracket bl" style="bottom:20%;left:20%;transform:translate(-10px,10px);"></div>
+        <div class="geo-bracket br" style="bottom:20%;right:20%;transform:translate(10px,10px);"></div>
+        <div class="geo-dots" style="width:250px;height:250px;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;opacity:0.3;"></div>
+
+        <div class="scene-content centered">
+          <div class="kinetic-line">
+            <span class="word-reveal thin">Every piece</span>
+          </div>
+          <div class="kinetic-line">
+            <span class="word-reveal thin">starts somewhere.</span>
+          </div>
+          <div class="scene-divider" style="margin-top:1.5rem;">
+            <div class="scene-divider-inner"></div>
+          </div>
+          <div class="kinetic-line question-line" style="margin-top:1rem;">
+            <span class="word-reveal">Where does</span>
+          </div>
+          <div class="kinetic-line question-line">
+            <span class="word-reveal accent">yours</span>
+            <span class="word-reveal">begin?</span>
+          </div>
+          <div class="scroll-hint-v" id="scroll-hint-v" style="position:relative;bottom:auto;left:auto;transform:none;margin-top:3rem;">
+            <span>Continue</span>
+            <div class="scroll-hint-v-line"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /h-track -->
+  </div><!-- /journey-horizontal -->
+
+  <!-- ============================================
+       VERTICAL ACT — clean 3-field form
+       ============================================ -->
+  <div id="journey-vertical">
+
+    <!-- Form section -->
+    <div class="v-scene" id="v-scene-6">
+      <div class="geo-cross" style="width:50px;height:50px;top:15%;left:8%;position:absolute;"></div>
+      <div class="geo-dots" style="width:150px;height:150px;bottom:15%;right:6%;border-radius:3px;position:absolute;"></div>
+      <div class="geo-bracket tl" style="top:20%;right:15%;position:absolute;transform:translate(10px,-10px);"></div>
+      <div class="ambient-orb" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);--dur:28s;opacity:0.3;"></div>
+
+      <div class="scene-content centered">
+        <div class="trust-strip" id="trust-strip">
+          <span class="trust-label">Trusted by institutions, churches &amp; nonprofits</span>
+        </div>
+
+        <div class="form-heading-wrap">
+          <div class="scene-divider"><div class="scene-divider-inner" id="form-divider"></div></div>
+          <p class="form-section-heading">Start the conversation.</p>
+        </div>
+
+        <form id="landingForm" action="https://formspree.io/f/movyqgop" method="POST" class="landing-form">
+          <input type="text" name="_gotcha" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;" aria-hidden="true" />
+
+          <div class="journey-fields" id="fields-6">
+            <div class="journey-field-group">
+              <label class="field-label" for="j-name">Name</label>
+              <input type="text" class="journey-input" name="name" id="j-name" placeholder="Your name" autocomplete="name" required />
+              <div class="field-underline"></div>
+            </div>
+            <div class="journey-field-group">
+              <label class="field-label" for="j-email">Email</label>
+              <input type="email" class="journey-input" name="email" id="j-email" placeholder="Your email" autocomplete="email" required />
+              <div class="field-underline"></div>
+            </div>
+            <div class="journey-field-group">
+              <label class="field-label" for="j-project">Project</label>
+              <input type="text" class="journey-input" name="project" id="j-project" placeholder="Briefly describe your project" required />
+              <div class="field-underline"></div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="landing-submit">
+              <span>Tell Us About Your Project</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <a href="contact.html" class="book-call-link">Ready to book a call instead?</a>
+          </div>
+        </form>
+
+        <div class="trust-testimonial">
+          <div class="testimonial-line"></div>
+          <blockquote class="testimonial-text">"Eyekonika delivered custom pieces for our dedication wall — on time, exactly as envisioned."</blockquote>
+          <cite class="testimonial-cite">— A past client</cite>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation -->
+    <div class="v-scene" id="v-scene-confirm" style="display:none;">
+      <div class="geo-line-h" style="width:300px;top:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+      <div class="geo-line-h" style="width:160px;bottom:30%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+
+      <div class="scene-content centered">
+        <div class="confirmation-wrap">
+          <p class="confirm-main" id="confirm-main">We'll be in touch.</p>
+          <p class="confirm-sub" id="confirm-sub">Usually within a day.</p>
+          <div class="confirm-rule" id="confirm-rule"></div>
+          <nav class="confirm-nav" id="confirm-nav">
+            <button class="confirm-nav-btn" data-target="intro">Back to Home</button>
+            <span class="confirm-nav-sep"></span>
+            <button class="confirm-nav-btn" data-target="what-we-do">Testimonials</button>
+            <span class="confirm-nav-sep"></span>
+            <button class="confirm-nav-btn" data-target="proceses">Process</button>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /journey-vertical -->
+
+  <script src="js/journey.js"></script>
+</body>
+</html>

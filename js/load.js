@@ -7,7 +7,6 @@ const parts = [
   { id: "proceses", file: "components/proceses-component/proceses.html" },
   { id: "gallery", file: "components/gallery-component/gallery.html" },
   { id: "what-we-do", file: "components/what-we-do-component/what-we-do.html" },
-  { id: "journey", file: "components/journey-component/journey.html" },
 ];
 Promise.all(
   parts.map((part) =>
@@ -23,7 +22,7 @@ Promise.all(
 )
   .then(() => {
     console.log("✅ All partials loaded!");
-    loadScriptsSequentially(["js/vendor/main.js", "js/journey.js"], () => {
+    loadScriptsSequentially(["js/vendor/main.js"], () => {
       // Trigger scroll *after* vendor/main.js has loaded and scrollex has
       // had a chance to initialize — ensures #intro.inactive is removed
       // for sections already in the viewport on page load.

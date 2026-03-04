@@ -269,6 +269,13 @@
 
   // Confirm-screen nav buttons — tear down the journey then scroll to target section
   function navigateFromConfirm(destId) {
+    // Standalone journey.html: set return target + slide back down to index.html
+    if (isStandalone) {
+      sessionStorage.setItem('returnSection', destId);
+      document.body.classList.add('slide-down-exit');
+      setTimeout(function () { window.location.href = 'index.html'; }, 750);
+      return;
+    }
     state.inJourney = false;
     document.body.classList.remove('journey-active');
     unlockScroll();
@@ -277,7 +284,7 @@
     setSidebarHidden(false);
     var hSection = document.getElementById('journey-horizontal');
     if (hSection) hSection.style.touchAction = '';
-    if (!isStandalone && window.reinitLenis) window.reinitLenis();
+    if (window.reinitLenis) window.reinitLenis();
     resetJourney();
     var dest = document.getElementById(destId);
     if (dest) {
@@ -689,6 +696,15 @@
 
   function init() {
     if (isStandalone) {
+      // Back button — slide page down and return to gallery on index.html
+      document.addEventListener('click', function (e) {
+        var backBtn = e.target.closest('.journey-back');
+        if (!backBtn) return;
+        e.preventDefault();
+        sessionStorage.setItem('returnSection', 'gallery');
+        document.body.classList.add('slide-down-exit');
+        setTimeout(function () { window.location.href = 'index.html'; }, 750);
+      });
       startJourney();
       return;
     }

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="shared-css/main.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="shared-css/journey.css" />
+  <link rel="stylesheet" href="shared-css/page-transitions.css" />
   <noscript>
     <link rel="stylesheet" href="shared-css/noscript.css" />
   </noscript>
@@ -47,11 +47,21 @@
     <!-- what our product and what is our purpose -->
     <div id="what-we-do"></div>
 
-    <!-- journey scrollytelling section + 3-field form
-         CSS in journey.css breaks this out of the wrapper's sidebar margin
-         so it fills the full viewport width. -->
-    <div id="journey"></div>
+  </div>
 
+  <!-- Journey gateway — pulsing arrows appear at bottom; fires slide-up to journey.html -->
+  <div id="journey-gateway" aria-hidden="true">
+    <div class="gateway-inner" id="gateway-inner">
+      <span class="gateway-text">scroll to begin</span>
+      <div class="gateway-arrows">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+    </div>
   </div>
 
   <script src="js/loading-page.js"></script>
@@ -73,6 +83,7 @@
   <script src="js/tabs-float-animation.js"></script>
   <script src="js/smooth-scroll.js"></script>
   <script src="js/email-send.js"></script>
+  <script src="js/journey-gateway.js"></script>
 </body>
 
 </html>

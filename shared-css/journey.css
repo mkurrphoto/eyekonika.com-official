@@ -584,48 +584,11 @@ body::after {
 }
 
 /* ============================================
-   POST-SCROLL FORM SECTION
-   ============================================ */
-
-/* Suppress grain overlay on index.html (body.index) */
-body.index::after { content: none; }
-
-/* ============================================
    JOURNEY ACTIVE STATE
    Hides sidebar, repositions progress dots
    ============================================ */
 
 /* Sidebar hiding uses class-based .hide-sidebar (same as timeline) */
-
-/* ============================================
-   EMBEDDED JOURNEY LAYOUT (inside #wrapper)
-   #wrapper has margin-left:17em on desktop for the sidebar.
-   Break #journey out to full viewport width using negative margin.
-   Sidebar is hidden via .hide-sidebar class (same as timeline).
-   ============================================ */
-body.index #journey {
-  margin-left: -17em;
-  width: 100vw;
-}
-
-/* When timeline expands wrapper to full width, reset journey too */
-body.index .expand-wrapper #journey {
-  margin-left: 0;
-  width: 100%;
-}
-
-/* Tablet / mobile — #wrapper has no sidebar margin */
-@media screen and (max-width: 1280px) {
-  body.index #journey {
-    margin-left: 0;
-    width: 100%;
-  }
-}
-
-/* The journey section's background should match the page dark theme */
-body.index #journey {
-  background: var(--dark);
-}
 
 /* Trust strip */
 .trust-strip {
@@ -804,11 +767,6 @@ body.journey-active .journey-embed-root {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 10001;
-}
-
-/* Keep #journey from collapsing in the page flow when embed-root is fixed */
-body.index #journey {
-  min-height: 100vh;
 }
 
 /* Vertical panel: absolute within the fixed embed-root, starts off-screen below */
