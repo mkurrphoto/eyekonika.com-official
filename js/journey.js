@@ -711,7 +711,7 @@
         var backBtn = e.target.closest('.journey-back, .home-orbit');
         if (!backBtn) return;
         e.preventDefault();
-        sessionStorage.setItem('returnSection', 'gallery');
+        sessionStorage.removeItem('returnSection');
         document.body.classList.add('slide-down-exit');
         setTimeout(function () { window.location.href = 'index.html'; }, 750);
       });
