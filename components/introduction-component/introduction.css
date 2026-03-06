@@ -1,27 +1,27 @@
 /* ============================================
-   INTRODUCTION — Sticky scroll word reveal + hero panel
+   INTRODUCTION — Sticky scroll word reveal + unblur reveal
    ============================================ */
 
-/* ——— root + full-width breakout ——— */
+/* ——— section root ——— */
 #intro {
-  --start: 45vh;
-  --space: 65vh;
+  --start: 45vh;        /* vertical position of the blue highlight band */
+  --space: 35vh;        /* breathing room between word list end and reveal */
   --accent: #60a5fa;
   --dimmed: rgba(255, 255, 255, 0.12);
   --label-color: rgba(255, 255, 255, 0.35);
 
   position: relative;
   background: #030712;
-  color: white;
   font-family: 'Poppins', sans-serif;
-  overflow-x: hidden;
+  color: white;
 
-  /* Break out of the sidebar's 17em left margin */
+  /* Break out of sidebar's 17em left margin to fill full viewport width.
+     NO overflow:hidden here — it would break position:sticky on children. */
   margin-left: -17em;
   width: 100vw;
 }
 
-/* On ≤1280px the sidebar collapses to a top bar; wrapper margin is already 0 */
+/* Sidebar collapses to top bar at ≤1280px; wrapper margin becomes 0 */
 @media screen and (max-width: 1280px) {
   #intro {
     margin-left: 0;
@@ -30,16 +30,76 @@
 }
 
 
-/* ——— sticky header ——— */
-/* font-size + line-height set here so 1lh is consistent across all children */
+/* ——— sticky background ——— */
+/* Stays fixed at top:0 while #intro is in view.
+   margin-bottom: -100vh collapses its document-flow height to 0
+   so .intro-content starts at the very same y position, overlaying the bg. */
+.intro-bg {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-bottom: -100vh;
+  z-index: 0;
+
+  background-image: url('/images/pic01.jpg.jpg');
+  background-size: cover;
+  background-position: center center;
+
+  /* Scaled up slightly so blur doesn't show edge bleed */
+  transform: scale(1.06);
+  /* Start: heavily blurred and darkened */
+  filter: blur(14px) brightness(0.28);
+  transition:
+    filter 1.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Clip the blur bleed — safe here because .intro-bg has no sticky children */
+  overflow: hidden;
+}
+
+/* Dark gradient overlay always on bg — softens to a film once revealed */
+.intro-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.62);
+  transition: opacity 1.4s ease;
+}
+
+/* State: background fully sharp once reveal section enters view */
+.intro-bg.is-revealed {
+  filter: blur(0px) brightness(0.72);
+  transform: scale(1);
+}
+.intro-bg.is-revealed::after {
+  opacity: 0.28;
+}
+
+
+/* ——— scrolling content wrapper ——— */
+/* z-index:1 layers it above the sticky bg; no overflow so sticky inside works */
+.intro-content {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* ——— sticky word-reveal header ——— */
+/* font-size + line-height live here so 1lh is the same unit for all children */
 .intro-sticky {
   font-size: clamp(2.6rem, 6vw, 6rem);
   line-height: 1.15;
+
   position: sticky;
+  /* Negative top = how far the header can scroll up before it locks.
+     (count-1) items × 1lh each — once that's scrolled, header sticks
+     with only the last word visible at --start. */
   top: calc((var(--count) - 1) * -1lh);
+
   display: flex;
   align-items: flex-start;
   width: 100%;
+  /* Gap between end of word list and the reveal section */
   margin-bottom: var(--space);
 }
 
@@ -48,6 +108,7 @@
   align-items: flex-start;
   justify-content: center;
   gap: clamp(0.8rem, 2.5vw, 3rem);
+  /* Pushes first word down to --start so it begins at the highlight band */
   padding-top: calc(var(--start) - 0.5lh);
   width: 100%;
   max-width: 1100px;
@@ -61,7 +122,7 @@
 /* ——— sticky label ("Make your image") ——— */
 .intro-label {
   position: sticky;
-  top: calc(var(--start) - 0.5lh);
+  top: calc(var(--start) - 0.5lh); /* keeps label at viewport midpoint */
   font-size: clamp(1rem, 2vw, 1.8rem);
   font-weight: 200;
   line-height: 1.15;
@@ -71,8 +132,7 @@
   white-space: nowrap;
   flex-shrink: 0;
   text-align: right;
-  /* optical top-align with first word */
-  padding-top: 0.12em;
+  padding-top: 0.1em; /* optical alignment with word list */
 }
 
 
@@ -81,16 +141,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  /* font-size + line-height inherited from .intro-sticky — keeps lh consistent */
+  /* inherits font-size + line-height from .intro-sticky — 1lh stays consistent */
 }
 
 .intro-words li {
-  /* Text is transparent; colour comes from the fixed gradient behind */
+  /* Text is transparent; colour comes from the fixed viewport gradient */
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
 
-  /* Fixed viewport gradient: dimmed everywhere, blue band at --start */
+  /* Fixed gradient: dimmed everywhere; blue band exactly at --start vh.
+     background-attachment:fixed makes gradient stay relative to viewport
+     so each word gets highlighted as it scrolls through that band. */
   background-image: linear-gradient(
     180deg,
     var(--dimmed) 0 calc(var(--start) - 0.5lh),
@@ -101,78 +163,62 @@
   font-weight: 300;
 }
 
-/* Last word ("eyekonik.") gets a slight italic accent */
+/* "eyekonik." — italic, slightly bolder */
 .intro-words li:last-child {
   font-weight: 400;
   font-style: italic;
 }
 
 
-/* ——— hero reveal panel ——— */
-.intro-panel {
-  position: relative;
-  width: 100%;
+/* ——— logo + catchphrase reveal ——— */
+.intro-reveal {
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('/images/pic01.jpg.jpg');
-  background-size: cover;
-  background-position: center center;
-  background-attachment: scroll;
-  overflow: hidden;
 }
 
-.intro-panel-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(3, 7, 18, 0.93) 0%,
-    rgba(3, 7, 18, 0.52) 50%,
-    rgba(3, 7, 18, 0.72) 100%
-  );
-  z-index: 1;
-}
-
-.intro-panel-content {
-  position: relative;
-  z-index: 2;
+.intro-reveal-content {
   text-align: center;
   padding: 0 2rem;
-  max-width: 760px;
+  max-width: 700px;
 
-  /* hidden until IntersectionObserver fires */
+  /* Hidden until IntersectionObserver fires */
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(22px);
+  transition:
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.intro-panel-content.is-visible {
+.intro-reveal-content.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.intro-tagline {
-  font-family: 'Poppins', sans-serif;
-  font-size: clamp(2rem, 4.5vw, 4.2rem);
-  font-weight: 200;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.92);
-  margin: 0 0 1.1rem;
-  line-height: 1.2;
+/* Reverses smoothly when scrolling back up */
+.intro-reveal-content.is-hiding {
+  opacity: 0;
+  transform: translateY(22px);
 }
 
-.intro-sub {
+.intro-logo {
+  display: block;
+  max-width: 380px;
+  width: 70%;
+  height: auto;
+  margin: 0 auto 1.6rem;
+  filter: drop-shadow(0 0 40px rgba(96, 165, 250, 0.18));
+}
+
+.intro-catchphrase {
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(0.72rem, 1.3vw, 0.95rem);
-  font-weight: 300;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.38);
-  margin: 0 0 2.8rem;
-  line-height: 1.7;
+  font-size: clamp(1rem, 2.4vw, 1.7rem);
+  font-weight: 200;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 2.6rem;
+  line-height: 1.4;
 }
 
 .intro-cta {
@@ -211,10 +257,18 @@
 }
 
 
-/* ——— reduced motion ——— */
+/* ——— prefers-reduced-motion ——— */
 @media (prefers-reduced-motion: reduce) {
+  .intro-bg {
+    filter: brightness(0.5);
+    transform: none;
+    transition: none;
+  }
+  .intro-bg.is-revealed {
+    filter: brightness(0.65);
+    transform: none;
+  }
   .intro-words li {
-    /* Skip the gradient trick; show static coloured text */
     background-image: none;
     -webkit-background-clip: unset;
     background-clip: unset;
@@ -223,7 +277,7 @@
   .intro-words li:last-child {
     color: var(--accent);
   }
-  .intro-panel-content {
+  .intro-reveal-content {
     opacity: 1;
     transform: none;
     transition: none;
@@ -231,15 +285,15 @@
 }
 
 
-/* ——— mobile: background-attachment: fixed doesn't work on iOS, disable effect ——— */
+/* ——— mobile ——— */
 @media screen and (max-width: 736px) {
   #intro {
     --start: 40vh;
-    --space: 30vh;
+    --space: 20vh;
   }
 
   .intro-sticky {
-    font-size: clamp(2.4rem, 10.5vw, 3.8rem);
+    font-size: clamp(2.2rem, 10vw, 3.6rem);
   }
 
   .intro-sticky-section {
@@ -248,6 +302,7 @@
     gap: 0.4rem;
   }
 
+  /* Label doesn't sticky-inside-sticky well on mobile; just flows normally */
   .intro-label {
     position: static;
     text-align: center;
@@ -258,7 +313,8 @@
     text-align: center;
   }
 
-  /* Kill fixed gradient on mobile (Safari ignores it anyway) */
+  /* background-attachment:fixed is ignored by Safari on sub-body elements;
+     fall back to static coloured text */
   .intro-words li {
     background-attachment: scroll;
     background-image: none;
