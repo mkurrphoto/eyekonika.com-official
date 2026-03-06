@@ -24,9 +24,9 @@
     if (fired) return;
     var dist = scrollBottom();
 
-    // Show gateway when within ~200px of absolute bottom
+    // Show gateway when within ~400px of absolute bottom
     if (inner) {
-      inner.classList.toggle('visible', dist <= 200);
+      inner.classList.toggle('visible', dist <= 400);
     }
 
     // Fire transition at absolute bottom (≤2px tolerance for float rounding)

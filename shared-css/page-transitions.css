@@ -3,6 +3,13 @@
    index.html ↔ journey.html
    ============================================ */
 
+/* === bfcache restore: instant reset (no visible slide-back) === */
+body.is-restoring,
+body.is-restoring * {
+  transition: none !important;
+  animation: none !important;
+}
+
 /* === Exit animations === */
 
 @keyframes slideUpExit {
@@ -54,17 +61,25 @@ body.is-journey {
   display: flex;
   justify-content: center;
   pointer-events: none;
+  /* Soft gradient floor so the gateway has its own tonal zone */
+  background: linear-gradient(
+    to top,
+    rgba(3, 7, 18, 0.88) 0%,
+    rgba(3, 7, 18, 0.55) 55%,
+    transparent 100%
+  );
 }
 
 .gateway-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
-  padding-bottom: 1.8rem;
+  gap: 1.1rem;
+  padding-top: 3.5rem;
+  padding-bottom: 4.2rem;
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .gateway-inner.visible {
@@ -74,24 +89,24 @@ body.is-journey {
 
 .gateway-text {
   font-family: 'Poppins', sans-serif;
-  font-size: 0.56rem;
-  font-weight: 400;
-  letter-spacing: 0.3em;
+  font-size: 0.82rem;
+  font-weight: 300;
+  letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: rgba(96, 165, 250, 0.45);
+  color: rgba(96, 165, 250, 0.65);
 }
 
 .gateway-arrows {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
+  gap: 5px;
 }
 
 .gateway-arrows svg {
-  width: 14px;
-  height: 14px;
-  color: rgba(96, 165, 250, 0.45);
+  width: 28px;
+  height: 28px;
+  color: rgba(96, 165, 250, 0.55);
   display: block;
 }
 
@@ -100,10 +115,10 @@ body.is-journey {
   animation: gatewayPulse 1.8s ease-in-out infinite 0s;
 }
 .gateway-arrows svg:nth-child(2) {
-  animation: gatewayPulse 1.8s ease-in-out infinite 0.25s;
+  animation: gatewayPulse 1.8s ease-in-out infinite 0.3s;
 }
 
 @keyframes gatewayPulse {
-  0%, 100% { opacity: 0.25; transform: translateY(0); }
-  50%       { opacity: 0.9;  transform: translateY(4px); }
+  0%, 100% { opacity: 0.2;  transform: translateY(0); }
+  50%       { opacity: 0.85; transform: translateY(7px); }
 }
