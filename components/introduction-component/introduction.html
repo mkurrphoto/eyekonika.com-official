@@ -1,55 +1,46 @@
 <!-- ============================================
-     INTRODUCTION — Sticky scroll word reveal + unblur reveal
+     INTRODUCTION — Cinematic hero with kinetic text reveal
      ============================================ -->
 <section id="intro">
 
-  <!-- ——— sticky background layer ——— -->
-  <!-- Stays at top:0 while #intro is in view; starts blurred+dark, unblurs on reveal -->
-  <div class="intro-bg" id="intro-bg"></div>
+  <!-- Dark gradient overlay — controls photo exposure -->
+  <div class="intro-overlay"></div>
 
-  <!-- ——— all scrolling content, layered above the bg ——— -->
-  <div class="intro-content">
+  <div class="intro-inner">
 
-    <!-- sticky scroll word reveal -->
-    <header class="intro-sticky" style="--count: 6">
-      <section class="intro-sticky-section">
+    <h1 class="sr-only">Eyekonika — Custom Glass Engravings</h1>
 
-        <h1 class="intro-label">
-          <span aria-hidden="true">Make your image&nbsp;</span>
-          <span class="sr-only">Make your image eyekonik — custom glass engravings.</span>
-        </h1>
+    <!-- Logo -->
+    <img
+      class="intro-logo"
+      src="images/logo-index-transparent.png"
+      alt="Eyekonika"
+    />
 
-        <ul class="intro-words" aria-hidden="true">
-          <li>iconic.</li>
-          <li>eye-catching.</li>
-          <li>permanent.</li>
-          <li>inside glass.</li>
-          <li>alive with light.</li>
-          <li>eyekonik.</li>
-        </ul>
+    <!-- Thin rule between logo and text -->
+    <div class="intro-rule" aria-hidden="true"></div>
 
-      </section>
-    </header>
+    <!-- Catchphrase -->
+    <p class="intro-catchphrase">Uniquely elite &mdash; Universally amazing.</p>
 
-    <!-- ——— logo + catchphrase reveal ——— -->
-    <!-- Appears as background unblurs; same visual layer, no separate panel -->
-    <div class="intro-reveal" id="intro-reveal">
-      <div class="intro-reveal-content" id="intro-reveal-content">
-        <img
-          src="images/logo-index-transparent.png"
-          class="intro-logo"
-          alt="Eyekonika"
-        />
-        <p class="intro-catchphrase">Uniquely elite &mdash; Universally amazing.</p>
-        <a href="#one" class="intro-cta scrolly">
-          <span>Explore our work</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18" aria-hidden="true">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
+    <!-- Sub-descriptor -->
+    <p class="intro-sub">
+      Custom glass engravings for institutions, nonprofits &amp; elite marketing.
+    </p>
+
+    <!-- CTA -->
+    <a href="#one" class="intro-cta scrolly">
+      <span>Explore our work</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+
+    <!-- Scroll indicator -->
+    <div class="intro-scroll" aria-hidden="true">
+      <div class="intro-scroll-line"></div>
     </div>
 
-  </div><!-- /intro-content -->
+  </div>
 
 </section>
