@@ -66,8 +66,11 @@ function initParallaxBackgrounds() {
   document.body.classList.add('smooth-scroll-active');
 
   // Get all sections with parallax backgrounds
+  // NOTE: #intro is excluded — it manages its own background-image and
+  // position directly in CSS. Injecting a parallax wrapper there strips
+  // the background off the section and applies the wrong background-position,
+  // which causes a black gap on the right side of the hero.
   const parallaxSections = [
-    { selector: '#intro', speed: 0.3 },
     { selector: '#three', speed: 0.3 }, // Get in touch section
   ];
 
