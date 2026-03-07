@@ -54,12 +54,13 @@ body.is-journey {
 
 #journey-gate {
   background: #030712;
-  min-height: 52vh;
+  min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  /* Blend from the section above */
-  border-top: 1px solid rgba(96, 165, 250, 0.06);
+  /* Clear visual break from gallery above */
+  border-top: 1px solid rgba(96, 165, 250, 0.08);
+  padding-bottom: 12vh;
 }
 
 .journey-gate-btn {
