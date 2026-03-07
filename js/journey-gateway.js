@@ -1,17 +1,28 @@
 /* ============================================
    EYEKONIKA — Journey Gateway
-   Shows pulsing "scroll to begin" arrows near the
-   absolute bottom of index.html. Fires a slide-up
-   page transition to journey.html when the user
-   reaches the scroll bottom.
+   Two ways to enter the journey:
+     1. Click the #journey-gate-btn (static section below all content)
+     2. Scroll to the absolute page bottom (auto-fire fallback)
+   Visual invitation lives in #journey-gate in the DOM.
+   The fixed #journey-gateway div is kept for markup compatibility only.
    ============================================ */
 
 (function () {
   'use strict';
 
-  var inner = document.getElementById('gateway-inner');
   var fired = false;
 
+  function fireTransition() {
+    if (fired) return;
+    fired = true;
+    if (window.destroyLenis) window.destroyLenis();
+    document.body.classList.add('slide-up-exit');
+    setTimeout(function () {
+      window.location.href = 'journey.html';
+    }, 750);
+  }
+
+  // Auto-fire when user scrolls to the absolute page bottom
   function scrollBottom() {
     return (
       document.documentElement.scrollHeight
@@ -22,30 +33,17 @@
 
   function onScroll() {
     if (fired) return;
-    var dist = scrollBottom();
-
-    // Show gateway when within ~80px of absolute bottom
-    if (inner) {
-      inner.classList.toggle('visible', dist <= 80);
-    }
-
-    // Fire transition at absolute bottom (≤2px tolerance for float rounding)
-    if (dist <= 2) {
-      fired = true;
-      // Halt Lenis before animating to prevent scroll-fighting during exit
-      if (window.destroyLenis) window.destroyLenis();
-      document.body.classList.add('slide-up-exit');
-      setTimeout(function () {
-        window.location.href = 'journey.html';
-      }, 750);
-    }
+    if (scrollBottom() <= 2) fireTransition();
   }
 
-  // Use native scroll event — Lenis updates window.scrollY on every tick
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Also check once the page is fully laid out (smooth-scroll may shift heights)
+  // Wire up the static gateway button
   window.addEventListener('load', function () {
+    var btn = document.getElementById('journey-gate-btn');
+    if (btn) btn.addEventListener('click', fireTransition);
+
+    // One-time check in case page loaded already at bottom
     setTimeout(onScroll, 300);
   });
 })();

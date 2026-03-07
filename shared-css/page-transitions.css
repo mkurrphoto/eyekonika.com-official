@@ -46,10 +46,45 @@ body.is-journey {
 }
 
 /* ============================================
-   JOURNEY GATEWAY
-   Fixed at bottom of index.html.
-   Fades in when user is near the page bottom.
-   Pulses to invite scrolling to trigger journey.
+   JOURNEY GATEWAY — static section in page flow
+   Lives inside #wrapper, below all content.
+   Provides clear dead-space so the arrows never
+   overlap the gallery or any other section.
+   ============================================ */
+
+#journey-gate {
+  background: #030712;
+  min-height: 52vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Blend from the section above */
+  border-top: 1px solid rgba(96, 165, 250, 0.06);
+}
+
+.journey-gate-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 2.5rem 3rem;
+  /* Subtle focus ring for accessibility */
+  outline-offset: 8px;
+}
+
+.journey-gate-btn:focus-visible {
+  outline: 1px solid rgba(96, 165, 250, 0.5);
+  border-radius: 4px;
+}
+
+/* ============================================
+   JOURNEY GATEWAY — fixed div (auto-fire only)
+   No longer shows any visual content.
+   journey-gateway.js fires the transition when
+   the user reaches the absolute page bottom.
    ============================================ */
 
 #journey-gateway {
@@ -58,33 +93,15 @@ body.is-journey {
   left: 0;
   right: 0;
   z-index: 500;
-  display: flex;
-  justify-content: center;
   pointer-events: none;
-  /* Soft gradient floor so the gateway has its own tonal zone */
-  background: linear-gradient(
-    to top,
-    rgba(3, 7, 18, 0.88) 0%,
-    rgba(3, 7, 18, 0.55) 55%,
-    transparent 100%
-  );
+  /* hidden permanently — visual handled by #journey-gate above */
+  display: none;
 }
 
+/* .gateway-inner kept for JS compatibility but never shown */
 .gateway-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.1rem;
-  padding-top: 3.5rem;
-  padding-bottom: 4.2rem;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.gateway-inner.visible {
-  opacity: 1;
-  transform: translateY(0);
+  pointer-events: none;
 }
 
 .gateway-text {

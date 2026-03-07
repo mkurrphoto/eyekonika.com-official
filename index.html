@@ -77,9 +77,27 @@
     <!-- what our product and what is our purpose -->
     <div id="what-we-do"></div>
 
+    <!-- Journey gateway zone — dedicated dead-space section below all content.
+         Arrows live here in the page flow; clicking or scrolling to the very
+         bottom of the page both fire the slide-up transition to journey.html -->
+    <div id="journey-gate">
+      <button class="journey-gate-btn" id="journey-gate-btn" aria-label="Begin your journey">
+        <span class="gateway-text">scroll to begin</span>
+        <div class="gateway-arrows">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+        </div>
+      </button>
+    </div>
+
   </div>
 
-  <!-- Journey gateway — pulsing arrows appear at bottom; fires slide-up to journey.html -->
+  <!-- Journey gateway (fixed) — auto-fires transition at absolute page bottom.
+       No longer shows any visual; #journey-gate section above handles the UI. -->
   <div id="journey-gateway" aria-hidden="true">
     <div class="gateway-inner" id="gateway-inner">
       <span class="gateway-text">scroll to begin</span>
