@@ -45,10 +45,14 @@ a {
 }
 
 nav a#logo {
-    position: relative;
-    top: -12px;
-    font-family: "Timmons NY 2.005";
-    font-size: 42px;
+    display: inline-flex;
+    align-items: center;
+}
+
+nav a#logo img {
+    height: 42px;
+    width: auto;
+    display: block;
 }
 
 .bg-overlay {
