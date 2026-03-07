@@ -39,45 +39,33 @@
   align-items: center;
   justify-content: center;
 
-  background-image: url('/images/pic01.jpg.jpg');
+  background-image: url('/images/photo-backgrounds/pexels-tracehudson-2724664.jpg');
   background-size: cover;
-  background-position: center center;
+  background-position: center 30%;
   background-attachment: scroll;
   background-color: #030712;
 
   font-family: 'Poppins', sans-serif;
   color: white;
   overflow: hidden;
-
-  /* Break out of sidebar's 17em left margin — no overflow issue since
-     .intro-inner has no position:sticky children */
-  margin-left: -17em;
-  width: 100vw;
-}
-
-@media screen and (max-width: 1280px) {
-  #intro {
-    margin-left: 0;
-    width: 100%;
-  }
 }
 
 
 /* ——— dark gradient overlay ——— */
-/* Heavier at top and bottom, opens up in the centre so photo reads through */
+/* Heavy base layer + lighter window in the middle so photo reads as
+   mood/texture but never competes with text legibility */
 .intro-overlay {
   position: absolute;
   inset: 0;
   background:
     linear-gradient(
       180deg,
-      rgba(3, 7, 18, 0.80) 0%,
-      rgba(3, 7, 18, 0.42) 38%,
-      rgba(3, 7, 18, 0.42) 62%,
-      rgba(3, 7, 18, 0.82) 100%
+      rgba(3, 7, 18, 0.88) 0%,
+      rgba(3, 7, 18, 0.60) 35%,
+      rgba(3, 7, 18, 0.60) 65%,
+      rgba(3, 7, 18, 0.92) 100%
     );
-  /* Subtle vignette ring */
-  box-shadow: inset 0 0 120px rgba(3, 7, 18, 0.55);
+  box-shadow: inset 0 0 180px rgba(3, 7, 18, 0.65);
   z-index: 1;
 }
 
@@ -260,8 +248,3 @@
   .intro-scroll-line  { animation-delay: 2.8s; }
 }
 
-@media screen and (max-width: 1280px) {
-  #intro {
-    background-attachment: scroll;
-  }
-}
