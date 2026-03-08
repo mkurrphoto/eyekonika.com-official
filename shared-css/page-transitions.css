@@ -62,36 +62,49 @@ body.is-journey {
 }
 
 .journey-gate-btn {
-  background: rgba(3, 7, 18, 0.55);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(96, 165, 250, 0.22);
-  border-radius: 20px;
+  background: linear-gradient(
+    160deg,
+    rgba(14, 22, 45, 0.9) 0%,
+    rgba(8, 14, 30, 0.95) 100%
+  );
+  border: 1px solid rgba(96, 165, 250, 0.28);
+  border-radius: 100px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.4rem;
-  padding: 2.4rem 3.6rem;
+  gap: 0.85rem;
+  padding: 1.6rem 3rem;
   box-shadow:
-    0 0 40px rgba(96, 165, 250, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+    0 0 0 1px rgba(96, 165, 250, 0.04),
+    0 0 48px rgba(96, 165, 250, 0.1),
+    0 4px 24px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  animation: gateBtnPulse 3s ease-in-out infinite;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
   outline: none;
+  position: relative;
 }
 
 .journey-gate-btn:hover {
-  border-color: rgba(96, 165, 250, 0.45);
-  background: rgba(3, 7, 18, 0.72);
+  border-color: rgba(96, 165, 250, 0.55);
   box-shadow:
-    0 0 60px rgba(96, 165, 250, 0.14),
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 0 0 1px rgba(96, 165, 250, 0.08),
+    0 0 72px rgba(96, 165, 250, 0.22),
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  animation: none;
 }
 
 .journey-gate-btn:focus-visible {
   outline: 1px solid rgba(96, 165, 250, 0.5);
-  border-radius: 20px;
+  border-radius: 100px;
+}
+
+@keyframes gateBtnPulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.04), 0 0 32px rgba(96, 165, 250, 0.07), 0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07); }
+  50%       { box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.08), 0 0 60px rgba(96, 165, 250, 0.16), 0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07); }
 }
 
 /* ============================================
@@ -120,46 +133,43 @@ body.is-journey {
 
 .gateway-text {
   font-family: 'Poppins', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.32em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.75);
-  transition: color 0.35s ease;
+  color: rgba(255, 255, 255, 0.88);
+  transition: color 0.3s ease;
+  white-space: nowrap;
 }
 
 .journey-gate-btn:hover .gateway-text {
-  color: rgba(255, 255, 255, 0.95);
+  color: #fff;
 }
 
 .gateway-arrows {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 1px;
 }
 
 .gateway-arrows svg {
-  width: 22px;
-  height: 22px;
-  color: rgba(96, 165, 250, 0.7);
+  width: 16px;
+  height: 16px;
+  color: #60a5fa;
   display: block;
-  transition: color 0.35s ease;
+  stroke-width: 2;
 }
 
-.journey-gate-btn:hover .gateway-arrows svg {
-  color: rgba(96, 165, 250, 1);
-}
-
-/* Staggered pulse per arrow */
+/* Staggered cascade down */
 .gateway-arrows svg:nth-child(1) {
-  animation: gatewayPulse 1.8s ease-in-out infinite 0s;
+  animation: gatewayPulse 1.6s ease-in-out infinite 0s;
 }
 .gateway-arrows svg:nth-child(2) {
-  animation: gatewayPulse 1.8s ease-in-out infinite 0.35s;
+  animation: gatewayPulse 1.6s ease-in-out infinite 0.28s;
 }
 
 @keyframes gatewayPulse {
-  0%, 100% { opacity: 0.25; transform: translateY(0); }
-  50%       { opacity: 1;    transform: translateY(6px); }
+  0%, 100% { opacity: 0.2; transform: translateY(-2px); }
+  50%       { opacity: 1;   transform: translateY(3px); }
 }
