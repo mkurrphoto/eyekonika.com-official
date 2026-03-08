@@ -56,29 +56,42 @@ body.is-journey {
   background: #030712;
   min-height: 100vh;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  /* Clear visual break from gallery above */
   border-top: 1px solid rgba(96, 165, 250, 0.08);
-  padding-bottom: 12vh;
 }
 
 .journey-gate-btn {
-  background: none;
-  border: none;
+  background: rgba(3, 7, 18, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(96, 165, 250, 0.22);
+  border-radius: 20px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.1rem;
-  padding: 2.5rem 3rem;
-  /* Subtle focus ring for accessibility */
-  outline-offset: 8px;
+  gap: 1.4rem;
+  padding: 2.4rem 3.6rem;
+  box-shadow:
+    0 0 40px rgba(96, 165, 250, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+  outline: none;
+}
+
+.journey-gate-btn:hover {
+  border-color: rgba(96, 165, 250, 0.45);
+  background: rgba(3, 7, 18, 0.72);
+  box-shadow:
+    0 0 60px rgba(96, 165, 250, 0.14),
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .journey-gate-btn:focus-visible {
   outline: 1px solid rgba(96, 165, 250, 0.5);
-  border-radius: 4px;
+  border-radius: 20px;
 }
 
 /* ============================================
@@ -107,25 +120,35 @@ body.is-journey {
 
 .gateway-text {
   font-family: 'Poppins', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 300;
-  letter-spacing: 0.38em;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(96, 165, 250, 0.65);
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.35s ease;
+}
+
+.journey-gate-btn:hover .gateway-text {
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .gateway-arrows {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 3px;
 }
 
 .gateway-arrows svg {
-  width: 28px;
-  height: 28px;
-  color: rgba(96, 165, 250, 0.55);
+  width: 22px;
+  height: 22px;
+  color: rgba(96, 165, 250, 0.7);
   display: block;
+  transition: color 0.35s ease;
+}
+
+.journey-gate-btn:hover .gateway-arrows svg {
+  color: rgba(96, 165, 250, 1);
 }
 
 /* Staggered pulse per arrow */
@@ -133,10 +156,10 @@ body.is-journey {
   animation: gatewayPulse 1.8s ease-in-out infinite 0s;
 }
 .gateway-arrows svg:nth-child(2) {
-  animation: gatewayPulse 1.8s ease-in-out infinite 0.3s;
+  animation: gatewayPulse 1.8s ease-in-out infinite 0.35s;
 }
 
 @keyframes gatewayPulse {
-  0%, 100% { opacity: 0.2;  transform: translateY(0); }
-  50%       { opacity: 0.85; transform: translateY(7px); }
+  0%, 100% { opacity: 0.25; transform: translateY(0); }
+  50%       { opacity: 1;    transform: translateY(6px); }
 }
