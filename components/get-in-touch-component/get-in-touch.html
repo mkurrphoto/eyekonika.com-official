@@ -1,59 +1,141 @@
-<section id="three" class="wrapper style1">
-  <div class="inner">
-    <h2>Get in touch</h2>
-    <p>
-      Ready to turn your organization&rsquo;s image into something genuinely elite?
-      Tell us about your idea and we&rsquo;ll walk you through every option, what&rsquo;s possible, and what it costs &mdash; no obligation.
-    </p>
-    <div class="split style1">
-      <section class="form-section">
+<section id="three" class="git-section">
+
+  <!-- Overlay -->
+  <div class="git-overlay" aria-hidden="true"></div>
+
+  <div class="git-container">
+
+    <!-- Left: copy -->
+    <div class="git-copy">
+      <p class="git-eyebrow">Start here.</p>
+      <h2 class="git-heading">Every piece begins with a conversation.</h2>
+      <p class="git-sub">Tell us what you&rsquo;re imagining. We&rsquo;ll walk you through every option, what&rsquo;s possible, and what it costs &mdash; no obligation, no pressure.</p>
+
+      <ul class="git-trust" aria-label="What to expect">
+        <li class="git-trust__item">
+          <span class="git-trust__dot" aria-hidden="true"></span>
+          <span>We typically respond within one business day</span>
+        </li>
+        <li class="git-trust__item">
+          <span class="git-trust__dot" aria-hidden="true"></span>
+          <span>No commitment required &mdash; just a conversation</span>
+        </li>
+        <li class="git-trust__item">
+          <span class="git-trust__dot" aria-hidden="true"></span>
+          <span>Every inquiry is handled personally</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Right: form card -->
+    <div class="git-right">
+      <div class="git-card">
+
         <form
           id="contactForm"
+          class="git-form"
           action="https://formspree.io/f/movyqgop"
           method="POST"
+          novalidate
         >
-          <div class="form-container">
+          <!-- Honeypot -->
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div class="git-field">
             <input
-              class="form-inputs"
               type="text"
+              id="git-name"
               name="name"
-              placeholder="Name"
+              required
+              placeholder=" "
+              autocomplete="given-name"
             />
-            <input
-              class="form-inputs"
-              type="text"
-              name="last-name"
-              placeholder="Last Name"
-            />
+            <label for="git-name">Your name</label>
           </div>
-          <div class="form-container">
+
+          <div class="git-field">
             <input
-              class="form-inputs"
-              id="email"
               type="email"
+              id="git-email"
               name="email"
               required
-              placeholder="Email@example.com"
+              placeholder=" "
+              autocomplete="email"
             />
-            <input type="text" name="subject" required placeholder="Subject" />
+            <label for="git-email">Email address</label>
           </div>
 
-          <textarea
-            class="form-inputs"
-            name="message"
-            required
-            placeholder="Write Your Message Here"
-          ></textarea>
-          <!-- AutoResponse -->
-          <!-- <input
-            type="hidden"
-            name="_autoresponse"
-            value="Thank you for contacting us! We'll reply soon."
-          /> -->
+          <div class="git-field git-field--area">
+            <textarea
+              id="git-project"
+              name="project"
+              required
+              placeholder=" "
+              rows="5"
+            ></textarea>
+            <label for="git-project">Tell us about your piece</label>
+          </div>
 
-          <button style="display: block" id="send" type="submit">Send</button>
+          <button type="submit" class="git-submit" id="git-submit-btn">
+            <span class="git-submit__text">Send My Vision</span>
+            <svg class="git-submit__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+
+          <p class="git-note">We typically respond within one business day.</p>
         </form>
-      </section>
+
+        <!-- Confirmation (shown after successful submit) -->
+        <div class="git-confirm" id="git-confirm" hidden aria-live="polite">
+          <div class="git-confirm__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="26" height="26">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h3 class="git-confirm__heading">We&rsquo;ll be in touch.</h3>
+          <p class="git-confirm__sub">Usually within one business day. We look forward to hearing more about your project.</p>
+        </div>
+
+      </div>
     </div>
+
   </div>
 </section>
+
+<script>
+(function () {
+  var form    = document.getElementById('contactForm');
+  var confirm = document.getElementById('git-confirm');
+  var btn     = document.getElementById('git-submit-btn');
+  var btnText = btn ? btn.querySelector('.git-submit__text') : null;
+
+  if (!form || !confirm || !btn) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (btnText) btnText.textContent = 'Sending\u2026';
+    btn.disabled = true;
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(function (res) {
+        if (res.ok) {
+          form.hidden = true;
+          confirm.hidden = false;
+        } else {
+          if (btnText) btnText.textContent = 'Something went wrong \u2014 try again.';
+          btn.disabled = false;
+        }
+      })
+      .catch(function () {
+        if (btnText) btnText.textContent = 'Something went wrong \u2014 try again.';
+        btn.disabled = false;
+      });
+  });
+})();
+</script>

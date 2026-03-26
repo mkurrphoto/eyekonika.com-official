@@ -1,7 +1,6 @@
-.inner {
-  position: relative;
-  z-index: 2;
-}
+/* =============================================
+   GET IN TOUCH — Lead capture section
+   ============================================= */
 
 #three {
   position: relative;
@@ -9,132 +8,371 @@
   background-color: #060a14;
   background-image: url("/images/photo-backgrounds/pexels-apasaric-325185.jpg");
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center center;
   background-size: cover;
-  background-attachment: fixed; /* Fallback for browsers without smooth scroll */
+  background-attachment: fixed;
 }
 
-/* When smooth scroll is active, background-attachment will be overridden by JS */
 .smooth-scroll-active #three {
   background-attachment: scroll;
 }
 
-section.form-section {
-  display: flex;
-  justify-content: center;
-  padding: 2rem;
+/* Dark cinematic overlay */
+.git-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 7, 18, 0.86) 0%,
+    rgba(3, 7, 18, 0.74) 50%,
+    rgba(3, 7, 18, 0.92) 100%
+  );
+  z-index: 1;
 }
-form {
-  width: 100%;
-  max-width: 700px;
+
+/* Two-column container */
+.git-container {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 9rem 3rem;
+}
+
+/* ——— Left: copy ——— */
+
+.git-eyebrow {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.67rem;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(96, 165, 250, 0.7);
+  margin: 0 0 1.2rem;
+}
+
+.git-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.55rem, 2.8vw, 2.3rem);
+  font-weight: 200;
+  line-height: 1.25;
+  color: #fff;
+  margin: 0 0 1.4rem;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+
+.git-sub {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.87rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 2.6rem;
+}
+
+/* Trust signals */
+.git-trust {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  background: rgba(255, 255, 255, 0.05); /* subtle translucent box */
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  padding: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* soft shadow */
+  gap: 1rem;
 }
-.form-container {
+
+.git-trust__item {
   display: flex;
-  gap: 20px;
+  align-items: flex-start;
+  gap: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.77rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.02em;
+  line-height: 1.55;
 }
 
-input {
-  width: 330px;
-  font-weight: 500;
-  color: rgb(96, 165, 250);
+.git-trust__dot {
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(96, 165, 250, 0.55);
+  margin-top: 0.46em;
 }
 
-.message {
+/* ——— Right: frosted glass card ——— */
+
+.git-right {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* Soft glow behind the card */
+.git-right::before {
+  content: '';
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(ellipse, rgba(30, 58, 138, 0.22) 0%, transparent 68%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.git-card {
+  position: relative;
+  z-index: 1;
   width: 100%;
-}
-input,
-textarea {
-  margin-top: 5px;
-  padding: 10px;
-  border: 1px solid #968d8d;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.034);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 6px;
-  font-size: 15px;
-  font-family: inherit;
-  background: rgba(255, 255, 255, 0);
-  color: white;
+  padding: 2.6rem 2.4rem;
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.04) inset,
+    0 24px 64px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(96, 165, 250, 0.05);
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: #968d8d;
+/* ——— Form ——— */
+
+.git-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-textarea {
+/* Field wrapper */
+.git-field {
+  position: relative;
+}
+
+.git-field input,
+.git-field textarea {
   width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 1.5em 1em 0.55em;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  line-height: 1.5;
+  transition: border-color 0.25s ease, background 0.25s ease;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.git-field textarea {
+  min-height: 128px;
   resize: vertical;
-  min-height: 150px;
 }
 
-button {
+.git-field input:focus,
+.git-field textarea:focus {
+  border-color: rgba(96, 165, 250, 0.48);
+  background: rgba(96, 165, 250, 0.04);
+}
+
+/* Floating label */
+.git-field label {
+  position: absolute;
+  left: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.36);
+  pointer-events: none;
+  transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  letter-spacing: 0.04em;
+}
+
+/* Textarea label starts at top, not middle */
+.git-field--area label {
+  top: 1.1em;
+  transform: none;
+}
+
+/* Float up on focus or when filled */
+.git-field input:focus ~ label,
+.git-field input:not(:placeholder-shown) ~ label {
+  top: 0.48em;
+  transform: none;
+  font-size: 0.6rem;
+  color: rgba(96, 165, 250, 0.72);
+  letter-spacing: 0.1em;
+}
+
+.git-field textarea:focus ~ label,
+.git-field textarea:not(:placeholder-shown) ~ label {
+  top: 0.42em;
+  font-size: 0.6rem;
+  color: rgba(96, 165, 250, 0.72);
+  letter-spacing: 0.1em;
+}
+
+/* ——— Submit button ——— */
+
+.git-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
   width: 100%;
-  background-color: #1a3a7a47;
-  border-radius: 6px;
-  padding: 2px 10px;
+  padding: 1em 2em;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.88), rgba(14, 165, 233, 0.78));
+  border: 1px solid rgba(96, 165, 250, 0.42);
+  border-radius: 4px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
   cursor: pointer;
-  align-self: flex-start;
+  transition: background 0.35s ease, border-color 0.35s ease, transform 0.2s ease, opacity 0.25s ease;
+  margin-top: 0.3rem;
 }
 
-button:hover {
-  background: #0d2a7856;
+.git-submit:hover {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 1), rgba(14, 165, 233, 0.95));
+  border-color: rgba(96, 165, 250, 0.72);
+  transform: translateY(-1px);
 }
 
-/* ✅ Responsive */
-@media (max-width: 900px) {
-  .form-container {
-    flex-direction: column;
-    gap: 10px;
+.git-submit:active {
+  transform: translateY(0);
+}
+
+.git-submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+
+.git-submit__arrow {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.git-submit:not(:disabled):hover .git-submit__arrow {
+  transform: translateX(4px);
+}
+
+/* ——— Note below button ——— */
+
+.git-note {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.24);
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin: 0;
+}
+
+/* ——— Confirmation state ——— */
+
+.git-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+
+.git-confirm__check {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(96, 165, 250, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+  color: rgba(96, 165, 250, 0.85);
+  animation: gitCheckIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.git-confirm__heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 200;
+  color: #fff;
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.02em;
+  animation: gitFadeUp 0.5s ease both;
+  animation-delay: 0.1s;
+}
+
+.git-confirm__sub {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.75;
+  margin: 0;
+  animation: gitFadeUp 0.5s ease both;
+  animation-delay: 0.2s;
+}
+
+@keyframes gitCheckIn {
+  from { opacity: 0; transform: scale(0.55); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes gitFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ——— Responsive ——— */
+
+@media screen and (max-width: 1024px) {
+  .git-container {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+    padding: 7rem 2.5rem;
   }
 
+  .git-card {
+    max-width: 100%;
+  }
+
+  .git-right::before {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 736px) {
+  .git-container {
+    padding: 5rem 1.5rem;
+  }
+
+  .git-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
   #three {
     background-attachment: scroll !important;
-    background-position: center !important;
-    background-size: cover !important;
-  }
-
-  input {
-    width: 100%;
-  }
-}
-
-@media (max-width: 600px) {
-  section.form-section {
-    padding: 1.5rem 1rem;
-  }
-
-  form {
-    gap: 10px;
-    padding: 20px;
-  }
-
-  input,
-  textarea {
-    font-size: 14px;
-  }
-
-  textarea {
-    min-height: 120px;
-  }
-
-  button {
-    width: 100%;
-    padding: 10px;
-  }
-}
-
-@media (max-width: 400px) {
-  h2 {
-    font-size: 1.4rem;
-  }
-
-  p {
-    font-size: 0.9rem;
   }
 }
