@@ -813,3 +813,54 @@
   .climax-panel:hover .climax-text-block     { opacity: 1; transform: none; }
   .climax-panel:hover .climax-logo           { opacity: 1; transform: none; }
 }
+
+
+/* =============================================
+   MID-PAGE CTA STRIP
+   ============================================= */
+
+.process-cta-strip {
+  padding: 5rem 2rem;
+  text-align: center;
+  background: linear-gradient(to bottom, transparent, rgba(30, 58, 138, 0.06));
+}
+
+.process-cta-strip__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.process-cta-strip__text {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.process-cta-strip__btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.88em 2.3em;
+  border: 1px solid rgba(96, 165, 250, 0.5);
+  border-radius: 2px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.7), rgba(14, 165, 233, 0.6));
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.process-cta-strip__btn:hover {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(14, 165, 233, 0.82));
+  border-color: rgba(96, 165, 250, 0.85);
+}
