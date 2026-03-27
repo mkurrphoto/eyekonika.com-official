@@ -1,219 +1,227 @@
-/* === Base Styles === */
+/* =============================================
+   SITE FOOTER
+   ============================================= */
+
 .site-footer {
-  /* background: #2f1f53; */
-  background-color: black;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  color: white;
-  font-family: "Poppins", sans-serif;
-  transition: all 0.3s ease;
-  padding: 2.3rem 2rem 1.5rem calc(260px + 5vw);
-  padding-bottom: 0;
-}
-body.generic .site-footer{
-  padding:30px 10px 10px 10px;
+  background-color: #030712;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: 'Poppins', sans-serif;
+  padding: 3.2rem 3rem 2rem;
 }
 
+/* ——— Three-column inner row ——— */
+
 .footer-inner {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  max-width: 920px;
+  gap: 2rem;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
-/* === Logo === */
-.footer-logo img {
-  width: 180px;
-  height: auto;
-  opacity: 0.95;
-  transition: opacity 0.3s ease;
-}
-.footer-logo img:hover {
-  opacity: 1;
+/* ——— Brand: icon + name + tagline ——— */
+
+.footer-brand__mark {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.55rem;
 }
 
-/* === Social Icons === */
+.footer-brand__icon {
+  width: 22px;
+  height: auto;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.footer-brand__name {
+  font-size: 0.78rem;
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.footer-tagline {
+  font-size: 0.62rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.24);
+  margin: 0;
+  padding-left: 2px;
+}
+
+/* ——— Social icons ——— */
+
 .footer-socials {
-  display: flex;
-  gap: 14px;
   list-style: none;
   padding: 0;
   margin: 0;
-}
-.footer-socials a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 50%;
-  color: white;
-  font-size: 16px;
-  text-decoration: none;
-  transition: 0.2s ease;
+  gap: 1.5rem;
 }
-.footer-socials a:hover {
-  background: rgba(255, 255, 255, 0.15);
+
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+  transition: color 0.22s ease, transform 0.22s ease;
+  line-height: 1;
+}
+
+.footer-social-link:hover {
+  color: rgba(96, 165, 250, 0.85);
   transform: translateY(-2px);
 }
 
-/* === Contact Info === */
+/* ——— Contact ——— */
+
 .footer-contact {
-  text-align: left;
-  line-height: 1.6;
-}
-.footer-contact p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #ddd;
-}
-.footer-contact a {
-  color: #bbb;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-.footer-contact a:hover {
-  color: white;
-}
-
-/* === Separator === */
-.footer-sep {
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  margin: 1.5rem auto;
-  width: calc(100% - 280px); /* match padding-left area */
-  transition: width 0.3s ease;
-}
-body.generic .footer-sep{
-  width: 80%;
-}
-
-/* === Bottom Section === */
-.footer-bottom {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.footer-contact__email {
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.22s ease;
+}
+
+.footer-contact__email:hover {
+  color: rgba(96, 165, 250, 0.85);
+}
+
+.footer-contact__phone {
+  font-size: 0.67rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.22);
+  letter-spacing: 0.06em;
+}
+
+/* ——— Separator ——— */
+
+.footer-sep {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.07) 20%,
+    rgba(255, 255, 255, 0.07) 80%,
+    transparent
+  );
+  margin: 2rem auto 1.6rem;
+  max-width: 1040px;
+}
+
+/* ——— Bottom row ——— */
+
+.footer-bottom {
+  display: flex;
   align-items: center;
-  text-align: center;
-  gap: 4px;
-  color: #ccc;
+  justify-content: space-between;
+  max-width: 1040px;
+  margin: 0 auto;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .footer-links {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
+  gap: 0.7rem;
 }
+
 .footer-links a {
+  font-size: 0.67rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
   text-decoration: none;
-  color: #ccc;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
+  transition: color 0.22s ease;
 }
+
 .footer-links a:hover {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.footer-dot {
+  color: rgba(255, 255, 255, 0.18);
+  font-size: 0.6rem;
 }
 
 .footer-copy {
-  font-size: 0.85rem;
-  opacity: 0.8;
-}
-.footer-copy a {
-  color: #bbb;
-  text-decoration: underline dotted;
-}
-.footer-copy a:hover {
-  color: white;
-}
-.dot {
-  opacity: 0.5;
+  font-size: 0.64rem;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0;
 }
 
-/* === Responsive Fixes === */
+/* =============================================
+   RESPONSIVE
+   ============================================= */
 
-/* Tablet - sidebar disappears or collapses */
-
-@media (max-width: 1280px) {
+/* Tablet: sidebar collapses to top bar */
+@media screen and (max-width: 1280px) {
   .site-footer {
-    padding-left: 0px;
-  }
-  .footer-inner {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 5rem;
-    max-width: 1100px;
-  }
-  
-  @media (max-width: 850px) {
-    
-    .site-footer {
-      padding: 2rem 1.5rem 1rem 1.5rem;
-    }
-
-    .footer-inner {
-      gap: 2rem;
-    }
-
-    .footer-socials {
-      gap: 10px;
-    }
-
-    .footer-socials a {
-      width: 38px;
-      height: 38px;
-      font-size: 14px;
-    }
-
-    .footer-logo img {
-      width: 140px;
-    }
-
-    .footer-contact p {
-      font-size: 0.9rem;
-    }
-  }
-
-  /* === Mobile (max-width: 600px) === */
-  @media (max-width: 700px) {
-    .site-footer {
-      padding: 1.8rem 1rem 1rem 1rem;
-    }
-
-    .footer-inner {
-      gap: 1.5rem;
-    }
-
-    .footer-logo {
-      display: none; /* hides logo only on mobile */
-    }
-
-    .footer-socials a {
-      width: 34px;
-      height: 34px;
-      font-size: 13px;
-    }
-
-    .footer-contact p {
-      font-size: 0.85rem;
-    }
-
-    .footer-links a {
-      font-size: 0.85rem;
-    }
-
-    .footer-copy {
-      font-size: 0.8rem;
-    }
-
-    .footer-sep {
-      width: 90%;
-      margin: 1.2rem auto;
-    }
+    padding: 3rem 2.5rem 2rem;
   }
 }
-/* mobile */
+
+/* Mid: stack socials */
+@media screen and (max-width: 860px) {
+  .footer-inner {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 2rem 3rem;
+  }
+
+  .footer-socials {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    gap: 1.6rem;
+  }
+
+  .footer-contact {
+    align-items: flex-end;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 580px) {
+  .site-footer {
+    padding: 2.5rem 1.5rem 1.8rem;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  .footer-socials {
+    gap: 1.5rem;
+  }
+
+  .footer-contact {
+    align-items: flex-start;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
