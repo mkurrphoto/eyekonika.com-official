@@ -9,34 +9,45 @@
   padding: 3.2rem 3rem 2rem;
 }
 
-/* ——— Three-column grid ——— */
+/* ——— Three-column flex row ——— */
 
 .footer-inner {
-  display: grid !important;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  align-items: center;
-  gap: 2rem;
-  max-width: 1040px;
-  margin: 0 auto;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 2rem !important;
+  max-width: 960px !important;
+  margin: 0 auto !important;
 }
 
-/* ——— Brand: wordmark + tagline ——— */
+/* ——— Brand: logo + tagline ——— */
 
-.footer-brand__name {
-  font-size: 0.75rem;
-  font-weight: 300;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0 0 0.45rem;
+.footer-brand {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.55rem !important;
+  flex-shrink: 0;
+}
+
+/* Logo — sizing forced via HTML attrs + inline style; these just ensure no override undoes it */
+.footer-brand img {
+  display: block !important;
+  max-width: 120px !important;
+  width: 120px !important;
+  height: auto !important;
+  opacity: 0.9;
 }
 
 .footer-tagline {
-  font-size: 0.6rem;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.22);
-  margin: 0;
+  font-size: 0.6rem !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.1em !important;
+  color: rgba(255, 255, 255, 0.22) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.4 !important;
 }
 
 /* ——— Social icons ——— */
@@ -46,9 +57,10 @@
   padding: 0 !important;
   margin: 0 !important;
   display: flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 1.6rem;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1.6rem !important;
 }
 
 .footer-socials li {
@@ -57,35 +69,51 @@
   display: block !important;
 }
 
-/* Anchor: no border, no circle, clean */
-.footer-social-link {
+/* Strip ALL template circle/border styling from icon anchors */
+.footer-social-link,
+.footer-social-link:hover,
+.footer-social-link:focus,
+.footer-social-link:visited,
+.footer-social-link:active {
   display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
+  align-items: center !important;
+  justify-content: center !important;
   width: auto !important;
+  min-width: 0 !important;
   height: auto !important;
   border: none !important;
+  outline: none !important;
   border-radius: 0 !important;
   background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
   padding: 0 !important;
-  text-decoration: none;
+  margin: 0 !important;
+  text-decoration: none !important;
+  line-height: 1 !important;
+}
+
+.footer-social-link {
   color: rgba(255, 255, 255, 0.28) !important;
   transition: color 0.22s ease, transform 0.22s ease;
-  line-height: 1;
+  font-size: 14px !important;
 }
 
 .footer-social-link:hover {
   color: rgba(96, 165, 250, 0.85) !important;
   transform: translateY(-2px);
-  background: none !important;
-  border: none !important;
 }
 
-/* The icon glyph itself */
-.footer-social-link i {
-  font-size: 14px;
-  line-height: 1;
-  display: block;
+/* Silence any ::before pseudo from template that could draw a circle */
+.footer-social-link::before {
+  display: inline !important;
+  width: auto !important;
+  height: auto !important;
+  border: none !important;
+  background: none !important;
+  border-radius: 0 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
 }
 
 /* ——— Contact ——— */
@@ -93,30 +121,32 @@
 .footer-contact {
   display: flex !important;
   flex-direction: column !important;
-  align-items: flex-end;
-  gap: 0.3rem;
+  align-items: flex-end !important;
+  gap: 0.3rem !important;
+  flex-shrink: 0;
 }
 
-.footer-contact__email {
-  font-size: 0.73rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  letter-spacing: 0.03em;
+.footer-contact-email {
+  font-size: 0.73rem !important;
+  font-weight: 300 !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  text-decoration: none !important;
+  letter-spacing: 0.03em !important;
   transition: color 0.22s ease;
-  display: block;
+  display: block !important;
 }
 
-.footer-contact__email:hover {
-  color: rgba(96, 165, 250, 0.85);
+.footer-contact-email:hover {
+  color: rgba(96, 165, 250, 0.85) !important;
+  border-bottom: none !important;
 }
 
-.footer-contact__phone {
-  font-size: 0.65rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.2);
-  letter-spacing: 0.05em;
-  display: block;
+.footer-contact-phone {
+  font-size: 0.65rem !important;
+  font-weight: 300 !important;
+  color: rgba(255, 255, 255, 0.2) !important;
+  letter-spacing: 0.05em !important;
+  display: block !important;
 }
 
 /* ——— Separator ——— */
@@ -133,80 +163,71 @@
     transparent
   );
   margin: 2rem auto 1.6rem;
-  max-width: 1040px;
+  max-width: 960px;
 }
 
 /* ——— Bottom row ——— */
 
 .footer-bottom {
   display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1040px;
+  align-items: center !important;
+  justify-content: space-between !important;
+  max-width: 960px;
   margin: 0 auto;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
 .footer-links {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  margin: 0;
-  padding: 0;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .footer-links a {
   font-size: 0.65rem !important;
-  font-weight: 300;
-  letter-spacing: 0.1em;
+  font-weight: 300 !important;
+  letter-spacing: 0.1em !important;
   color: rgba(255, 255, 255, 0.32) !important;
   text-decoration: none !important;
-  transition: color 0.22s ease;
   border-bottom: none !important;
+  transition: color 0.22s ease;
 }
 
 .footer-links a:hover {
   color: rgba(255, 255, 255, 0.72) !important;
-}
-
-.footer-dot {
-  color: rgba(255, 255, 255, 0.16);
-  font-size: 0.55rem;
+  border-bottom: none !important;
 }
 
 .footer-copy {
-  font-size: 0.62rem;
-  font-weight: 300;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.18);
-  margin: 0;
+  font-size: 0.62rem !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.05em !important;
+  color: rgba(255, 255, 255, 0.18) !important;
+  margin: 0 !important;
 }
 
 /* =============================================
    RESPONSIVE
    ============================================= */
 
-@media screen and (max-width: 1280px) {
-  .site-footer {
-    padding: 3rem 2.5rem 2rem;
-  }
-}
-
 @media screen and (max-width: 860px) {
   .footer-inner {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 2rem 3rem;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    gap: 2rem 3rem !important;
   }
 
   .footer-socials {
-    grid-column: 1 / -1;
+    order: 3;
+    width: 100%;
     justify-content: flex-start !important;
-    gap: 1.6rem;
   }
 
   .footer-contact {
-    align-items: flex-end;
+    align-items: flex-end !important;
   }
 }
 
@@ -216,8 +237,9 @@
   }
 
   .footer-inner {
-    grid-template-columns: 1fr !important;
-    gap: 1.8rem;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1.8rem !important;
   }
 
   .footer-contact {
