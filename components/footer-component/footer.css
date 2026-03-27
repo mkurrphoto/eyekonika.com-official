@@ -41,7 +41,7 @@
 }
 
 .footer-tagline {
-  font-size: 0.6rem !important;
+  font-size: 0.72rem !important;
   font-weight: 300 !important;
   letter-spacing: 0.1em !important;
   color: rgba(255, 255, 255, 0.22) !important;
@@ -96,7 +96,7 @@
 .footer-social-link {
   color: rgba(255, 255, 255, 0.28) !important;
   transition: color 0.22s ease, transform 0.22s ease;
-  font-size: 14px !important;
+  font-size: 16px !important;
 }
 
 .footer-social-link:hover {
@@ -127,7 +127,7 @@
 }
 
 .footer-contact-email {
-  font-size: 0.73rem !important;
+  font-size: 0.85rem !important;
   font-weight: 300 !important;
   color: rgba(255, 255, 255, 0.5) !important;
   text-decoration: none !important;
@@ -142,7 +142,7 @@
 }
 
 .footer-contact-phone {
-  font-size: 0.65rem !important;
+  font-size: 0.76rem !important;
   font-weight: 300 !important;
   color: rgba(255, 255, 255, 0.2) !important;
   letter-spacing: 0.05em !important;
@@ -187,7 +187,7 @@
 }
 
 .footer-links a {
-  font-size: 0.65rem !important;
+  font-size: 0.76rem !important;
   font-weight: 300 !important;
   letter-spacing: 0.1em !important;
   color: rgba(255, 255, 255, 0.32) !important;
@@ -202,7 +202,7 @@
 }
 
 .footer-copy {
-  font-size: 0.62rem !important;
+  font-size: 0.74rem !important;
   font-weight: 300 !important;
   letter-spacing: 0.05em !important;
   color: rgba(255, 255, 255, 0.18) !important;
