@@ -20,9 +20,27 @@
   </url>
 
   <url>
-    <loc>https://eyekonika.com/pictures.html</loc>
+    <loc>https://eyekonika.com/projects.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://eyekonika.com/projects/jordanville.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://eyekonika.com/projects/lakewood.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://eyekonika.com/projects/st-tikhons.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
   <!-- Process step pages — add remaining steps as they go live -->

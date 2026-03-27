@@ -7,9 +7,9 @@
 export function titles(index) {
     // Array of titles - each title is split into rows
     const titleData = [
-        [['P', 'I', 'C', 'T'], ['U', 'R', 'E', 'S']],  // Index 0
-        [['S', 'L', 'I', 'D'], ['E', 'R', ' ', ' ']],  // Index 1
-        [['G', 'A', 'L', 'L'], ['E', 'R', 'Y', ' ']],  // Index 2
+        [['H', 'O', 'L', 'Y'], ['T', 'R', 'I', 'N']],  // Index 0 — Holy Trinity Monastery
+        [['L', 'A', 'K', 'E'], ['W', 'O', 'O', 'D']],  // Index 1 — St. Alexander Nevsky (Lakewood)
+        [['T', 'I', 'K', 'H'], ['O', 'N', 'S', ' ']],  // Index 2 — St. Tikhon's Monastery
         [['I', 'M', 'A', 'G'], ['E', 'S', ' ', ' ']],  // Index 3
         [['P', 'H', 'O', 'T'], ['O', 'S', ' ', ' ']],  // Index 4
         [['V', 'I', 'E', 'W'], ['S', ' ', ' ', ' ']],   // Index 5

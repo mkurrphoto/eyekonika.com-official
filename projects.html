@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Our Projects — Eyekonika</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="components/picture-component/detail.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="/" id="logo"><img src="images/logo-index-transparent.png" alt="Eyekonika" /></a>
+            <a href="/">HOME</a>
+        </nav>
+
+        <div class="bg-overlay"></div>
+        <div class="slider-nav"></div>
+        <div class="slides"></div>
+        <div class="slide-title">
+            <div class="slide-title-row">
+                <div class="letter"></div>
+                <div class="letter"></div>
+                <div class="letter"></div>
+                <div class="letter"></div>
+            </div>
+            <div class="slide-title-row">
+                <div class="letter"></div>
+                <div class="letter"></div>
+                <div class="letter"></div>
+                <div class="letter"></div>
+            </div>
+        </div>
+        <div class="floating-img">
+            <img src="images/picture/2.jpg" alt="" />
+        </div>
+    </div>
+
+</body>
+<script>
+  window.addEventListener('pagehide', function () {
+    sessionStorage.setItem('returnSection', 'two');
+  });
+</script>
+<!-- GSAP Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CustomEase.min.js"></script>
+<script type="module" src="./js/vendor/picture.js"></script>
+
+</html>
