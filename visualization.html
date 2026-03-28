@@ -378,85 +378,56 @@
         barEl.style.width = '72%';
         subEl.textContent = 'Building point cloud…';
 
-        // ── Surface sampling ──────────────────────────────
-        // Sample random points from triangle faces proportional to area.
-        // This fills large flat surfaces (walls, roofs) that would otherwise
-        // be empty when using vertices alone.
+        // ── Edge sampling ─────────────────────────────────
+        // EdgesGeometry extracts unique structural edges (removes coplanar
+        // face seams), then we sample random points along each edge
+        // proportional to its length. This fills outlines/structure without
+        // flooding flat faces.
         obj.updateMatrixWorld(true);
 
-        const TARGET_PTS = 500000;
+        const TARGET_PTS    = 120000;
+        const EDGE_THRESHOLD = 8;   // degrees — edges with smaller dihedral angle are removed
 
-        // Pass 1: collect all world-space triangles and total surface area
-        const allTris = [];   // { ax,ay,az, bx,by,bz, cx,cy,cz, area }
-        let grandArea = 0;
+        // Pass 1: collect all unique edges and total wire length
+        const allEdges = [];   // packed: ax,ay,az, bx,by,bz, len  (7 floats per edge)
+        let grandLen = 0;
 
         const _vA = new THREE.Vector3();
         const _vB = new THREE.Vector3();
-        const _vC = new THREE.Vector3();
-        const _e1 = new THREE.Vector3();
-        const _e2 = new THREE.Vector3();
-        const _cr = new THREE.Vector3();
 
         obj.traverse(child => {
           if (!child.isMesh) return;
-          const geo  = child.geometry;
-          const attr = geo.attributes.position;
-          if (!attr) return;
-          const idx  = geo.index;
-          const m4   = child.matrixWorld;
-          const triCount = idx ? idx.count / 3 : attr.count / 3;
+          const m4      = child.matrixWorld;
+          const edgeGeo = new THREE.EdgesGeometry(child.geometry, EDGE_THRESHOLD);
+          const attr    = edgeGeo.attributes.position;
+          const eCount  = attr.count / 2;   // each edge = 2 consecutive verts
 
-          for (let i = 0; i < triCount; i++) {
-            let iA, iB, iC;
-            if (idx) {
-              iA = idx.getX(i*3); iB = idx.getX(i*3+1); iC = idx.getX(i*3+2);
-            } else {
-              iA = i*3; iB = i*3+1; iC = i*3+2;
-            }
-            _vA.fromBufferAttribute(attr, iA).applyMatrix4(m4);
-            _vB.fromBufferAttribute(attr, iB).applyMatrix4(m4);
-            _vC.fromBufferAttribute(attr, iC).applyMatrix4(m4);
-
-            _e1.subVectors(_vB, _vA);
-            _e2.subVectors(_vC, _vA);
-            _cr.crossVectors(_e1, _e2);
-            const area = _cr.length() * 0.5;
-            if (area < 1e-12) continue;   // skip degenerate triangles
-
-            allTris.push(
-              _vA.x, _vA.y, _vA.z,
-              _vB.x, _vB.y, _vB.z,
-              _vC.x, _vC.y, _vC.z,
-              area
-            );
-            grandArea += area;
+          for (let i = 0; i < eCount; i++) {
+            _vA.fromBufferAttribute(attr, i * 2    ).applyMatrix4(m4);
+            _vB.fromBufferAttribute(attr, i * 2 + 1).applyMatrix4(m4);
+            const len = _vA.distanceTo(_vB);
+            if (len < 1e-9) continue;
+            allEdges.push(_vA.x, _vA.y, _vA.z, _vB.x, _vB.y, _vB.z, len);
+            grandLen += len;
           }
+          edgeGeo.dispose();
         });
 
-        // Pass 2: sample random barycentric points per triangle, area-weighted
-        const density = TARGET_PTS / grandArea;   // points per unit area
+        // Pass 2: sample points along each edge, proportional to length
+        const density = TARGET_PTS / grandLen;
         const raw = [];
 
-        for (let t = 0; t < allTris.length; t += 10) {
-          const ax = allTris[t],   ay = allTris[t+1], az = allTris[t+2];
-          const bx = allTris[t+3], by = allTris[t+4], bz = allTris[t+5];
-          const cx = allTris[t+6], cy = allTris[t+7], cz = allTris[t+8];
-          const area = allTris[t+9];
+        for (let e = 0; e < allEdges.length; e += 7) {
+          const ax = allEdges[e],   ay = allEdges[e+1], az = allEdges[e+2];
+          const bx = allEdges[e+3], by = allEdges[e+4], bz = allEdges[e+5];
+          const len = allEdges[e+6];
 
-          // Stochastic rounding: integer floor + probabilistic extra point
-          const expected = density * area;
+          const expected = density * len;
           const count = Math.floor(expected) + (Math.random() < (expected % 1) ? 1 : 0);
 
           for (let j = 0; j < count; j++) {
-            // Uniform random point in triangle (Osada 2002)
-            const r1 = Math.random(), r2 = Math.random();
-            const s  = Math.sqrt(r1);
-            const u  = 1 - s, v = s * (1 - r2), w = s * r2;
-            raw.push(
-              u*ax + v*bx + w*cx,
-              u*ay + v*by + w*cy,
-              u*az + v*bz + w*cz
-            );
+            const t = Math.random();
+            raw.push(ax + t*(bx-ax), ay + t*(by-ay), az + t*(bz-az));
           }
         }
 
@@ -483,14 +454,11 @@
           const z = (pos[i*3+2] - ctr.z) * scale;
           finalPos[i*3] = x; finalPos[i*3+1] = y; finalPos[i*3+2] = z;
 
-          // Brightness: slight random variation + centre-bright falloff
-          const b  = 0.75 + Math.random() * 0.25;
-          const yN = (y - CH / 2) / (CH / 2);             // –1 to +1
-          const cx = x / (CW / 2);                         // –1 to +1
-          const boost = 0.15 * Math.max(0, 1 - Math.sqrt(yN*yN + cx*cx));
-          colors[i*3]   = b * (0.70 + boost);  // R (warm-ish)
-          colors[i*3+1] = b * (0.86 + boost);  // G
-          colors[i*3+2] = b * 1.00;            // B (full)
+          // Brightness: modest random variation, cooler blue-white tint
+          const b  = 0.45 + Math.random() * 0.30;   // 0.45–0.75 (dimmer than before)
+          colors[i*3]   = b * 0.72;   // R
+          colors[i*3+1] = b * 0.86;   // G
+          colors[i*3+2] = b * 1.00;   // B
         }
 
         const geo = new THREE.BufferGeometry();
@@ -498,12 +466,12 @@
         geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
 
         const points = new THREE.Points(geo, new THREE.PointsMaterial({
-          size:            0.09,
+          size:            0.065,
           sizeAttenuation: true,
           map:             makeGlowTex(),
           vertexColors:    true,
           transparent:     true,
-          opacity:         0.92,
+          opacity:         0.75,
           depthWrite:      false,
           blending:        THREE.AdditiveBlending,
           alphaTest:       0.005,
