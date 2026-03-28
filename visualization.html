@@ -378,33 +378,89 @@
         barEl.style.width = '72%';
         subEl.textContent = 'Building point cloud…';
 
-        // Collect all vertex positions
+        // ── Surface sampling ──────────────────────────────
+        // Sample random points from triangle faces proportional to area.
+        // This fills large flat surfaces (walls, roofs) that would otherwise
+        // be empty when using vertices alone.
         obj.updateMatrixWorld(true);
-        const raw = [];
+
+        const TARGET_PTS = 500000;
+
+        // Pass 1: collect all world-space triangles and total surface area
+        const allTris = [];   // { ax,ay,az, bx,by,bz, cx,cy,cz, area }
+        let grandArea = 0;
+
+        const _vA = new THREE.Vector3();
+        const _vB = new THREE.Vector3();
+        const _vC = new THREE.Vector3();
+        const _e1 = new THREE.Vector3();
+        const _e2 = new THREE.Vector3();
+        const _cr = new THREE.Vector3();
+
         obj.traverse(child => {
           if (!child.isMesh) return;
-          const attr = child.geometry.attributes.position;
+          const geo  = child.geometry;
+          const attr = geo.attributes.position;
           if (!attr) return;
-          const v = new THREE.Vector3();
-          for (let i = 0; i < attr.count; i++) {
-            v.fromBufferAttribute(attr, i).applyMatrix4(child.matrixWorld);
-            raw.push(v.x, v.y, v.z);
+          const idx  = geo.index;
+          const m4   = child.matrixWorld;
+          const triCount = idx ? idx.count / 3 : attr.count / 3;
+
+          for (let i = 0; i < triCount; i++) {
+            let iA, iB, iC;
+            if (idx) {
+              iA = idx.getX(i*3); iB = idx.getX(i*3+1); iC = idx.getX(i*3+2);
+            } else {
+              iA = i*3; iB = i*3+1; iC = i*3+2;
+            }
+            _vA.fromBufferAttribute(attr, iA).applyMatrix4(m4);
+            _vB.fromBufferAttribute(attr, iB).applyMatrix4(m4);
+            _vC.fromBufferAttribute(attr, iC).applyMatrix4(m4);
+
+            _e1.subVectors(_vB, _vA);
+            _e2.subVectors(_vC, _vA);
+            _cr.crossVectors(_e1, _e2);
+            const area = _cr.length() * 0.5;
+            if (area < 1e-12) continue;   // skip degenerate triangles
+
+            allTris.push(
+              _vA.x, _vA.y, _vA.z,
+              _vB.x, _vB.y, _vB.z,
+              _vC.x, _vC.y, _vC.z,
+              area
+            );
+            grandArea += area;
           }
         });
 
-        // Subsample to ≤ 220k points
-        const MAX = 220000;
-        const rawCount = raw.length / 3;
-        let pos;
-        if (rawCount <= MAX) {
-          pos = new Float32Array(raw);
-        } else {
-          const step = Math.ceil(rawCount / MAX);
-          const out  = [];
-          for (let i = 0; i < raw.length; i += step * 3)
-            out.push(raw[i], raw[i+1], raw[i+2]);
-          pos = new Float32Array(out);
+        // Pass 2: sample random barycentric points per triangle, area-weighted
+        const density = TARGET_PTS / grandArea;   // points per unit area
+        const raw = [];
+
+        for (let t = 0; t < allTris.length; t += 10) {
+          const ax = allTris[t],   ay = allTris[t+1], az = allTris[t+2];
+          const bx = allTris[t+3], by = allTris[t+4], bz = allTris[t+5];
+          const cx = allTris[t+6], cy = allTris[t+7], cz = allTris[t+8];
+          const area = allTris[t+9];
+
+          // Stochastic rounding: integer floor + probabilistic extra point
+          const expected = density * area;
+          const count = Math.floor(expected) + (Math.random() < (expected % 1) ? 1 : 0);
+
+          for (let j = 0; j < count; j++) {
+            // Uniform random point in triangle (Osada 2002)
+            const r1 = Math.random(), r2 = Math.random();
+            const s  = Math.sqrt(r1);
+            const u  = 1 - s, v = s * (1 - r2), w = s * r2;
+            raw.push(
+              u*ax + v*bx + w*cx,
+              u*ay + v*by + w*cy,
+              u*az + v*bz + w*cz
+            );
+          }
         }
+
+        const pos = new Float32Array(raw);
 
         // Compute bounding box, scale to fit 84% of crystal interior
         const tmpGeo = new THREE.BufferGeometry();
