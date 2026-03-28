@@ -12,10 +12,11 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:     #0d0a07;
+      --bg:     #05080f;
       --fg:     #ede8df;
-      --muted:  #7a6e60;
+      --muted:  #6a7080;
       --accent: #c4a35a;
+      --crystal:#a8c8ff;
       --font-display: "Bebas Neue", sans-serif;
       --font-mono:    "DM Mono", monospace;
     }
@@ -28,65 +29,53 @@
       overflow: hidden;
     }
 
-    canvas {
-      display: block;
-      width: 100% !important;
-      height: 100% !important;
-    }
-
-    /* ── Nav ── */
+    /* ── Nav ─────────────────────────────────── */
     #site_nav {
       position: fixed;
       top: 2rem; left: 2rem;
       z-index: 10;
     }
-
     #site_nav a {
       display: inline-flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 0.4em;
       text-decoration: none;
-      opacity: 0.75;
+      opacity: 0.7;
       transition: opacity 0.2s;
     }
-
     #site_nav a:hover { opacity: 1; }
-
-    #site_nav img { height: 36px; width: auto; display: block; }
-
-    #site_nav .home-label {
-      font-size: 0.5rem;
+    #site_nav img { height: 34px; width: auto; display: block; }
+    #site_nav .back-label {
+      font-size: 0.48rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    /* ── Title ── */
+    /* ── Title ───────────────────────────────── */
     #title_block {
       position: fixed;
       top: 2rem; right: 2rem;
       z-index: 10;
       text-align: right;
+      pointer-events: none;
     }
-
     #title_block h1 {
       font-family: var(--font-display);
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
       letter-spacing: 0.06em;
-      line-height: 1;
-      color: var(--fg);
+      line-height: 1.05;
     }
-
     #title_block p {
-      font-size: 0.52rem;
-      letter-spacing: 0.2em;
+      font-size: 0.5rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-top: 0.35em;
+      margin-top: 0.4em;
     }
 
-    /* ── Loading overlay ── */
+    /* ── Loader ──────────────────────────────── */
     #loader {
       position: fixed;
       inset: 0;
@@ -96,131 +85,127 @@
       align-items: center;
       justify-content: center;
       background: var(--bg);
-      gap: 1.5rem;
-      transition: opacity 0.6s ease;
+      gap: 1.4rem;
+      transition: opacity 0.7s ease;
     }
-
-    #loader.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+    #loader.hidden { opacity: 0; pointer-events: none; }
 
     #loader-title {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 6vw, 4rem);
+      font-size: clamp(2rem, 5vw, 3.5rem);
       letter-spacing: 0.08em;
-      color: var(--accent);
+      color: var(--crystal);
     }
-
     #loader-bar-wrap {
-      width: min(18rem, 70vw);
+      width: min(20rem, 72vw);
       height: 1px;
-      background: color-mix(in srgb, var(--muted) 30%, transparent);
+      background: rgba(168, 200, 255, 0.15);
       position: relative;
       overflow: hidden;
     }
-
     #loader-bar {
       position: absolute;
       inset-block: 0;
       left: 0;
       width: 0%;
-      background: var(--accent);
+      background: var(--crystal);
       transition: width 0.15s linear;
     }
-
-    #loader-label {
-      font-size: 0.55rem;
-      letter-spacing: 0.25em;
+    #loader-sub {
+      font-size: 0.52rem;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    /* ── Hint ── */
+    /* ── Hint ────────────────────────────────── */
     #hint {
       position: fixed;
-      bottom: 2rem;
+      bottom: 2.2rem;
       left: 50%;
       translate: -50% 0;
       z-index: 10;
-      font-size: 0.52rem;
+      font-size: 0.5rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--muted);
       pointer-events: none;
-      opacity: 1;
-      transition: opacity 1s ease;
+      transition: opacity 1.2s ease;
     }
-
     #hint.fade { opacity: 0; }
 
-    /* ── Controls bar ── */
+    /* ── Controls ────────────────────────────── */
     #controls {
       position: fixed;
       bottom: 2rem; right: 2rem;
       z-index: 10;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.5rem;
       align-items: flex-end;
     }
-
     .ctrl-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.45rem 0.9rem;
-      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      padding: 0.4rem 0.85rem;
+      border: 1px solid rgba(168, 200, 255, 0.2);
+      background: rgba(5, 8, 15, 0.7);
       color: var(--muted);
       font-family: var(--font-mono);
-      font-size: 0.52rem;
+      font-size: 0.5rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-      backdrop-filter: blur(6px);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      backdrop-filter: blur(8px);
+    }
+    .ctrl-btn:hover, .ctrl-btn.active {
+      border-color: var(--crystal);
+      color: var(--crystal);
+      background: rgba(168, 200, 255, 0.08);
     }
 
-    .ctrl-btn:hover, .ctrl-btn.active {
-      background: color-mix(in srgb, var(--accent) 12%, transparent);
-      border-color: var(--accent);
-      color: var(--accent);
+    /* ── Stats ───────────────────────────────── */
+    #stats {
+      position: fixed;
+      bottom: 2rem; left: 2rem;
+      z-index: 10;
+      font-size: 0.46rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(106, 112, 128, 0.6);
+      pointer-events: none;
+      line-height: 1.8;
     }
   </style>
 </head>
 <body>
 
-  <!-- nav -->
   <nav id="site_nav">
     <a href="/">
       <img src="images/logo-index-transparent.png" alt="Eyekonika" />
-      <span class="home-label">&#8592; Back to Home</span>
+      <span class="back-label">&#8592; Back to Home</span>
     </a>
   </nav>
 
-  <!-- title -->
   <div id="title_block">
     <h1>St. Tikhon&rsquo;s<br>Monastery</h1>
-    <p>3D Design Preview</p>
+    <p>Subsurface Laser Engraving Preview</p>
   </div>
 
-  <!-- loading overlay -->
   <div id="loader">
-    <div id="loader-title">Loading Model</div>
+    <div id="loader-title">Building Crystal</div>
     <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
-    <div id="loader-label">Please wait&hellip;</div>
+    <div id="loader-sub">Parsing geometry&hellip;</div>
   </div>
 
-  <!-- hint -->
-  <div id="hint">Drag to rotate &middot; Scroll to zoom &middot; Right-drag to pan</div>
+  <div id="hint">Drag to rotate &middot; Scroll to zoom</div>
 
-  <!-- controls -->
   <div id="controls">
     <button class="ctrl-btn" id="btn_reset">Reset View</button>
-    <button class="ctrl-btn" id="btn_wire">Wireframe</button>
-    <button class="ctrl-btn" id="btn_crystal">Crystal Mode</button>
+    <button class="ctrl-btn active" id="btn_auto">Auto-Rotate: On</button>
+    <button class="ctrl-btn" id="btn_edges">Hide Edges</button>
   </div>
+
+  <div id="stats"></div>
 
   <script type="importmap">
   {
@@ -232,272 +217,333 @@
   </script>
 
   <script type="module">
-    import * as THREE from 'three';
-    import { OBJLoader }      from 'three/addons/loaders/OBJLoader.js';
-    import { MTLLoader }      from 'three/addons/loaders/MTLLoader.js';
-    import { OrbitControls }  from 'three/addons/controls/OrbitControls.js';
+    import * as THREE               from 'three';
+    import { OBJLoader }            from 'three/addons/loaders/OBJLoader.js';
+    import { OrbitControls }        from 'three/addons/controls/OrbitControls.js';
+    import { RoomEnvironment }      from 'three/addons/environments/RoomEnvironment.js';
 
-    // ── Elements ──────────────────────────────────────
-    const loaderEl   = document.getElementById('loader');
-    const barEl      = document.getElementById('loader-bar');
-    const labelEl    = document.getElementById('loader-label');
-    const hintEl     = document.getElementById('hint');
-    const btnReset   = document.getElementById('btn_reset');
-    const btnWire    = document.getElementById('btn_wire');
-    const btnCrystal = document.getElementById('btn_crystal');
+    // ── Crystal dimensions (width : depth : height) ──────
+    const CW = 6, CD = 6, CH = 10;   // 6 × 6 × 10
 
-    // ── Renderer ──────────────────────────────────────
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    // ── DOM refs ──────────────────────────────────────────
+    const loaderEl  = document.getElementById('loader');
+    const barEl     = document.getElementById('loader-bar');
+    const subEl     = document.getElementById('loader-sub');
+    const hintEl    = document.getElementById('hint');
+    const statsEl   = document.getElementById('stats');
+    const btnReset  = document.getElementById('btn_reset');
+    const btnAuto   = document.getElementById('btn_auto');
+    const btnEdges  = document.getElementById('btn_edges');
+
+    // ── Renderer ──────────────────────────────────────────
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace  = THREE.SRGBColorSpace;
     renderer.toneMapping       = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.2;
     document.body.appendChild(renderer.domElement);
 
-    // ── Scene ─────────────────────────────────────────
+    // ── Scene ─────────────────────────────────────────────
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0d0a07);
-    scene.fog = new THREE.FogExp2(0x0d0a07, 0.018);
+    scene.background = new THREE.Color(0x05080f);
 
-    // ── Camera ────────────────────────────────────────
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
-    camera.position.set(0, 8, 22);
+    // Environment map (gives crystal nice reflections)
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+    pmrem.dispose();
 
-    // ── Controls ──────────────────────────────────────
+    // ── Camera ────────────────────────────────────────────
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 500);
+    camera.position.set(0, CH * 0.5, CH * 1.9);
+
+    // ── Controls ──────────────────────────────────────────
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.minDistance   = 3;
-    controls.maxDistance   = 60;
-    controls.maxPolarAngle = Math.PI * 0.85;
+    controls.target.set(0, CH * 0.5, 0);
+    controls.enableDamping  = true;
+    controls.dampingFactor  = 0.05;
+    controls.minDistance    = 4;
+    controls.maxDistance    = 80;
+    controls.maxPolarAngle  = Math.PI * 0.88;
+    controls.update();
 
-    const defaultCamPos    = camera.position.clone();
-    const defaultTarget    = controls.target.clone();
+    const defaultCamPos = camera.position.clone();
+    const defaultTarget = controls.target.clone();
 
-    // ── Lighting ──────────────────────────────────────
-    const ambient = new THREE.AmbientLight(0xfff8ee, 0.6);
-    scene.add(ambient);
+    // ── Lights ────────────────────────────────────────────
+    // Dim ambient — we want the glowing points to do the work
+    scene.add(new THREE.AmbientLight(0x0a1020, 2));
 
-    const sun = new THREE.DirectionalLight(0xfff5dd, 1.8);
-    sun.position.set(10, 20, 15);
-    sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
-    sun.shadow.camera.near = 0.5;
-    sun.shadow.camera.far  = 100;
-    sun.shadow.camera.left = sun.shadow.camera.bottom = -20;
-    sun.shadow.camera.right = sun.shadow.camera.top   =  20;
-    scene.add(sun);
+    // Top soft key (for crystal reflections)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    keyLight.position.set(4, 18, 8);
+    scene.add(keyLight);
 
-    const fill = new THREE.DirectionalLight(0xaac4e8, 0.5);
-    fill.position.set(-8, 5, -10);
-    scene.add(fill);
+    // Back-blue light — simulates the classic crystal display pedestal
+    const backLight = new THREE.PointLight(0x3366ff, 6, 30);
+    backLight.position.set(0, -2, -10);
+    scene.add(backLight);
 
-    const rim = new THREE.DirectionalLight(0xc4a35a, 0.35);
-    rim.position.set(0, -5, -15);
-    scene.add(rim);
+    // Subtle rim
+    const rimLight = new THREE.PointLight(0x88aaff, 2, 20);
+    rimLight.position.set(-8, CH, -6);
+    scene.add(rimLight);
 
-    // Ground shadow catcher
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(100, 100),
-      new THREE.ShadowMaterial({ opacity: 0.25 })
+    // ── Group that holds everything (auto-rotate on this) ─
+    const crystalGroup = new THREE.Group();
+    crystalGroup.position.set(0, 0, 0);
+    scene.add(crystalGroup);
+
+    // ── Glass crystal box ─────────────────────────────────
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color:            0xc8dcff,
+      transmission:     0.96,
+      roughness:        0.02,
+      metalness:        0,
+      ior:              1.52,
+      thickness:        Math.min(CW, CD),
+      transparent:      true,
+      opacity:          0.22,
+      side:             THREE.DoubleSide,
+      envMapIntensity:  2.0,
+      attenuationColor: new THREE.Color(0xb8d4ff),
+      attenuationDistance: 8,
+    });
+
+    const crystalMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(CW, CH, CD),
+      glassMat
     );
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
-    ground.receiveShadow = true;
-    scene.add(ground);
+    crystalMesh.position.y = CH / 2;
+    crystalGroup.add(crystalMesh);
 
-    // ── Crystal overlay geometry (hidden by default) ──
-    let crystalBox = null;
+    // Glowing edges
+    const edgesGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(CW, CH, CD));
+    const edgesMat = new THREE.LineBasicMaterial({
+      color:       0x88bbff,
+      transparent: true,
+      opacity:     0.55,
+    });
+    const edgeLines = new THREE.LineSegments(edgesGeo, edgesMat);
+    edgeLines.position.y = CH / 2;
+    crystalGroup.add(edgeLines);
 
-    function makeCrystalBox(box) {
-      const size = new THREE.Vector3();
-      box.getSize(size);
-      const center = new THREE.Vector3();
-      box.getCenter(center);
+    // ── Pedestal / base ───────────────────────────────────
+    const baseMat = new THREE.MeshStandardMaterial({
+      color:     0x181c28,
+      roughness: 0.3,
+      metalness: 0.6,
+    });
+    const base = new THREE.Mesh(new THREE.BoxGeometry(CW + 0.8, 0.4, CD + 0.8), baseMat);
+    base.position.y = -0.2;
+    crystalGroup.add(base);
 
-      const geo = new THREE.BoxGeometry(
-        size.x * 1.08, size.y * 1.08, size.z * 1.08
-      );
-      const mat = new THREE.MeshPhysicalMaterial({
-        color:           0xddeeff,
-        transmission:    0.96,
-        thickness:       size.y,
-        roughness:       0.0,
-        ior:             1.52,
-        reflectivity:    0.5,
-        transparent:     true,
-        opacity:         0.18,
-        side:            THREE.DoubleSide,
-      });
-      crystalBox = new THREE.Mesh(geo, mat);
-      crystalBox.position.copy(center);
-      crystalBox.visible = false;
-      scene.add(crystalBox);
+    // ── Floor plane (subtle reflection) ───────────────────
+    const floorMat = new THREE.MeshStandardMaterial({
+      color:     0x060a14,
+      roughness: 0.8,
+      metalness: 0.1,
+    });
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -0.42;
+    scene.add(floor);
+
+    // ── Glow sprite texture ───────────────────────────────
+    function makeGlowTexture() {
+      const c = document.createElement('canvas');
+      c.width = c.height = 64;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      g.addColorStop(0,    'rgba(255, 255, 255, 1)');
+      g.addColorStop(0.15, 'rgba(200, 225, 255, 0.9)');
+      g.addColorStop(0.4,  'rgba(130, 185, 255, 0.5)');
+      g.addColorStop(1,    'rgba(60,  120, 255, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(c);
     }
+    const glowTex = makeGlowTexture();
 
-    // ── State ─────────────────────────────────────────
-    let model        = null;
-    let origMaterials = [];   // { mesh, material }[]
-    let isWireframe  = false;
-    let isCrystal    = false;
+    // ── Load OBJ → point cloud ────────────────────────────
+    subEl.textContent = 'Parsing geometry…';
+    barEl.style.width = '5%';
 
-    // ── Load model ────────────────────────────────────
-    const MODEL_PATH = 'models/sttikhons/';
+    const objLoader = new OBJLoader();
+    objLoader.load(
+      'models/sttikhons/FinalDesign.obj',
+      (obj) => {
+        barEl.style.width = '70%';
+        subEl.textContent = 'Building point cloud…';
 
-    labelEl.textContent = 'Loading materials…';
-    barEl.style.width   = '5%';
+        // --- Collect all vertex positions in world space ---
+        // Apply the object's own transforms (there shouldn't be any from OBJ
+        // but traverse handles nested groups)
+        obj.updateMatrixWorld(true);
 
-    const mtlLoader = new MTLLoader();
-    mtlLoader.setPath(MODEL_PATH);
-    mtlLoader.load('FinalDesign.mtl', (materials) => {
-      materials.preload();
-      barEl.style.width = '20%';
-      labelEl.textContent = 'Loading geometry…';
-
-      const objLoader = new OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.setPath(MODEL_PATH);
-      objLoader.load(
-        'FinalDesign.obj',
-        (obj) => {
-          // Center and scale
-          const box = new THREE.Box3().setFromObject(obj);
-          const center = new THREE.Vector3();
-          box.getCenter(center);
-          obj.position.sub(center);
-
-          const size = new THREE.Vector3();
-          box.getSize(size);
-          const maxDim = Math.max(size.x, size.y, size.z);
-          const scale  = 10 / maxDim;
-          obj.scale.setScalar(scale);
-
-          // Re-center after scale
-          const box2 = new THREE.Box3().setFromObject(obj);
-          const center2 = new THREE.Vector3();
-          box2.getCenter(center2);
-          obj.position.sub(center2);
-
-          // Lift to sit on ground
-          const box3 = new THREE.Box3().setFromObject(obj);
-          obj.position.y -= box3.min.y;
-
-          // Enable shadows on all meshes, store originals
-          obj.traverse(child => {
-            if (child.isMesh) {
-              child.castShadow    = true;
-              child.receiveShadow = true;
-              origMaterials.push({ mesh: child, mat: child.material });
-            }
-          });
-
-          model = obj;
-          scene.add(obj);
-
-          // Build crystal box around final bounding box
-          const finalBox = new THREE.Box3().setFromObject(obj);
-          makeCrystalBox(finalBox);
-
-          // Point controls at model center
-          const fc = new THREE.Vector3();
-          finalBox.getCenter(fc);
-          controls.target.copy(fc);
-          defaultTarget.copy(fc);
-          camera.position.set(fc.x, fc.y + 5, fc.z + 20);
-          defaultCamPos.copy(camera.position);
-          controls.update();
-
-          // Dismiss loader
-          barEl.style.width = '100%';
-          labelEl.textContent = 'Ready';
-          setTimeout(() => {
-            loaderEl.classList.add('hidden');
-            // Fade out hint after 4s
-            setTimeout(() => hintEl.classList.add('fade'), 4000);
-          }, 400);
-        },
-        (xhr) => {
-          const pct = 20 + (xhr.loaded / xhr.total) * 78;
-          barEl.style.width = Math.min(pct, 98) + '%';
-          labelEl.textContent = `Loading geometry… ${Math.round(pct)}%`;
-        },
-        (err) => {
-          console.error('OBJ load error', err);
-          labelEl.textContent = 'Error loading model.';
-        }
-      );
-    }, undefined, (err) => {
-      console.error('MTL load error', err);
-      labelEl.textContent = 'Error loading materials.';
-    });
-
-    // ── Wireframe toggle ──────────────────────────────
-    btnWire.addEventListener('click', () => {
-      if (!model) return;
-      isWireframe = !isWireframe;
-      btnWire.classList.toggle('active', isWireframe);
-
-      model.traverse(child => {
-        if (!child.isMesh) return;
-        if (isWireframe) {
-          child.material = new THREE.MeshBasicMaterial({
-            color:     0xc4a35a,
-            wireframe: true,
-          });
-        } else {
-          const orig = origMaterials.find(o => o.mesh === child);
-          if (orig) child.material = orig.mat;
-        }
-      });
-    });
-
-    // ── Crystal mode toggle ───────────────────────────
-    btnCrystal.addEventListener('click', () => {
-      if (!model || !crystalBox) return;
-      isCrystal = !isCrystal;
-      btnCrystal.classList.toggle('active', isCrystal);
-      crystalBox.visible = isCrystal;
-
-      model.traverse(child => {
-        if (!child.isMesh) return;
-        if (isCrystal) {
-          child.material = new THREE.MeshPhongMaterial({
-            color:     0x99ccff,
-            emissive:  0x1133aa,
-            emissiveIntensity: 0.4,
-            shininess: 120,
-            transparent: true,
-            opacity:   0.85,
-            wireframe: false,
-          });
-        } else {
-          if (!isWireframe) {
-            const orig = origMaterials.find(o => o.mesh === child);
-            if (orig) child.material = orig.mat;
+        const rawPos = [];
+        obj.traverse(child => {
+          if (!child.isMesh) return;
+          const pos = child.geometry.attributes.position;
+          if (!pos) return;
+          const mat = child.matrixWorld;
+          const v   = new THREE.Vector3();
+          for (let i = 0; i < pos.count; i++) {
+            v.fromBufferAttribute(pos, i).applyMatrix4(mat);
+            rawPos.push(v.x, v.y, v.z);
           }
+        });
+
+        const rawCount = rawPos.length / 3;
+
+        // --- Subsample to ≤ 200k points for performance ---
+        const MAX_PTS = 200000;
+        let positions;
+        if (rawCount <= MAX_PTS) {
+          positions = new Float32Array(rawPos);
+        } else {
+          const step = Math.ceil(rawCount / MAX_PTS);
+          const out  = [];
+          for (let i = 0; i < rawPos.length; i += step * 3) {
+            out.push(rawPos[i], rawPos[i + 1], rawPos[i + 2]);
+          }
+          positions = new Float32Array(out);
         }
-      });
+
+        const ptCount = positions.length / 3;
+
+        // --- Compute bounding box and center/scale to crystal ---
+        const tempGeo = new THREE.BufferGeometry();
+        tempGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        tempGeo.computeBoundingBox();
+        const bb  = tempGeo.boundingBox;
+        const sz  = new THREE.Vector3();
+        bb.getSize(sz);
+        const ctr = new THREE.Vector3();
+        bb.getCenter(ctr);
+
+        // Scale so the model fills ~82% of the crystal interior
+        const fillRatio = 0.82;
+        const scaleX = (CW * fillRatio) / sz.x;
+        const scaleY = (CH * fillRatio) / sz.y;
+        const scaleZ = (CD * fillRatio) / sz.z;
+        const scale  = Math.min(scaleX, scaleY, scaleZ);
+
+        // Apply centering + scale to every point
+        const final = new Float32Array(positions.length);
+        for (let i = 0; i < positions.length; i += 3) {
+          final[i]     = (positions[i]     - ctr.x) * scale;
+          final[i + 1] = (positions[i + 1] - ctr.y) * scale + CH / 2;
+          final[i + 2] = (positions[i + 2] - ctr.z) * scale;
+        }
+
+        // --- Per-point colour: slight brightness variation ---
+        const colors = new Float32Array(ptCount * 3);
+        for (let i = 0; i < ptCount; i++) {
+          const b = 0.72 + Math.random() * 0.28;   // 0.72 – 1.0
+          // Slight blue-white tint, brighter toward centre (approx by Y)
+          const y = (final[i * 3 + 1] - CH / 2) / (CH / 2);  // –1 to +1
+          const extra = 0.12 * (1 - Math.abs(y));
+          colors[i * 3]     = b * (0.72 + extra);   // R
+          colors[i * 3 + 1] = b * (0.85 + extra);   // G
+          colors[i * 3 + 2] = b * 1.0;              // B  (always full)
+        }
+
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(final, 3));
+        geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+
+        const mat = new THREE.PointsMaterial({
+          size:             0.055,
+          sizeAttenuation:  true,
+          map:              glowTex,
+          vertexColors:     true,
+          transparent:      true,
+          opacity:          0.88,
+          depthWrite:       false,
+          blending:         THREE.AdditiveBlending,
+          alphaTest:        0.01,
+        });
+
+        const points = new THREE.Points(geo, mat);
+        crystalGroup.add(points);
+
+        barEl.style.width  = '100%';
+        subEl.textContent  = 'Ready';
+        statsEl.textContent = `${ptCount.toLocaleString()} engraving points`;
+
+        setTimeout(() => {
+          loaderEl.classList.add('hidden');
+          setTimeout(() => hintEl.classList.add('fade'), 5000);
+        }, 400);
+      },
+      (xhr) => {
+        if (xhr.total > 0) {
+          const pct = 5 + (xhr.loaded / xhr.total) * 62;
+          barEl.style.width  = pct.toFixed(0) + '%';
+          subEl.textContent  = `Loading geometry… ${pct.toFixed(0)}%`;
+        }
+      },
+      (err) => {
+        console.error(err);
+        subEl.textContent = 'Error loading model.';
+      }
+    );
+
+    // ── Auto-rotate ───────────────────────────────────────
+    let autoRotate   = true;
+    let resumeTimer  = null;
+
+    controls.addEventListener('start', () => {
+      autoRotate = false;
+      clearTimeout(resumeTimer);
+      btnAuto.textContent = 'Auto-Rotate: Off';
+      btnAuto.classList.remove('active');
+    });
+    controls.addEventListener('end', () => {
+      resumeTimer = setTimeout(() => {
+        autoRotate = true;
+        btnAuto.textContent = 'Auto-Rotate: On';
+        btnAuto.classList.add('active');
+      }, 4000);
     });
 
-    // ── Reset ─────────────────────────────────────────
+    btnAuto.addEventListener('click', () => {
+      autoRotate = !autoRotate;
+      clearTimeout(resumeTimer);
+      btnAuto.textContent = autoRotate ? 'Auto-Rotate: On' : 'Auto-Rotate: Off';
+      btnAuto.classList.toggle('active', autoRotate);
+    });
+
+    // ── Edge toggle ───────────────────────────────────────
+    let edgesVisible = true;
+    btnEdges.addEventListener('click', () => {
+      edgesVisible = !edgesVisible;
+      edgeLines.visible = edgesVisible;
+      btnEdges.textContent = edgesVisible ? 'Hide Edges' : 'Show Edges';
+      btnEdges.classList.toggle('active', !edgesVisible);
+    });
+
+    // ── Reset ─────────────────────────────────────────────
     btnReset.addEventListener('click', () => {
       camera.position.copy(defaultCamPos);
       controls.target.copy(defaultTarget);
       controls.update();
     });
 
-    // ── Resize ────────────────────────────────────────
+    // ── Resize ────────────────────────────────────────────
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // ── Render loop ───────────────────────────────────
+    // ── Render loop ───────────────────────────────────────
+    const clock = new THREE.Clock();
     function animate() {
       requestAnimationFrame(animate);
+      const dt = clock.getDelta();
+      if (autoRotate) crystalGroup.rotation.y += dt * 0.18;  // ~10°/s
       controls.update();
       renderer.render(scene, camera);
     }
