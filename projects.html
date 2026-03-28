@@ -13,12 +13,13 @@
     <div class="container">
         <nav>
             <a href="/" id="logo"><img src="images/logo-index-transparent.png" alt="Eyekonika" /></a>
-            <a href="/">HOME</a>
+            <a href="/">Home</a>
         </nav>
 
         <div class="bg-overlay"></div>
         <div class="slider-nav"></div>
         <div class="slides"></div>
+
         <div class="slide-title">
             <div class="slide-title-row">
                 <div class="letter"></div>
@@ -33,9 +34,25 @@
                 <div class="letter"></div>
             </div>
         </div>
+
+        <!-- Fixed project info card -->
+        <div class="project-card">
+            <div class="project-counter">
+                <span class="counter-current">01</span>
+                <span class="counter-sep"> / </span>
+                <span class="counter-total">03</span>
+            </div>
+            <p class="project-location"></p>
+            <h2 class="project-name"></h2>
+            <p class="project-type"></p>
+            <button class="project-cta">View Project <span class="cta-arrow">&#8594;</span></button>
+        </div>
+
         <div class="floating-img">
             <img src="images/picture/2.jpg" alt="" />
         </div>
+
+        <p class="scroll-hint">Scroll to explore</p>
     </div>
 
 </body>
@@ -44,7 +61,6 @@
     sessionStorage.setItem('returnSection', 'two');
   });
 </script>
-<!-- GSAP Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CustomEase.min.js"></script>
 <script type="module" src="./js/vendor/picture.js"></script>

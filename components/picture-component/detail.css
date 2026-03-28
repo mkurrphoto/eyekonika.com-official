@@ -1,115 +1,49 @@
-* {
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     width: 100%;
     height: 100%;
-    font-family: "PP Neue Montreal";
+    font-family: "PP Neue Montreal", sans-serif;
+    background: #030712;
+    color: #e8e4dc;
 }
 
 .container {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-}
-
-nav,
-footer {
-    position: fixed;
-    left: 0;
-    width: 100vw;
-    padding: 2.75em;
-    display: flex;
-    justify-content: space-between;
-    z-index: 2;
-}
-
-nav {
-    top: 0;
-}
-
-footer {
-    bottom: 0;
-}
-
-a {
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: 500;
-    color: #000;
-}
-
-/* ── Floating secondary image (parallax layer) ─────────────────────── */
-.floating-img {
-    position: fixed;
-    bottom: 12%;
-    right: 6%;
-    width: 20vw;
-    height: 26vh;
-    overflow: hidden;
-    z-index: 1;
-    pointer-events: none;
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-}
-
-.floating-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.75;
-    transform: scale(1.08);
-}
-
-/* ── Project info overlay ──────────────────────────────────────────── */
-.project-info {
-    position: absolute;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.project-location {
-    font-family: "PP Neue Montreal", sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
-    margin-bottom: 0.4em;
-}
-
-.project-name {
-    font-family: "PP Neue Montreal", sans-serif;
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    font-weight: 400;
-    color: rgba(255,255,255,0.9);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.75em;
-}
-
-.project-cta {
-    font-family: "PP Neue Montreal", sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
-    border-bottom: 1px solid rgba(255,255,255,0.25);
-    padding-bottom: 2px;
-}
-
-/* Make slides show pointer cursor */
-.slide {
-    cursor: pointer;
     position: relative;
 }
+
+/* ── Nav ───────────────────────────────────────────── */
+nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    padding: 2.2em 2.75em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+    background: linear-gradient(to bottom, rgba(3,7,18,0.8) 0%, transparent 100%);
+}
+
+nav a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.5);
+    transition: color 0.25s;
+}
+
+nav a:hover { color: rgba(255,255,255,0.9); }
 
 nav a#logo {
     display: inline-flex;
@@ -122,95 +56,91 @@ nav a#logo img {
     display: block;
 }
 
+/* ── Background color overlay ──────────────────────── */
 .bg-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #2563eb;
-    filter: brightness(0.75);
-    opacity: 0.5;
-
+    inset: 0;
+    background-color: #0d1633;
+    opacity: 0.6;
+    z-index: 1;
+    pointer-events: none;
 }
 
+/* ── Progress nav ──────────────────────────────────── */
 .slider-nav {
     position: fixed;
-    top: 5%;
+    top: 4.5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 25%;
-    height: 15px;
     display: flex;
-    justify-content: space-between;
-    z-index: 10;
+    gap: 6px;
+    align-items: center;
+    z-index: 20;
 }
 
 .nav-item-wrapper {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 1.8s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.nav-item {
-    width: 1px;
-    height: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    transition: all 1.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+    width: 30px;
+    height: 2px;
+    background: rgba(255,255,255,0.18);
+    cursor: pointer;
+    transition: background 0.4s ease, width 0.4s ease;
 }
 
 .nav-item-wrapper.active {
-    flex: 1;
+    width: 60px;
+    background: rgba(255,255,255,0.75);
 }
 
-.nav-item-wrapper.active .nav-item {
-    width: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+.nav-item-wrapper:hover:not(.active) {
+    background: rgba(255,255,255,0.38);
 }
 
+.nav-item { display: none; }
+
+/* ── Slides strip ──────────────────────────────────── */
 .slides {
     position: fixed;
     top: 0;
     left: 0;
-    width: 3000vw;
     height: 100vh;
     display: flex;
+    z-index: 0;
 }
 
 .slide {
-    flex: 1;
+    flex: 0 0 100vw;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    cursor: pointer;
 }
 
 .slide .img {
-    width: 50%;
-    height: 50%;
-    opacity: 0.75;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
 }
 
-img {
+.slide .img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: brightness(0.28);
 }
 
+/* ── Letter watermark (background) ────────────────── */
 .slide-title {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 75%;
-    height: 65%;
+    width: 82%;
+    height: 68%;
     display: flex;
     flex-direction: column;
     pointer-events: none;
+    z-index: 2;
 }
 
 .slide-title-row {
@@ -236,97 +166,163 @@ img {
     display: inline-block;
     font-family: "Timmons NY 2.005";
     font-size: 280px;
-    filter: brightness(0.25) saturate(0.75);
+    color: rgba(255,255,255,0.055);
 }
 
-@media screen and (max-width: 1024px) {
-    .letter span {
-        font-size: 200px;
-    }
+/* ── Project card (fixed, bottom-left) ────────────── */
+.project-card {
+    position: fixed;
+    bottom: 10%;
+    left: 5vw;
+    z-index: 10;
+    max-width: 420px;
 }
 
-@media screen and (max-width: 900px) {
-    .slider-nav {
-        width: 40%;
-        left: 57%;
-    }
-
-    .slide .img {
-        width: 90%;
-        height: 60%;
-        max-height: 60vh;
-    }
-
-    .slide-title {
-        left: 47.5%;
-        height: 25%;
-    }
-
-    .slide-title-row:nth-child(2) {
-        left: 0;
-    }
-
-    .letter span {
-        font-size: 130px;
-    }
+.project-counter {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 1.4em;
+    font-variant-numeric: tabular-nums;
 }
 
-@media screen and (max-width: 768px) {
-    nav a#logo {
-        font-size: 29px;
-    }
-
-    .slider-nav {
-        width: 20%;
-    }
-
-    .slide .img {
-        width: 95%;
-        height: 55%;
-        max-height: 55vh;
-    }
+.counter-current {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
 }
 
-@media screen and (max-width: 600px) {
-    .letter span {
-        font-size: 75px !important;
-    }
-
-    .slide .img {
-        width: 95%;
-        height: 50%;
-        max-height: 50vh;
-    }
+.project-location {
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.38);
+    margin-bottom: 0.7em;
 }
 
+.project-name {
+    font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+    font-weight: 300;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 0.5em;
+}
 
-@media screen and (max-width: 900px) {
+.project-type {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 1.8em;
+}
+
+.project-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 0 0 4px;
+    font-family: "PP Neue Montreal", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: color 0.22s, border-color 0.22s;
+}
+
+.project-cta:hover {
+    color: rgba(255,255,255,0.95);
+    border-color: rgba(255,255,255,0.5);
+}
+
+.cta-arrow {
+    display: inline-block;
+    transition: transform 0.22s;
+}
+
+.project-cta:hover .cta-arrow {
+    transform: translateX(5px);
+}
+
+/* ── Floating secondary image ──────────────────────── */
+.floating-img {
+    position: fixed;
+    bottom: 10%;
+    right: 5vw;
+    width: 20vw;
+    max-width: 280px;
+    min-width: 160px;
+    height: 26vh;
+    overflow: hidden;
+    z-index: 10;
+    pointer-events: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 12px 60px rgba(0,0,0,0.65);
+}
+
+.floating-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+    transform: scale(1.07);
+}
+
+/* ── Scroll hint ───────────────────────────────────── */
+.scroll-hint {
+    position: fixed;
+    bottom: 2.4em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.18);
+    z-index: 10;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .letter span { font-size: 200px; }
+}
+
+@media (max-width: 900px) {
     .floating-img {
-        width: 28vw;
-        height: 18vh;
-        right: 3%;
-        bottom: 8%;
+        width: 26vw;
+        height: 20vh;
+        right: 3vw;
+        bottom: 6%;
     }
+    .project-card {
+        bottom: 7%;
+        left: 4vw;
+    }
+    .letter span { font-size: 160px; }
 }
 
-@media screen and (max-width: 600px) {
+@media (max-width: 768px) {
+    nav a#logo img { height: 34px; }
+    .project-name { font-size: clamp(1.5rem, 5.5vw, 2.2rem); }
+    .letter span { font-size: 130px; }
+}
+
+@media (max-width: 600px) {
     .floating-img { display: none; }
-    .project-info { bottom: 6%; }
+    .letter span { font-size: 75px !important; }
+    .project-card {
+        bottom: 14%;
+        max-width: 90vw;
+    }
+    .scroll-hint { display: none; }
 }
 
-@media screen and (max-width: 425px) {
-    .letter span {
-        font-size: 60px !important;
-    }
-
-    nav a#logo {
-        font-size: 20px !important;
-        padding-top: 6px;
-    }
-
-    .slide .img {
-        width: 95%;
-        height: 45%;
-        max-height: 45vh;
-    }
+@media (max-width: 425px) {
+    .letter span { font-size: 60px !important; }
+    nav a#logo img { height: 28px; }
 }
