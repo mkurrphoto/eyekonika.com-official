@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>3D Visualization — Eyekonika</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0d0a07;
+      --fg:     #ede8df;
+      --muted:  #7a6e60;
+      --accent: #c4a35a;
+      --font-display: "Bebas Neue", sans-serif;
+      --font-mono:    "DM Mono", monospace;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* ── Nav ── */
+    #site_nav {
+      position: fixed;
+      top: 2rem; left: 2rem;
+      z-index: 10;
+    }
+
+    #site_nav a {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4em;
+      text-decoration: none;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+
+    #site_nav a:hover { opacity: 1; }
+
+    #site_nav img { height: 36px; width: auto; display: block; }
+
+    #site_nav .home-label {
+      font-size: 0.5rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Title ── */
+    #title_block {
+      position: fixed;
+      top: 2rem; right: 2rem;
+      z-index: 10;
+      text-align: right;
+    }
+
+    #title_block h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--fg);
+    }
+
+    #title_block p {
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.35em;
+    }
+
+    /* ── Loading overlay ── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      gap: 1.5rem;
+      transition: opacity 0.6s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #loader-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 4rem);
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    #loader-bar-wrap {
+      width: min(18rem, 70vw);
+      height: 1px;
+      background: color-mix(in srgb, var(--muted) 30%, transparent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #loader-bar {
+      position: absolute;
+      inset-block: 0;
+      left: 0;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.15s linear;
+    }
+
+    #loader-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Hint ── */
+    #hint {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      translate: -50% 0;
+      z-index: 10;
+      font-size: 0.52rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 1s ease;
+    }
+
+    #hint.fade { opacity: 0; }
+
+    /* ── Controls bar ── */
+    #controls {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      align-items: flex-end;
+    }
+
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      backdrop-filter: blur(6px);
+    }
+
+    .ctrl-btn:hover, .ctrl-btn.active {
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- nav -->
+  <nav id="site_nav">
+    <a href="/">
+      <img src="images/logo-index-transparent.png" alt="Eyekonika" />
+      <span class="home-label">&#8592; Back to Home</span>
+    </a>
+  </nav>
+
+  <!-- title -->
+  <div id="title_block">
+    <h1>St. Tikhon&rsquo;s<br>Monastery</h1>
+    <p>3D Design Preview</p>
+  </div>
+
+  <!-- loading overlay -->
+  <div id="loader">
+    <div id="loader-title">Loading Model</div>
+    <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+    <div id="loader-label">Please wait&hellip;</div>
+  </div>
+
+  <!-- hint -->
+  <div id="hint">Drag to rotate &middot; Scroll to zoom &middot; Right-drag to pan</div>
+
+  <!-- controls -->
+  <div id="controls">
+    <button class="ctrl-btn" id="btn_reset">Reset View</button>
+    <button class="ctrl-btn" id="btn_wire">Wireframe</button>
+    <button class="ctrl-btn" id="btn_crystal">Crystal Mode</button>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OBJLoader }      from 'three/addons/loaders/OBJLoader.js';
+    import { MTLLoader }      from 'three/addons/loaders/MTLLoader.js';
+    import { OrbitControls }  from 'three/addons/controls/OrbitControls.js';
+
+    // ── Elements ──────────────────────────────────────
+    const loaderEl   = document.getElementById('loader');
+    const barEl      = document.getElementById('loader-bar');
+    const labelEl    = document.getElementById('loader-label');
+    const hintEl     = document.getElementById('hint');
+    const btnReset   = document.getElementById('btn_reset');
+    const btnWire    = document.getElementById('btn_wire');
+    const btnCrystal = document.getElementById('btn_crystal');
+
+    // ── Renderer ──────────────────────────────────────
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+    renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    document.body.appendChild(renderer.domElement);
+
+    // ── Scene ─────────────────────────────────────────
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0d0a07);
+    scene.fog = new THREE.FogExp2(0x0d0a07, 0.018);
+
+    // ── Camera ────────────────────────────────────────
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
+    camera.position.set(0, 8, 22);
+
+    // ── Controls ──────────────────────────────────────
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.minDistance   = 3;
+    controls.maxDistance   = 60;
+    controls.maxPolarAngle = Math.PI * 0.85;
+
+    const defaultCamPos    = camera.position.clone();
+    const defaultTarget    = controls.target.clone();
+
+    // ── Lighting ──────────────────────────────────────
+    const ambient = new THREE.AmbientLight(0xfff8ee, 0.6);
+    scene.add(ambient);
+
+    const sun = new THREE.DirectionalLight(0xfff5dd, 1.8);
+    sun.position.set(10, 20, 15);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.near = 0.5;
+    sun.shadow.camera.far  = 100;
+    sun.shadow.camera.left = sun.shadow.camera.bottom = -20;
+    sun.shadow.camera.right = sun.shadow.camera.top   =  20;
+    scene.add(sun);
+
+    const fill = new THREE.DirectionalLight(0xaac4e8, 0.5);
+    fill.position.set(-8, 5, -10);
+    scene.add(fill);
+
+    const rim = new THREE.DirectionalLight(0xc4a35a, 0.35);
+    rim.position.set(0, -5, -15);
+    scene.add(rim);
+
+    // Ground shadow catcher
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(100, 100),
+      new THREE.ShadowMaterial({ opacity: 0.25 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = 0;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // ── Crystal overlay geometry (hidden by default) ──
+    let crystalBox = null;
+
+    function makeCrystalBox(box) {
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+
+      const geo = new THREE.BoxGeometry(
+        size.x * 1.08, size.y * 1.08, size.z * 1.08
+      );
+      const mat = new THREE.MeshPhysicalMaterial({
+        color:           0xddeeff,
+        transmission:    0.96,
+        thickness:       size.y,
+        roughness:       0.0,
+        ior:             1.52,
+        reflectivity:    0.5,
+        transparent:     true,
+        opacity:         0.18,
+        side:            THREE.DoubleSide,
+      });
+      crystalBox = new THREE.Mesh(geo, mat);
+      crystalBox.position.copy(center);
+      crystalBox.visible = false;
+      scene.add(crystalBox);
+    }
+
+    // ── State ─────────────────────────────────────────
+    let model        = null;
+    let origMaterials = [];   // { mesh, material }[]
+    let isWireframe  = false;
+    let isCrystal    = false;
+
+    // ── Load model ────────────────────────────────────
+    const MODEL_PATH = 'models/sttikhons/';
+
+    labelEl.textContent = 'Loading materials…';
+    barEl.style.width   = '5%';
+
+    const mtlLoader = new MTLLoader();
+    mtlLoader.setPath(MODEL_PATH);
+    mtlLoader.load('FinalDesign.mtl', (materials) => {
+      materials.preload();
+      barEl.style.width = '20%';
+      labelEl.textContent = 'Loading geometry…';
+
+      const objLoader = new OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.setPath(MODEL_PATH);
+      objLoader.load(
+        'FinalDesign.obj',
+        (obj) => {
+          // Center and scale
+          const box = new THREE.Box3().setFromObject(obj);
+          const center = new THREE.Vector3();
+          box.getCenter(center);
+          obj.position.sub(center);
+
+          const size = new THREE.Vector3();
+          box.getSize(size);
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const scale  = 10 / maxDim;
+          obj.scale.setScalar(scale);
+
+          // Re-center after scale
+          const box2 = new THREE.Box3().setFromObject(obj);
+          const center2 = new THREE.Vector3();
+          box2.getCenter(center2);
+          obj.position.sub(center2);
+
+          // Lift to sit on ground
+          const box3 = new THREE.Box3().setFromObject(obj);
+          obj.position.y -= box3.min.y;
+
+          // Enable shadows on all meshes, store originals
+          obj.traverse(child => {
+            if (child.isMesh) {
+              child.castShadow    = true;
+              child.receiveShadow = true;
+              origMaterials.push({ mesh: child, mat: child.material });
+            }
+          });
+
+          model = obj;
+          scene.add(obj);
+
+          // Build crystal box around final bounding box
+          const finalBox = new THREE.Box3().setFromObject(obj);
+          makeCrystalBox(finalBox);
+
+          // Point controls at model center
+          const fc = new THREE.Vector3();
+          finalBox.getCenter(fc);
+          controls.target.copy(fc);
+          defaultTarget.copy(fc);
+          camera.position.set(fc.x, fc.y + 5, fc.z + 20);
+          defaultCamPos.copy(camera.position);
+          controls.update();
+
+          // Dismiss loader
+          barEl.style.width = '100%';
+          labelEl.textContent = 'Ready';
+          setTimeout(() => {
+            loaderEl.classList.add('hidden');
+            // Fade out hint after 4s
+            setTimeout(() => hintEl.classList.add('fade'), 4000);
+          }, 400);
+        },
+        (xhr) => {
+          const pct = 20 + (xhr.loaded / xhr.total) * 78;
+          barEl.style.width = Math.min(pct, 98) + '%';
+          labelEl.textContent = `Loading geometry… ${Math.round(pct)}%`;
+        },
+        (err) => {
+          console.error('OBJ load error', err);
+          labelEl.textContent = 'Error loading model.';
+        }
+      );
+    }, undefined, (err) => {
+      console.error('MTL load error', err);
+      labelEl.textContent = 'Error loading materials.';
+    });
+
+    // ── Wireframe toggle ──────────────────────────────
+    btnWire.addEventListener('click', () => {
+      if (!model) return;
+      isWireframe = !isWireframe;
+      btnWire.classList.toggle('active', isWireframe);
+
+      model.traverse(child => {
+        if (!child.isMesh) return;
+        if (isWireframe) {
+          child.material = new THREE.MeshBasicMaterial({
+            color:     0xc4a35a,
+            wireframe: true,
+          });
+        } else {
+          const orig = origMaterials.find(o => o.mesh === child);
+          if (orig) child.material = orig.mat;
+        }
+      });
+    });
+
+    // ── Crystal mode toggle ───────────────────────────
+    btnCrystal.addEventListener('click', () => {
+      if (!model || !crystalBox) return;
+      isCrystal = !isCrystal;
+      btnCrystal.classList.toggle('active', isCrystal);
+      crystalBox.visible = isCrystal;
+
+      model.traverse(child => {
+        if (!child.isMesh) return;
+        if (isCrystal) {
+          child.material = new THREE.MeshPhongMaterial({
+            color:     0x99ccff,
+            emissive:  0x1133aa,
+            emissiveIntensity: 0.4,
+            shininess: 120,
+            transparent: true,
+            opacity:   0.85,
+            wireframe: false,
+          });
+        } else {
+          if (!isWireframe) {
+            const orig = origMaterials.find(o => o.mesh === child);
+            if (orig) child.material = orig.mat;
+          }
+        }
+      });
+    });
+
+    // ── Reset ─────────────────────────────────────────
+    btnReset.addEventListener('click', () => {
+      camera.position.copy(defaultCamPos);
+      controls.target.copy(defaultTarget);
+      controls.update();
+    });
+
+    // ── Resize ────────────────────────────────────────
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ── Render loop ───────────────────────────────────
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
