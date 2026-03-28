@@ -12,12 +12,12 @@
 
   // Labels for each section (s0–s5)
   const scenes = [
-    { name: 'OVERVIEW',    num: '00' },
-    { name: 'JORDANVILLE', num: '01' },
-    { name: 'SACRED',      num: '02' },
-    { name: 'WAYMART',     num: '03' },
-    { name: 'THE CRAFT',   num: '04' },
-    { name: 'BEGIN',       num: '05' },
+    { name: 'VISION',      num: '01' },
+    { name: 'DESIGN',      num: '02' },
+    { name: 'PROTOTYPE',   num: '03' },
+    { name: 'PRODUCTION',  num: '04' },
+    { name: 'DELIVERY',    num: '05' },
+    { name: 'GET IN TOUCH',num: '06' },
   ];
 
   // [rotateX, rotateY] to face each side of the cube

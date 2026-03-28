@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Our Work — Eyekonika</title>
+  <title>How We Work — Eyekonika</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="animation.css" />
@@ -10,47 +10,46 @@
 
 <body>
 
-  <!-- per-section ambient background layers -->
+  <!-- ambient background layers (one per face) -->
   <div id="bg-layers">
-    <div class="bg-layer active" style="background-image:url('images/picture/1.jpg')"></div>
-    <div class="bg-layer"        style="background-image:url('images/picture/2.jpg')"></div>
-    <div class="bg-layer"        style="background-image:url('images/picture/3.jpg')"></div>
-    <div class="bg-layer"        style="background-image:url('images/marketing-photos/PXL_20251231_195905257.PORTRAIT.jpg')"></div>
-    <div class="bg-layer"        style="background-image:url('images/marketing-photos/PXL_20251231_192445182.MP.jpg')"></div>
+    <div class="bg-layer active" style="background-image:url('images/marketing-photos/PXL_20251231_192445182.MP.jpg')"></div>
+    <div class="bg-layer"        style="background-image:url('images/marketing-photos/PXL_20251125_022845006.MP.jpg')"></div>
+    <div class="bg-layer"        style="background-image:url('images/marketing-photos/Prototypeexampleforclients.png')"></div>
+    <div class="bg-layer"        style="background-image:url('images/marketing-photos/PXL_20251231_200213608.PORTRAIT.jpg')"></div>
     <div class="bg-layer"        style="background-image:url('images/marketing-photos/cubes-images-import-march.jpg')"></div>
+    <div class="bg-layer"        style="background-image:url('images/picture/1.jpg')"></div>
   </div>
 
   <!-- back to site -->
   <nav id="site_nav">
-    <a href="/">← Eyekonika</a>
+    <a href="/">&#8592; Home</a>
   </nav>
 
   <!-- fixed 3-D cube -->
   <div id="scene">
     <div id="cube">
-      <!-- Each face shows a project or process photo -->
-      <div class="face" data-face="top" data-i="0">
-        <img src="images/picture/1.jpg" alt="Holy Trinity Monastery" />
+      <div class="face" data-face="top"    data-i="0">
+        <img src="images/marketing-photos/PXL_20251231_192445182.MP.jpg" alt="Discovery &amp; Consultation" />
         <span class="face-ph">01</span>
       </div>
-      <div class="face" data-face="front" data-i="1">
-        <img src="images/picture/2.jpg" alt="Sacred Architecture" />
+      <div class="face" data-face="front"  data-i="1">
+        <img src="images/marketing-photos/PXL_20251125_022845006.MP.jpg" alt="Design &amp; Revision" />
         <span class="face-ph">02</span>
       </div>
-      <div class="face" data-face="right" data-i="2">
-        <img src="images/picture/3.jpg" alt="St. Tikhon's Monastery" />
+      <div class="face" data-face="right"  data-i="2">
+        <img src="images/marketing-photos/Prototypeexampleforclients.png" alt="Prototype &amp; Approval" />
         <span class="face-ph">03</span>
       </div>
-      <div class="face" data-face="back" data-i="3">
-        <img src="images/marketing-photos/PXL_20251231_195905257.PORTRAIT.jpg" alt="Behind the lens" />
+      <div class="face" data-face="back"   data-i="3">
+        <img src="images/marketing-photos/PXL_20251231_200213608.PORTRAIT.jpg" alt="Production" />
         <span class="face-ph">04</span>
       </div>
-      <div class="face" data-face="left" data-i="4">
-        <img src="images/marketing-photos/PXL_20251231_192445182.MP.jpg" alt="On location" />
+      <div class="face" data-face="left"   data-i="4">
+        <img src="images/marketing-photos/cubes-images-import-march.jpg" alt="Shipping &amp; Implementation" />
         <span class="face-ph">05</span>
       </div>
       <div class="face" data-face="bottom" data-i="5">
-        <img src="images/marketing-photos/cubes-images-import-march.jpg" alt="Eyekonika product" />
+        <img src="images/picture/1.jpg" alt="Get in touch" />
         <span class="face-ph">06</span>
       </div>
     </div>
@@ -62,7 +61,7 @@
     <div class="progress-bar">
       <div class="progress-fill" id="prog_fill"></div>
     </div>
-    <div class="scene-label" id="scene_name">OVERVIEW</div>
+    <div class="scene-label" id="scene_name">VISION</div>
   </div>
 
   <!-- light / dark toggle -->
@@ -88,26 +87,35 @@
 
   <!-- bottom-center face label -->
   <div id="face_caption">
-    <div id="face_caption_num">00</div>
-    <div id="face_caption_name">OVERVIEW</div>
+    <div id="face_caption_num">01</div>
+    <div id="face_caption_name">VISION</div>
   </div>
 
   <!-- scrollable content -->
   <div id="scroll_container">
 
+    <!-- STEP 01 -->
     <section id="s0">
       <div class="text-card">
-        <div class="tag">Eyekonika — Portfolio</div>
-        <h1>SIX<br>SIDES<br>ONE<br>STORY</h1>
+        <div class="tag">Step 01 &mdash; Discovery &amp; Consultation</div>
+        <h1>WE LEARN<br>YOUR<br>VISION</h1>
         <p class="body-text">
-          Every face of this cube holds a moment
-          from our work — sacred spaces, honest light,
-          and the craft behind each image.
-          Scroll to turn it.
+          We discuss your idea in full &mdash;
+          every option, every possibility,
+          what&rsquo;s achievable and what it costs.
+          We walk you through the details
+          and draw up the contracts.
+          No surprises, no guesswork.
         </p>
         <div class="cta-row">
+          <a class="cta-back" href="/">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M11 6H1M6 11L1 6l5-5" />
+            </svg>
+            Home
+          </a>
           <a class="cta" href="#s1">
-            Turn
+            Next
             <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M1 6h10M6 1l5 5-5 5" />
             </svg>
@@ -116,17 +124,18 @@
       </div>
     </section>
 
+    <!-- STEP 02 -->
     <section id="s1">
       <div class="text-card right">
         <div class="h-line"></div>
-        <div class="tag">01 — Holy Trinity Monastery</div>
-        <h2>JORDAN-<br>VILLE,<br>NY</h2>
+        <div class="tag">Step 02 &mdash; Design &amp; Revision</div>
+        <h2>YOUR IMAGE<br>BROUGHT<br>TO LIFE</h2>
         <p class="body-text">
-          One of the most significant centers of
-          Russian Orthodox life in North America.
-          We documented its iconography,
-          architecture, and living community
-          over multiple visits.
+          Our team builds the 3D design from the ground up &mdash;
+          visiting your location if needed to capture buildings,
+          monuments, or any subject with precision.
+          You review every draft and we revise
+          until it&rsquo;s exactly as you imagined.
         </p>
         <div class="cta-row">
           <a class="cta-back" href="#s0">
@@ -135,8 +144,8 @@
             </svg>
             Back
           </a>
-          <a class="cta" href="projects/jordanville.html">
-            View Project
+          <a class="cta" href="#s2">
+            Next
             <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M1 6h10M6 1l5 5-5 5" />
             </svg>
@@ -145,16 +154,18 @@
       </div>
     </section>
 
+    <!-- STEP 03 -->
     <section id="s2">
       <div class="text-card">
         <div class="h-line"></div>
-        <div class="tag">02 — Sacred Architecture</div>
-        <h2>LIGHT<br>THROUGH<br>STONE</h2>
+        <div class="tag">Step 03 &mdash; Prototype &amp; Final Approval</div>
+        <h2>YOU SEE IT<br>BEFORE WE<br>MAKE IT</h2>
         <p class="body-text">
-          Cathedrals and monasteries hold a silence
-          that photography can carry.
-          We work within that silence —
-          no intrusion, only witness.
+          Once the design is finalized, we produce a prototype &mdash;
+          detailed images sent directly to you,
+          or a physical piece in your hands if needed.
+          Nothing moves to production
+          until you&rsquo;re certain every detail is exactly right.
         </p>
         <div class="cta-row">
           <a class="cta-back" href="#s1">
@@ -164,7 +175,7 @@
             Back
           </a>
           <a class="cta" href="#s3">
-            Turn
+            Next
             <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M1 6h10M6 1l5 5-5 5" />
             </svg>
@@ -173,29 +184,31 @@
       </div>
     </section>
 
+    <!-- STEP 04 -->
     <section id="s3">
       <div class="text-card right">
         <div class="h-line"></div>
-        <div class="tag">03 — St. Tikhon's Monastery</div>
-        <h2>WAY-<br>MART,<br>PA</h2>
+        <div class="tag">Step 04 &mdash; Production</div>
+        <h2>PRECISION<br>CUT INTO<br>CRYSTAL</h2>
         <p class="body-text">
-          Monastic life moves at its own pace.
-          We matched it — patient exposure,
-          unhurried composition,
-          light that arrives on its own terms.
+          High-precision femtosecond lasers etch your design
+          deep into premium optical K9 crystal.
+          One piece or one thousand &mdash;
+          every unit held to the same
+          uncompromising standard.
         </p>
-        <div class="stat-row" style="justify-content: flex-end">
+        <div class="stat-row" style="justify-content:flex-end">
           <div class="stat">
-            <span class="stat-num">3</span>
-            <span class="stat-label">Projects</span>
+            <span class="stat-num">200k</span>
+            <span class="stat-label">Dots / min</span>
           </div>
           <div class="stat">
-            <span class="stat-num">6+</span>
-            <span class="stat-label">Locations</span>
+            <span class="stat-num">K9</span>
+            <span class="stat-label">Crystal</span>
           </div>
           <div class="stat">
-            <span class="stat-num">100s</span>
-            <span class="stat-label">Frames</span>
+            <span class="stat-num">0</span>
+            <span class="stat-label">Surprises</span>
           </div>
         </div>
         <div class="cta-row">
@@ -205,8 +218,8 @@
             </svg>
             Back
           </a>
-          <a class="cta" href="projects/st-tikhons.html">
-            View Project
+          <a class="cta" href="#s4">
+            Next
             <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M1 6h10M6 1l5 5-5 5" />
             </svg>
@@ -215,16 +228,19 @@
       </div>
     </section>
 
+    <!-- STEP 05 -->
     <section id="s4">
       <div class="text-card">
         <div class="h-line"></div>
-        <div class="tag">04 — Behind the Lens</div>
-        <h2>THE<br>CRAFT<br>BEHIND<br>IT</h2>
+        <div class="tag">Step 05 &mdash; Shipping &amp; Implementation</div>
+        <h2>DELIVERED.<br>WE STAY<br>WITH YOU.</h2>
         <p class="body-text">
-          Every image starts long before the shutter.
-          Location study. Natural light mapping.
-          A conversation about what needs to be kept
-          and what can be let go.
+          We make shipping easy &mdash; delivering directly to you
+          or coordinating qualified carriers.
+          When your engravings arrive, we stay at your side:
+          helping plan your campaign, advising on strategy,
+          and answering every question.
+          Reorder pricing is among the most competitive you&rsquo;ll find.
         </p>
         <div class="cta-row">
           <a class="cta-back" href="#s3">
@@ -234,7 +250,7 @@
             Back
           </a>
           <a class="cta" href="#s5">
-            Turn
+            Next
             <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M1 6h10M6 1l5 5-5 5" />
             </svg>
@@ -243,16 +259,16 @@
       </div>
     </section>
 
+    <!-- SIDE 06 — GET IN TOUCH -->
     <section id="s5">
       <div class="text-card right">
         <div class="h-line"></div>
-        <div class="tag">05 — Start a Project</div>
-        <h2>YOUR<br>WORK<br>NEXT</h2>
+        <div class="tag">Ready &mdash; Start Here</div>
+        <h2>LET&rsquo;S<br>BUILD<br>SOMETHING</h2>
         <p class="body-text">
-          Whether it is a single space or an
-          ongoing documentation project —
-          we would like to hear about it.
-          The conversation costs nothing.
+          Every project starts with a conversation.
+          Tell us what you&rsquo;re imagining &mdash;
+          we&rsquo;ll handle the rest.
         </p>
         <div class="cta-row">
           <a class="cta-back" href="#s4">
@@ -273,9 +289,8 @@
 
   </div>
 
-  <!-- projects link -->
   <div id="credit">
-    <a href="projects.html">All Projects →</a>
+    <a href="projects.html">Our Projects &rarr;</a>
   </div>
 
   <script src="animation.js"></script>
