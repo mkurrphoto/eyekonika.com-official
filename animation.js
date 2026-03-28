@@ -9,6 +9,7 @@
   const themeToggle   = document.getElementById('theme_toggle');
   const sections      = document.querySelectorAll('#scroll_container section');
   const bgLayers      = document.querySelectorAll('.bg-layer');
+  const scrollCue     = document.getElementById('scroll_cue');
 
   // Labels for each section (s0–s5)
   const scenes = [
@@ -81,6 +82,9 @@
       bgLayers.forEach((layer, i) => layer.classList.toggle('active', i === activeIdx));
       lastActiveIdx = activeIdx;
     }
+
+    // Show scroll cue only on first step
+    if (scrollCue) scrollCue.classList.toggle('hidden', activeIdx !== 0);
   }
 
   // ── Reveal animations via IntersectionObserver ────
