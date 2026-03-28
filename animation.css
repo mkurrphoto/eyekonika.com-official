@@ -15,9 +15,9 @@
     color-scheme: dark;
 
     /* Eyekonika brand palette */
-    --dark-bg:    #030712;
-    --dark-fg:    #e8e4dc;
-    --dark-muted: #5a6480;
+    --dark-bg:    #0d0a07;
+    --dark-fg:    #ede8df;
+    --dark-muted: #7a6e60;
     --light-bg:   #f0ece3;
     --light-fg:   #0d0d14;
     --light-muted:#7a7a8a;
@@ -37,7 +37,7 @@
     --ui-inset:     2rem;
 
     /* cards: very dark + slight blur — images read through */
-    --card-bg:     rgba(3, 7, 18, 0.72);
+    --card-bg:     rgba(16, 11, 7, 0.76);
     --card-border: rgba(196, 163, 90, 0.18);
 
     --nav-x:          calc(var(--ui-inset) + 0.125rem);
@@ -71,7 +71,7 @@
     inset: -8%;          /* oversize to hide blur fringing */
     background-size: cover;
     background-position: center;
-    filter: blur(72px) brightness(0.13) saturate(1.6);
+    filter: blur(72px) brightness(0.18) saturate(1.5);
     opacity: 0;
     transition: opacity 1.1s ease;
     will-change: opacity;
@@ -110,7 +110,7 @@
 @layer cube {
   #cube {
     /* larger — fills 86% of the shorter viewport dimension */
-    --s: min(86vw, 86vh);
+    --s: min(72vw, 72vh);
     width: var(--s);
     height: var(--s);
     position: relative;
@@ -186,24 +186,41 @@
 }
 
 @layer ui {
-  /* ── site back-link ─────────────────────────── */
+  /* ── site logo / back-to-home ───────────────── */
   #site_nav {
     position: fixed;
     top: var(--ui-inset);
     left: var(--ui-inset);
     z-index: var(--z-ui);
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
   }
 
   #site_nav a {
-    color: var(--muted);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45em;
     text-decoration: none;
-    transition: color 0.2s;
+    opacity: 0.75;
+    transition: opacity 0.22s;
   }
 
-  #site_nav a:hover { color: var(--fg); }
+  #site_nav a:hover { opacity: 1; }
+
+  #site_nav img {
+    height: 38px;
+    width: auto;
+    display: block;
+  }
+
+  #site_nav .home-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.22s;
+  }
+
+  #site_nav a:hover .home-label { color: var(--fg); }
 
   /* ── HUD ────────────────────────────────────── */
   #hud {
