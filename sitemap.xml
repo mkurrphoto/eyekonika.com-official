@@ -43,11 +43,10 @@
     <priority>0.6</priority>
   </url>
 
-  <!-- Process step pages — add remaining steps as they go live -->
   <url>
-    <loc>https://eyekonika.com/process/vision/</loc>
+    <loc>https://eyekonika.com/process.html</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
   </url>
 
 </urlset>
