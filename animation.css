@@ -57,13 +57,36 @@
     overflow-x: hidden;
     transition: background 0.3s ease, color 0.3s ease;
   }
+
+  /* ── Ambient background layers ───────────────────── */
+  #bg-layers {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .bg-layer {
+    position: absolute;
+    inset: -8%;          /* oversize to hide blur fringing */
+    background-size: cover;
+    background-position: center;
+    filter: blur(72px) brightness(0.13) saturate(1.6);
+    opacity: 0;
+    transition: opacity 1.1s ease;
+    will-change: opacity;
+  }
+
+  .bg-layer.active {
+    opacity: 1;
+  }
 }
 
 @layer layout {
   #scene {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,7 +96,7 @@
 
   #scroll_container {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   section {

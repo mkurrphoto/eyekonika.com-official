@@ -8,6 +8,7 @@
   const captionName   = document.getElementById('face_caption_name');
   const themeToggle   = document.getElementById('theme_toggle');
   const sections      = document.querySelectorAll('#scroll_container section');
+  const bgLayers      = document.querySelectorAll('.bg-layer');
 
   // Labels for each section (s0–s5)
   const scenes = [
@@ -32,6 +33,8 @@
   function lerp(a, b, t) {
     return a + (b - a) * t;
   }
+
+  let lastActiveIdx = -1;
 
   // ── Cube + HUD update on scroll ───────────────────
   function update() {
@@ -72,6 +75,12 @@
     sceneLabel.textContent  = scenes[activeIdx].name;
     captionNum.textContent  = scenes[activeIdx].num;
     captionName.textContent = scenes[activeIdx].name;
+
+    // Swap ambient background layer on section change
+    if (activeIdx !== lastActiveIdx) {
+      bgLayers.forEach((layer, i) => layer.classList.toggle('active', i === activeIdx));
+      lastActiveIdx = activeIdx;
+    }
   }
 
   // ── Reveal animations via IntersectionObserver ────
