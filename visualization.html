@@ -217,286 +217,266 @@
   </script>
 
   <script type="module">
-    import * as THREE               from 'three';
-    import { OBJLoader }            from 'three/addons/loaders/OBJLoader.js';
-    import { OrbitControls }        from 'three/addons/controls/OrbitControls.js';
-    import { RoomEnvironment }      from 'three/addons/environments/RoomEnvironment.js';
+    /*
+     * Render order for points-inside-glass effect:
+     *   0 — opaque scene (floor, base)
+     *   1 — crystal back faces  (glass behind the engraving)
+     *   2 — point cloud         (the engraving itself)
+     *   3 — crystal front faces (glass in front of the engraving)
+     *   4 — edge lines
+     *
+     * No MeshPhysicalMaterial transmission — that render pass captures the
+     * scene before AdditiveBlending points are composited, making them vanish.
+     */
+    import * as THREE          from 'three';
+    import { OBJLoader }       from 'three/addons/loaders/OBJLoader.js';
+    import { OrbitControls }   from 'three/addons/controls/OrbitControls.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-    // ── Crystal dimensions (width : depth : height) ──────
-    const CW = 6, CD = 6, CH = 10;   // 6 × 6 × 10
+    const CW = 6, CD = 6, CH = 10;  // crystal width × depth × height
 
-    // ── DOM refs ──────────────────────────────────────────
-    const loaderEl  = document.getElementById('loader');
-    const barEl     = document.getElementById('loader-bar');
-    const subEl     = document.getElementById('loader-sub');
-    const hintEl    = document.getElementById('hint');
-    const statsEl   = document.getElementById('stats');
-    const btnReset  = document.getElementById('btn_reset');
-    const btnAuto   = document.getElementById('btn_auto');
-    const btnEdges  = document.getElementById('btn_edges');
+    const loaderEl = document.getElementById('loader');
+    const barEl    = document.getElementById('loader-bar');
+    const subEl    = document.getElementById('loader-sub');
+    const hintEl   = document.getElementById('hint');
+    const statsEl  = document.getElementById('stats');
+    const btnReset = document.getElementById('btn_reset');
+    const btnAuto  = document.getElementById('btn_auto');
+    const btnEdges = document.getElementById('btn_edges');
 
     // ── Renderer ──────────────────────────────────────────
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.outputColorSpace  = THREE.SRGBColorSpace;
-    renderer.toneMapping       = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.outputColorSpace   = THREE.SRGBColorSpace;
+    renderer.toneMapping        = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
     document.body.appendChild(renderer.domElement);
 
     // ── Scene ─────────────────────────────────────────────
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x05080f);
 
-    // Environment map (gives crystal nice reflections)
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
     pmrem.dispose();
 
     // ── Camera ────────────────────────────────────────────
     const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 500);
-    camera.position.set(0, CH * 0.5, CH * 1.9);
+    camera.position.set(0, CH * 0.5, CH * 2.0);
 
     // ── Controls ──────────────────────────────────────────
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, CH * 0.5, 0);
-    controls.enableDamping  = true;
-    controls.dampingFactor  = 0.05;
-    controls.minDistance    = 4;
-    controls.maxDistance    = 80;
-    controls.maxPolarAngle  = Math.PI * 0.88;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance   = 4;
+    controls.maxDistance   = 80;
+    controls.maxPolarAngle = Math.PI * 0.88;
     controls.update();
 
     const defaultCamPos = camera.position.clone();
     const defaultTarget = controls.target.clone();
 
     // ── Lights ────────────────────────────────────────────
-    // Dim ambient — we want the glowing points to do the work
-    scene.add(new THREE.AmbientLight(0x0a1020, 2));
+    scene.add(new THREE.AmbientLight(0x0a1020, 3));
 
-    // Top soft key (for crystal reflections)
-    const keyLight = new THREE.DirectionalLight(0xffffff, 0.6);
-    keyLight.position.set(4, 18, 8);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    keyLight.position.set(5, 18, 10);
     scene.add(keyLight);
 
-    // Back-blue light — simulates the classic crystal display pedestal
-    const backLight = new THREE.PointLight(0x3366ff, 6, 30);
-    backLight.position.set(0, -2, -10);
+    // Blue back-light — classic crystal display pedestal look
+    const backLight = new THREE.PointLight(0x2255ff, 8, 40);
+    backLight.position.set(0, -1, -12);
     scene.add(backLight);
 
-    // Subtle rim
-    const rimLight = new THREE.PointLight(0x88aaff, 2, 20);
-    rimLight.position.set(-8, CH, -6);
+    const rimLight = new THREE.PointLight(0x6699ff, 3, 25);
+    rimLight.position.set(-10, CH, -5);
     scene.add(rimLight);
 
-    // ── Group that holds everything (auto-rotate on this) ─
+    // ── Scene group (rotates together) ────────────────────
     const crystalGroup = new THREE.Group();
-    crystalGroup.position.set(0, 0, 0);
     scene.add(crystalGroup);
 
-    // ── Glass crystal box ─────────────────────────────────
-    const glassMat = new THREE.MeshPhysicalMaterial({
-      color:            0xc8dcff,
-      transmission:     0.96,
-      roughness:        0.02,
-      metalness:        0,
-      ior:              1.52,
-      thickness:        Math.min(CW, CD),
-      transparent:      true,
-      opacity:          0.22,
-      side:             THREE.DoubleSide,
-      envMapIntensity:  2.0,
-      attenuationColor: new THREE.Color(0xb8d4ff),
-      attenuationDistance: 8,
-    });
-
-    const crystalMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(CW, CH, CD),
-      glassMat
+    // ── Floor ─────────────────────────────────────────────
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(100, 100),
+      new THREE.MeshStandardMaterial({ color: 0x060a14, roughness: 0.9, metalness: 0.05 })
     );
-    crystalMesh.position.y = CH / 2;
-    crystalGroup.add(crystalMesh);
-
-    // Glowing edges
-    const edgesGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(CW, CH, CD));
-    const edgesMat = new THREE.LineBasicMaterial({
-      color:       0x88bbff,
-      transparent: true,
-      opacity:     0.55,
-    });
-    const edgeLines = new THREE.LineSegments(edgesGeo, edgesMat);
-    edgeLines.position.y = CH / 2;
-    crystalGroup.add(edgeLines);
-
-    // ── Pedestal / base ───────────────────────────────────
-    const baseMat = new THREE.MeshStandardMaterial({
-      color:     0x181c28,
-      roughness: 0.3,
-      metalness: 0.6,
-    });
-    const base = new THREE.Mesh(new THREE.BoxGeometry(CW + 0.8, 0.4, CD + 0.8), baseMat);
-    base.position.y = -0.2;
-    crystalGroup.add(base);
-
-    // ── Floor plane (subtle reflection) ───────────────────
-    const floorMat = new THREE.MeshStandardMaterial({
-      color:     0x060a14,
-      roughness: 0.8,
-      metalness: 0.1,
-    });
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), floorMat);
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = -0.42;
     scene.add(floor);
 
-    // ── Glow sprite texture ───────────────────────────────
-    function makeGlowTexture() {
+    // ── Crystal glass — split into back + front faces ─────
+    // Back faces render BEFORE points (renderOrder 1)
+    // Front faces render AFTER points (renderOrder 3)
+    // This creates the illusion of points floating inside glass.
+    function makeGlassMat(side) {
+      return new THREE.MeshPhysicalMaterial({
+        color:           0xc0d8ff,
+        roughness:       0.01,
+        metalness:       0.0,
+        transparent:     true,
+        opacity:         side === THREE.BackSide ? 0.07 : 0.13,
+        side,
+        envMapIntensity: 2.5,
+        depthWrite:      false,
+      });
+    }
+
+    const BOX = new THREE.BoxGeometry(CW, CH, CD);
+
+    const crystalBack = new THREE.Mesh(BOX, makeGlassMat(THREE.BackSide));
+    crystalBack.position.y  = CH / 2;
+    crystalBack.renderOrder = 1;
+    crystalGroup.add(crystalBack);
+
+    const crystalFront = new THREE.Mesh(BOX, makeGlassMat(THREE.FrontSide));
+    crystalFront.position.y  = CH / 2;
+    crystalFront.renderOrder = 3;
+    crystalGroup.add(crystalFront);
+
+    // ── Crystal edges ─────────────────────────────────────
+    const edgeLines = new THREE.LineSegments(
+      new THREE.EdgesGeometry(BOX),
+      new THREE.LineBasicMaterial({ color: 0x99ccff, transparent: true, opacity: 0.6 })
+    );
+    edgeLines.position.y  = CH / 2;
+    edgeLines.renderOrder = 4;
+    crystalGroup.add(edgeLines);
+
+    // ── Pedestal ──────────────────────────────────────────
+    const base = new THREE.Mesh(
+      new THREE.BoxGeometry(CW + 0.8, 0.4, CD + 0.8),
+      new THREE.MeshStandardMaterial({ color: 0x181c28, roughness: 0.3, metalness: 0.6 })
+    );
+    base.position.y = -0.2;
+    crystalGroup.add(base);
+
+    // ── Glow sprite ───────────────────────────────────────
+    function makeGlowTex() {
       const c = document.createElement('canvas');
       c.width = c.height = 64;
       const ctx = c.getContext('2d');
       const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      g.addColorStop(0,    'rgba(255, 255, 255, 1)');
-      g.addColorStop(0.15, 'rgba(200, 225, 255, 0.9)');
-      g.addColorStop(0.4,  'rgba(130, 185, 255, 0.5)');
-      g.addColorStop(1,    'rgba(60,  120, 255, 0)');
+      g.addColorStop(0,    'rgba(255,255,255,1)');
+      g.addColorStop(0.12, 'rgba(210,230,255,0.95)');
+      g.addColorStop(0.35, 'rgba(130,185,255,0.55)');
+      g.addColorStop(1,    'rgba(50,110,255,0)');
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, 64, 64);
       return new THREE.CanvasTexture(c);
     }
-    const glowTex = makeGlowTexture();
 
-    // ── Load OBJ → point cloud ────────────────────────────
-    subEl.textContent = 'Parsing geometry…';
+    // ── Load OBJ and build point cloud ────────────────────
     barEl.style.width = '5%';
+    subEl.textContent = 'Loading geometry…';
 
-    const objLoader = new OBJLoader();
-    objLoader.load(
+    new OBJLoader().load(
       'models/sttikhons/FinalDesign.obj',
       (obj) => {
-        barEl.style.width = '70%';
+        barEl.style.width = '72%';
         subEl.textContent = 'Building point cloud…';
 
-        // --- Collect all vertex positions in world space ---
-        // Apply the object's own transforms (there shouldn't be any from OBJ
-        // but traverse handles nested groups)
+        // Collect all vertex positions
         obj.updateMatrixWorld(true);
-
-        const rawPos = [];
+        const raw = [];
         obj.traverse(child => {
           if (!child.isMesh) return;
-          const pos = child.geometry.attributes.position;
-          if (!pos) return;
-          const mat = child.matrixWorld;
-          const v   = new THREE.Vector3();
-          for (let i = 0; i < pos.count; i++) {
-            v.fromBufferAttribute(pos, i).applyMatrix4(mat);
-            rawPos.push(v.x, v.y, v.z);
+          const attr = child.geometry.attributes.position;
+          if (!attr) return;
+          const v = new THREE.Vector3();
+          for (let i = 0; i < attr.count; i++) {
+            v.fromBufferAttribute(attr, i).applyMatrix4(child.matrixWorld);
+            raw.push(v.x, v.y, v.z);
           }
         });
 
-        const rawCount = rawPos.length / 3;
-
-        // --- Subsample to ≤ 200k points for performance ---
-        const MAX_PTS = 200000;
-        let positions;
-        if (rawCount <= MAX_PTS) {
-          positions = new Float32Array(rawPos);
+        // Subsample to ≤ 220k points
+        const MAX = 220000;
+        const rawCount = raw.length / 3;
+        let pos;
+        if (rawCount <= MAX) {
+          pos = new Float32Array(raw);
         } else {
-          const step = Math.ceil(rawCount / MAX_PTS);
+          const step = Math.ceil(rawCount / MAX);
           const out  = [];
-          for (let i = 0; i < rawPos.length; i += step * 3) {
-            out.push(rawPos[i], rawPos[i + 1], rawPos[i + 2]);
-          }
-          positions = new Float32Array(out);
+          for (let i = 0; i < raw.length; i += step * 3)
+            out.push(raw[i], raw[i+1], raw[i+2]);
+          pos = new Float32Array(out);
         }
 
-        const ptCount = positions.length / 3;
+        // Compute bounding box, scale to fit 84% of crystal interior
+        const tmpGeo = new THREE.BufferGeometry();
+        tmpGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        tmpGeo.computeBoundingBox();
+        const bb  = tmpGeo.boundingBox;
+        const sz  = new THREE.Vector3(); bb.getSize(sz);
+        const ctr = new THREE.Vector3(); bb.getCenter(ctr);
+        const fill  = 0.84;
+        const scale = Math.min((CW * fill) / sz.x, (CH * fill) / sz.y, (CD * fill) / sz.z);
 
-        // --- Compute bounding box and center/scale to crystal ---
-        const tempGeo = new THREE.BufferGeometry();
-        tempGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        tempGeo.computeBoundingBox();
-        const bb  = tempGeo.boundingBox;
-        const sz  = new THREE.Vector3();
-        bb.getSize(sz);
-        const ctr = new THREE.Vector3();
-        bb.getCenter(ctr);
+        // Transform points into crystal space
+        const n = pos.length / 3;
+        const finalPos = new Float32Array(pos.length);
+        const colors   = new Float32Array(pos.length);
 
-        // Scale so the model fills ~82% of the crystal interior
-        const fillRatio = 0.82;
-        const scaleX = (CW * fillRatio) / sz.x;
-        const scaleY = (CH * fillRatio) / sz.y;
-        const scaleZ = (CD * fillRatio) / sz.z;
-        const scale  = Math.min(scaleX, scaleY, scaleZ);
+        for (let i = 0; i < n; i++) {
+          const x = (pos[i*3]   - ctr.x) * scale;
+          const y = (pos[i*3+1] - ctr.y) * scale + CH / 2;
+          const z = (pos[i*3+2] - ctr.z) * scale;
+          finalPos[i*3] = x; finalPos[i*3+1] = y; finalPos[i*3+2] = z;
 
-        // Apply centering + scale to every point
-        const final = new Float32Array(positions.length);
-        for (let i = 0; i < positions.length; i += 3) {
-          final[i]     = (positions[i]     - ctr.x) * scale;
-          final[i + 1] = (positions[i + 1] - ctr.y) * scale + CH / 2;
-          final[i + 2] = (positions[i + 2] - ctr.z) * scale;
-        }
-
-        // --- Per-point colour: slight brightness variation ---
-        const colors = new Float32Array(ptCount * 3);
-        for (let i = 0; i < ptCount; i++) {
-          const b = 0.72 + Math.random() * 0.28;   // 0.72 – 1.0
-          // Slight blue-white tint, brighter toward centre (approx by Y)
-          const y = (final[i * 3 + 1] - CH / 2) / (CH / 2);  // –1 to +1
-          const extra = 0.12 * (1 - Math.abs(y));
-          colors[i * 3]     = b * (0.72 + extra);   // R
-          colors[i * 3 + 1] = b * (0.85 + extra);   // G
-          colors[i * 3 + 2] = b * 1.0;              // B  (always full)
+          // Brightness: slight random variation + centre-bright falloff
+          const b  = 0.75 + Math.random() * 0.25;
+          const yN = (y - CH / 2) / (CH / 2);             // –1 to +1
+          const cx = x / (CW / 2);                         // –1 to +1
+          const boost = 0.15 * Math.max(0, 1 - Math.sqrt(yN*yN + cx*cx));
+          colors[i*3]   = b * (0.70 + boost);  // R (warm-ish)
+          colors[i*3+1] = b * (0.86 + boost);  // G
+          colors[i*3+2] = b * 1.00;            // B (full)
         }
 
         const geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.BufferAttribute(final, 3));
+        geo.setAttribute('position', new THREE.BufferAttribute(finalPos, 3));
         geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
 
-        const mat = new THREE.PointsMaterial({
-          size:             0.055,
-          sizeAttenuation:  true,
-          map:              glowTex,
-          vertexColors:     true,
-          transparent:      true,
-          opacity:          0.88,
-          depthWrite:       false,
-          blending:         THREE.AdditiveBlending,
-          alphaTest:        0.01,
-        });
-
-        const points = new THREE.Points(geo, mat);
+        const points = new THREE.Points(geo, new THREE.PointsMaterial({
+          size:            0.09,
+          sizeAttenuation: true,
+          map:             makeGlowTex(),
+          vertexColors:    true,
+          transparent:     true,
+          opacity:         0.92,
+          depthWrite:      false,
+          blending:        THREE.AdditiveBlending,
+          alphaTest:       0.005,
+        }));
+        points.renderOrder = 2;   // between back glass (1) and front glass (3)
         crystalGroup.add(points);
 
         barEl.style.width  = '100%';
-        subEl.textContent  = 'Ready';
-        statsEl.textContent = `${ptCount.toLocaleString()} engraving points`;
-
+        statsEl.textContent = `${n.toLocaleString()} engraving points`;
         setTimeout(() => {
           loaderEl.classList.add('hidden');
           setTimeout(() => hintEl.classList.add('fade'), 5000);
-        }, 400);
+        }, 350);
       },
       (xhr) => {
         if (xhr.total > 0) {
-          const pct = 5 + (xhr.loaded / xhr.total) * 62;
-          barEl.style.width  = pct.toFixed(0) + '%';
-          subEl.textContent  = `Loading geometry… ${pct.toFixed(0)}%`;
+          const p = 5 + (xhr.loaded / xhr.total) * 65;
+          barEl.style.width = p.toFixed(0) + '%';
+          subEl.textContent = `Loading geometry… ${p.toFixed(0)}%`;
         }
       },
-      (err) => {
-        console.error(err);
-        subEl.textContent = 'Error loading model.';
-      }
+      (err) => { console.error(err); subEl.textContent = 'Error loading model.'; }
     );
 
-    // ── Auto-rotate ───────────────────────────────────────
-    let autoRotate   = true;
-    let resumeTimer  = null;
+    // ── Button handlers ───────────────────────────────────
+    let autoRotate = true, resumeTimer = null;
 
     controls.addEventListener('start', () => {
-      autoRotate = false;
-      clearTimeout(resumeTimer);
+      autoRotate = false; clearTimeout(resumeTimer);
       btnAuto.textContent = 'Auto-Rotate: Off';
       btnAuto.classList.remove('active');
     });
@@ -507,15 +487,12 @@
         btnAuto.classList.add('active');
       }, 4000);
     });
-
     btnAuto.addEventListener('click', () => {
-      autoRotate = !autoRotate;
-      clearTimeout(resumeTimer);
+      autoRotate = !autoRotate; clearTimeout(resumeTimer);
       btnAuto.textContent = autoRotate ? 'Auto-Rotate: On' : 'Auto-Rotate: Off';
       btnAuto.classList.toggle('active', autoRotate);
     });
 
-    // ── Edge toggle ───────────────────────────────────────
     let edgesVisible = true;
     btnEdges.addEventListener('click', () => {
       edgesVisible = !edgesVisible;
@@ -524,7 +501,6 @@
       btnEdges.classList.toggle('active', !edgesVisible);
     });
 
-    // ── Reset ─────────────────────────────────────────────
     btnReset.addEventListener('click', () => {
       camera.position.copy(defaultCamPos);
       controls.target.copy(defaultTarget);
@@ -540,14 +516,13 @@
 
     // ── Render loop ───────────────────────────────────────
     const clock = new THREE.Clock();
-    function animate() {
+    (function animate() {
       requestAnimationFrame(animate);
-      const dt = clock.getDelta();
-      if (autoRotate) crystalGroup.rotation.y += dt * 0.18;  // ~10°/s
+      if (autoRotate) crystalGroup.rotation.y += clock.getDelta() * 0.18;
+      else clock.getDelta();   // keep clock ticking
       controls.update();
       renderer.render(scene, camera);
-    }
-    animate();
+    })();
   </script>
 </body>
 </html>
