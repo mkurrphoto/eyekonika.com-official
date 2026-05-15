@@ -3134,6 +3134,11 @@ body.is-preload .wrapper.fade > .inner {
   margin-left: 0 !important;
 }
 
+/* WRAPPER collapses to icon-rail width */
+#wrapper.collapse-wrapper {
+  margin-left: 2.5em !important;
+}
+
 @media screen and (max-width: 1280px) {
   #sidebar + #wrapper {
     margin-left: 0;

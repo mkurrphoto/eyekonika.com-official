@@ -239,15 +239,15 @@ function initSidebarScrollLock() {
 
     if (state === "normal" && insideEnter) {
       state = "fullscreen";
-      sidebar.classList.add("hide-sidebar");
-      wrapper.classList.add("expand-wrapper");
+      sidebar.classList.add("collapse-sidebar");
+      wrapper.classList.add("collapse-wrapper");
       return;
     }
 
     if (state === "fullscreen" && outsideExit) {
       state = "normal";
-      sidebar.classList.remove("hide-sidebar");
-      wrapper.classList.remove("expand-wrapper");
+      sidebar.classList.remove("collapse-sidebar");
+      wrapper.classList.remove("collapse-wrapper");
     }
   };
 
@@ -285,8 +285,8 @@ function initIntroObserver() {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          sidebar.classList.remove("hide-sidebar");
-          wrapper.classList.remove("expand-wrapper");
+          sidebar.classList.remove("collapse-sidebar");
+          wrapper.classList.remove("collapse-wrapper");
         }
       });
     },

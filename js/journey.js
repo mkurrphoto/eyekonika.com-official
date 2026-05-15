@@ -487,8 +487,8 @@
   function setSidebarHidden(hidden) {
     var sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
-    if (hidden) { sidebar.classList.add('hide-sidebar'); }
-    else        { sidebar.classList.remove('hide-sidebar'); }
+    if (hidden) { sidebar.classList.add('collapse-sidebar'); }
+    else        { sidebar.classList.remove('collapse-sidebar'); }
   }
 
   // ============================================
