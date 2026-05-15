@@ -27,17 +27,16 @@ body.is-contact::after { opacity: 0.35; }
   opacity: 0.45;
 }
 
-/* ── Vignette overlay ─────────────────────────────────────── */
+/* ── Page overlay ─────────────────────────────────────────── */
 body.is-contact::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(
-    ellipse 120% 100% at 50% 50%,
-    transparent 25%,
-    rgba(8,5,2,0.6) 65%,
-    rgba(8,5,2,0.92) 100%
+  background: radial-gradient(ellipse at center,
+    rgba(10,12,20,0.55) 0%,
+    rgba(10,12,20,0.25) 60%,
+    rgba(10,12,20,0.10) 100%
   );
   pointer-events: none;
 }
@@ -110,14 +109,6 @@ body.is-contact::before {
   padding: 11rem 2.5rem 3.5rem;
 }
 
-.cn-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(8,5,2,0.55) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: -1;
-}
 
 .cn-eyebrow {
   font-size: 0.62rem;
@@ -147,6 +138,7 @@ body.is-contact::before {
   letter-spacing: 0.04em;
   line-height: 0.95;
   margin: 0 0 1.4rem;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
 }
 
 .cn-tagline {
@@ -200,7 +192,7 @@ body.is-contact::before {
 .cn-input {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(196,163,90,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.35);
   color: var(--warm-fg);
   font-family: "Poppins", sans-serif;
   font-size: 0.92rem;
@@ -294,9 +286,9 @@ body.is-contact::before {
   align-items: center;
   gap: 0.75rem;
   padding: 0.85rem 2rem;
-  border: 1px solid var(--gold);
-  background: var(--gold-glow);
-  color: var(--gold);
+  border: 1px solid #0ea5e9;
+  background: rgba(14,165,233,0.08);
+  color: #0ea5e9;
   font-family: "Poppins", sans-serif;
   font-size: 0.65rem;
   font-weight: 400;
@@ -308,8 +300,8 @@ body.is-contact::before {
 }
 
 .cn-submit:hover {
-  background: var(--gold);
-  color: var(--warm-bg);
+  background: #0ea5e9;
+  color: #0a0c14;
 }
 
 .cn-submit:disabled { opacity: 0.5; cursor: default; }
@@ -372,8 +364,11 @@ body.is-contact::before {
 
 /* Book a call card */
 .cn-call-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-bdr);
+  background: rgba(8,10,18,0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
   padding: 2rem 1.75rem;
   display: flex;
   flex-direction: column;
@@ -401,14 +396,14 @@ body.is-contact::before {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  border: 1px solid rgba(196,163,90,0.35);
+  border: 1px solid rgba(14,165,233,0.45);
   padding: 0.7rem 1.4rem;
   font-family: "Poppins", sans-serif;
   font-size: 0.58rem;
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: #0ea5e9;
   text-decoration: none;
   transition: background 0.3s, border-color 0.3s, color 0.3s;
   align-self: flex-start;
@@ -416,9 +411,9 @@ body.is-contact::before {
 
 .cn-call-btn svg { transition: transform 0.3s; }
 .cn-call-btn:hover {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--warm-bg);
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+  color: #0a0c14;
 }
 .cn-call-btn:hover svg { transform: translateX(4px); }
 
@@ -439,8 +434,12 @@ body.is-contact::before {
 }
 
 .cn-testimonial {
-  background: var(--card-bg);
+  background: rgba(8,10,18,0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
   border-left: 2px solid var(--gold-dim);
+  border-radius: 4px;
   padding: 1.25rem 1.25rem 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
