@@ -7,7 +7,7 @@
 
 /* ── Root overrides ───────────────────────────────────────── */
 body.is-contact {
-  background: #0d0a07;
+  background: #0d0a07 url('images/background_for_contact_page.JPG') center/cover no-repeat fixed;
   color: #ede8df;
   font-family: "Poppins", sans-serif;
   overflow-x: hidden;
