@@ -39,7 +39,7 @@
   align-items: center;
   justify-content: center;
 
-  background-image: url('/images/marketing-photos/PXL_20251231_195905257.PORTRAIT.jpg');
+  background-image: url('/images/photo-backgrounds/Eyekonika_Hero.jpg');
   background-size: cover;
   background-position: center 60%;
   background-attachment: scroll;
@@ -272,4 +272,3 @@
   .intro-scroll       { animation-delay: 2.6s; }
   .intro-scroll-line  { animation-delay: 2.8s; }
 }
-
