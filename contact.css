@@ -16,6 +16,43 @@ body.is-contact {
 /* grain overlay from journey.css — keep it */
 body.is-contact::after { opacity: 0.35; }
 
+/* ── Full-bleed background photo ──────────────────────────── */
+.cn-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url('images/marketing-photos/cubes-images-import-march.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.45) contrast(1.3) saturate(0.55);
+}
+
+/* ── Cinematic overlay: diagonal scan lines + vignette ────── */
+body.is-contact::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
+    ),
+    radial-gradient(
+      ellipse 110% 90% at 50% 50%,
+      transparent 20%,
+      rgba(8,5,2,0.55) 60%,
+      rgba(8,5,2,0.9) 100%
+    ),
+    linear-gradient(
+      175deg,
+      rgba(13,10,7,0.25) 0%,
+      rgba(13,10,7,0.65) 100%
+    );
+  pointer-events: none;
+}
+
 :root {
   --gold:       #c4a35a;
   --gold-dim:   rgba(196, 163, 90, 0.22);
@@ -77,9 +114,20 @@ body.is-contact::after { opacity: 0.35; }
 
 /* ── Hero ─────────────────────────────────────────────────── */
 .cn-hero {
+  position: relative;
+  z-index: 1;
   max-width: 1080px;
   margin: 0 auto;
   padding: 11rem 2.5rem 3.5rem;
+}
+
+.cn-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(8,5,2,0.55) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .cn-eyebrow {
@@ -124,6 +172,8 @@ body.is-contact::after { opacity: 0.35; }
 
 /* ── Main two-column layout ───────────────────────────────── */
 .cn-body {
+  position: relative;
+  z-index: 1;
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 2.5rem 9rem;
@@ -134,6 +184,14 @@ body.is-contact::after { opacity: 0.35; }
 }
 
 /* ── Form column ──────────────────────────────────────────── */
+.cn-form-col {
+  background: rgba(10,7,4,0.72);
+  padding: 2.5rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(196,163,90,0.12);
+}
+
 .cn-form-col form {
   display: flex;
   flex-direction: column;
@@ -151,7 +209,7 @@ body.is-contact::after { opacity: 0.35; }
   font-size: 0.62rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--warm-muted);
+  color: var(--warm-mid);
   font-weight: 400;
 }
 
@@ -333,12 +391,14 @@ body.is-contact::after { opacity: 0.35; }
 
 /* Book a call card */
 .cn-call-card {
-  background: var(--card-bg);
+  background: rgba(10,7,4,0.72);
   border: 1px solid var(--card-bdr);
   padding: 2rem 1.75rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .cn-call-heading {
@@ -400,12 +460,14 @@ body.is-contact::after { opacity: 0.35; }
 }
 
 .cn-testimonial {
-  background: var(--card-bg);
+  background: rgba(10,7,4,0.68);
   border-left: 2px solid var(--gold-dim);
   padding: 1.25rem 1.25rem 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .cn-testimonial-quote {
