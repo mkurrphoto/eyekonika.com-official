@@ -6,21 +6,24 @@ const projects = [
         name: 'Holy Trinity Monastery',
         location: 'Jordanville, NY',
         type: 'Iconography & Sacred Art',
-        color: '#12172e'
+        color: '#12172e',
+        image: 'images/holy_trinity_monastery_front_photo.JPG'
     },
     {
         slug: 'lakewood',
         name: 'St. Alexander Nevsky Cathedral',
         location: 'Howell, NJ',
         type: 'Cathedral Photography',
-        color: '#0e1e30'
+        color: '#0e1e30',
+        image: 'images/gallery/2.jpg'
     },
     {
         slug: 'st-tikhons',
         name: "St. Tikhon's Monastery",
         location: 'Waymart, PA',
         type: 'Monastic Documentary',
-        color: '#121e16'
+        color: '#121e16',
+        image: 'images/gallery/3.jpg'
     },
 ];
 
@@ -96,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
             gsap.to(floatingImg, { x: 0, duration: 1.3, ease: 'smooth' });
         }});
         gsap.to(floatingImgEl, { opacity: 0, duration: 0.22, onComplete: () => {
-            floatingImgEl.src = `images/gallery/${newIndex + 1}.jpg`;
+            floatingImgEl.src = projects[newIndex].image;
             gsap.to(floatingImgEl, { opacity: 0.75, duration: 0.45 });
         }});
     }
@@ -167,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const imgWrapper = document.createElement("div");
         imgWrapper.classList.add("img");
         const img = document.createElement("img");
-        img.src = `images/gallery/${i + 1}.jpg`;
+        img.src = projects[i].image;
         img.alt = projects[i].name;
         imgWrapper.appendChild(img);
         slide.appendChild(imgWrapper);
@@ -184,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
     gsap.set(bgOverlay, { backgroundColor: projects[0].color });
 
     if (floatingImgEl) {
-        floatingImgEl.src = 'images/gallery/2.jpg';
+        floatingImgEl.src = projects[1].image;
         gsap.set(floatingImg, { opacity: 0 });
         gsap.to(floatingImg, { opacity: 1, duration: 0.9, delay: 0.5 });
     }
