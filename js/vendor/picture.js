@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
             gsap.to(floatingImg, { x: 0, duration: 1.3, ease: 'smooth' });
         }});
         gsap.to(floatingImgEl, { opacity: 0, duration: 0.22, onComplete: () => {
-            floatingImgEl.src = `images/picture/${newIndex + 1}.jpg`;
+            floatingImgEl.src = `images/gallery/${newIndex + 1}.jpg`;
             gsap.to(floatingImgEl, { opacity: 0.75, duration: 0.45 });
         }});
     }
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const imgWrapper = document.createElement("div");
         imgWrapper.classList.add("img");
         const img = document.createElement("img");
-        img.src = `images/picture/${i + 1}.jpg`;
+        img.src = `images/gallery/${i + 1}.jpg`;
         img.alt = projects[i].name;
         imgWrapper.appendChild(img);
         slide.appendChild(imgWrapper);
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
     gsap.set(bgOverlay, { backgroundColor: projects[0].color });
 
     if (floatingImgEl) {
-        floatingImgEl.src = 'images/picture/2.jpg';
+        floatingImgEl.src = 'images/gallery/2.jpg';
         gsap.set(floatingImg, { opacity: 0 });
         gsap.to(floatingImg, { opacity: 1, duration: 0.9, delay: 0.5 });
     }

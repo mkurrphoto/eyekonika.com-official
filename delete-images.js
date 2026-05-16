@@ -31,7 +31,7 @@ const FILES_TO_DELETE = [
   'pexels-yulia-pribytkova-76505330-8924381.jpg',
 ];
 
-const BASE_PATH = 'images/photo-backgrounds';
+const BASE_PATH = 'images/backgrounds';
 
 if (!TOKEN) {
   console.error('Error: GitHub token is required');
