@@ -295,6 +295,26 @@ body.is-preload #sidebar nav ul li {
   transform-origin: center center;
 }
 
+/* ——— sidebar logo (top-bar only) ——— */
+.sidebar-logo-link {
+  display: none; /* hidden on desktop; shown in top-bar below */
+}
+
+@media screen and (max-width: 1280px) {
+  .sidebar-logo-link {
+    display: flex;
+    align-items: center;
+    padding: 0 1em 0 1.25em;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+
+  .sidebar-logo {
+    height: 2em;
+    width: auto;
+  }
+}
+
 @media screen and (max-width: 1280px) {
   #sidebar {
     height: 3.5em;
