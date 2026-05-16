@@ -87,11 +87,11 @@
 .intro-logo {
   position: absolute;
   top: 2rem;
-  left: 2rem;
+  left: 3.5rem;
   z-index: 2;
   display: block;
-  max-width: 200px;
-  width: clamp(140px, 18vw, 200px);
+  max-width: 280px;
+  width: clamp(200px, 22vw, 280px);
   height: auto;
   filter: drop-shadow(0 0 48px rgba(96, 165, 250, 0.15));
 
