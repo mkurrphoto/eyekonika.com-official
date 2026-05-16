@@ -24,7 +24,8 @@ const projects = [
         type: 'Monastic Documentary',
         color: '#121e16',
         image: 'images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG',
-        thumbnail: 'images/project_photos/front-detail-waymart-PA.JPG'
+        thumbnail: 'images/project_photos/front-detail-waymart-PA.JPG',
+        thumbPosition: 'center 20%'
     },
 ];
 
@@ -101,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }});
         gsap.to(floatingImgEl, { opacity: 0, duration: 0.22, onComplete: () => {
             floatingImgEl.src = projects[newIndex].thumbnail || projects[newIndex].image;
+            floatingImgEl.style.objectPosition = projects[newIndex].thumbPosition || 'center center';
             gsap.to(floatingImgEl, { opacity: 0.75, duration: 0.45 });
         }});
     }
@@ -189,6 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (floatingImgEl) {
         floatingImgEl.src = projects[0].thumbnail || projects[0].image;
+        floatingImgEl.style.objectPosition = projects[0].thumbPosition || 'center center';
         gsap.set(floatingImg, { opacity: 0 });
         gsap.to(floatingImg, { opacity: 1, duration: 0.9, delay: 0.5 });
     }
