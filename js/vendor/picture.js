@@ -15,7 +15,7 @@ const projects = [
         location: 'Howell, NJ',
         type: 'Cathedral Photography',
         color: '#0e1e30',
-        image: 'images/gallery/2.jpg'
+        image: 'images/project_photos/Lakewood_main_image.JPG'
     },
     {
         slug: 'st-tikhons',
@@ -23,7 +23,8 @@ const projects = [
         location: 'Waymart, PA',
         type: 'Monastic Documentary',
         color: '#121e16',
-        image: 'images/gallery/3.jpg'
+        image: 'images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG',
+        thumbnail: 'images/project_photos/front-detail-waymart-PA.JPG'
     },
 ];
 
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
             gsap.to(floatingImg, { x: 0, duration: 1.3, ease: 'smooth' });
         }});
         gsap.to(floatingImgEl, { opacity: 0, duration: 0.22, onComplete: () => {
-            floatingImgEl.src = projects[newIndex].image;
+            floatingImgEl.src = projects[newIndex].thumbnail || projects[newIndex].image;
             gsap.to(floatingImgEl, { opacity: 0.75, duration: 0.45 });
         }});
     }
@@ -187,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
     gsap.set(bgOverlay, { backgroundColor: projects[0].color });
 
     if (floatingImgEl) {
-        floatingImgEl.src = projects[1].image;
+        floatingImgEl.src = projects[0].thumbnail || projects[0].image;
         gsap.set(floatingImg, { opacity: 0 });
         gsap.to(floatingImg, { opacity: 1, duration: 0.9, delay: 0.5 });
     }
