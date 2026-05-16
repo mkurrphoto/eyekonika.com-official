@@ -439,47 +439,40 @@ body.is-contact::before {
   border-bottom: 1px solid rgba(196,163,90,0.1);
 }
 
-.cn-testimonial {
-  background: rgba(8,10,18,0.72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.cn-clients {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.cn-client {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,0.08);
-  border-left: 2px solid var(--gold-dim);
   border-radius: 4px;
-  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.cn-testimonial-quote {
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: var(--warm-fg);
-  line-height: 1.75;
-  margin: 0;
-  font-style: italic;
-  opacity: 0.9;
+.cn-client:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.14);
 }
 
-.cn-testimonial-attr {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+.cn-client img {
+  max-width: 100%;
+  max-height: 80px;
+  object-fit: contain;
+  filter: grayscale(0.2) opacity(0.85);
+  transition: filter 0.3s ease;
 }
 
-.cn-testimonial-name {
-  font-size: 0.62rem;
-  font-weight: 400;
-  color: var(--gold);
-  letter-spacing: 0.06em;
-}
-
-.cn-testimonial-role {
-  font-size: 0.58rem;
-  font-weight: 300;
-  color: var(--warm-muted);
-  letter-spacing: 0.04em;
+.cn-client:hover img {
+  filter: grayscale(0) opacity(1);
 }
 
 /* ── Responsive ───────────────────────────────────────────── */
