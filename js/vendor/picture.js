@@ -5,7 +5,7 @@ const projects = [
         slug: 'jordanville',
         name: 'Holy Trinity Monastery',
         location: 'Jordanville, NY',
-        type: 'Iconography & Sacred Art',
+        type: 'Powerful Monastic and Spiritual Legacy',
         color: '#12172e',
         image: 'images/holy_trinity_monastery_front_photo.JPG'
     },
@@ -13,7 +13,7 @@ const projects = [
         slug: 'lakewood',
         name: 'St. Alexander Nevsky Cathedral',
         location: 'Howell, NJ',
-        type: 'Cathedral Photography',
+        type: 'Thriving Russian Orthodox Parish',
         color: '#0e1e30',
         image: 'images/project_photos/Lakewood_main_image.JPG'
     },
@@ -21,7 +21,7 @@ const projects = [
         slug: 'st-tikhons',
         name: "St. Tikhon's Monastery",
         location: 'Waymart, PA',
-        type: 'Monastic Documentary',
+        type: 'Oldest Orthodox Monastery in America',
         color: '#121e16',
         image: 'images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG',
         thumbnail: 'images/project_photos/front-detail-waymart-PA.JPG',
