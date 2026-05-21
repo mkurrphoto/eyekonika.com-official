@@ -251,4 +251,13 @@
     align-items: flex-start !important;
     gap: 0.5rem;
   }
+
+  /* Increase social icon tap targets to ~36px without changing visual size */
+  .footer-social-link {
+    padding: 10px !important;
+  }
+
+  .footer-socials {
+    gap: 0.1rem !important;
+  }
 }

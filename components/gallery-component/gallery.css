@@ -193,6 +193,11 @@ body.swipe-page-left #preloader {
   will-change: transform, opacity;
 }
 
+/* --- Dots (hidden on desktop, shown by mobile rules below) --- */
+.gallery-dots {
+  display: none;
+}
+
 /* --- Responsive --- */
 @media (max-width: 1024px) {
   .container {
@@ -203,21 +208,99 @@ body.swipe-page-left #preloader {
 @media (max-width: 768px) {
   .gallery-section {
     padding: 60px 24px 80px;
-    gap: 48px;
+    gap: 40px;
   }
 
   .gallery-title {
     font-size: 1.6rem;
   }
 
-  .container {
-    width: 80%;
-    height: 280px;
+  /* ── Mobile carousel mode ── */
+  .gallery-stage .container {
+    perspective: none;
+    width: 100%;
+    height: 260px;
+    transform: none !important;
+    overflow: hidden;
+    border-radius: 12px;
   }
 
-  .container img {
-    width: 65vw;
-    height: 22vh;
+  .gallery-stage .container:hover {
+    transform: none !important;
+  }
+
+  /* All items: stacked at centre, invisible by default */
+  .gallery-stage .item {
+    width: 100% !important;
+    height: 100% !important;
+    transform: translate(-50%, -50%) !important;
+    opacity: 0;
+    transition: opacity 0.45s ease !important;
+    cursor: default;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .gallery-stage .item.gallery-active {
+    opacity: 1;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  /* Kill desktop hover fan-out */
+  .gallery-stage .container:hover .item-1,
+  .gallery-stage .container:hover .item-2,
+  .gallery-stage .container:hover .item-3 {
+    transform: translate(-50%, -50%) !important;
+    opacity: 0;
+  }
+
+  .gallery-stage .container:hover .item.gallery-active {
+    opacity: 1 !important;
+  }
+
+  .gallery-stage .item:hover {
+    margin-top: 0 !important;
+  }
+
+  .gallery-stage .container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  /* Dots */
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-top: 18px;
+  }
+
+  /* Tap target is ~24px tall; visual bar is 3px via ::after */
+  .gallery-dot {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 10px 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  .gallery-dot::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    transition: width 0.3s ease, background 0.3s ease;
+  }
+
+  .gallery-dot.active::after {
+    width: 40px;
+    background: rgba(96, 165, 250, 0.75);
   }
 
   .gallery-more-btn {
@@ -231,11 +314,7 @@ body.swipe-page-left #preloader {
     font-size: 1.4rem;
   }
 
-  .container {
-    width: 90%;
-  }
-
-  .container img {
-    width: 75vw;
+  .gallery-stage .container {
+    height: 220px;
   }
 }
