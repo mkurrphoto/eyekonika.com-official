@@ -241,6 +241,13 @@ body.swipe-page-left #preloader {
     z-index: 1;
   }
 
+  /* No-JS fallback: first image visible until JS adds js-ready */
+  .gallery-stage:not(.js-ready) .item-1 {
+    opacity: 1;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
   .gallery-stage .item.gallery-active {
     opacity: 1;
     z-index: 2;

@@ -24,7 +24,7 @@ Promise.all(
 )
   .then(() => {
     console.log("✅ All partials loaded!");
-    loadScriptsSequentially(["js/vendor/main.js"], () => {
+    loadScriptsSequentially(["js/vendor/main.js", "js/gallery-carousel.js"], () => {
       // Trigger scroll *after* vendor/main.js has loaded and scrollex has
       // had a chance to initialize — ensures #intro.inactive is removed
       // for sections already in the viewport on page load.
