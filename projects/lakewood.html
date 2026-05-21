@@ -16,44 +16,9 @@
     <link rel="stylesheet" href="./project-page.css">
 </head>
 <body>
-
-    <nav>
-        <a href="../" id="logo"><img src="../images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" /></a>
-        <a href="../projects.html">← All Projects</a>
-    </nav>
-
-    <div class="project-hero">
-        <img class="project-hero-img" src="../images/project_photos/Lakewood_main_image.JPG" alt="St. Alexander Nevsky Cathedral, Howell NJ" />
-        <div class="project-hero-overlay"></div>
-        <div class="project-hero-content">
-            <p class="project-eyebrow">Howell, New Jersey</p>
-            <h1 class="project-title">St. Alexander<br>Nevsky Cathedral</h1>
-            <p class="project-subtitle">Thriving Russian Orthodox Parish</p>
-        </div>
-    </div>
-
-    <div class="project-body">
-        <p class="project-description">
-            St. Alexander Nevsky's is a thriving Russian Orthodox parish with a rich history and beautifully built cathedral. Eyekonika's model of the church is available at the parish store.
-        </p>
-
-        <div class="project-grid">
-            <div class="project-grid-item">
-                <img src="../images/project_photos/Lakewood_main_image.JPG" alt="St. Alexander Nevsky Cathedral" />
-            </div>
-            <div class="project-grid-item">
-                <img src="../images/project_photos/Lakewood_top_down_with_double_lighting.JPG" alt="St. Alexander Nevsky Cathedral, top-down view with double lighting" />
-            </div>
-            <div class="project-grid-item">
-                <img src="../images/project_photos/St. Alexander Nevsky Cathedral.JPG" alt="St. Alexander Nevsky Cathedral" />
-            </div>
-            <div class="project-grid-item">
-                <img src="../images/project_photos/unusual_angle_lakewood_model.JPG" alt="St. Alexander Nevsky Cathedral, unusual angle" />
-            </div>
-        </div>
-
-        <a class="back-link" href="../projects.html">← Back to Projects</a>
-    </div>
-
+    <script type="module">
+        import { buildProjectPage } from '../js/project-page.js';
+        buildProjectPage('lakewood');
+    </script>
 </body>
 </html>

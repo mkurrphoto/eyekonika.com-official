@@ -16,44 +16,9 @@
     <link rel="stylesheet" href="./project-page.css">
 </head>
 <body>
-
-    <nav>
-        <a href="../" id="logo"><img src="../images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" /></a>
-        <a href="../projects.html">← All Projects</a>
-    </nav>
-
-    <div class="project-hero">
-        <img class="project-hero-img" src="../images/holy_trinity_monastery_front_photo.JPG" alt="Holy Trinity Monastery, Jordanville NY" />
-        <div class="project-hero-overlay"></div>
-        <div class="project-hero-content">
-            <p class="project-eyebrow">Jordanville, New York</p>
-            <h1 class="project-title">Holy Trinity<br>Monastery</h1>
-            <p class="project-subtitle">Powerful monastic and spiritual legacy</p>
-        </div>
-    </div>
-
-    <div class="project-body">
-        <p class="project-description">
-            Holy Trinity Monastery is a major pilgrim destination, spiritual center, and historic site. The monastery is known all over the world in Orthodox Christian circles for its publishing activity in the Cold War period, the seminary on the monastery's grounds, and the many highly influential church leaders and luminaries that lived and worked there. The monastery and seminary have used Eyekonika's glass engravings as gifts for donors, important guests, and offer them for pilgrims to buy in the monastery gift shop.
-        </p>
-
-        <div class="project-grid project-grid--jordanville">
-            <div class="project-grid-item">
-                <img src="../images/Jordanville_detail_2.JPG" alt="Holy Trinity Monastery — engraving detail" />
-            </div>
-            <div class="project-grid-item">
-                <img src="../images/detail_holy_trinity_monastery_1.JPG" alt="Holy Trinity Monastery — engraving detail" />
-            </div>
-            <div class="project-grid-item">
-                <img src="../images/holy_trinity_monastery_front_photo.JPG" alt="Holy Trinity Monastery — exterior" />
-            </div>
-            <div class="project-grid-item">
-                <img src="../images/side_perspective_Jordanville_3.JPG" alt="Holy Trinity Monastery — side perspective" />
-            </div>
-        </div>
-
-        <a class="back-link" href="../projects.html">← Back to Projects</a>
-    </div>
-
+    <script type="module">
+        import { buildProjectPage } from '../js/project-page.js';
+        buildProjectPage('jordanville');
+    </script>
 </body>
 </html>

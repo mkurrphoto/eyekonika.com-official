@@ -1,3 +1,11 @@
+<!-- Mobile sticky header — visible only on mobile, slides in after hero -->
+<nav class="mobile-nav" id="mobile-nav" aria-label="Site navigation">
+  <a href="#intro" class="mobile-nav__logo">
+    <img src="images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" />
+  </a>
+  <a href="#three" class="mobile-nav__cta">Contact</a>
+</nav>
+
 <section id="sidebar" class="sidebar">
   <div class="inner">
     <a href="#intro" class="sidebar-logo-link scrolly">
@@ -13,3 +21,19 @@
     </nav>
   </div>
 </section>
+
+<script>
+(function () {
+  if (!window.matchMedia('(max-width: 736px)').matches) return;
+
+  var nav = document.getElementById('mobile-nav');
+  if (!nav) return;
+
+  // Show after scrolling past ~70% of the hero (which is min-height: 100vh)
+  var threshold = window.innerHeight * 0.7;
+
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('is-visible', window.scrollY > threshold);
+  }, { passive: true });
+})();
+</script>

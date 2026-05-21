@@ -64,25 +64,35 @@
         <p class="scroll-hint">Scroll to explore</p>
     </div>
 
-    <!-- SEO: static project index for search crawlers -->
-    <section style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
-        <h1>Our Projects — Eyekonika</h1>
-        <p>Custom subsurface laser-engraved glass art for churches, monasteries, and nonprofits.</p>
-        <ul>
-            <li>
-                <a href="projects/jordanville">Holy Trinity Monastery — Jordanville, NY</a>
-                <p>Powerful Monastic and Spiritual Legacy — subsurface crystal engravings for Holy Trinity Monastery.</p>
-            </li>
-            <li>
-                <a href="projects/lakewood">St. Alexander Nevsky Cathedral — Howell, NJ</a>
-                <p>Thriving Russian Orthodox Parish — laser-engraved crystal pieces for St. Alexander Nevsky Cathedral.</p>
-            </li>
-            <li>
-                <a href="projects/st-tikhons">St. Tikhon's Monastery — Waymart, PA</a>
-                <p>Oldest Orthodox Monastery in America — custom glass engravings for St. Tikhon's Monastery.</p>
-            </li>
-        </ul>
-    </section>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Our Projects — Eyekonika",
+        "description": "Custom subsurface laser-engraved glass art for churches, monasteries, and nonprofits.",
+        "url": "https://eyekonika.com/projects",
+        "hasPart": [
+            {
+                "@type": "CreativeWork",
+                "name": "Holy Trinity Monastery",
+                "description": "Subsurface crystal engravings for Holy Trinity Monastery, Jordanville NY.",
+                "url": "https://eyekonika.com/projects/jordanville"
+            },
+            {
+                "@type": "CreativeWork",
+                "name": "St. Alexander Nevsky Cathedral",
+                "description": "Laser-engraved crystal pieces for St. Alexander Nevsky Cathedral, Howell NJ.",
+                "url": "https://eyekonika.com/projects/lakewood"
+            },
+            {
+                "@type": "CreativeWork",
+                "name": "St. Tikhon's Monastery",
+                "description": "Custom glass engravings for St. Tikhon's Monastery, Waymart PA.",
+                "url": "https://eyekonika.com/projects/st-tikhons"
+            }
+        ]
+    }
+    </script>
 
 </body>
 <script>

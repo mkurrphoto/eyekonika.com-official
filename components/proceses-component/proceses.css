@@ -702,7 +702,15 @@
   }
 
   .step-title { font-size: 1.1rem; }
-  .step-desc  { font-size: 0.86rem; }
+
+  .step-desc {
+    font-size: 0.86rem;
+    /* Remove clamp — on mobile cards don't hover so the full text must be visible */
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+    overflow: visible;
+  }
 
   /* Image card: stacked above card, always visible, no hover required */
   .timeline-image-card {
@@ -872,4 +880,16 @@
 .process-cta-strip__btn:hover {
   background: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(14, 165, 233, 0.82));
   border-color: rgba(96, 165, 250, 0.85);
+}
+
+@media (max-width: 600px) {
+  .process-cta-strip {
+    padding: 3.5rem 1.5rem;
+  }
+
+  .process-cta-strip__inner {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
 }
