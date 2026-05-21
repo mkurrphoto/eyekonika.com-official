@@ -73,25 +73,35 @@ nav a#logo img {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 6px;
+    gap: 0;
     align-items: center;
     z-index: 20;
 }
 
+/* Invisible padding extends the tap target to ~26px tall without changing appearance */
 .nav-item-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 12px 3px;
+    background: none;
+    cursor: pointer;
+}
+
+.nav-item-wrapper::before {
+    content: '';
+    display: block;
     width: 30px;
     height: 2px;
     background: rgba(255,255,255,0.18);
-    cursor: pointer;
     transition: background 0.4s ease, width 0.4s ease;
 }
 
-.nav-item-wrapper.active {
+.nav-item-wrapper.active::before {
     width: 60px;
     background: rgba(255,255,255,0.75);
 }
 
-.nav-item-wrapper:hover:not(.active) {
+.nav-item-wrapper:hover:not(.active)::before {
     background: rgba(255,255,255,0.38);
 }
 
@@ -273,6 +283,11 @@ nav a#logo img {
 }
 
 /* ── Scroll hint ───────────────────────────────────── */
+@keyframes hint-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+}
+
 .scroll-hint {
     position: fixed;
     bottom: 2.4em;
@@ -281,10 +296,17 @@ nav a#logo img {
     font-size: 10px;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.5);
     z-index: 10;
     white-space: nowrap;
     pointer-events: none;
+    animation: hint-pulse 2.5s ease-in-out 1.5s infinite;
+    transition: opacity 0.6s ease;
+}
+
+.scroll-hint.has-interacted {
+    opacity: 0 !important;
+    animation: none;
 }
 
 /* ── Responsive ────────────────────────────────────── */
@@ -319,10 +341,14 @@ nav a#logo img {
         bottom: 14%;
         max-width: 90vw;
     }
-    .scroll-hint { display: none; }
+    .project-counter { color: rgba(255,255,255,0.38); }
+    .counter-current { color: rgba(255,255,255,0.75); }
+    .project-location { color: rgba(255,255,255,0.5); }
 }
 
 @media (max-width: 425px) {
     .letter span { font-size: 60px !important; }
     nav a#logo img { height: 28px; }
+    .project-type { display: none; }
+    .project-card { bottom: 20%; }
 }

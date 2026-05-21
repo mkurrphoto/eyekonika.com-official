@@ -1,33 +1,4 @@
-import { titles } from './data.js';
-
-const projects = [
-    {
-        slug: 'jordanville',
-        name: 'Holy Trinity Monastery',
-        location: 'Jordanville, NY',
-        type: 'Powerful Monastic and Spiritual Legacy',
-        color: '#12172e',
-        image: 'images/holy_trinity_monastery_front_photo.JPG'
-    },
-    {
-        slug: 'lakewood',
-        name: 'St. Alexander Nevsky Cathedral',
-        location: 'Howell, NJ',
-        type: 'Thriving Russian Orthodox Parish',
-        color: '#0e1e30',
-        image: 'images/project_photos/Lakewood_main_image.JPG'
-    },
-    {
-        slug: 'st-tikhons',
-        name: "St. Tikhon's Monastery",
-        location: 'Waymart, PA',
-        type: 'Oldest Orthodox Monastery in America',
-        color: '#121e16',
-        image: 'images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG',
-        thumbnail: 'images/project_photos/front-detail-waymart-PA.JPG',
-        thumbPosition: 'center 20%'
-    },
-];
+import { projects } from '../projects-data.js';
 
 document.addEventListener("DOMContentLoaded", function () {
     gsap.registerPlugin(CustomEase);
@@ -40,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const slideTitle      = document.querySelector('.slide-title');
     const floatingImg     = document.querySelector('.floating-img');
     const floatingImgEl   = floatingImg ? floatingImg.querySelector('img') : null;
+    const scrollHint      = document.querySelector('.scroll-hint');
 
-    // Project card elements (may not exist on older pages)
     const projectCard    = document.querySelector('.project-card');
     const counterCurrent = projectCard ? projectCard.querySelector('.counter-current') : null;
     const counterTotal   = projectCard ? projectCard.querySelector('.counter-total')   : null;
@@ -50,32 +21,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const typeEl         = projectCard ? projectCard.querySelector('.project-type')     : null;
     const ctaBtn         = projectCard ? projectCard.querySelector('.project-cta')      : null;
 
-    const numberOfItems  = projects.length;
-    let currentIndex     = 0;
-    let isTransitioning  = false;
-    let scrollTimeout    = null;
+    const numberOfItems = projects.length;
+    let isTransitioning = false;
+    let scrollTimeout   = null;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    // Populate initial card content
-    if (projectCard) {
-        if (counterTotal)   counterTotal.textContent   = String(numberOfItems).padStart(2, '0');
-        if (counterCurrent) counterCurrent.textContent = '01';
-        if (locationEl)     locationEl.textContent     = projects[0].location;
-        if (nameEl)         nameEl.textContent         = projects[0].name;
-        if (typeEl)         typeEl.textContent         = projects[0].type;
+    // Set hint text based on input device
+    if (scrollHint) {
+        scrollHint.textContent = isTouchDevice ? 'Swipe to explore' : 'Scroll to explore';
     }
 
-    // CTA navigates to current project's detail page
+    // CTA navigates to current project detail page
     if (ctaBtn) {
         ctaBtn.addEventListener('click', () => {
-            sessionStorage.setItem('returnSection', 'two');
             window.location.href = `projects/${projects[currentIndex].slug}.html`;
         });
     }
 
-    // ── Letter watermark animation ──────────────────
+    // ── Letter watermark animation ──────────────────────
     function updateTitle(newIndex) {
         if (!slideTitle) return;
-        const title     = titles(newIndex);
+        const watermark = projects[newIndex].watermark;
         const titleRows = slideTitle.querySelectorAll(".slide-title-row");
 
         titleRows.forEach((row, rowIndex) => {
@@ -86,14 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 const newSpan = document.createElement("span");
                 const direction = newIndex > currentIndex ? 150 : -150;
                 gsap.set(newSpan, { x: direction });
-                newSpan.textContent = title[rowIndex][letterIndex] || "";
+                newSpan.textContent = watermark[rowIndex][letterIndex] || "";
                 letter.appendChild(newSpan);
                 gsap.to(newSpan, { x: 0, duration: 1.2, ease: 'smooth', delay: 0.05 });
             });
         });
     }
 
-    // ── Floating secondary image parallax + crossfade ──
+    // ── Floating secondary image parallax + crossfade ───
     function updateFloatingImg(newIndex) {
         if (!floatingImg || !floatingImgEl) return;
         const direction = newIndex > currentIndex ? 50 : -50;
@@ -107,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }});
     }
 
-    // ── Project card content transition ────────────────
+    // ── Project card content transition ─────────────────
     function updateProjectCard(newIndex) {
         if (!projectCard) return;
         const direction = newIndex > currentIndex ? 1 : -1;
@@ -116,9 +82,9 @@ document.addEventListener("DOMContentLoaded", function () {
             y: direction * -18, opacity: 0, duration: 0.28, ease: 'smooth',
             onComplete: () => {
                 if (counterCurrent) counterCurrent.textContent = String(newIndex + 1).padStart(2, '0');
-                if (locationEl)     locationEl.textContent = projects[newIndex].location;
-                if (nameEl)         nameEl.textContent     = projects[newIndex].name;
-                if (typeEl)         typeEl.textContent     = projects[newIndex].type;
+                if (locationEl)     locationEl.textContent     = projects[newIndex].location;
+                if (nameEl)         nameEl.textContent         = projects[newIndex].name;
+                if (typeEl)         typeEl.textContent         = projects[newIndex].type;
                 gsap.fromTo(projectCard,
                     { y: direction * 18, opacity: 0 },
                     { y: 0, opacity: 1, duration: 0.45, ease: 'smooth' }
@@ -127,10 +93,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ── Main slide transition ───────────────────────────
+    // ── Main slide transition ────────────────────────────
     function goToSlide(newIndex) {
         if (isTransitioning || newIndex === currentIndex || newIndex < 0 || newIndex >= numberOfItems) return;
         isTransitioning = true;
+
+        if (scrollHint) scrollHint.classList.add('has-interacted');
 
         document.querySelectorAll(".nav-item-wrapper").forEach((nav, i) => {
             nav.classList.toggle("active", i === newIndex);
@@ -149,16 +117,17 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFloatingImg(newIndex);
         updateProjectCard(newIndex);
 
+        history.replaceState(null, '', `#${projects[newIndex].slug}`);
+
         currentIndex = newIndex;
     }
 
     if (slidesContainer) slidesContainer.style.width = `${numberOfItems * 100}vw`;
 
-    // ── Build nav dots + slide elements ─────────────────
+    // ── Build nav dots + slide elements ──────────────────
     for (let i = 0; i < numberOfItems; i++) {
         const navWrapper = document.createElement('div');
         navWrapper.classList.add("nav-item-wrapper");
-        if (i === 0) navWrapper.classList.add("active");
         const navItem = document.createElement('div');
         navItem.classList.add('nav-item');
         navWrapper.appendChild(navItem);
@@ -179,26 +148,42 @@ document.addEventListener("DOMContentLoaded", function () {
         slide.appendChild(imgWrapper);
 
         slide.addEventListener('click', () => {
-            sessionStorage.setItem('returnSection', 'two');
             window.location.href = `projects/${projects[i].slug}.html`;
         });
 
         slidesContainer.appendChild(slide);
     }
 
-    // ── Init state ───────────────────────────────────────
-    gsap.set(bgOverlay, { backgroundColor: projects[0].color });
+    // ── Init — resolve starting slide from URL hash ──────
+    const initialSlug  = location.hash.slice(1);
+    const initialIndex = Math.max(0, projects.findIndex(p => p.slug === initialSlug));
+    let currentIndex   = initialIndex;
+
+    gsap.set(slidesContainer, { x: `${-initialIndex * 100}vw` });
+    gsap.set(bgOverlay, { backgroundColor: projects[initialIndex].color });
+
+    document.querySelectorAll('.nav-item-wrapper').forEach((nav, i) => {
+        nav.classList.toggle('active', i === initialIndex);
+    });
+
+    if (projectCard) {
+        if (counterTotal)   counterTotal.textContent   = String(numberOfItems).padStart(2, '0');
+        if (counterCurrent) counterCurrent.textContent = String(initialIndex + 1).padStart(2, '0');
+        if (locationEl)     locationEl.textContent     = projects[initialIndex].location;
+        if (nameEl)         nameEl.textContent         = projects[initialIndex].name;
+        if (typeEl)         typeEl.textContent         = projects[initialIndex].type;
+    }
 
     if (floatingImgEl) {
-        floatingImgEl.src = projects[0].thumbnail || projects[0].image;
-        floatingImgEl.style.objectPosition = projects[0].thumbPosition || 'center center';
+        floatingImgEl.src = projects[initialIndex].thumbnail || projects[initialIndex].image;
+        floatingImgEl.style.objectPosition = projects[initialIndex].thumbPosition || 'center center';
         gsap.set(floatingImg, { opacity: 0 });
         gsap.to(floatingImg, { opacity: 1, duration: 0.9, delay: 0.5 });
     }
 
-    updateTitle(0);
+    updateTitle(initialIndex);
 
-    // ── Keyboard navigation ──────────────────────────────
+    // ── Keyboard navigation ───────────────────────────────
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
             goToSlide(currentIndex === numberOfItems - 1 ? 0 : currentIndex + 1);
@@ -207,8 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // ── Mouse wheel (desktop) ────────────────────────────
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    // ── Mouse wheel (desktop) ─────────────────────────────
     let wheelDelta = 0;
     const wheelThreshold = 50;
 
@@ -230,9 +214,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }, { passive: false });
     }
 
-    // ── Touch / swipe (mobile) ───────────────────────────
+    // ── Touch / swipe (mobile) ────────────────────────────
     let touchStartX = 0, touchStartY = 0;
-    const swipeThreshold = 50;
+    const swipeThreshold         = 50;
     const verticalSwipeThreshold = 80;
     const container = document.querySelector('.container');
 
