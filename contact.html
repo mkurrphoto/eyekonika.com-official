@@ -34,7 +34,7 @@
   <div class="cn-hero">
     <p class="cn-eyebrow">Start the conversation</p>
     <h1 class="cn-title">Let&rsquo;s build<br>something lasting.</h1>
-    <p class="cn-tagline">Tell us about your project — we&rsquo;ll be back in touch within a day.</p>
+    <p class="cn-tagline">Tell us about your project &mdash; we&rsquo;ll be back in touch within a day.</p>
   </div>
 
   <!-- Body -->
@@ -43,15 +43,15 @@
     <!-- ── Form column ── -->
     <section class="cn-form-col">
 
-      <!-- Confirmation (shown after submit) -->
-      <div class="cn-confirm" id="cn-confirm">
+      <!-- Confirmation (shown after successful submit) -->
+      <div class="cn-confirm" id="cn-confirm" aria-live="polite">
         <p class="cn-confirm-title">We&rsquo;ll be in touch.</p>
         <p class="cn-confirm-sub">Usually within one business day.</p>
         <a href="/" class="cn-confirm-home">&#8592; Back to Eyekonika</a>
       </div>
 
       <!-- Form -->
-      <form id="cnForm" action="https://formspree.io/f/movyqgop" method="POST">
+      <form id="cnForm" action="https://formspree.io/f/movyqgop" method="POST" novalidate>
         <input type="text" name="_gotcha" tabindex="-1"
           style="position:absolute;left:-9999px;width:1px;height:1px;" aria-hidden="true" />
 
@@ -61,7 +61,9 @@
             Name <span class="req">*</span>
           </label>
           <input class="cn-input" type="text" id="cn-name" name="name"
-            placeholder="Your full name" autocomplete="name" required />
+            placeholder="Your full name" autocomplete="name"
+            required aria-required="true" />
+          <span class="cn-field-error" aria-live="polite"></span>
         </div>
 
         <!-- Email -->
@@ -70,7 +72,9 @@
             Email <span class="req">*</span>
           </label>
           <input class="cn-input" type="email" id="cn-email" name="email"
-            placeholder="Your email address" autocomplete="email" required />
+            placeholder="Your email address" autocomplete="email"
+            required aria-required="true" />
+          <span class="cn-field-error" aria-live="polite"></span>
         </div>
 
         <!-- Organization -->
@@ -83,8 +87,8 @@
         <div class="cn-form-divider"></div>
 
         <!-- Concept clarity -->
-        <div class="cn-field">
-          <label class="cn-label">Do you have a clear design concept?</label>
+        <div class="cn-field" role="group" aria-labelledby="lbl-concept">
+          <span class="cn-label" id="lbl-concept">Do you have a clear design concept?</span>
           <div class="cn-radio-group">
             <label class="cn-radio">
               <input type="radio" name="concept" value="yes-clear" />
@@ -99,9 +103,11 @@
           </div>
         </div>
 
+        <div class="cn-form-divider"></div>
+
         <!-- Subject -->
-        <div class="cn-field">
-          <label class="cn-label">What is the subject of the engraving?</label>
+        <div class="cn-field" role="group" aria-labelledby="lbl-subject">
+          <span class="cn-label" id="lbl-subject">What is the subject of the engraving?</span>
           <div class="cn-radio-group">
             <label class="cn-radio">
               <input type="radio" name="subject" value="building-monument" />
@@ -126,9 +132,11 @@
           </div>
         </div>
 
+        <div class="cn-form-divider"></div>
+
         <!-- 3D model -->
-        <div class="cn-field">
-          <label class="cn-label">Do you have a 3D model of the subject?</label>
+        <div class="cn-field" role="group" aria-labelledby="lbl-model">
+          <span class="cn-label" id="lbl-model">Do you have a 3D model of the subject?</span>
           <div class="cn-radio-group">
             <label class="cn-radio">
               <input type="radio" name="has-model" value="yes" />
@@ -148,11 +156,18 @@
           </div>
         </div>
 
+        <div class="cn-form-divider"></div>
+
         <!-- Timeline -->
         <div class="cn-field">
           <label class="cn-label" for="cn-timeline">When does your project need to be completed?</label>
           <input class="cn-input" type="text" id="cn-timeline" name="timeline"
             placeholder="e.g. &ldquo;by December&rdquo; or &ldquo;within 3 months&rdquo;" />
+        </div>
+
+        <!-- Submission error message -->
+        <div id="cn-error" class="cn-error-banner" hidden>
+          Something went wrong &mdash; please try again in a moment.
         </div>
 
         <div class="cn-submit-row">
@@ -212,18 +227,56 @@
 
   <script>
     (function () {
-      var form    = document.getElementById('cnForm');
-      var confirm = document.getElementById('cn-confirm');
-      var btn     = document.getElementById('cn-submit');
+      var form      = document.getElementById('cnForm');
+      var confirmEl = document.getElementById('cn-confirm');
+      var errorEl   = document.getElementById('cn-error');
+      var btn       = document.getElementById('cn-submit');
+      var btnSpan   = btn ? btn.querySelector('span') : null;
 
       if (!form) return;
 
+      var nameInput  = document.getElementById('cn-name');
+      var emailInput = document.getElementById('cn-email');
+
+      function setFieldError(input, msg) {
+        var wrapper = input.closest('.cn-field');
+        var errSpan = wrapper && wrapper.querySelector('.cn-field-error');
+        if (wrapper) wrapper.classList.add('error');
+        if (errSpan) errSpan.textContent = msg;
+        input.addEventListener('input', function clearErr() {
+          wrapper.classList.remove('error');
+          if (errSpan) errSpan.textContent = '';
+          input.removeEventListener('input', clearErr);
+        });
+      }
+
+      function validate() {
+        var ok = true;
+        if (!nameInput.value.trim()) {
+          setFieldError(nameInput, 'Please enter your name.');
+          ok = false;
+        }
+        var email = emailInput.value.trim();
+        if (!email) {
+          setFieldError(emailInput, 'Please enter your email address.');
+          ok = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setFieldError(emailInput, 'Please enter a valid email address.');
+          ok = false;
+        }
+        return ok;
+      }
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        if (errorEl) errorEl.hidden = true;
+
+        if (!validate()) return;
+
         if (btn) {
           btn.disabled = true;
-          var span = btn.querySelector('span');
-          if (span) span.textContent = 'Sending\u2026';
+          btn.classList.add('is-loading');
+          if (btnSpan) btnSpan.textContent = 'Sending…';
         }
 
         fetch(form.action, {
@@ -231,17 +284,34 @@
           body:    new FormData(form),
           headers: { Accept: 'application/json' }
         })
-          .then(show)
-          .catch(show);
+          .then(function (res) {
+            if (res.ok) {
+              showSuccess();
+            } else {
+              showError();
+            }
+          })
+          .catch(showError);
       });
 
-      function show() {
+      function showSuccess() {
         form.style.transition = 'opacity 0.7s ease';
         form.style.opacity    = '0';
         setTimeout(function () {
           form.style.display = 'none';
-          if (confirm) confirm.classList.add('visible');
+          setTimeout(function () {
+            if (confirmEl) confirmEl.classList.add('visible');
+          }, 100);
         }, 700);
+      }
+
+      function showError() {
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('is-loading');
+          if (btnSpan) btnSpan.textContent = 'Send My Project Details';
+        }
+        if (errorEl) errorEl.hidden = false;
       }
     })();
   </script>

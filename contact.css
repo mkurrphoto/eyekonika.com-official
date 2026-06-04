@@ -166,7 +166,9 @@ body.is-contact::before {
 
 /* ── Form column ──────────────────────────────────────────── */
 .cn-form-col {
-  background: rgba(8,10,18,0.38);
+  background: rgba(8,10,18,0.52);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 2rem 2.5rem;
   border-radius: 4px;
 }
@@ -193,6 +195,19 @@ body.is-contact::before {
 }
 
 .cn-label .req { color: var(--gold); font-style: normal; }
+
+/* Inline validation error */
+.cn-field-error {
+  display: block;
+  color: #e05c5c;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  min-height: 1em;
+}
+
+.cn-field.error .cn-input {
+  border-bottom-color: #e05c5c;
+}
 
 /* Text inputs */
 .cn-input {
@@ -242,6 +257,12 @@ body.is-contact::before {
 
 /* Hide native radio */
 .cn-radio input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+/* Keyboard focus ring on custom dot */
+.cn-radio input[type="radio"]:focus-visible ~ .cn-dot {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
 
 /* Custom dot */
 .cn-dot {
@@ -323,7 +344,36 @@ body.is-contact::before {
   padding: 3rem 0;
 }
 
-.cn-confirm.visible { display: flex; }
+.cn-confirm.visible {
+  display: flex;
+  animation: cn-fadein 0.7s ease forwards;
+}
+
+@keyframes cn-fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Submission error banner ──────────────────────────────── */
+.cn-error-banner {
+  font-size: 0.72rem;
+  font-weight: 300;
+  color: #e05c5c;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(224,92,92,0.3);
+  border-radius: 2px;
+  padding: 0.75rem 1rem;
+}
+
+/* ── Button loading pulse ─────────────────────────────────── */
+@keyframes cn-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+.cn-submit.is-loading {
+  animation: cn-pulse 1.2s ease-in-out infinite;
+}
 
 .cn-confirm-title {
   font-family: "Bebas Neue", sans-serif;
