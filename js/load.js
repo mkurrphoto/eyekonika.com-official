@@ -24,6 +24,11 @@ Promise.all(
   .then(() => {
     console.log("✅ All partials loaded!");
     loadScriptsSequentially(["js/vendor/main.js", "js/gallery-carousel.js"], () => {
+      // main.js registers $window.on('load') but loads dynamically after the
+      // window load event has already fired — trigger it manually so the
+      // is-preload class gets removed and the sidebar animates in.
+      setTimeout(() => document.body.classList.remove('is-preload'), 100);
+
       // Trigger scroll *after* vendor/main.js has loaded and scrollex has
       // had a chance to initialize — ensures #intro.inactive is removed
       // for sections already in the viewport on page load.
