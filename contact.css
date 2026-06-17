@@ -232,6 +232,31 @@ body.is-contact::before {
   color: var(--warm-fg);
 }
 
+/* Textarea — matches .cn-input underline style */
+.cn-textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+  color: var(--warm-fg);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 300;
+  padding: 0.65rem 0;
+  letter-spacing: 0.02em;
+  outline: none;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.cn-textarea::placeholder { color: rgba(122,110,96,0.55); }
+
+.cn-textarea:focus {
+  border-color: var(--gold);
+  color: var(--warm-fg);
+}
+
 /* Radio group — pill style */
 .cn-radio-group {
   display: flex;
