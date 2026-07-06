@@ -42,12 +42,17 @@ Dev pages are fully self-contained — sidebar HTML inline, all sections inline,
 **Already built:**
 - `index-dev.html` — home page (full redesign)
 - `shared-css/design-tokens.css` — CSS custom property foundation
+- `contact-dev.html` — two-column contact form + side panel (Calendly card, client logos); custom `--glow-cool` radios, inline validation, Formspree submit
+- `projects-dev.html` — hero + 3 alternating featured-project rows (link to production `projects/*.html`) + 6-card crystal gallery + closing CTA
+- `process-dev.html` — hero + 5 alternating numbered steps (K9/200k/0 stats on step 04) + closing CTA (step-06 copy). Editorial layout, NOT a port of the production 3D cube (`process.js`)
+- `our-story-dev.html` — full-bleed hero + 5 editorial sections (origin, craft pull-quote, why, founder, CTA), reveal-on-scroll. Founder photo is still a "Photo" placeholder — needs a real image
 
 **Still to build:**
-- `contact-dev.html`
-- `projects-dev.html`
-- `process-dev.html` (lower priority — existing process.html is already polished)
-- `our-story-dev.html` (lowest priority)
+- Nothing outstanding. All planned `-dev` pages are complete.
+
+**Open follow-ups:**
+- `projects-dev.html` / `process-dev.html` use editorial/gallery layouts rather than porting the production GSAP horizontal slider (`picture.js`) and 3D rotating cube (`process.js`). Decide whether to port those interactions.
+- `our-story-dev.html` founder photo placeholder awaits a confirmed image of Matthew Kurr.
 
 ---
 

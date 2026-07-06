@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Get in Touch — Eyekonika [dev]</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Start a conversation with Eyekonika. Tell us about your project and we'll be in touch within a day." />
+  <link rel="canonical" href="https://eyekonika.com/contact" />
+  <link rel="icon" type="image/png" href="images/brand/favicon.png" />
+
+  <!-- Fonts: Cormorant Garamond (display) + Inter (body) + Poppins (UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Design tokens -->
+  <link rel="stylesheet" href="shared-css/design-tokens.css" />
+
+  <style>
+  /* ============================================================
+     CONTACT-DEV — page styles
+     Self-contained; matches the -dev design system.
+     ============================================================ */
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background-color: var(--bg-void);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: inherit; }
+
+  @keyframes cnFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes cnFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ============================================================
+     TOP BAR
+     ============================================================ */
+  .cn-topbar {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem var(--section-pad-h);
+  }
+  .cn-topbar__logo img {
+    height: 30px;
+    width: auto;
+    display: block;
+    opacity: 0.9;
+    transition: opacity 0.25s ease;
+  }
+  .cn-topbar__logo:hover img { opacity: 1; }
+
+  .cn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+  .cn-back:hover { color: var(--glow-warm); }
+  .cn-back svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease, opacity 0.3s ease; }
+  .cn-back:hover svg { transform: translateX(-3px); opacity: 1; }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .cn-hero {
+    position: relative;
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 5rem) var(--section-pad-h) clamp(2rem, 5vw, 3.5rem);
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .cn-eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.64rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+    margin: 0 0 1rem;
+    opacity: 0;
+    animation: cnFadeIn 0.9s ease 0.1s both;
+  }
+  .cn-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--glow-warm);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem;
+    text-shadow: 0 2px 60px rgba(244, 237, 224, 0.12);
+    opacity: 0;
+    animation: cnFadeUp 1s var(--ease-out-expo) 0.25s both;
+  }
+  .cn-tagline {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 auto;
+    max-width: 440px;
+    opacity: 0;
+    animation: cnFadeIn 1s ease 0.5s both;
+  }
+
+  /* ============================================================
+     BODY — two-column
+     ============================================================ */
+  .cn-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 3.5rem) var(--section-pad-h) clamp(4rem, 8vw, 6rem);
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .cn-body { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  /* ============================================================
+     FORM
+     ============================================================ */
+  .cn-field { margin-bottom: 1.6rem; }
+
+  .cn-label {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+  }
+  .cn-label .req { color: var(--glow-cool); margin-left: 0.15em; }
+
+  .cn-input,
+  .cn-textarea {
+    width: 100%;
+    background: rgba(232, 228, 220, 0.04);
+    border: 1px solid rgba(232, 228, 220, 0.14);
+    border-radius: 2px;
+    padding: 0.85em 1em;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.25s ease, background 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .cn-input::placeholder,
+  .cn-textarea::placeholder { color: rgba(232, 228, 220, 0.25); }
+  .cn-input:focus,
+  .cn-textarea:focus {
+    border-color: rgba(244, 237, 224, 0.35);
+    background: rgba(232, 228, 220, 0.07);
+  }
+  .cn-textarea { resize: vertical; min-height: 110px; }
+
+  /* Inline validation */
+  .cn-field.error .cn-input,
+  .cn-field.error .cn-textarea {
+    border-color: rgba(226, 122, 122, 0.65);
+    background: rgba(226, 122, 122, 0.06);
+  }
+  .cn-field-error {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
+    color: #e27a7a;
+    margin-top: 0.45rem;
+    min-height: 0.66rem;
+  }
+
+  .cn-form-divider {
+    border-top: var(--border-subtle);
+    margin: 1.9rem 0;
+  }
+
+  /* ---- Custom radio group ---- */
+  .cn-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .cn-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .cn-radio:hover { color: var(--text-primary); }
+  /* Hide native input, keep it accessible */
+  .cn-radio input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .cn-dot {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(232, 228, 220, 0.30);
+    background: rgba(232, 228, 220, 0.03);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .cn-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--glow-cool);
+    transform: scale(0);
+    transition: transform 0.2s var(--ease-out-expo);
+  }
+  .cn-radio:hover .cn-dot { border-color: rgba(127, 184, 201, 0.6); }
+  .cn-radio input:checked ~ .cn-dot {
+    border-color: var(--glow-cool);
+    box-shadow: 0 0 12px rgba(127, 184, 201, 0.35);
+  }
+  .cn-radio input:checked ~ .cn-dot::after { transform: scale(1); }
+  .cn-radio input:checked ~ span:last-child { color: var(--text-primary); }
+  /* Keyboard focus ring */
+  .cn-radio input:focus-visible ~ .cn-dot {
+    outline: 2px solid rgba(127, 184, 201, 0.6);
+    outline-offset: 3px;
+  }
+
+  /* ---- Submit ---- */
+  .cn-error-banner {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: #e27a7a;
+    background: rgba(226, 122, 122, 0.08);
+    border: 1px solid rgba(226, 122, 122, 0.3);
+    border-radius: 2px;
+    padding: 0.75em 1em;
+    margin-bottom: 1.4rem;
+  }
+  .cn-submit-row { margin-top: 2rem; }
+  .cn-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.95em 2.4em;
+    background: rgba(244, 237, 224, 0.09);
+    border: 1px solid rgba(244, 237, 224, 0.28);
+    border-radius: 2px;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-warm);
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .cn-submit:hover:not(:disabled) {
+    background: rgba(244, 237, 224, 0.16);
+    border-color: rgba(244, 237, 224, 0.48);
+  }
+  .cn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+  .cn-submit svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease; }
+  .cn-submit:hover:not(:disabled) svg { transform: translateX(3px); opacity: 1; }
+
+  /* ---- Confirmation ---- */
+  .cn-confirm {
+    display: none;
+    padding: 3rem 0;
+    text-align: center;
+  }
+  .cn-confirm.visible {
+    display: block;
+    animation: cnFadeUp 0.7s var(--ease-out-expo) both;
+  }
+  .cn-confirm-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--glow-warm);
+    margin: 0 0 0.5rem;
+    line-height: 1.2;
+  }
+  .cn-confirm-sub {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 0 0 1.75rem;
+  }
+  .cn-confirm-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+  .cn-confirm-home:hover { color: var(--glow-warm); }
+
+  /* ============================================================
+     SIDE PANEL
+     ============================================================ */
+  .cn-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .cn-call-card {
+    background: var(--bg-raised);
+    border: var(--border-subtle);
+    border-radius: 4px;
+    padding: 2rem 1.85rem;
+  }
+  .cn-call-heading {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 0.65rem;
+    line-height: 1.2;
+  }
+  .cn-call-sub {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 0 1.5rem;
+  }
+  .cn-call-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85em 1.8em;
+    border: var(--border-light);
+    border-radius: 2px;
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .cn-call-btn:hover {
+    color: var(--glow-warm);
+    border-color: rgba(244, 237, 224, 0.38);
+    background: rgba(244, 237, 224, 0.04);
+  }
+  .cn-call-btn svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease; }
+  .cn-call-btn:hover svg { transform: translateX(3px); opacity: 1; }
+
+  /* ---- Client logos ---- */
+  .cn-testimonials-label {
+    font-family: var(--font-ui);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 1.25rem;
+  }
+  .cn-clients {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1.75rem;
+    align-items: center;
+  }
+  .cn-client {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cn-client img {
+    max-height: 44px;
+    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.4;
+    filter: grayscale(1) brightness(1.6);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  .cn-client img:hover {
+    opacity: 0.7;
+    filter: grayscale(0.2) brightness(1.3);
+  }
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .cn-eyebrow, .cn-title, .cn-tagline, .cn-confirm.visible {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========================================================
+       TOP BAR
+       ======================================================== -->
+  <header class="cn-topbar">
+    <a href="index-dev.html" class="cn-topbar__logo" aria-label="Eyekonika — home">
+      <img src="images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" />
+    </a>
+    <a href="index-dev.html" class="cn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to Home
+    </a>
+  </header>
+
+  <!-- ========================================================
+       HERO
+       ======================================================== -->
+  <div class="cn-hero">
+    <p class="cn-eyebrow">Start the conversation</p>
+    <h1 class="cn-title">Let&rsquo;s build<br>something lasting.</h1>
+    <p class="cn-tagline">Tell us about your project &mdash; we&rsquo;ll be back in touch within a day.</p>
+  </div>
+
+  <!-- ========================================================
+       BODY
+       ======================================================== -->
+  <main class="cn-body">
+
+    <!-- ── Form column ── -->
+    <section class="cn-form-col">
+
+      <!-- Confirmation (shown after successful submit) -->
+      <div class="cn-confirm" id="cn-confirm" aria-live="polite">
+        <p class="cn-confirm-title">We&rsquo;ll be in touch.</p>
+        <p class="cn-confirm-sub">Usually within one business day.</p>
+        <a href="index-dev.html" class="cn-confirm-home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Eyekonika
+        </a>
+      </div>
+
+      <!-- Form -->
+      <form id="cnForm" action="https://formspree.io/f/movyqgop" method="POST" novalidate>
+        <input type="text" name="_gotcha" tabindex="-1"
+          style="position:absolute;left:-9999px;width:1px;height:1px;" autocomplete="off" aria-hidden="true" />
+
+        <!-- Name -->
+        <div class="cn-field">
+          <label class="cn-label" for="cn-name">
+            Name <span class="req">*</span>
+          </label>
+          <input class="cn-input" type="text" id="cn-name" name="name"
+            placeholder="Your full name" autocomplete="name"
+            required aria-required="true" />
+          <span class="cn-field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Email -->
+        <div class="cn-field">
+          <label class="cn-label" for="cn-email">
+            Email <span class="req">*</span>
+          </label>
+          <input class="cn-input" type="email" id="cn-email" name="email"
+            placeholder="Your email address" autocomplete="email"
+            required aria-required="true" />
+          <span class="cn-field-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Organization -->
+        <div class="cn-field">
+          <label class="cn-label" for="cn-org">Organization</label>
+          <input class="cn-input" type="text" id="cn-org" name="organization"
+            placeholder="Church, institution, company&hellip;" autocomplete="organization" />
+        </div>
+
+        <div class="cn-form-divider"></div>
+
+        <!-- Concept clarity -->
+        <div class="cn-field" role="radiogroup" aria-labelledby="lbl-concept">
+          <span class="cn-label" id="lbl-concept">Do you have a clear design concept?</span>
+          <div class="cn-radio-group">
+            <label class="cn-radio">
+              <input type="radio" name="concept" value="yes-clear" />
+              <span class="cn-dot"></span>
+              <span>Yes &mdash; I know exactly what I want</span>
+            </label>
+            <label class="cn-radio">
+              <input type="radio" name="concept" value="still-exploring" />
+              <span class="cn-dot"></span>
+              <span>Still working on the idea</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="cn-form-divider"></div>
+
+        <!-- Subject -->
+        <div class="cn-field" role="radiogroup" aria-labelledby="lbl-subject">
+          <span class="cn-label" id="lbl-subject">What is the subject of the engraving?</span>
+          <div class="cn-radio-group">
+            <label class="cn-radio">
+              <input type="radio" name="subject" value="building-monument" />
+              <span class="cn-dot"></span>
+              <span>Building or monument</span>
+            </label>
+            <label class="cn-radio">
+              <input type="radio" name="subject" value="abstract" />
+              <span class="cn-dot"></span>
+              <span>Abstract object</span>
+            </label>
+            <label class="cn-radio">
+              <input type="radio" name="subject" value="logo" />
+              <span class="cn-dot"></span>
+              <span>Logo or brand mark</span>
+            </label>
+            <label class="cn-radio">
+              <input type="radio" name="subject" value="other" />
+              <span class="cn-dot"></span>
+              <span>Something else</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="cn-form-divider"></div>
+
+        <!-- 3D model -->
+        <div class="cn-field" role="radiogroup" aria-labelledby="lbl-model">
+          <span class="cn-label" id="lbl-model">Do you have a 3D model of the subject?</span>
+          <div class="cn-radio-group">
+            <label class="cn-radio">
+              <input type="radio" name="has-model" value="yes" />
+              <span class="cn-dot"></span>
+              <span>Yes</span>
+            </label>
+            <label class="cn-radio">
+              <input type="radio" name="has-model" value="no" />
+              <span class="cn-dot"></span>
+              <span>No</span>
+            </label>
+            <label class="cn-radio">
+              <input type="radio" name="has-model" value="not-sure" />
+              <span class="cn-dot"></span>
+              <span>Not sure yet</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="cn-form-divider"></div>
+
+        <!-- Timeline -->
+        <div class="cn-field">
+          <label class="cn-label" for="cn-timeline">When does your project need to be completed?</label>
+          <input class="cn-input" type="text" id="cn-timeline" name="timeline"
+            placeholder="e.g. &ldquo;by December&rdquo; or &ldquo;within 3 months&rdquo;" />
+        </div>
+
+        <div class="cn-form-divider"></div>
+
+        <!-- Project description -->
+        <div class="cn-field">
+          <label class="cn-label" for="cn-project">Tell us about your project.</label>
+          <textarea class="cn-textarea" id="cn-project" name="project-details" rows="4"
+            placeholder="Describe your vision, inspiration, or any details you&rsquo;d like us to know&hellip;"></textarea>
+        </div>
+
+        <!-- Submission error message -->
+        <div id="cn-error" class="cn-error-banner" hidden>
+          Something went wrong &mdash; please try again in a moment.
+        </div>
+
+        <div class="cn-submit-row">
+          <button type="submit" class="cn-submit" id="cn-submit">
+            <span>Send My Project Details</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="15" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+
+    </section><!-- /cn-form-col -->
+
+    <!-- ── Side panel ── -->
+    <aside class="cn-side">
+
+      <!-- Book a call -->
+      <div class="cn-call-card">
+        <h2 class="cn-call-heading">Prefer a call?</h2>
+        <p class="cn-call-sub">
+          Book a 30-minute conversation to talk through your vision directly.
+          No commitment required.
+        </p>
+        <a href="https://calendly.com/eyekonika" target="_blank" rel="noopener noreferrer" class="cn-call-btn">
+          <span>Open Booking Calendar</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Client logos -->
+      <div class="cn-testimonials">
+        <p class="cn-testimonials-label">Our past clients include</p>
+
+        <div class="cn-clients">
+          <div class="cn-client">
+            <img src="images/clients/JordanvilleLogo.png" alt="Holy Trinity Monastery, Jordanville" />
+          </div>
+          <div class="cn-client">
+            <img src="images/clients/st-tikhons-logo.png" alt="St. Tikhon's Monastery" />
+          </div>
+          <div class="cn-client">
+            <img src="images/clients/HTCS-Logo-FIN.avif" alt="Holy Trinity Cathedral and Seminary" />
+          </div>
+          <div class="cn-client">
+            <img src="images/clients/hts-seminary-logo.png" alt="Holy Trinity Orthodox Seminary" />
+          </div>
+        </div>
+
+      </div><!-- /cn-testimonials -->
+
+    </aside><!-- /cn-side -->
+
+  </main>
+
+  <!-- ========================================================
+       SCRIPT — validation + Formspree submit
+       ======================================================== -->
+  <script>
+    (function () {
+      var form      = document.getElementById('cnForm');
+      var confirmEl = document.getElementById('cn-confirm');
+      var errorEl   = document.getElementById('cn-error');
+      var btn       = document.getElementById('cn-submit');
+      var btnSpan   = btn ? btn.querySelector('span') : null;
+
+      if (!form) return;
+
+      var nameInput  = document.getElementById('cn-name');
+      var emailInput = document.getElementById('cn-email');
+
+      function setFieldError(input, msg) {
+        var wrapper = input.closest('.cn-field');
+        var errSpan = wrapper && wrapper.querySelector('.cn-field-error');
+        if (wrapper) wrapper.classList.add('error');
+        if (errSpan) errSpan.textContent = msg;
+        input.addEventListener('input', function clearErr() {
+          wrapper.classList.remove('error');
+          if (errSpan) errSpan.textContent = '';
+          input.removeEventListener('input', clearErr);
+        });
+      }
+
+      function validate() {
+        var ok = true;
+        if (!nameInput.value.trim()) {
+          setFieldError(nameInput, 'Please enter your name.');
+          ok = false;
+        }
+        var email = emailInput.value.trim();
+        if (!email) {
+          setFieldError(emailInput, 'Please enter your email address.');
+          ok = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setFieldError(emailInput, 'Please enter a valid email address.');
+          ok = false;
+        }
+        return ok;
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (errorEl) errorEl.hidden = true;
+
+        if (!validate()) return;
+
+        if (btn) {
+          btn.disabled = true;
+          btn.classList.add('is-loading');
+          if (btnSpan) btnSpan.textContent = 'Sending…';
+        }
+
+        fetch(form.action, {
+          method:  'POST',
+          body:    new FormData(form),
+          headers: { Accept: 'application/json' }
+        })
+          .then(function (res) {
+            if (res.ok) {
+              showSuccess();
+            } else {
+              showError();
+            }
+          })
+          .catch(showError);
+      });
+
+      function showSuccess() {
+        form.style.transition = 'opacity 0.7s ease';
+        form.style.opacity    = '0';
+        setTimeout(function () {
+          form.style.display = 'none';
+          setTimeout(function () {
+            if (confirmEl) confirmEl.classList.add('visible');
+          }, 100);
+        }, 700);
+      }
+
+      function showError() {
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('is-loading');
+          if (btnSpan) btnSpan.textContent = 'Send My Project Details';
+        }
+        if (errorEl) errorEl.hidden = false;
+      }
+    })();
+  </script>
+
+</body>
+</html>

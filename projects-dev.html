@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Our Projects — Eyekonika [dev]</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Past crystal engraving projects by Eyekonika — custom subsurface laser engravings for churches, institutions, and nonprofits." />
+  <link rel="canonical" href="https://eyekonika.com/projects" />
+  <link rel="icon" type="image/png" href="images/brand/favicon.png" />
+
+  <!-- Fonts: Cormorant Garamond (display) + Inter (body) + Poppins (UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Design tokens -->
+  <link rel="stylesheet" href="shared-css/design-tokens.css" />
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css" />
+
+  <style>
+  /* ============================================================
+     PROJECTS-DEV — page styles
+     Self-contained; matches the -dev design system.
+     ============================================================ */
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background-color: var(--bg-void);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: inherit; }
+
+  @keyframes pjFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pjFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Scroll-in animation (JS adds .is-visible) */
+  .fade-item {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity   0.7s var(--ease-out-expo),
+      transform 0.7s var(--ease-out-expo);
+  }
+  .fade-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============================================================
+     TOP BAR
+     ============================================================ */
+  .pj-topbar {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem var(--section-pad-h);
+  }
+  .pj-topbar__logo img {
+    height: 30px;
+    width: auto;
+    display: block;
+    opacity: 0.9;
+    transition: opacity 0.25s ease;
+  }
+  .pj-topbar__logo:hover img { opacity: 1; }
+
+  .pj-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+  .pj-back:hover { color: var(--glow-warm); }
+  .pj-back svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease, opacity 0.3s ease; }
+  .pj-back:hover svg { transform: translateX(-3px); opacity: 1; }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .pj-hero {
+    position: relative;
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 5rem) var(--section-pad-h) clamp(2rem, 5vw, 3.5rem);
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .pj-eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.64rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+    margin: 0 0 1rem;
+    opacity: 0;
+    animation: pjFadeIn 0.9s ease 0.1s both;
+  }
+  .pj-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--glow-warm);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem;
+    text-shadow: 0 2px 60px rgba(244, 237, 224, 0.12);
+    opacity: 0;
+    animation: pjFadeUp 1s var(--ease-out-expo) 0.25s both;
+  }
+  .pj-tagline {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0 auto;
+    max-width: 520px;
+    opacity: 0;
+    animation: pjFadeIn 1s ease 0.5s both;
+  }
+
+  /* ============================================================
+     SHARED SECTION UTILITIES
+     ============================================================ */
+  .section-eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.64rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+    margin: 0 0 14px;
+  }
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+    line-height: 1.1;
+  }
+  .section-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.88em 2em;
+    border: var(--border-light);
+    border-radius: 2px;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .section-cta:hover {
+    color: var(--glow-warm);
+    border-color: rgba(244, 237, 224, 0.38);
+    background: rgba(244, 237, 224, 0.04);
+  }
+  .section-cta svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease; }
+  .section-cta:hover svg { transform: translateX(3px); opacity: 1; }
+
+  /* ============================================================
+     FEATURED PROJECTS — alternating editorial rows
+     ============================================================ */
+  .pj-featured {
+    padding: clamp(2rem, 5vw, 3.5rem) var(--section-pad-h) clamp(3rem, 6vw, 5rem);
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 7vw, 6rem);
+  }
+
+  .feature-row {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+  .feature-row:nth-child(even) { grid-template-columns: 1fr 1.15fr; }
+  .feature-row:nth-child(even) .feature-media { order: 2; }
+  .feature-row:nth-child(even) .feature-text  { order: 1; }
+  @media (max-width: 820px) {
+    .feature-row,
+    .feature-row:nth-child(even) { grid-template-columns: 1fr; gap: 1.75rem; }
+    .feature-row:nth-child(even) .feature-media { order: 0; }
+    .feature-row:nth-child(even) .feature-text  { order: 0; }
+  }
+
+  /* Media: tilt + glow, mirrors index-dev crystal treatment */
+  .feature-media {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+  .feature-tilt {
+    position: relative;
+    transform-style: preserve-3d;
+    border-radius: 4px;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .feature-tilt[data-tilting] { transition: none; }
+  .feature-glow {
+    position: absolute;
+    inset: -22%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(50px) brightness(0.42);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 50%;
+  }
+  .feature-tilt:hover .feature-glow { opacity: 0.8; }
+  .feature-inner {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 4px;
+    border: var(--border-subtle);
+    background: var(--bg-raised);
+    display: block;
+  }
+  .feature-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-out-expo);
+  }
+  .feature-tilt:hover .feature-img { transform: scale(1.04); }
+
+  .feature-counter {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(244, 237, 224, 0.14);
+    line-height: 1;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+  .feature-location {
+    font-family: var(--font-ui);
+    font-size: 0.6rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+    margin: 0 0 0.75rem;
+  }
+  .feature-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.1;
+    margin: 0 0 1rem;
+  }
+  .feature-desc {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin: 0 0 1.75rem;
+    max-width: 440px;
+  }
+  .feature-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-warm);
+    text-decoration: none;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgba(244, 237, 224, 0.25);
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  .feature-link:hover { border-color: rgba(244, 237, 224, 0.7); }
+  .feature-link svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease; }
+  .feature-link:hover svg { transform: translateX(4px); opacity: 1; }
+
+  /* ============================================================
+     GALLERY GRID — crystal tilt/glow cards
+     ============================================================ */
+  .pj-gallery {
+    background: var(--bg-surface);
+    border-top: var(--border-subtle);
+    padding: var(--section-pad-v) 0;
+  }
+  .pj-gallery__header {
+    text-align: center;
+    padding: 0 var(--section-pad-h) 3rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .pj-gallery__header .section-sub {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin: 0 auto;
+    max-width: 520px;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--section-pad-h);
+  }
+  @media (max-width: 960px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .gallery-grid { grid-template-columns: 1fr; } }
+
+  .crystal-wrap {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity   0.65s var(--ease-out-expo),
+      transform 0.65s var(--ease-out-expo);
+  }
+  .crystal-wrap.is-visible { opacity: 1; transform: translateY(0); }
+
+  .crystal-tilt {
+    position: relative;
+    transform-style: preserve-3d;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .crystal-tilt[data-tilting] { transition: none; }
+
+  .crystal-glow {
+    position: absolute;
+    inset: -30%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(45px) brightness(0.40);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 50%;
+  }
+  .crystal-tilt:hover .crystal-glow { opacity: 0.85; }
+
+  .crystal-inner {
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+    z-index: 1;
+    border: var(--border-subtle);
+    background: var(--bg-raised);
+  }
+  .crystal-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out-expo);
+  }
+  .crystal-tilt:hover .crystal-img { transform: scale(1.04); }
+
+  .crystal-overlay {
+    position: absolute;
+    inset: 0;
+    top: auto;
+    padding: 1.4rem;
+    background: linear-gradient(
+      to top,
+      rgba(10, 10, 13, 0.92) 0%,
+      rgba(10, 10, 13, 0.00) 65%
+    );
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .crystal-tilt:hover .crystal-overlay { opacity: 1; transform: translateY(0); }
+  .crystal-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--glow-warm);
+    margin: 0 0 0.35rem;
+    line-height: 1.2;
+  }
+  .crystal-cat {
+    font-family: var(--font-ui);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+  }
+
+  /* ============================================================
+     CLOSING CTA
+     ============================================================ */
+  .pj-cta {
+    position: relative;
+    text-align: center;
+    padding: var(--section-pad-v) var(--section-pad-h);
+    border-top: var(--border-subtle);
+    overflow: hidden;
+  }
+  .pj-cta__bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('images/backgrounds/Eyekonika_ContactSection.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .pj-cta__inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+  .pj-cta__sub {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin: 0 auto 2.25rem;
+    max-width: 460px;
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .dev-footer {
+    background: var(--bg-void);
+    border-top: var(--border-subtle);
+    padding: 3rem var(--section-pad-h);
+    font-family: var(--font-body);
+  }
+  .dev-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+  }
+  .dev-footer__logo {
+    height: 26px;
+    width: auto;
+    opacity: 0.75;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .dev-footer__tagline { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+  .dev-footer__socials {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; gap: 1.25rem; align-items: center;
+  }
+  .dev-footer__social {
+    color: rgba(232, 228, 220, 0.38);
+    font-size: 1rem; border: none;
+    transition: color 0.25s ease;
+  }
+  .dev-footer__social:hover { color: var(--text-primary); }
+  .dev-footer__contact a {
+    font-size: 0.9rem; color: var(--glow-cool);
+    text-decoration: none; border: none; display: block;
+    margin-bottom: 0.35rem; transition: color 0.25s ease;
+  }
+  .dev-footer__contact a:hover { color: var(--glow-warm); }
+  .dev-footer__contact span { font-size: 0.85rem; color: var(--text-muted); }
+  .dev-footer__hr { border: none; border-top: var(--border-subtle); margin: 0 0 1.5rem; }
+  .dev-footer__bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .dev-footer__nav { display: flex; gap: 1.5rem; }
+  .dev-footer__nav a {
+    font-family: var(--font-ui); font-size: 0.72rem;
+    color: var(--text-muted); text-decoration: none; border: none;
+    transition: color 0.25s ease;
+  }
+  .dev-footer__nav a:hover { color: var(--text-primary); }
+  .dev-footer__copy {
+    font-family: var(--font-ui); font-size: 0.72rem;
+    color: var(--text-faint); margin: 0;
+  }
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .pj-eyebrow, .pj-title, .pj-tagline { animation: none; opacity: 1; transform: none; }
+    .fade-item, .crystal-wrap { opacity: 1; transform: none; transition: none; }
+    .crystal-img, .crystal-tilt, .feature-img, .feature-tilt { transition: none; }
+  }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========================================================
+       TOP BAR
+       ======================================================== -->
+  <header class="pj-topbar">
+    <a href="index-dev.html" class="pj-topbar__logo" aria-label="Eyekonika — home">
+      <img src="images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" />
+    </a>
+    <a href="index-dev.html" class="pj-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to Home
+    </a>
+  </header>
+
+  <!-- ========================================================
+       HERO
+       ======================================================== -->
+  <div class="pj-hero">
+    <p class="pj-eyebrow">Selected work</p>
+    <h1 class="pj-title">Light, made<br>permanent.</h1>
+    <p class="pj-tagline">A selection of the pieces we&rsquo;ve crafted for churches, monasteries, and institutions &mdash; each one unrepeatable.</p>
+  </div>
+
+  <!-- ========================================================
+       FEATURED PROJECTS
+       ======================================================== -->
+  <section class="pj-featured">
+
+    <!-- 01 — Holy Trinity Monastery -->
+    <article class="feature-row fade-item">
+      <div class="feature-media">
+        <a class="feature-tilt" href="projects/jordanville.html" aria-label="View project — Holy Trinity Monastery">
+          <div class="feature-glow" style="background-image:url('images/holy_trinity_monastery_front_photo.JPG')" aria-hidden="true"></div>
+          <span class="feature-inner">
+            <img class="feature-img" src="images/holy_trinity_monastery_front_photo.JPG" alt="Holy Trinity Monastery, Jordanville NY — crystal engraving" loading="lazy" />
+          </span>
+        </a>
+      </div>
+      <div class="feature-text">
+        <p class="feature-counter">01</p>
+        <p class="feature-location">Jordanville, New York</p>
+        <h2 class="feature-name">Holy Trinity Monastery</h2>
+        <p class="feature-desc">A powerful monastic and spiritual legacy, rendered in optical crystal — the cathedral&rsquo;s form suspended in light.</p>
+        <a class="feature-link" href="projects/jordanville.html">
+          View Project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- 02 — St. Alexander Nevsky Cathedral -->
+    <article class="feature-row fade-item">
+      <div class="feature-media">
+        <a class="feature-tilt" href="projects/lakewood.html" aria-label="View project — St. Alexander Nevsky Cathedral">
+          <div class="feature-glow" style="background-image:url('images/project_photos/St. Alexander Nevsky Cathedral.JPG')" aria-hidden="true"></div>
+          <span class="feature-inner">
+            <img class="feature-img" src="images/project_photos/St. Alexander Nevsky Cathedral.JPG" alt="St. Alexander Nevsky Cathedral, Howell NJ — crystal engraving" loading="lazy" />
+          </span>
+        </a>
+      </div>
+      <div class="feature-text">
+        <p class="feature-counter">02</p>
+        <p class="feature-location">Howell, New Jersey</p>
+        <h2 class="feature-name">St. Alexander Nevsky Cathedral</h2>
+        <p class="feature-desc">Every dome and arch subsurface-etched into K9 crystal, alive only when the light finds it.</p>
+        <a class="feature-link" href="projects/lakewood.html">
+          View Project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+
+    <!-- 03 — St. Tikhon's Monastery -->
+    <article class="feature-row fade-item">
+      <div class="feature-media">
+        <a class="feature-tilt" href="projects/st-tikhons.html" aria-label="View project — St. Tikhon's Monastery">
+          <div class="feature-glow" style="background-image:url('images/project_photos/key_image_st_tikhons-monastery-waymart_PA.JPG')" aria-hidden="true"></div>
+          <span class="feature-inner">
+            <img class="feature-img" src="images/project_photos/key_image_st_tikhons-monastery-waymart_PA.JPG" alt="St. Tikhon's Monastery, Waymart PA — crystal engraving" loading="lazy" />
+          </span>
+        </a>
+      </div>
+      <div class="feature-text">
+        <p class="feature-counter">03</p>
+        <p class="feature-location">Waymart, Pennsylvania</p>
+        <h2 class="feature-name">St. Tikhon&rsquo;s Monastery</h2>
+        <p class="feature-desc">The oldest Orthodox monastery in America, captured in exacting subsurface detail — front to reverse.</p>
+        <a class="feature-link" href="projects/st-tikhons.html">
+          View Project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ========================================================
+       GALLERY GRID
+       ======================================================== -->
+  <section class="pj-gallery">
+    <div class="pj-gallery__header">
+      <p class="section-eyebrow">The archive</p>
+      <h2 class="section-heading">More from the studio</h2>
+      <p class="section-sub">Details, angles, and prototypes from across our work in optical crystal.</p>
+    </div>
+
+    <div class="gallery-grid">
+
+      <div class="crystal-wrap">
+        <div class="crystal-tilt">
+          <div class="crystal-glow" style="background-image:url('images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG')" aria-hidden="true"></div>
+          <div class="crystal-inner">
+            <img class="crystal-img" src="images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG" alt="St. Tikhon's Monastery — high-detail front engraving" loading="lazy" />
+            <div class="crystal-overlay" aria-hidden="true">
+              <p class="crystal-title">St. Tikhon&rsquo;s — Detail</p>
+              <span class="crystal-cat">Liturgical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-wrap">
+        <div class="crystal-tilt">
+          <div class="crystal-glow" style="background-image:url('images/project_photos/reverse of St. Tikhons model.JPG')" aria-hidden="true"></div>
+          <div class="crystal-inner">
+            <img class="crystal-img" src="images/project_photos/reverse of St. Tikhons model.JPG" alt="St. Tikhon's Monastery — reverse of the model" loading="lazy" />
+            <div class="crystal-overlay" aria-hidden="true">
+              <p class="crystal-title">St. Tikhon&rsquo;s — Reverse</p>
+              <span class="crystal-cat">Liturgical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-wrap">
+        <div class="crystal-tilt">
+          <div class="crystal-glow" style="background-image:url('images/project_photos/Lakewood_main_image.JPG')" aria-hidden="true"></div>
+          <div class="crystal-inner">
+            <img class="crystal-img" src="images/project_photos/Lakewood_main_image.JPG" alt="Lakewood model — primary view" loading="lazy" />
+            <div class="crystal-overlay" aria-hidden="true">
+              <p class="crystal-title">Lakewood Model</p>
+              <span class="crystal-cat">Institutional</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-wrap">
+        <div class="crystal-tilt">
+          <div class="crystal-glow" style="background-image:url('images/project_photos/Lakewood_top_down_with_double_lighting.JPG')" aria-hidden="true"></div>
+          <div class="crystal-inner">
+            <img class="crystal-img" src="images/project_photos/Lakewood_top_down_with_double_lighting.JPG" alt="Lakewood — overhead view with dual lighting" loading="lazy" />
+            <div class="crystal-overlay" aria-hidden="true">
+              <p class="crystal-title">Lakewood — Dual Light</p>
+              <span class="crystal-cat">Institutional</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-wrap">
+        <div class="crystal-tilt">
+          <div class="crystal-glow" style="background-image:url('images/project_photos/unusual_angle_lakewood_model.JPG')" aria-hidden="true"></div>
+          <div class="crystal-inner">
+            <img class="crystal-img" src="images/project_photos/unusual_angle_lakewood_model.JPG" alt="Lakewood model — unusual angle" loading="lazy" />
+            <div class="crystal-overlay" aria-hidden="true">
+              <p class="crystal-title">Lakewood — Perspective</p>
+              <span class="crystal-cat">Institutional</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-wrap">
+        <div class="crystal-tilt">
+          <div class="crystal-glow" style="background-image:url('images/process/Gracanica_Cinematic.jpg')" aria-hidden="true"></div>
+          <div class="crystal-inner">
+            <img class="crystal-img" src="images/process/Gracanica_Cinematic.jpg" alt="Gracanica Monastery — cinematic crystal engraving" loading="lazy" />
+            <div class="crystal-overlay" aria-hidden="true">
+              <p class="crystal-title">Gracanica Monastery</p>
+              <span class="crystal-cat">Liturgical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.gallery-grid -->
+  </section>
+
+  <!-- ========================================================
+       CLOSING CTA
+       ======================================================== -->
+  <section class="pj-cta">
+    <div class="pj-cta__bg" aria-hidden="true"></div>
+    <div class="pj-cta__inner fade-item">
+      <p class="section-eyebrow" style="text-align:center;">Start here.</p>
+      <h2 class="section-heading">Imagine yours in crystal.</h2>
+      <p class="pj-cta__sub">Every piece begins with a conversation. Tell us what you&rsquo;re envisioning — we&rsquo;ll be in touch within a day.</p>
+      <a href="contact-dev.html" class="section-cta">
+        Start the Conversation
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       FOOTER
+       ======================================================== -->
+  <footer class="dev-footer">
+    <div class="dev-footer__inner">
+
+      <div>
+        <img class="dev-footer__logo" src="images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" />
+        <p class="dev-footer__tagline">Subsurface laser-engraved glass art.</p>
+      </div>
+
+      <ul class="dev-footer__socials" aria-label="Social media">
+        <li><a href="https://www.facebook.com/eyekonika"            class="dev-footer__social icon brands fa-facebook-f" aria-label="Facebook"  target="_blank" rel="noopener"></a></li>
+        <li><a href="https://www.linkedin.com/company/eyekonika/"   class="dev-footer__social icon brands fa-linkedin-in" aria-label="LinkedIn"  target="_blank" rel="noopener"></a></li>
+        <li><a href="https://www.instagram.com/eyekonika_official/" class="dev-footer__social icon brands fa-instagram"   aria-label="Instagram" target="_blank" rel="noopener"></a></li>
+        <li><a href="https://www.youtube.com/@eyekonika_official"   class="dev-footer__social icon brands fa-youtube"     aria-label="YouTube"   target="_blank" rel="noopener"></a></li>
+        <li><a href="https://pinterest.com/eyekonika"               class="dev-footer__social icon brands fa-pinterest-p" aria-label="Pinterest" target="_blank" rel="noopener"></a></li>
+      </ul>
+
+      <div class="dev-footer__contact">
+        <a href="mailto:contact@eyekonika.com">contact@eyekonika.com</a>
+        <span>(315) 552-0330</span>
+      </div>
+
+    </div>
+
+    <hr class="dev-footer__hr" />
+
+    <div class="dev-footer__bottom">
+      <nav class="dev-footer__nav" aria-label="Footer navigation">
+        <a href="index-dev.html">Home</a>
+        <a href="contact-dev.html">Contact</a>
+        <a href="projects-dev.html">Projects</a>
+      </nav>
+      <p class="dev-footer__copy">&copy; 2026 Eyekonika LLC. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---- Lenis smooth scroll ---- */
+    if (!reduceMotion && window.Lenis) {
+      var lenis = new Lenis({
+        duration: 1.2,
+        easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+        smoothWheel: true,
+        smoothTouch: false,
+      });
+      window.lenis = lenis;
+
+      if (window.ScrollTrigger) lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    /* ---- IntersectionObserver: scroll-in fade ---- */
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el  = entry.target;
+        var idx = parseInt(el.dataset.stagger || '0', 10);
+        setTimeout(function () { el.classList.add('is-visible'); }, idx * 90);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-item').forEach(function (el) { io.observe(el); });
+
+    /* Crystal cards: stagger in rows of 3 */
+    document.querySelectorAll('.crystal-wrap').forEach(function (el, i) {
+      el.dataset.stagger = i % 3;
+      io.observe(el);
+    });
+
+    /* ---- 3D tilt (crystal cards + feature media) ---- */
+    if (!reduceMotion) {
+      var TILT_MAX = 11; /* degrees */
+
+      document.querySelectorAll('.crystal-tilt, .feature-tilt').forEach(function (card) {
+        card.addEventListener('mouseenter', function () {
+          card.setAttribute('data-tilting', '');
+        });
+
+        card.addEventListener('mousemove', function (e) {
+          var rect = card.getBoundingClientRect();
+          var cx   = rect.left + rect.width  / 2;
+          var cy   = rect.top  + rect.height / 2;
+          var dx   = (e.clientX - cx) / (rect.width  / 2);
+          var dy   = (e.clientY - cy) / (rect.height / 2);
+          var rx   = -dy * TILT_MAX;
+          var ry   =  dx * TILT_MAX;
+          card.style.transform =
+            'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+        });
+
+        card.addEventListener('mouseleave', function () {
+          card.removeAttribute('data-tilting');
+          card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+        });
+      });
+    }
+
+  })();
+  </script>
+
+</body>
+</html>
