@@ -1,0 +1,41 @@
+/* ============================================================
+   EYEKONIKA DESIGN TOKENS — shared across all -dev pages
+   ============================================================ */
+
+:root {
+  /* ---- Backgrounds ---- */
+  --bg-void:    #0a0a0d;   /* deepest dark — page background */
+  --bg-surface: #0f0f14;   /* sidebar, section alternates */
+  --bg-raised:  #141419;   /* cards, form fields */
+
+  /* ---- Accent / glow ---- */
+  --glow-warm: #f4ede0;    /* crystal light; primary accent on dark */
+  --glow-cool: #7fb8c9;    /* links, category tags, UI highlights */
+  --glow-blue: #60a5fa;    /* legacy accent — phase out gradually */
+
+  /* ---- Text ---- */
+  --text-primary: #e8e4dc;
+  --text-muted:   rgba(232, 228, 220, 0.50);
+  --text-faint:   rgba(232, 228, 220, 0.25);
+  --text-on-light: #0a0a0d;
+
+  /* ---- Typography ---- */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Inter', 'Poppins', sans-serif;
+  --font-ui:      'Poppins', sans-serif;  /* nav, labels, buttons */
+
+  /* ---- Spacing ---- */
+  --section-pad-v: clamp(80px, 10vw, 140px);
+  --section-pad-h: clamp(24px, 5vw, 80px);
+
+  /* ---- Borders ---- */
+  --border-subtle:  1px solid rgba(232, 228, 220, 0.07);
+  --border-light:   1px solid rgba(232, 228, 220, 0.14);
+
+  /* ---- Shadows / glow ---- */
+  --card-glow: 0 0 60px rgba(244, 237, 224, 0.07), 0 0 120px rgba(127, 184, 201, 0.05);
+
+  /* ---- Easing ---- */
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+}

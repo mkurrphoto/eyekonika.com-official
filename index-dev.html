@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Eyekonika — Custom Crystal Engravings [dev]</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Subsurface laser-engraved glass art — permanent, unrepeatable, alive only when light finds it. Trusted by institutions, churches, and nonprofits." />
+  <link rel="canonical" href="https://eyekonika.com/" />
+  <link rel="icon" type="image/png" href="images/brand/favicon.png" />
+
+  <!-- Fonts: Cormorant Garamond (display) + Inter (body) + Poppins (UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Base + tokens -->
+  <link rel="stylesheet" href="shared-css/main.css" />
+  <link rel="stylesheet" href="shared-css/loading.css" />
+  <link rel="stylesheet" href="shared-css/design-tokens.css" />
+  <!-- Sidebar layout (position:fixed, width, mobile topbar, mobile-nav) -->
+  <link rel="stylesheet" href="components/sidebar-component/sidebar.css" />
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css" />
+
+  <style>
+  /* ============================================================
+     INDEX-DEV — page styles
+     All component CSS is inlined here; no external injection.
+     ============================================================ */
+
+  /* ---- Global body overrides ---- */
+  body {
+    background-color: var(--bg-void);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ---- Wrapper layout (sidebar is position:fixed at 15em) ---- */
+  #wrapper {
+    margin-left: 15em;
+  }
+  @media screen and (max-width: 1280px) {
+    #wrapper { margin-left: 0; margin-top: 3.5em; }
+  }
+  @media screen and (max-width: 736px) {
+    #wrapper { margin-top: 0; }
+  }
+
+  /* ---- Sidebar overrides ---- */
+  #sidebar {
+    background-color: var(--bg-surface);
+    border-right: var(--border-subtle);
+  }
+  #sidebar nav a {
+    color: var(--text-faint);
+    font-family: var(--font-ui);
+  }
+  #sidebar nav a:before {
+    background: rgba(232, 228, 220, 0.04);
+  }
+  #sidebar nav a:after {
+    background-image: linear-gradient(to right, var(--glow-warm), var(--glow-cool));
+  }
+  #sidebar nav a:hover { color: var(--text-muted); }
+  #sidebar nav a.active { color: var(--glow-warm); }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  #intro {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('images/backgrounds/Eyekonika_Hero.jpg');
+    background-size: cover;
+    background-position: center 60%;
+    background-color: var(--bg-void);
+    overflow: hidden;
+  }
+
+  .intro-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 13, 0.82) 0%,
+      rgba(10, 10, 13, 0.65) 35%,
+      rgba(10, 10, 13, 0.65) 65%,
+      rgba(10, 10, 13, 0.90) 100%
+    );
+    z-index: 1;
+  }
+
+  .intro-logo {
+    position: absolute;
+    top: 2rem;
+    left: 3.5rem;
+    z-index: 2;
+    max-width: 280px;
+    width: clamp(200px, 22vw, 280px);
+    height: auto;
+    opacity: 0;
+    animation: devFadeUp 1s var(--ease-out-expo) 1.6s both;
+  }
+
+  @keyframes devFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes devFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .intro-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 780px;
+    width: 100%;
+  }
+
+  .intro-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5.4rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--glow-warm);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.75rem;
+    text-shadow:
+      0 2px 60px rgba(244, 237, 224, 0.14),
+      0 0 120px rgba(244, 237, 224, 0.07);
+    opacity: 0;
+    animation: devFadeUp 1.1s var(--ease-out-expo) 2.0s both;
+  }
+
+  .intro-sub {
+    font-family: var(--font-ui);
+    font-size: clamp(0.6rem, 1vw, 0.78rem);
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 220, 0.60);
+    margin: 0 0 2.4rem;
+    opacity: 0;
+    animation: devFadeIn 1s ease 2.55s both;
+  }
+
+  .intro-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 3.2rem;
+    opacity: 0;
+    animation: devFadeUp 0.9s var(--ease-out-expo) 2.85s both;
+  }
+
+  .intro-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.9em 2.4em;
+    border: 1px solid rgba(244, 237, 224, 0.22);
+    border-radius: 2px;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(244, 237, 224, 0.72);
+    background: rgba(244, 237, 224, 0.04);
+    transition:
+      background 0.35s ease,
+      color 0.35s ease,
+      border-color 0.35s ease;
+  }
+  .intro-cta--primary {
+    background: rgba(244, 237, 224, 0.10);
+    border-color: rgba(244, 237, 224, 0.38);
+    color: var(--glow-warm);
+  }
+  .intro-cta--primary:hover {
+    background: rgba(244, 237, 224, 0.18);
+    border-color: rgba(244, 237, 224, 0.65);
+    color: #fff;
+  }
+  .intro-cta--secondary:hover {
+    background: rgba(244, 237, 224, 0.08);
+    color: var(--glow-warm);
+    border-color: rgba(244, 237, 224, 0.4);
+  }
+  .intro-cta svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease; }
+  .intro-cta--secondary:hover svg { transform: translateX(3px); opacity: 1; }
+
+  /* Trust strip */
+  .intro-trust {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    opacity: 0;
+    animation: devFadeIn 1s ease 3.25s both;
+  }
+  .intro-trust__label {
+    font-family: var(--font-ui);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0;
+  }
+  .intro-trust__logos {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .intro-trust__logo {
+    height: 30px;
+    width: auto;
+    max-width: 100px;
+    object-fit: contain;
+    opacity: 0.35;
+    filter: grayscale(1) brightness(1.6);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  .intro-trust__logo:hover {
+    opacity: 0.65;
+    filter: grayscale(0.2) brightness(1.3);
+  }
+
+  /* Scroll indicator */
+  .intro-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    opacity: 0;
+    animation: devFadeIn 0.8s ease 3.6s both;
+  }
+  .intro-scroll__line {
+    width: 1px;
+    height: 52px;
+    background: linear-gradient(to bottom, rgba(244, 237, 224, 0.6), transparent);
+    animation: devScrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes devScrollPulse {
+    0%, 100% { opacity: 0.35; transform: scaleY(0.5); transform-origin: top; }
+    50%       { opacity: 1;    transform: scaleY(1);   transform-origin: top; }
+  }
+
+  @media screen and (max-width: 1280px) {
+    .intro-logo { display: none; }
+  }
+  @media screen and (max-width: 736px) {
+    .intro-logo {
+      display: block;
+      position: static;
+      max-width: 210px;
+      margin: 0 auto 1.5rem;
+    }
+    .intro-inner { padding: 3rem 1.5rem; }
+    .intro-ctas  { flex-direction: column; width: 100%; }
+    .intro-cta   { justify-content: center; }
+    .intro-trust__logos { gap: 1.5rem; }
+    .intro-trust__logo  { height: 24px; }
+  }
+
+  /* ============================================================
+     SHARED SECTION UTILITIES
+     ============================================================ */
+  .section-eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.64rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+    margin: 0 0 14px;
+  }
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+    line-height: 1.1;
+  }
+  .section-body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 520px;
+    margin: 0 0 2.5rem;
+  }
+  .section-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.88em 2em;
+    border: var(--border-light);
+    border-radius: 2px;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .section-cta:hover {
+    color: var(--glow-warm);
+    border-color: rgba(244, 237, 224, 0.38);
+    background: rgba(244, 237, 224, 0.04);
+  }
+  .section-cta svg { flex-shrink: 0; opacity: 0.7; transition: transform 0.3s ease; }
+  .section-cta:hover svg { transform: translateX(3px); opacity: 1; }
+
+  /* Scroll-in animation (JS adds .is-visible) */
+  .fade-item {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity  0.65s var(--ease-out-expo),
+      transform 0.65s var(--ease-out-expo);
+  }
+  .fade-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============================================================
+     PROCESS TEASER (#one)
+     ============================================================ */
+  .process-teaser {
+    position: relative;
+    background: var(--bg-surface);
+    padding: var(--section-pad-v) var(--section-pad-h);
+    border-top: var(--border-subtle);
+  }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin: 2.5rem 0 3rem;
+  }
+  @media (max-width: 900px)  { .process-steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px)  { .process-steps { grid-template-columns: 1fr; } }
+
+  .process-step {
+    padding: 2rem 1.75rem;
+    border: var(--border-subtle);
+    border-radius: 3px;
+    background: var(--bg-raised);
+    transition: border-color 0.3s ease;
+  }
+  .process-step:hover { border-color: rgba(244, 237, 224, 0.14); }
+
+  .process-step__num {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(244, 237, 224, 0.10);
+    line-height: 1;
+    margin: 0 0 1.2rem;
+    letter-spacing: -0.02em;
+  }
+  .process-step__title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+    line-height: 1.25;
+  }
+  .process-step__desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin: 0;
+  }
+
+  /* ============================================================
+     PORTFOLIO / GALLERY (#two)
+     ============================================================ */
+  .gallery-dev {
+    background: var(--bg-void);
+    padding: var(--section-pad-v) 0;
+    border-top: var(--border-subtle);
+  }
+
+  .gallery-dev__header {
+    text-align: center;
+    padding: 0 var(--section-pad-h) 3rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .gallery-dev__header .section-body {
+    margin: 0 auto;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--section-pad-h);
+  }
+  @media (max-width: 960px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .gallery-grid { grid-template-columns: 1fr; } }
+
+  /* Outer wrapper: handles fade-in only */
+  .crystal-wrap {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity  0.65s var(--ease-out-expo),
+      transform 0.65s var(--ease-out-expo);
+  }
+  .crystal-wrap.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Tilt target: 3D perspective via JS */
+  .crystal-tilt {
+    position: relative;
+    transform-style: preserve-3d;
+    border-radius: 3px;
+    cursor: pointer;
+    /* smooth return on mouseleave */
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  /* Suppress return transition during active tilt (JS toggles data-tilting) */
+  .crystal-tilt[data-tilting] {
+    transition: none;
+  }
+
+  /* Glow layer: blurred duplicate, screen-blended */
+  .crystal-glow {
+    position: absolute;
+    inset: -30%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(45px) brightness(0.40);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 50%;
+  }
+  .crystal-tilt:hover .crystal-glow { opacity: 0.85; }
+
+  /* Sharp image container */
+  .crystal-inner {
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+    z-index: 1;
+    border: var(--border-subtle);
+    background: var(--bg-raised);
+  }
+
+  .crystal-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out-expo);
+  }
+  .crystal-tilt:hover .crystal-img { transform: scale(1.04); }
+
+  /* Hover overlay: title + category */
+  .crystal-overlay {
+    position: absolute;
+    inset: 0;
+    top: auto;
+    padding: 1.4rem;
+    background: linear-gradient(
+      to top,
+      rgba(10, 10, 13, 0.92) 0%,
+      rgba(10, 10, 13, 0.00) 65%
+    );
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .crystal-tilt:hover .crystal-overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .crystal-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--glow-warm);
+    margin: 0 0 0.35rem;
+    line-height: 1.2;
+  }
+  .crystal-cat {
+    font-family: var(--font-ui);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-cool);
+  }
+
+  .gallery-dev__footer {
+    text-align: center;
+    padding: 3rem var(--section-pad-h) 0;
+  }
+
+  /* ============================================================
+     GET IN TOUCH (#three)
+     ============================================================ */
+  .git-section {
+    position: relative;
+    background: var(--bg-surface);
+    padding: var(--section-pad-v) var(--section-pad-h);
+    border-top: var(--border-subtle);
+    overflow: hidden;
+  }
+
+  .git-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('images/backgrounds/Eyekonika_ContactSection.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .git-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .git-container { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  .git-trust-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .git-trust-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .git-trust-list li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--glow-cool);
+    flex-shrink: 0;
+    margin-top: 0.5em;
+  }
+
+  /* Form card */
+  .git-card {
+    background: var(--bg-raised);
+    border: var(--border-subtle);
+    border-radius: 4px;
+    padding: 2.5rem;
+  }
+
+  .git-form-field {
+    margin-bottom: 1.4rem;
+  }
+  .git-form-field:last-of-type { margin-bottom: 2rem; }
+
+  .git-form-label {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .git-form-input,
+  .git-form-textarea {
+    width: 100%;
+    background: rgba(232, 228, 220, 0.04);
+    border: 1px solid rgba(232, 228, 220, 0.14);
+    border-radius: 2px;
+    padding: 0.85em 1em;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.25s ease, background 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .git-form-input::placeholder,
+  .git-form-textarea::placeholder {
+    color: rgba(232, 228, 220, 0.25);
+  }
+  .git-form-input:focus,
+  .git-form-textarea:focus {
+    border-color: rgba(244, 237, 224, 0.35);
+    background: rgba(232, 228, 220, 0.07);
+  }
+  .git-form-textarea { resize: vertical; }
+
+  .git-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.92em 2.2em;
+    background: rgba(244, 237, 224, 0.09);
+    border: 1px solid rgba(244, 237, 224, 0.28);
+    border-radius: 2px;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-warm);
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .git-submit:hover:not(:disabled) {
+    background: rgba(244, 237, 224, 0.16);
+    border-color: rgba(244, 237, 224, 0.48);
+  }
+  .git-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .git-confirm {
+    text-align: center;
+    padding: 2.5rem 0;
+  }
+  .git-confirm__heading {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--glow-warm);
+    margin: 0 0 0.5rem;
+    line-height: 1.2;
+  }
+  .git-confirm__sub {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .dev-footer {
+    background: var(--bg-void);
+    border-top: var(--border-subtle);
+    padding: 3rem var(--section-pad-h);
+    font-family: var(--font-body);
+  }
+  .dev-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+  }
+  .dev-footer__logo {
+    height: 26px;
+    width: auto;
+    opacity: 0.75;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .dev-footer__tagline {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .dev-footer__socials {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+  }
+  .dev-footer__social {
+    color: rgba(232, 228, 220, 0.38);
+    font-size: 1rem;
+    border: none;
+    transition: color 0.25s ease;
+  }
+  .dev-footer__social:hover { color: var(--text-primary); }
+  .dev-footer__contact a {
+    font-size: 0.9rem;
+    color: var(--glow-cool);
+    text-decoration: none;
+    border: none;
+    display: block;
+    margin-bottom: 0.35rem;
+    transition: color 0.25s ease;
+  }
+  .dev-footer__contact a:hover { color: var(--glow-warm); }
+  .dev-footer__contact span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .dev-footer__hr {
+    border: none;
+    border-top: var(--border-subtle);
+    margin: 0 0 1.5rem;
+  }
+  .dev-footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .dev-footer__nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .dev-footer__nav a {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    border: none;
+    transition: color 0.25s ease;
+  }
+  .dev-footer__nav a:hover { color: var(--text-primary); }
+  .dev-footer__copy {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    margin: 0;
+  }
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .intro-logo,
+    .intro-headline,
+    .intro-sub,
+    .intro-ctas,
+    .intro-trust,
+    .intro-scroll {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+    .intro-scroll__line { animation: none; }
+    .fade-item,
+    .crystal-wrap {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .crystal-img,
+    .crystal-tilt { transition: none; }
+  }
+  </style>
+</head>
+
+<body class="index is-preload">
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <img src="images/loading/80672da3-9ad4-0884-8d9b-e0d35bb47ea9.gif" alt="Loading..." class="loader-gif" />
+    <div class="loader-text">Eyekonika.com</div>
+  </div>
+
+  <!-- Mobile sticky header -->
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Site navigation">
+    <a href="#intro" class="mobile-nav__logo">
+      <img src="images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" />
+    </a>
+    <a href="#three" class="mobile-nav__cta">Contact</a>
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- ========================================================
+         SIDEBAR
+         ======================================================== -->
+    <section id="sidebar" class="sidebar">
+      <div class="inner">
+        <a href="index-dev.html" class="sidebar-logo-link">
+          <img class="sidebar-logo" src="images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" />
+        </a>
+        <nav>
+          <ul>
+            <li><a href="#intro">Welcome</a></li>
+            <li><a href="#one">The Process</a></li>
+            <li><a href="#two">Portfolio</a></li>
+            <li><a href="contact.html">Get in Touch</a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         HERO (#intro)
+         ======================================================== -->
+    <section id="intro">
+      <div class="intro-overlay" aria-hidden="true"></div>
+
+      <img
+        class="intro-logo"
+        src="images/brand/Eyekonika_logo_blue_rectangle.png"
+        alt="Eyekonika"
+      />
+
+      <div class="intro-inner">
+
+        <h1 class="intro-headline">Permanent light.<br>Engraved in crystal.</h1>
+
+        <p class="intro-sub">Custom 3D subsurface laser engravings</p>
+
+        <div class="intro-ctas">
+          <a href="#three" class="intro-cta intro-cta--primary scrolly">
+            Tell Us Your Vision
+          </a>
+          <a href="#one" class="intro-cta intro-cta--secondary scrolly">
+            See how it works
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Institutional trust strip -->
+        <div class="intro-trust">
+          <p class="intro-trust__label">Trusted by Orthodox institutions across North America</p>
+          <div class="intro-trust__logos" aria-label="Past clients">
+            <img class="intro-trust__logo" src="images/clients/JordanvilleLogo.png"   alt="Holy Trinity Monastery, Jordanville" />
+            <img class="intro-trust__logo" src="images/clients/st-tikhons-logo.png"   alt="St. Tikhon's Monastery" />
+            <img class="intro-trust__logo" src="images/clients/HTCS-Logo-FIN.avif"   alt="Holy Trinity Cathedral and Seminary" />
+            <img class="intro-trust__logo" src="images/clients/hts-seminary-logo.png" alt="Holy Trinity Orthodox Seminary" />
+          </div>
+        </div>
+
+      </div>
+
+      <div class="intro-scroll" aria-hidden="true">
+        <div class="intro-scroll__line"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PROCESS TEASER (#one)
+         ======================================================== -->
+    <div id="timeline-enter"></div>
+
+    <section id="one" class="process-teaser">
+      <p class="section-eyebrow">Our Process</p>
+      <h2 class="section-heading">How We Work</h2>
+      <p class="section-body">
+        From your first idea to delivery — every step documented, approved, and refined. No surprises, no guesswork.
+      </p>
+
+      <div class="process-steps">
+
+        <div class="process-step fade-item">
+          <div class="process-step__num">01</div>
+          <h3 class="process-step__title">Discovery &amp; Consultation</h3>
+          <p class="process-step__desc">We learn your vision completely — every option, every cost. Contracts drawn up before anything moves forward.</p>
+        </div>
+
+        <div class="process-step fade-item">
+          <div class="process-step__num">02</div>
+          <h3 class="process-step__title">Design &amp; Revision</h3>
+          <p class="process-step__desc">Our team builds the 3D model from scratch — visiting your site if needed. You review every draft until it's exact.</p>
+        </div>
+
+        <div class="process-step fade-item">
+          <div class="process-step__num">03</div>
+          <h3 class="process-step__title">Prototype &amp; Approval</h3>
+          <p class="process-step__desc">You see it before we make it. Nothing enters production until you're certain of every detail.</p>
+        </div>
+
+        <div class="process-step fade-item">
+          <div class="process-step__num">04</div>
+          <h3 class="process-step__title">Production &amp; Delivery</h3>
+          <p class="process-step__desc">Femtosecond lasers etch into optical K9 crystal. One piece or one thousand — the same standard throughout.</p>
+        </div>
+
+      </div>
+
+      <a href="process.html" class="section-cta">
+        Explore the full process
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+
+    <div id="timeline-exit"></div>
+
+    <!-- ========================================================
+         PORTFOLIO (#two)
+         ======================================================== -->
+    <section id="two" class="gallery-dev">
+
+      <div class="gallery-dev__header">
+        <p class="section-eyebrow">Portfolio</p>
+        <h2 class="section-heading">Our Past Projects</h2>
+        <p class="section-body">
+          A selection of pieces we've crafted — each one a permanent work of art.
+        </p>
+      </div>
+
+      <div class="gallery-grid">
+
+        <div class="crystal-wrap">
+          <div class="crystal-tilt">
+            <div class="crystal-glow" style="background-image:url('images/project_photos/St. Alexander Nevsky Cathedral.JPG')" aria-hidden="true"></div>
+            <div class="crystal-inner">
+              <img class="crystal-img" src="images/project_photos/St. Alexander Nevsky Cathedral.JPG" alt="St. Alexander Nevsky Cathedral — crystal engraving" loading="lazy" />
+              <div class="crystal-overlay" aria-hidden="true">
+                <p class="crystal-title">St. Alexander Nevsky Cathedral</p>
+                <span class="crystal-cat">Liturgical</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crystal-wrap">
+          <div class="crystal-tilt">
+            <div class="crystal-glow" style="background-image:url('images/project_photos/key_image_st_tikhons-monastery-waymart_PA.JPG')" aria-hidden="true"></div>
+            <div class="crystal-inner">
+              <img class="crystal-img" src="images/project_photos/key_image_st_tikhons-monastery-waymart_PA.JPG" alt="St. Tikhon's Monastery, Waymart PA — crystal engraving" loading="lazy" />
+              <div class="crystal-overlay" aria-hidden="true">
+                <p class="crystal-title">St. Tikhon's Monastery</p>
+                <span class="crystal-cat">Liturgical</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crystal-wrap">
+          <div class="crystal-tilt">
+            <div class="crystal-glow" style="background-image:url('images/project_photos/Lakewood_main_image.JPG')" aria-hidden="true"></div>
+            <div class="crystal-inner">
+              <img class="crystal-img" src="images/project_photos/Lakewood_main_image.JPG" alt="Lakewood — crystal engraving" loading="lazy" />
+              <div class="crystal-overlay" aria-hidden="true">
+                <p class="crystal-title">Lakewood Memorial</p>
+                <span class="crystal-cat">Institutional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crystal-wrap">
+          <div class="crystal-tilt">
+            <div class="crystal-glow" style="background-image:url('images/process/Gracanica_Cinematic.jpg')" aria-hidden="true"></div>
+            <div class="crystal-inner">
+              <img class="crystal-img" src="images/process/Gracanica_Cinematic.jpg" alt="Gracanica Monastery — cinematic crystal engraving" loading="lazy" />
+              <div class="crystal-overlay" aria-hidden="true">
+                <p class="crystal-title">Gracanica Monastery</p>
+                <span class="crystal-cat">Liturgical</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crystal-wrap">
+          <div class="crystal-tilt">
+            <div class="crystal-glow" style="background-image:url('images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG')" aria-hidden="true"></div>
+            <div class="crystal-inner">
+              <img class="crystal-img" src="images/project_photos/front-detail-high-detail-st-tikhons-monastery-waymart-PA.JPG" alt="St. Tikhon's Monastery — high-detail crystal engraving" loading="lazy" />
+              <div class="crystal-overlay" aria-hidden="true">
+                <p class="crystal-title">St. Tikhon's — Detail</p>
+                <span class="crystal-cat">Liturgical</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crystal-wrap">
+          <div class="crystal-tilt">
+            <div class="crystal-glow" style="background-image:url('images/project_photos/Lakewood_top_down_with_double_lighting.JPG')" aria-hidden="true"></div>
+            <div class="crystal-inner">
+              <img class="crystal-img" src="images/project_photos/Lakewood_top_down_with_double_lighting.JPG" alt="Lakewood — overhead view with dual lighting" loading="lazy" />
+              <div class="crystal-overlay" aria-hidden="true">
+                <p class="crystal-title">Lakewood — Dual Light</p>
+                <span class="crystal-cat">Institutional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.gallery-grid -->
+
+      <div class="gallery-dev__footer">
+        <a href="projects.html" class="section-cta">
+          View All Projects
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+    </section><!-- /.gallery-dev -->
+
+    <!-- ========================================================
+         GET IN TOUCH (#three)
+         ======================================================== -->
+    <section id="three" class="git-section">
+      <div class="git-bg" aria-hidden="true"></div>
+
+      <div class="git-container">
+
+        <!-- Left: copy -->
+        <div class="git-copy fade-item">
+          <p class="section-eyebrow">Start here.</p>
+          <h2 class="section-heading">Every piece begins<br>with a conversation.</h2>
+          <p class="section-body" style="max-width:100%;">
+            Tell us what you're imagining. We'll walk you through every option, what's possible, and what it costs — no obligation, no pressure.
+          </p>
+
+          <ul class="git-trust-list">
+            <li>We typically respond within one business day</li>
+            <li>No commitment required — just a conversation</li>
+            <li>Every inquiry is handled personally</li>
+          </ul>
+        </div>
+
+        <!-- Right: form -->
+        <div class="git-right fade-item">
+          <div class="git-card">
+
+            <form id="contactForm" action="https://formspree.io/f/movyqgop" method="POST" novalidate>
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+              <div class="git-form-field">
+                <label class="git-form-label" for="git-name">Your name</label>
+                <input class="git-form-input" type="text" id="git-name" name="name" required autocomplete="given-name" placeholder="Full name" />
+              </div>
+
+              <div class="git-form-field">
+                <label class="git-form-label" for="git-email">Email address</label>
+                <input class="git-form-input" type="email" id="git-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+              </div>
+
+              <div class="git-form-field">
+                <label class="git-form-label" for="git-project">Tell us about your piece</label>
+                <textarea class="git-form-textarea" id="git-project" name="project" required rows="5" placeholder="Describe your vision…"></textarea>
+              </div>
+
+              <button class="git-submit" type="submit" id="git-submit-btn">
+                <span class="git-submit__text">Send My Vision</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </form>
+
+            <div class="git-confirm" id="git-confirm" hidden aria-live="polite">
+              <p class="git-confirm__heading">We'll be in touch.</p>
+              <p class="git-confirm__sub">Usually within one business day. We look forward to hearing about your project.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /.git-container -->
+    </section>
+
+    <!-- ========================================================
+         FOOTER
+         ======================================================== -->
+    <footer class="dev-footer">
+      <div class="dev-footer__inner">
+
+        <div>
+          <img class="dev-footer__logo" src="images/brand/Eyekonika_logo_blue_rectangle.png" alt="Eyekonika" />
+          <p class="dev-footer__tagline">Subsurface laser-engraved glass art.</p>
+        </div>
+
+        <ul class="dev-footer__socials" aria-label="Social media">
+          <li><a href="https://www.facebook.com/eyekonika"               class="dev-footer__social icon brands fa-facebook-f"  aria-label="Facebook"  target="_blank" rel="noopener"></a></li>
+          <li><a href="https://www.linkedin.com/company/eyekonika/"      class="dev-footer__social icon brands fa-linkedin-in"  aria-label="LinkedIn"  target="_blank" rel="noopener"></a></li>
+          <li><a href="https://www.instagram.com/eyekonika_official/"    class="dev-footer__social icon brands fa-instagram"    aria-label="Instagram" target="_blank" rel="noopener"></a></li>
+          <li><a href="https://www.youtube.com/@eyekonika_official"      class="dev-footer__social icon brands fa-youtube"      aria-label="YouTube"   target="_blank" rel="noopener"></a></li>
+          <li><a href="https://pinterest.com/eyekonika"                  class="dev-footer__social icon brands fa-pinterest-p"  aria-label="Pinterest" target="_blank" rel="noopener"></a></li>
+        </ul>
+
+        <div class="dev-footer__contact">
+          <a href="mailto:contact@eyekonika.com">contact@eyekonika.com</a>
+          <span>(315) 552-0330</span>
+        </div>
+
+      </div>
+
+      <hr class="dev-footer__hr" />
+
+      <div class="dev-footer__bottom">
+        <nav class="dev-footer__nav" aria-label="Footer navigation">
+          <a href="index-dev.html">Home</a>
+          <a href="contact.html">Contact</a>
+          <a href="projects.html">Projects</a>
+        </nav>
+        <p class="dev-footer__copy">&copy; 2026 Eyekonika LLC. All rights reserved.</p>
+      </div>
+    </footer>
+
+  </div><!-- /#wrapper -->
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="js/loading-page.js"></script>
+  <script src="js/page-swipe.js"></script>
+  <script src="js/vendor/jquery.min.js"></script>
+  <script src="js/vendor/jquery.scrollex.min.js"></script>
+  <script src="js/vendor/jquery.scrolly.min.js"></script>
+  <script src="js/vendor/browser.min.js"></script>
+  <script src="js/vendor/breakpoints.min.js"></script>
+  <script src="js/vendor/util.js"></script>
+  <script src="js/vendor/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ---- Mobile nav ---- */
+    var mobileNav = document.getElementById('mobile-nav');
+    if (mobileNav && window.matchMedia('(max-width: 736px)').matches) {
+      var threshold = window.innerHeight * 0.7;
+      window.addEventListener('scroll', function () {
+        mobileNav.classList.toggle('is-visible', window.scrollY > threshold);
+      }, { passive: true });
+    }
+
+    /* ---- Lenis smooth scroll ---- */
+    var lenis = new Lenis({
+      duration: 1.2,
+      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      smoothWheel: true,
+      smoothTouch: false,
+    });
+    window.lenis = lenis;
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var href = this.getAttribute('href');
+        if (href && href.length > 1) {
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            lenis.scrollTo(target, { offset: 0, duration: 1.2 });
+          }
+        }
+      });
+    });
+
+    /* ---- IntersectionObserver: scroll-in fade ---- */
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el  = entry.target;
+        var idx = parseInt(el.dataset.stagger || '0', 10);
+        setTimeout(function () { el.classList.add('is-visible'); }, idx * 90);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.1 });
+
+    /* Stagger within groups */
+    document.querySelectorAll('.process-step').forEach(function (el, i) {
+      el.dataset.stagger = i;
+      io.observe(el);
+    });
+
+    /* Crystal cards: stagger in groups of 3 (one row at a time) */
+    document.querySelectorAll('.crystal-wrap').forEach(function (el, i) {
+      el.dataset.stagger = i % 3;
+      io.observe(el);
+    });
+
+    /* Contact section items */
+    document.querySelectorAll('.git-copy, .git-right').forEach(function (el, i) {
+      el.dataset.stagger = i;
+      io.observe(el);
+    });
+
+    /* ---- 3D tilt on crystal cards ---- */
+    var TILT_MAX = 11; /* degrees */
+
+    document.querySelectorAll('.crystal-tilt').forEach(function (card) {
+      card.addEventListener('mouseenter', function () {
+        card.setAttribute('data-tilting', '');
+      });
+
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var cx   = rect.left + rect.width  / 2;
+        var cy   = rect.top  + rect.height / 2;
+        var dx   = (e.clientX - cx) / (rect.width  / 2);
+        var dy   = (e.clientY - cy) / (rect.height / 2);
+        var rx   = -dy * TILT_MAX;
+        var ry   =  dx * TILT_MAX;
+        card.style.transform =
+          'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+      });
+
+      card.addEventListener('mouseleave', function () {
+        card.removeAttribute('data-tilting');
+        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+      });
+    });
+
+    /* ---- Contact form ---- */
+    var form      = document.getElementById('contactForm');
+    var confirmEl = document.getElementById('git-confirm');
+    var btn       = document.getElementById('git-submit-btn');
+    var btnText   = btn ? btn.querySelector('.git-submit__text') : null;
+
+    if (form && confirmEl && btn) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (btnText) btnText.textContent = 'Sending…';
+        btn.disabled = true;
+
+        fetch(form.action, {
+          method:  'POST',
+          body:    new FormData(form),
+          headers: { Accept: 'application/json' }
+        })
+        .then(function (res) {
+          if (res.ok) {
+            form.hidden     = true;
+            confirmEl.hidden = false;
+          } else {
+            if (btnText) btnText.textContent = 'Something went wrong — try again.';
+            btn.disabled = false;
+          }
+        })
+        .catch(function () {
+          if (btnText) btnText.textContent = 'Something went wrong — try again.';
+          btn.disabled = false;
+        });
+      });
+    }
+
+  })();
+  </script>
+
+</body>
+</html>
