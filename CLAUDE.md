@@ -43,7 +43,7 @@ Dev pages are fully self-contained — sidebar HTML inline, all sections inline,
 - `index-dev.html` — home page (full redesign)
 - `shared-css/design-tokens.css` — CSS custom property foundation
 - `contact-dev.html` — two-column contact form + side panel (Calendly card, client logos); custom `--glow-cool` radios, inline validation, Formspree submit
-- `projects-dev.html` — hero + 3 alternating featured-project rows (link to production `projects/*.html`) + 6-card crystal gallery + closing CTA
+- `projects-dev.html` — hero + fixed project index rail + 3 alternating featured-project rows (link to production `projects/*.html`) + closing CTA. Each row carries a 3-thumbnail strip of that project's supporting angles; every thumbnail links to the project page
 - `process-dev.html` — hero + 5 alternating numbered steps (K9/200k/0 stats on step 04) + closing CTA (step-06 copy). Editorial layout, NOT a port of the production 3D cube (`process.js`)
 - `our-story-dev.html` — full-bleed hero + 5 editorial sections (origin, craft pull-quote, why, founder, CTA), reveal-on-scroll. Founder photo is still a "Photo" placeholder — needs a real image
 
@@ -51,8 +51,10 @@ Dev pages are fully self-contained — sidebar HTML inline, all sections inline,
 - Nothing outstanding. All planned `-dev` pages are complete.
 
 **Open follow-ups:**
-- `projects-dev.html` / `process-dev.html` use editorial/gallery layouts rather than porting the production GSAP horizontal slider (`picture.js`) and 3D rotating cube (`process.js`). Decide whether to port those interactions.
+- `process-dev.html` uses an editorial layout rather than porting the production 3D rotating cube (`process.js`). Decide whether to port that interaction. (Settled for `projects-dev.html` — see below.)
 - `our-story-dev.html` founder photo placeholder awaits a confirmed image of Matthew Kurr.
+- Detail pages still leak to production: `js/project-page.js` builds its back link as `/projects.html#${slug}`, so `projects-dev.html` → detail → back lands on the **production** projects page. Fix when the redesign is promoted; it needs a production JS edit.
+- Image weight: project photos are 2–9 MB unoptimized JPEGs (~30 MB on `projects-dev.html`). `width`/`height`, `decoding`, and lazy/eager hints are in place, but real relief needs WebP/AVIF derivatives + `srcset`, which means adding an image step to a site with no build.
 
 ---
 
@@ -177,3 +179,26 @@ Read the file before making changes. Key sections:
 - `.dev-footer` — social icons, nav links
 
 All interactions (tilt, observer, form, lenis) are in the inline `<script>` at the bottom of `index-dev.html`.
+
+---
+
+## What projects-dev.html Contains
+
+**No catalogue UI — do not re-litigate.** There are only three projects. Filter bars, search, tag chips, and dense index/article lists were considered and rejected: over three items they advertise emptiness, and they break the page's cinematic register. Navigability here means the whole set is visible at once and no image is a dead end.
+
+Key sections:
+- `.pj-topbar` — logo + "Back to Home"
+- `.pj-rail` — fixed project index, one entry per project (tick + number + name). Real `#slug` anchors, so jumps work with JS off
+- `.pj-hero` — Cormorant italic heading, eyebrow, tagline
+- `.pj-featured` — 3 alternating `article.feature-row`, each `id`'d with its slug. Row contents: counter, location, type, name, description, "View Project" link, and a `.feature-thumbs` strip of 3 supporting images
+- `.pj-cta` — closing CTA → `contact-dev.html`
+- `.dev-footer`
+
+**Rules specific to this page:**
+- Project names, locations, and types are canonical in `js/projects-data.js` (which also drives `projects/*.html` and the production slider). Change them there first, then mirror. Markup is intentionally static, not rendered from the module — the page must work without JS.
+- Every image lives inside an `<a>`. Thumbnails duplicate a link already in the row, so they carry `tabindex="-1" aria-hidden="true"` and empty `alt`.
+- The rail is fixed and lives in a left gutter opened by `body { padding-left: 320px }` at `≥1280px`; below that the rail is `display: none`. The rail is capped at `250px` and names wrap — "St. Alexander Nevsky Cathedral" is 271px on one line and would overlap the content.
+- Scroll-spy uses one ScrollTrigger per row with `endTrigger` set to the *next* row, so the ranges are contiguous and exactly one entry is lit at a time. The last row holds through the CTA and footer.
+- Rail clicks are handed to `window.lenis.scrollTo`, falling back to `scrollIntoView` when Lenis is absent (reduced motion).
+
+All interactions (rail scroll-spy, rail jump, deep-link resync, observer, tilt, lenis) are in the inline `<script>` at the bottom of `projects-dev.html`.
