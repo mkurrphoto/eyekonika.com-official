@@ -7,4 +7,7 @@ Disallow: /generic.html
 Disallow: /waiting-page.html
 Disallow: /begin.html
 
+# Course assignment page (not Eyekonika) — see questrom/DELETE-ME-README.md
+Disallow: /questrom/
+
 Sitemap: https://eyekonika.com/sitemap.xml

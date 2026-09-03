@@ -202,3 +202,17 @@ Key sections:
 - Rail clicks are handed to `window.lenis.scrollTo`, falling back to `scrollIntoView` when Lenis is absent (reduced motion).
 
 All interactions (rail scroll-spy, rail jump, deep-link resync, observer, tilt, lenis) are in the inline `<script>` at the bottom of `projects-dev.html`.
+
+---
+
+## Course assignment page — `/questrom/` (unrelated to Eyekonika)
+
+`questrom/` holds a landing page for **Great Minds Cafe**, a hypothetical cafe
+built for a Questrom group assignment. It is **not** Eyekonika content and is
+not part of the redesign.
+
+- Fully self-contained: `questrom/index.html` (inline CSS, no JS) + `questrom/fonts/` + `questrom/images/`
+- Nothing outside the folder references it; nothing inside it references the site
+- `noindex, nofollow` on the page, `Disallow: /questrom/` in `robots.txt`, absent from `sitemap.xml`
+- Do not modify it, link to it, or fold it into the site's CSS/JS
+- To remove: `rm -rf questrom/`, drop the `/questrom/` lines from `robots.txt`, and delete this section. See `questrom/DELETE-ME-README.md`
