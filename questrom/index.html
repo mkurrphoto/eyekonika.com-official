@@ -485,6 +485,82 @@
     section,figure{break-inside:avoid;}
     .hero-figure img{height:280px;}
   }
+  /* ================================================================
+     ENHANCEMENT LAYER
+     Additive only — appended last so it overrides by cascade order
+     without touching the rules above. Same two guards as the rest of
+     the sheet: prefers-reduced-motion, and @supports for anything
+     scroll-driven. A reduced-motion visitor still gets the finished,
+     static page.
+     ================================================================ */
+
+  /* modern text niceties — no motion, safe unguarded */
+  .hero h1{text-wrap:balance;}
+  .standfirst,.room h2,.price h2,.close .line{text-wrap:pretty;}
+
+  @keyframes blur-up{
+    from{opacity:0;translate:0 26px;filter:blur(14px);}
+    to  {opacity:1;translate:0 0;   filter:blur(0);}
+  }
+  @keyframes word-rise{
+    from{opacity:0;translate:0 .5em;filter:blur(10px);}
+    to  {opacity:1;translate:0 0;   filter:blur(0);}
+  }
+  @keyframes hero-exit{
+    from{scale:1;   opacity:1; filter:blur(0);}
+    to  {scale:.94; opacity:.55; filter:blur(3px);}
+  }
+
+  @media (prefers-reduced-motion:no-preference){
+
+    /* ---- hero headline now rises word by word ---- */
+    .hero h1{animation:none;}
+    .hero h1 .w{
+      display:inline-block;
+      animation:word-rise .9s var(--ease) var(--wd,.16s) backwards;
+    }
+    .hero h1 .w:nth-of-type(1){--wd:.16s}
+    .hero h1 .w:nth-of-type(2){--wd:.24s}
+    .thin + .w{--wd:.32s}
+    .thin + .w + .w{--wd:.40s}
+    .thin + .w + .w + .w{--wd:.48s}
+
+    /* cards lift on hover — depth without moving the layout */
+    .trip figure{
+      transition:translate .55s var(--ease), filter .55s var(--ease);
+    }
+    .trip figure:hover{
+      translate:0 -8px;
+      filter:drop-shadow(0 18px 34px rgba(35,27,21,.16));
+    }
+    .panel{transition:translate .55s var(--ease), box-shadow .55s var(--ease);}
+    .panel:hover{translate:0 -4px;box-shadow:0 16px 40px rgba(35,27,21,.10);}
+
+    @supports (animation-timeline: view()){
+
+      /* headings resolve out of a blur as they enter */
+      .room h2,.price h2,.close .line,.exclusion blockquote{
+        animation:blur-up 1s var(--ease) both;
+        animation-timeline:view();
+        animation-range:entry 5% entry 50%;
+      }
+
+      /* the hero photo recedes as it leaves — gives the fold real depth */
+      .hero-figure{
+        animation:hero-exit linear both;
+        animation-timeline:view();
+        animation-range:exit 0% exit 100%;
+        transform-origin:50% 0;
+      }
+
+      /* section numerals count up out of the margin */
+      .num{
+        animation:blur-up .9s var(--ease) both;
+        animation-timeline:view();
+        animation-range:entry 2% entry 38%;
+      }
+    }
+  }
 </style>
 </head>
 <body id="top">
@@ -516,7 +592,7 @@
   <!-- HERO -->
   <section class="wrap hero">
     <div class="sig"></div>
-    <h1><span class="thin">Where ambition</span> and coffee unite.</h1>
+    <h1><span class="thin"><span class="w">Where</span> <span class="w">ambition</span></span> <span class="w">and</span> <span class="w">coffee</span> <span class="w">unite.</span></h1>
     <p class="standfirst">
       Whatever you&rsquo;re building needs two things on the same afternoon: a few uninterrupted hours, and
       <span class="em">one person who will tell you what they actually think</span>.
