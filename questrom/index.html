@@ -41,6 +41,7 @@
 <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="images/hero.jpg" as="image" fetchpriority="high">
+<link rel="preload" href="images/hero-bg.jpg" as="image" fetchpriority="high">
 
 <style>
   /* ---------- Type ---------- */
@@ -83,6 +84,10 @@
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
   body{
     margin:0;background:var(--paper);color:var(--ink);
+    /* the hero's full-bleed 100vw layer is a scrollbar-width wider than the
+       page; `clip` trims it without creating a scroll container, so the
+       sticky header and the scroll(root) timelines keep working. */
+    overflow-x:clip;
     font-family:var(--sans);font-size:17.5px;line-height:1.62;
     font-feature-settings:"kern" 1;
     -webkit-font-smoothing:antialiased;
@@ -155,7 +160,23 @@
   @media (max-width:820px){ .head-nav .lnk{display:none;} }
 
   /* ---------- Hero ---------- */
-  .hero{padding:58px 0 46px;}
+  .hero{padding:58px 0 46px;position:relative;isolation:isolate;}
+  /* faded close-up (cup + table) behind the slogan, full-bleed out of .wrap */
+  .hero::before{
+    content:"";position:absolute;z-index:-1;pointer-events:none;
+    left:50%;translate:-50% 0;width:100vw;top:-96px;bottom:-40px;
+    background:url(images/hero-bg.jpg) center 38%/cover no-repeat;
+    opacity:.20;filter:saturate(.85) contrast(1.03);
+    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 52%,transparent 92%);
+            mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 52%,transparent 92%);
+  }
+  /* keep the paper tone reading through on the left, where the type sits */
+  .hero::after{
+    content:"";position:absolute;z-index:-1;pointer-events:none;
+    left:50%;translate:-50% 0;width:100vw;top:-96px;bottom:-40px;
+    background:linear-gradient(95deg,var(--paper) 6%,rgba(250,246,239,.72) 44%,rgba(250,246,239,.30) 100%);
+  }
+  @media (max-width:640px){ .hero::before{opacity:.14;} }
   .sig{width:64px;height:4px;background:var(--accent);border-radius:2px;margin:0 0 30px;transform-origin:left center;}
   h1{
     font-size:clamp(2.5rem,6.4vw,4.6rem);
@@ -232,12 +253,49 @@
   }
   .room .lede{margin:0 0 42px;padding-left:24px;color:var(--soft);max-width:52ch;}
   .trip{display:grid;gap:26px;grid-template-columns:1fr;}
-  @media (min-width:760px){ .trip{grid-template-columns:repeat(3,1fr);gap:30px;} }
-  .trip figure{margin:0;}
-  .trip .shot{overflow:hidden;}
+  .trip figure{margin:0;position:relative;}
+  .trip .shot{overflow:hidden;position:relative;}
   .trip img{width:100%;aspect-ratio:4/5;object-fit:cover;}
   .trip figcaption{
     margin-top:14px;font-size:.9rem;color:var(--soft);
+  }
+
+  /* --- gallery: asymmetric, off-grid, ragged baseline --- */
+  @media (min-width:860px){
+    .trip{
+      grid-template-columns:repeat(12,1fr);
+      gap:0 26px;
+      align-items:start;
+      margin-top:8px;
+    }
+    /* tall plate, dropped low and pulled into the left margin */
+    .trip figure:nth-child(1){grid-column:1 / span 5;margin-top:64px;}
+    .trip figure:nth-child(1) img{aspect-ratio:3/4;}
+    /* the wide one, raised, overlapping the gutter */
+    .trip figure:nth-child(2){grid-column:6 / span 7;margin-top:0;}
+    .trip figure:nth-child(2) img{aspect-ratio:16/10;}
+    /* the small one, indented and dropped furthest */
+    .trip figure:nth-child(3){grid-column:7 / span 4;margin-top:34px;}
+    .trip figure:nth-child(3) img{aspect-ratio:1/1;}
+
+    /* ghost numerals in the margin, the way a plate list is set */
+    .trip figure::before{
+      content:"0" counter(plate);counter-increment:plate;
+      position:absolute;top:-34px;left:-2px;
+      font-family:var(--serif);font-size:3.1rem;line-height:1;
+      color:var(--accent);opacity:.16;letter-spacing:-.04em;
+      pointer-events:none;
+    }
+    .trip{counter-reset:plate;}
+    .trip figcaption{max-width:30ch;}
+    /* captions hang in the gutter beside the plate they belong to */
+    .trip figure:nth-child(2) figcaption{margin-left:auto;text-align:right;}
+  }
+
+  /* a hairline rules off the gallery, drawn on scroll */
+  .trip-rule{
+    height:1px;background:var(--rule);margin:56px 0 0;
+    transform-origin:left center;
   }
   .trip .lbl{
     display:block;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
@@ -410,7 +468,7 @@
       }
 
       /* rules and bars draw themselves */
-      .num::after,.brass-rule,.exclusion blockquote::before{
+      .num::after,.brass-rule,.exclusion blockquote::before,.trip-rule{
         animation:draw-x .9s var(--ease) both;
         animation-timeline:view();
         animation-range:entry 8% entry 56%;
@@ -656,7 +714,7 @@
     <div class="wrap">
       <p class="kicker reveal">The room itself</p>
       <h2 class="reveal">Built for a long sitting, and for the chance you&rsquo;ll want company partway through.</h2>
-      <p class="lede reveal">Two rooms, thirty-one seats, and a counter that has heard most versions of the problem you walked in with.</p>
+      <p class="lede reveal">Two rooms, thirty-one seats, and a counter that has heard most versions of the problem you walked in with. Three plates from the same afternoon.</p>
       <div class="trip">
         <figure>
           <div class="shot"><img src="images/room-light.jpg" alt="A barista at the espresso machine, silhouetted against morning sun coming through a striped awning." width="900" height="1125" loading="lazy" decoding="async"></div>
@@ -671,6 +729,7 @@
           <figcaption><span class="lbl">The back corner</span>Where two people end up when fifteen minutes turns into an hour.</figcaption>
         </figure>
       </div>
+      <div class="trip-rule reveal" aria-hidden="true"></div>
     </div>
   </section>
 
