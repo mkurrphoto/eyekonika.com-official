@@ -3,18 +3,32 @@
   ===========================================================================
   COURSE ASSIGNMENT PAGE — NOT PART OF EYEKONIKA LLC
   Great Minds Cafe (hypothetical) — Questrom group assignment.
-  Self-contained: this file + ./images/ + ./fonts/. Nothing outside
-  /questrom/ references it. Delete the whole /questrom/ folder to remove.
+  Self-contained: this file + ./images/ + ./fonts/. No CDN, no framework,
+  no build step. Nothing outside /questrom/ references it.
+  Delete the whole /questrom/ folder to remove.
   ===========================================================================
 -->
-<html lang="en">
+<html lang="en" data-theme="day">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme is resolved before first paint so the page never flashes -->
+<script>
+  (function(){
+    try{
+      var t = localStorage.getItem('gmc-theme');
+      if(!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dusk' : 'day';
+      document.documentElement.dataset.theme = t;
+    }catch(e){}
+  })();
+</script>
+
 <title>Great Minds Cafe — where ambition and coffee unite</title>
-<meta name="description" content="Great Minds Cafe is a South End coffee shop for people with something to build: uninterrupted hours, organic coffee and fresh pastries, and one person who'll tell you what they actually think. Open every day.">
+<meta name="description" content="A bright, unhurried coffee room in Boston's South End. Organic coffee, pastries baked that morning, gigabit wi-fi and an outlet at every seat — and a room full of people building something. Open 7am to 7pm, every day.">
 <meta name="author" content="Great Minds Cafe">
-<meta name="theme-color" content="#FAF6EF">
+<meta name="theme-color" content="#FAF6EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17110D" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://eyekonika.com/questrom/">
 <meta name="robots" content="noindex, nofollow">
 
@@ -23,14 +37,14 @@
 <meta property="og:site_name" content="Great Minds Cafe">
 <meta property="og:url" content="https://eyekonika.com/questrom/">
 <meta property="og:title" content="Great Minds Cafe — where ambition and coffee unite">
-<meta property="og:description" content="Uninterrupted hours, organic coffee and fresh pastries, and one person who'll tell you what they actually think. A South End coffee shop for people with something to build. Open every day.">
+<meta property="og:description" content="Organic coffee, fresh pastries, gigabit wi-fi and an outlet at every seat, in a bright room full of people building something. South End, Boston. Open 7 to 7, every day.">
 <meta property="og:image" content="https://eyekonika.com/questrom/images/hero.jpg">
 <meta property="og:image:width" content="2000">
 <meta property="og:image:height" content="900">
 <meta property="og:image:alt" content="A wide, high-ceilinged coffee room in the late afternoon, with long wooden tables and a few people working.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Great Minds Cafe — where ambition and coffee unite">
-<meta name="twitter:description" content="Uninterrupted hours, organic coffee and fresh pastries, and one person who'll tell you what they actually think.">
+<meta name="twitter:description" content="Organic coffee, fresh pastries, gigabit wi-fi and an outlet at every seat, in a room full of people building something.">
 <meta name="twitter:image" content="https://eyekonika.com/questrom/images/hero.jpg">
 
 <!-- Icons -->
@@ -44,586 +58,1011 @@
 <link rel="preload" href="images/hero-bg.jpg" as="image" fetchpriority="high">
 
 <style>
-  /* ---------- Type ---------- */
-  @font-face{
-    font-family:'Fraunces';font-style:normal;font-weight:400 700;font-display:swap;
-    src:url(fonts/fraunces-latin.woff2) format('woff2');
-    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2122,U+2212,U+FEFF,U+FFFD;
-  }
-  @font-face{
-    font-family:'Inter';font-style:normal;font-weight:400 600;font-display:swap;
-    src:url(fonts/inter-latin.woff2) format('woff2');
-    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2122,U+2212,U+FEFF,U+FFFD;
-  }
+/* ==========================================================================
+   GREAT MINDS CAFE — one stylesheet, no dependencies.
 
-  /* ---------- Palette ---------- */
-  :root{
-    color-scheme:light;
-    --paper:#FAF6EF;        /* cream paper, from the logo */
-    --putty:#F0E7D8;        /* secondary surface */
-    --ink:#231B15;          /* text */
-    --soft:#6B5D50;         /* muted text */
-    --rule:#E2D6C3;         /* hairline */
-    --house:#3E2E25;        /* house brown */
-    --house-2:#2B201A;      /* deep brown, from the logo mark */
-    --accent:#C6772F;       /* burnt orange, from the logo */
-    --accent-t:#9C5716;     /* darker orange, for small text */
-    --accent-l:#D9903F;     /* lighter orange, for dark grounds */
-    --cream:#F0E2CE;        /* logo cream */
-    --dark:#2B201A;         /* dark panel */
-    --panel:#F5EADA;        /* pale cream panel */
-    --wrap:1140px;
-    --serif:'Fraunces',"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
-    --sans:'Inter',"Helvetica Neue",Helvetica,Arial,sans-serif;
-    --ease:cubic-bezier(.22,.7,.2,1);
-    --head-h:86px;
-  }
+   Modern platform features used here, all progressively enhanced:
+     · variable-font axis animation (Fraunces opsz + wght)
+     · scroll-driven animations — animation-timeline: view() / scroll(root)
+     · View Transitions API — circular-reveal day/dusk switch
+     · @property — typed custom properties, so gradients can be animated
+     · container queries — bento tiles size their own type
+     · @scope — genuinely scoped component styles
+     · native CSS carousel — ::scroll-marker / ::scroll-button()
+     · anchor positioning + the Popover API
+     · interpolate-size + ::details-content — height:auto transitions
+     · :has(), color-mix(), oklch(), text-wrap, backdrop-filter
+   Every one of them sits behind @supports or prefers-reduced-motion.
+   With JavaScript off and none of the above supported, the page is a
+   complete, readable, fully styled document.
+   ========================================================================== */
 
-  *,*::before,*::after{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
-  body{
-    margin:0;background:var(--paper);color:var(--ink);
-    /* the hero's full-bleed 100vw layer is a scrollbar-width wider than the
-       page; `clip` trims it without creating a scroll container, so the
-       sticky header and the scroll(root) timelines keep working. */
-    overflow-x:clip;
-    font-family:var(--sans);font-size:17.5px;line-height:1.62;
-    font-feature-settings:"kern" 1;
-    -webkit-font-smoothing:antialiased;
-  }
-  img{max-width:100%;height:auto;display:block;}
-  a{color:inherit;}
+/* ---------- Type ---------- */
+@font-face{
+  font-family:'Fraunces';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url(fonts/fraunces-latin.woff2) format('woff2-variations');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2122,U+2212,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url(fonts/inter-latin.woff2) format('woff2-variations');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2122,U+2212,U+FEFF,U+FFFD;
+}
 
-  :where(a,button):focus-visible{
-    outline:2px solid var(--accent-t);outline-offset:3px;border-radius:2px;
-  }
-  .exclusion :where(a):focus-visible,.site-foot :where(a):focus-visible{outline-color:var(--accent-l);}
+/* ---------- Typed custom properties ----------
+   Registering these lets the browser interpolate them, which is what makes
+   the animated gradient rim and the pointer spotlight possible in pure CSS. */
+@property --sweep   { syntax:'<angle>';      inherits:false; initial-value:0deg; }
+@property --spot-x  { syntax:'<percentage>'; inherits:true;  initial-value:50%; }
+@property --spot-y  { syntax:'<percentage>'; inherits:true;  initial-value:0%; }
+@property --spot-o  { syntax:'<number>';     inherits:true;  initial-value:0; }
+@property --lift    { syntax:'<length>';     inherits:false; initial-value:0px; }
 
-  .skip{
-    position:absolute;left:-9999px;top:0;z-index:100;
-    background:var(--ink);color:var(--paper);padding:12px 18px;
-    font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
-  }
-  .skip:focus{left:8px;top:8px;}
+/* ---------- Palette — day ---------- */
+:root{
+  color-scheme:light;
+  --paper:#FAF6EF;
+  --putty:#F1E8DA;
+  --card:#FFFCF6;
+  --ink:#231B15;
+  --soft:#6B5D50;
+  --rule:#E2D6C3;
+  --accent:#C6772F;
+  --accent-t:#96520F;      /* AA on paper */
+  --accent-l:#D9903F;
+  --panel:#F5EADA;
+  --dark:#2B201A;
+  --dark-ink:#F2E7D5;
+  --dark-soft:#B7A794;
+  --hi:#F0DDB4;            /* highlighter */
+  --shade:35 27 21;        /* shadow rgb channels */
+  --img-filter:none;
+  --glass:rgba(250,246,239,.72);
 
-  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 32px;}
-  .bleed{width:100%;}
-  @media (max-width:640px){ .wrap{padding:0 22px;} }
+  --wrap:1180px;
+  --serif:'Fraunces',"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:'Inter',"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.22,.7,.2,1);
+  --ease-soft:cubic-bezier(.4,0,.2,1);
+  --head-h:84px;
+}
 
-  /* anchor targets clear the sticky header */
-  #quiet,#who,#visit,#top{scroll-margin-top:calc(var(--head-h) + 16px);}
+/* ---------- Palette — dusk ---------- */
+:root[data-theme="dusk"]{
+  color-scheme:dark;
+  --paper:#16110D;
+  --putty:#191310;
+  --card:#241C15;
+  --ink:#F3EADC;
+  --soft:#AE9E8C;
+  --rule:#3A2E24;
+  --accent:#E0983F;
+  --accent-t:#E9AC61;
+  --accent-l:#E9AC61;
+  --panel:#221A13;
+  --dark:#0E0A07;
+  --dark-ink:#F3EADC;
+  --dark-soft:#AE9E8C;
+  --hi:#5A3E14;
+  --shade:0 0 0;
+  --img-filter:brightness(.86) saturate(.95);
+  --glass:rgba(22,17,13,.72);
+}
 
-  /* paper grain */
-  .grain{
-    position:fixed;inset:-160px;pointer-events:none;z-index:60;opacity:.05;
-    mix-blend-mode:multiply;background-size:140px 140px;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
-  }
+*,*::before,*::after{box-sizing:border-box;}
+html{
+  -webkit-text-size-adjust:100%;scroll-behavior:smooth;
+  /* lets height:auto / content-visibility transitions actually interpolate */
+  interpolate-size:allow-keywords;
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
 
-  /* scroll progress hairline */
-  .progress{
-    position:fixed;top:0;left:0;right:0;height:2px;z-index:70;pointer-events:none;
-    background:linear-gradient(90deg,var(--accent-t),var(--accent),var(--accent-l));
-    transform-origin:0 50%;scale:0 1;
-  }
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  /* full-bleed 100vw layers are a scrollbar wider than the page; `clip`
+     trims them without making a scroll container, so sticky headers and
+     scroll(root) timelines keep working. */
+  overflow-x:clip;
+  font-family:var(--sans);font-size:17.5px;line-height:1.62;
+  font-feature-settings:"kern" 1;font-optical-sizing:auto;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color .5s var(--ease-soft),color .5s var(--ease-soft);
+}
+img{max-width:100%;height:auto;display:block;filter:var(--img-filter);}
+a{color:inherit;}
+button{font:inherit;color:inherit;}
 
-  /* shared bits */
-  .kicker{
-    font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;
-    font-weight:600;color:var(--accent-t);margin:0 0 22px;
-  }
-  .kicker.on-dark{color:var(--accent-l);}
-  h1,h2,h3,blockquote,.display{font-family:var(--serif);font-weight:600;}
-  .hair{height:1px;background:var(--rule);border:0;margin:0;}
+:where(a,button,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--accent-t);outline-offset:3px;border-radius:3px;
+}
+.on-dark-block :where(a,button):focus-visible{outline-color:var(--accent-l);}
 
-  /* ---------- Header ---------- */
-  .site-head{
-    position:sticky;top:0;z-index:50;
-    padding:26px 0 6px;background:var(--paper);
-  }
-  .head-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-  .wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;}
-  .wm-mark{width:46px;height:46px;flex:none;transform-origin:50% 50%;}
-  .wm-name{font-family:var(--serif);font-weight:600;font-size:1.42rem;letter-spacing:-.012em;line-height:1;display:block;}
-  .wm-sub{font-size:.58rem;letter-spacing:.17em;text-transform:uppercase;color:var(--soft);display:block;margin-top:5px;}
-  .head-nav{display:flex;align-items:center;gap:26px;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);}
-  .head-nav a{text-decoration:none;padding-bottom:3px;position:relative;transition:color .3s var(--ease);}
-  .head-nav a::after{
-    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
-    background:var(--accent-t);transform-origin:left center;scale:0 1;
-    transition:scale .38s var(--ease);
-  }
-  .head-nav a:hover{color:var(--accent-t);}
-  .head-nav a:hover::after,.head-nav a:focus-visible::after{scale:1 1;}
-  .head-nav .hrs{color:var(--ink);}
-  @media (max-width:820px){ .head-nav .lnk{display:none;} }
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:200;
+  background:var(--ink);color:var(--paper);padding:12px 18px;
+  font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+}
+.skip:focus{left:8px;top:8px;}
 
-  /* ---------- Hero ---------- */
-  .hero{padding:58px 0 46px;position:relative;isolation:isolate;}
-  /* faded close-up (cup + table) behind the slogan, full-bleed out of .wrap */
-  .hero::before{
-    content:"";position:absolute;z-index:-1;pointer-events:none;
-    left:50%;translate:-50% 0;width:100vw;top:-96px;bottom:-40px;
-    background:url(images/hero-bg.jpg) center 38%/cover no-repeat;
-    opacity:.20;filter:saturate(.85) contrast(1.03);
-    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 52%,transparent 92%);
-            mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 52%,transparent 92%);
-  }
-  /* keep the paper tone reading through on the left, where the type sits */
-  .hero::after{
-    content:"";position:absolute;z-index:-1;pointer-events:none;
-    left:50%;translate:-50% 0;width:100vw;top:-96px;bottom:-40px;
-    background:linear-gradient(95deg,var(--paper) 6%,rgba(250,246,239,.72) 44%,rgba(250,246,239,.30) 100%);
-  }
-  @media (max-width:640px){ .hero::before{opacity:.14;} }
-  .sig{width:64px;height:4px;background:var(--accent);border-radius:2px;margin:0 0 30px;transform-origin:left center;}
-  h1{
-    font-size:clamp(2.5rem,6.4vw,4.6rem);
-    line-height:1.03;letter-spacing:-.028em;margin:0 0 30px;max-width:19ch;
-  }
-  h1 .thin{font-weight:400;color:var(--soft);display:block;}
-  .standfirst{
-    font-size:clamp(1.06rem,1.55vw,1.24rem);line-height:1.6;
-    max-width:56ch;margin:0;color:var(--ink);
-  }
-  .standfirst .em{
-    background-image:linear-gradient(transparent 60%, #F0DDB4 60%, #F0DDB4 93%, transparent 93%);
-    background-repeat:no-repeat;background-size:100% 100%;
-  }
-  .meta{
-    list-style:none;margin:44px 0 0;padding:0;display:grid;gap:20px;
-  }
-  @media (min-width:760px){ .meta{grid-template-columns:repeat(3,1fr);gap:34px;} }
-  .meta li{position:relative;padding-top:16px;font-size:.95rem;color:var(--soft);}
-  .meta li::before{
-    content:"";position:absolute;left:0;right:0;top:0;height:2px;
-    background:var(--house);transform-origin:left center;
-  }
-  .meta li span{
-    display:block;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
-    color:var(--accent-t);font-weight:600;margin-bottom:6px;
-  }
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 34px;}
+.bleed{width:100%;}
+@media (max-width:640px){ .wrap{padding:0 22px;} }
 
-  .hero-figure{margin:56px 0 0;overflow:hidden;}
-  .hero-figure img{width:100%;height:clamp(300px,52vh,560px);object-fit:cover;object-position:center 55%;}
-  figcaption{
-    margin-top:12px;font-size:.83rem;color:var(--soft);line-height:1.5;max-width:62ch;
-  }
-  .wrap>.hero-figure figcaption{padding:0;}
-  .bleed-figure figcaption{max-width:var(--wrap);margin-left:auto;margin-right:auto;padding:0 32px;}
-  @media (max-width:640px){ .bleed-figure figcaption{padding:0 22px;} }
+#room,#amenities,#counter,#visit,#top{scroll-margin-top:calc(var(--head-h) + 20px);}
 
-  /* ---------- Numbered feature sections ---------- */
-  .feature{padding:74px 0;}
-  .feature+.feature{padding-top:8px;}
-  .feature-grid{display:grid;gap:38px;align-items:center;}
-  @media (min-width:900px){
-    .feature-grid{grid-template-columns:.95fr 1.05fr;gap:66px;}
-    .feature.flip .feature-grid{grid-template-columns:1.05fr .95fr;}
-    .feature.flip .fig{order:2;}
-  }
-  .fig{margin:0;overflow:hidden;}
-  .fig img{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center 42%;}
-  .feature.flip .fig img{aspect-ratio:5/4;}
-  .num{
-    font-family:var(--serif);font-size:1.5rem;font-weight:400;
-    letter-spacing:.05em;line-height:1;color:var(--accent);
-    display:flex;align-items:center;gap:18px;margin:0 0 20px;
-  }
-  .num::after{content:"";height:1px;flex:1;background:var(--rule);transform-origin:left center;}
-  .feature h2{margin-top:0;}
-  .feature h2{
-    font-size:clamp(1.85rem,3.6vw,2.7rem);line-height:1.1;letter-spacing:-.022em;
-    margin:0 0 20px;max-width:16ch;
-  }
-  .feature p{margin:0;max-width:52ch;color:var(--soft);font-size:1.06rem;}
-  .feature p+p{margin-top:16px;}
+h1,h2,h3,blockquote,.display{font-family:var(--serif);font-weight:600;}
+h1,h2,.display{text-wrap:balance;}
+p,li,figcaption{text-wrap:pretty;}
 
-  /* ---------- The room (triptych) ---------- */
-  .room{background:var(--putty);padding:74px 0 82px;}
-  .room h2{
-    position:relative;
-    font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.14;letter-spacing:-.02em;
-    margin:0 0 12px;max-width:22ch;padding-left:20px;
-  }
-  .room h2::before{
-    content:"";position:absolute;left:0;top:.12em;bottom:.12em;width:4px;
-    background:var(--accent);transform-origin:center top;
-  }
-  .room .lede{margin:0 0 42px;padding-left:24px;color:var(--soft);max-width:52ch;}
-  .trip{display:grid;gap:26px;grid-template-columns:1fr;}
-  .trip figure{margin:0;position:relative;}
-  .trip .shot{overflow:hidden;position:relative;}
-  .trip img{width:100%;aspect-ratio:4/5;object-fit:cover;}
-  .trip figcaption{
-    margin-top:14px;font-size:.9rem;color:var(--soft);
-  }
+.kicker{
+  font-size:.69rem;letter-spacing:.26em;text-transform:uppercase;
+  font-weight:600;color:var(--accent-t);margin:0 0 22px;
+}
+.kicker.on-dark{color:var(--accent-l);}
+.hair{height:1px;background:var(--rule);border:0;margin:0;}
 
-  /* --- gallery: asymmetric, off-grid, ragged baseline --- */
-  @media (min-width:860px){
-    .trip{
-      grid-template-columns:repeat(12,1fr);
-      gap:0 26px;
-      align-items:start;
-      margin-top:8px;
-    }
-    /* tall plate, dropped low and pulled into the left margin */
-    .trip figure:nth-child(1){grid-column:1 / span 5;margin-top:64px;}
-    .trip figure:nth-child(1) img{aspect-ratio:3/4;}
-    /* the wide one, raised, overlapping the gutter */
-    .trip figure:nth-child(2){grid-column:6 / span 7;margin-top:0;}
-    .trip figure:nth-child(2) img{aspect-ratio:16/10;}
-    /* the small one, indented and dropped furthest */
-    .trip figure:nth-child(3){grid-column:7 / span 4;margin-top:34px;}
-    .trip figure:nth-child(3) img{aspect-ratio:1/1;}
+/* ---------- Ambient layers ---------- */
+.grain{
+  position:fixed;inset:-160px;pointer-events:none;z-index:80;opacity:.05;
+  mix-blend-mode:multiply;background-size:140px 140px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+}
+:root[data-theme="dusk"] .grain{mix-blend-mode:screen;opacity:.045;}
 
-    /* ghost numerals in the margin, the way a plate list is set */
-    .trip figure::before{
-      content:"0" counter(plate);counter-increment:plate;
-      position:absolute;top:-34px;left:-2px;
-      font-family:var(--serif);font-size:3.1rem;line-height:1;
-      color:var(--accent);opacity:.16;letter-spacing:-.04em;
-      pointer-events:none;
-    }
-    .trip{counter-reset:plate;}
-    .trip figcaption{max-width:30ch;}
-    /* captions hang in the gutter beside the plate they belong to */
-    .trip figure:nth-child(2) figcaption{margin-left:auto;text-align:right;}
-  }
+/* pointer light — a warm spill that follows the cursor, desktop only */
+.pointer-light{
+  position:fixed;top:0;left:0;width:520px;height:520px;z-index:1;
+  pointer-events:none;opacity:0;translate:-50% -50%;
+  background:radial-gradient(circle closest-side,
+    color-mix(in oklab, var(--accent) 40%, transparent), transparent 72%);
+  mix-blend-mode:multiply;filter:blur(18px);
+  transition:opacity .6s var(--ease-soft);
+}
+:root[data-theme="dusk"] .pointer-light{mix-blend-mode:screen;}
+@media (hover:hover) and (pointer:fine){
+  body:has(.pointer-light[data-on]) .pointer-light{opacity:.5;}
+}
+@media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){
+  .pointer-light{display:none;}
+}
 
-  /* a hairline rules off the gallery, drawn on scroll */
-  .trip-rule{
-    height:1px;background:var(--rule);margin:56px 0 0;
-    transform-origin:left center;
-  }
-  .trip .lbl{
-    display:block;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
-    font-weight:600;color:var(--accent-t);margin-bottom:6px;
-  }
+/* scroll progress hairline */
+.progress{
+  position:fixed;top:0;left:0;right:0;height:2px;z-index:90;pointer-events:none;
+  background:linear-gradient(90deg,var(--accent-t),var(--accent),var(--accent-l));
+  transform-origin:0 50%;scale:0 1;
+}
 
-  /* ---------- Who this isn't for ---------- */
-  .exclusion{
-    position:relative;color:var(--paper);background:var(--dark);
-    padding:96px 0 100px;overflow:hidden;
-  }
-  .exclusion .bg{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    opacity:.34;filter:grayscale(.25);will-change:transform;
-  }
-  .exclusion::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(100deg,rgba(43,32,26,.94) 0%,rgba(43,32,26,.87) 46%,rgba(43,32,26,.46) 100%);
-  }
-  .exclusion .wrap{position:relative;z-index:2;}
-  .brass-rule{width:54px;height:3px;background:var(--accent);margin:0 0 26px;transform-origin:left center;}
-  .nots{list-style:none;margin:0 0 42px;padding:0;display:grid;gap:22px;max-width:54ch;}
-  .nots li{
-    padding-left:32px;position:relative;font-size:1.1rem;line-height:1.55;color:#EADFCE;
-  }
-  .nots li::before{
-    content:"";position:absolute;left:0;top:.72em;width:16px;height:2px;background:var(--accent);
-    transform-origin:left center;
-  }
-  .exclusion blockquote{
-    position:relative;
-    margin:0;font-size:clamp(1.5rem,3.5vw,2.35rem);line-height:1.18;
-    letter-spacing:-.022em;max-width:24ch;padding-top:34px;
-  }
-  .exclusion blockquote::before{
-    content:"";position:absolute;left:0;right:0;top:0;height:1px;
-    background:rgba(240,226,206,.24);transform-origin:left center;
-  }
+/* ---------- Header ---------- */
+.site-head{
+  position:sticky;top:0;z-index:70;
+  padding:20px 0;
+  background:var(--glass);
+  -webkit-backdrop-filter:saturate(1.5) blur(14px);
+  backdrop-filter:saturate(1.5) blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s var(--ease-soft),padding .4s var(--ease-soft);
+}
+.head-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;}
+.wordmark{display:flex;align-items:center;gap:12px;text-decoration:none;flex:none;}
+.wm-mark{width:44px;height:44px;flex:none;transform-origin:50% 50%;}
+.wm-name{font-family:var(--serif);font-weight:600;font-size:1.34rem;letter-spacing:-.012em;line-height:1;display:block;}
+.wm-sub{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);display:block;margin-top:5px;}
 
-  /* ---------- Price ---------- */
-  .price{padding:82px 0 86px;border-bottom:1px solid var(--rule);}
-  .price-grid{display:grid;gap:34px;}
-  @media (min-width:900px){ .price-grid{grid-template-columns:1fr 1fr;gap:64px;align-items:start;} }
-  .price h2{
-    font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.1;letter-spacing:-.022em;
-    margin:0;max-width:15ch;
-  }
-  .panel{
-    position:relative;background:var(--panel);padding:28px 30px;
-  }
-  .panel::before{
-    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
-    background:var(--accent);transform-origin:center top;
-  }
-  .panel p{margin:0;font-size:1.1rem;line-height:1.55;}
-  .panel .fine{
-    margin-top:14px;font-size:.84rem;color:var(--soft);letter-spacing:.02em;
-  }
+.head-right{display:flex;align-items:center;gap:22px;}
+.head-nav{display:flex;align-items:center;gap:24px;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);}
+.head-nav a{text-decoration:none;padding-bottom:3px;position:relative;transition:color .3s var(--ease);}
+.head-nav a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:var(--accent-t);transform-origin:left center;scale:0 1;
+  transition:scale .38s var(--ease);
+}
+.head-nav a:hover{color:var(--accent-t);}
+.head-nav a:hover::after,.head-nav a:focus-visible::after{scale:1 1;}
+@media (max-width:900px){ .head-nav{display:none;} }
 
-  /* ---------- Close ---------- */
-  .close{padding:86px 0 78px;}
-  .close-grid{display:grid;gap:44px;align-items:stretch;grid-template-columns:1fr;}
-  .close-col{display:flex;flex-direction:column;justify-content:space-between;gap:30px;}
-  @media (min-width:860px){ .close-grid{grid-template-columns:1.1fr .9fr;gap:70px;} }
-  .close .line{
-    font-family:var(--serif);font-weight:600;
-    font-size:clamp(1.7rem,4vw,2.9rem);line-height:1.14;letter-spacing:-.024em;
-    margin:0 0 28px;max-width:17ch;
+/* live open/closed pill */
+.status{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+  padding:8px 14px;border-radius:999px;white-space:nowrap;
+  background:color-mix(in oklab, var(--accent) 12%, transparent);
+  color:var(--accent-t);border:1px solid color-mix(in oklab, var(--accent) 34%, transparent);
+}
+.status .dot{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;
+  box-shadow:0 0 0 0 color-mix(in oklab, var(--accent) 60%, transparent);
+}
+.status[data-open="no"]{
+  background:transparent;color:var(--soft);
+  border-color:var(--rule);
+}
+.status[data-open="no"] .dot{background:var(--soft);}
+@media (max-width:560px){ .status .txt{display:none;} .status{padding:8px 10px;} }
+
+/* day / dusk switch */
+.theme-btn{
+  --lift:0px;
+  position:relative;width:52px;height:29px;flex:none;padding:0;cursor:pointer;
+  border-radius:999px;border:1px solid var(--rule);background:var(--putty);
+  transition:background-color .4s var(--ease-soft),border-color .4s var(--ease-soft);
+}
+.theme-btn::after{
+  content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 2px 6px rgb(var(--shade) / .3);
+  transition:translate .45s var(--ease);
+}
+:root[data-theme="dusk"] .theme-btn::after{translate:23px 0;}
+.theme-btn .lbl{
+  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);
+}
+
+/* ---------- Hero ---------- */
+/* padding-block, not the `padding` shorthand: these sections also carry
+   .wrap, whose horizontal padding the shorthand would wipe out. */
+.hero{padding-block:66px 40px;position:relative;isolation:isolate;}
+.hero::before{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  left:50%;translate:-50% 0;width:100vw;top:-140px;bottom:-40px;
+  background:url(images/hero-bg.jpg) center 38%/cover no-repeat;
+  opacity:.2;filter:saturate(.85) contrast(1.03);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 52%,transparent 92%);
+          mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 52%,transparent 92%);
+}
+.hero::after{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  left:50%;translate:-50% 0;width:100vw;top:-140px;bottom:-40px;
+  background:linear-gradient(95deg,var(--paper) 6%,
+    color-mix(in oklab, var(--paper) 74%, transparent) 44%,
+    color-mix(in oklab, var(--paper) 28%, transparent) 100%);
+}
+:root[data-theme="dusk"] .hero::before{opacity:.3;}
+@media (max-width:640px){ .hero::before{opacity:.14;} }
+
+.sig{width:64px;height:4px;background:var(--accent);border-radius:2px;margin:0 0 30px;transform-origin:left center;}
+
+h1{
+  font-size:clamp(2.6rem,7vw,5.1rem);
+  line-height:1.02;letter-spacing:-.03em;margin:0 0 28px;max-width:17ch;
+  font-variation-settings:'opsz' 96,'wght' 600;
+}
+h1 .thin{font-weight:400;color:var(--soft);display:block;font-variation-settings:'opsz' 96,'wght' 380;}
+h1 .w{display:inline-block;}
+
+.standfirst{
+  font-size:clamp(1.08rem,1.6vw,1.28rem);line-height:1.62;
+  max-width:58ch;margin:0;color:var(--ink);
+}
+.standfirst .em{
+  background-image:linear-gradient(transparent 58%, var(--hi) 58%, var(--hi) 94%, transparent 94%);
+  background-repeat:no-repeat;background-size:100% 100%;
+}
+
+.meta{list-style:none;margin:46px 0 0;padding:0;display:grid;gap:22px;}
+@media (min-width:800px){ .meta{grid-template-columns:repeat(3,1fr);gap:36px;} }
+.meta li{position:relative;padding-top:16px;font-size:.95rem;color:var(--soft);}
+.meta li::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:2px;
+  background:var(--ink);transform-origin:left center;
+}
+.meta li span{
+  display:block;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent-t);font-weight:600;margin-bottom:6px;
+}
+
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:42px 0 0;}
+.btn{
+  --lift:0px;
+  display:inline-flex;align-items:center;gap:11px;
+  padding:15px 27px;border-radius:999px;border:1px solid transparent;
+  background:var(--ink);color:var(--paper);text-decoration:none;cursor:pointer;
+  font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+  translate:var(--mag-x,0px) calc(var(--mag-y,0px) + var(--lift));
+  transition:background-color .4s var(--ease-soft),translate .5s var(--ease),box-shadow .5s var(--ease);
+}
+.btn:hover{--lift:-2px;box-shadow:0 14px 30px rgb(var(--shade) / .22);}
+.btn .arw{transition:translate .4s var(--ease);}
+.btn:hover .arw{translate:4px 0;}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule);}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent-t);}
+
+.scroll-cue{
+  display:flex;align-items:center;gap:12px;margin:52px 0 0;
+  font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--soft);
+}
+.scroll-cue i{display:block;width:44px;height:1px;background:var(--rule);position:relative;overflow:hidden;}
+.scroll-cue i::after{content:"";position:absolute;inset:0;background:var(--accent);transform-origin:left center;scale:0 1;}
+
+.hero-figure{margin:56px 0 0;overflow:hidden;}
+.hero-figure img{width:100%;height:clamp(320px,58vh,620px);object-fit:cover;object-position:center 55%;}
+figcaption{margin-top:12px;font-size:.83rem;color:var(--soft);line-height:1.5;max-width:62ch;}
+.bleed-figure figcaption{max-width:var(--wrap);margin-left:auto;margin-right:auto;padding:0 34px;}
+@media (max-width:640px){ .bleed-figure figcaption{padding:0 22px;} }
+
+/* ---------- Marquee band ---------- */
+.band{
+  --gap:0px;
+  position:relative;overflow:hidden;
+  padding:22px 0;margin:74px 0 0;
+  background:var(--ink);color:var(--paper);
+  border-block:1px solid var(--ink);
+  rotate:var(--band-rot,-.6deg);
+  width:calc(100% + 60px);margin-left:-30px;
+}
+:root[data-theme="dusk"] .band{background:var(--accent);color:#160F08;border-color:var(--accent);}
+.band-track{
+  display:flex;width:max-content;
+  will-change:transform;
+  animation:marquee 34s linear infinite;
+  animation-play-state:var(--band-play,running);
+  /* transform composes with the keyframed `translate` — separate properties */
+  transform:skewX(var(--band-skew,0deg)) translateX(var(--band-nudge,0px));
+}
+.band ul{
+  display:flex;align-items:center;gap:0;list-style:none;margin:0;padding:0 0 0 0;flex:none;
+}
+.band li{
+  display:flex;align-items:center;gap:34px;padding-right:34px;
+  font-family:var(--serif);font-size:clamp(1.05rem,2vw,1.6rem);
+  font-variation-settings:'opsz' 60,'wght' 500;
+  letter-spacing:-.01em;white-space:nowrap;
+}
+.band li::after{
+  content:"";width:7px;height:7px;border-radius:50%;flex:none;
+  background:currentColor;opacity:.5;
+}
+@keyframes marquee{ from{translate:0 0} to{translate:-50% 0} }
+@media (prefers-reduced-motion:reduce){ .band-track{animation:none;} }
+
+/* ---------- Chapters: sticky text column, scrolling plates ---------- */
+.chapters{padding-block:96px 40px;}
+.chapter{position:relative;}
+.chapter + .chapter{margin-top:120px;}
+.chapter-grid{display:grid;gap:40px;}
+@media (min-width:960px){
+  .chapter-grid{grid-template-columns:.86fr 1.14fr;gap:80px;align-items:start;}
+  .chapter.flip .chapter-grid{grid-template-columns:1.14fr .86fr;}
+  .chapter.flip .chapter-say{order:2;}
+  .chapter-say{
+    position:sticky;top:calc(var(--head-h) + 74px);
+    align-self:start;
   }
-  .close .visit-inline{margin:0;color:var(--soft);font-size:1rem;line-height:1.85;}
-  .close .visit-inline b{color:var(--ink);font-weight:600;}
-  .print{
-    margin:0;justify-self:center;width:360px;max-width:100%;
-    background:#FDFBF6;padding:16px 16px 54px;
-    box-shadow:0 18px 34px rgba(21,19,14,.20);
-    rotate:-2.2deg;
-    transition:rotate .6s var(--ease),box-shadow .6s var(--ease),translate .6s var(--ease);
+}
+.num{
+  font-family:var(--serif);font-size:1.35rem;font-variation-settings:'opsz' 40,'wght' 400;
+  letter-spacing:.05em;line-height:1;color:var(--accent);
+  display:flex;align-items:center;gap:18px;margin:0 0 22px;
+}
+.num::after{content:"";height:1px;flex:1;background:var(--rule);transform-origin:left center;}
+.chapter h2{
+  font-size:clamp(1.95rem,4vw,3rem);line-height:1.08;letter-spacing:-.025em;
+  margin:0 0 22px;max-width:15ch;
+  font-variation-settings:'opsz' 72,'wght' 600;
+}
+.chapter p{margin:0;max-width:50ch;color:var(--soft);font-size:1.06rem;}
+.chapter p + p{margin-top:16px;}
+.chapter .pull{
+  margin-top:28px;padding-left:20px;border-left:3px solid var(--accent);
+  font-family:var(--serif);font-size:1.16rem;line-height:1.45;color:var(--ink);
+  font-variation-settings:'opsz' 32,'wght' 500;max-width:34ch;
+}
+.plates{display:grid;gap:26px;margin:0;}
+.plates figure{margin:0;overflow:hidden;}
+.plates img{width:100%;object-fit:cover;}
+.plates figure:nth-child(1) img{aspect-ratio:4/5;object-position:center 42%;}
+.plates figure:nth-child(2) img{aspect-ratio:16/11;object-position:center 46%;}
+.plates figcaption{margin-top:12px;font-size:.86rem;color:var(--soft);}
+@media (min-width:960px){
+  .plates figure:nth-child(2){margin-left:12%;}
+}
+
+/* ---------- Bento — the amenities grid ---------- */
+.amen{background:var(--putty);padding:96px 0 104px;position:relative;}
+.amen h2{
+  font-size:clamp(1.9rem,3.8vw,2.9rem);line-height:1.1;letter-spacing:-.024em;
+  margin:0 0 14px;max-width:20ch;font-variation-settings:'opsz' 72,'wght' 600;
+}
+.amen .lede{margin:0 0 48px;color:var(--soft);max-width:56ch;}
+
+.bento{
+  display:grid;gap:16px;
+  grid-template-columns:repeat(2,1fr);
+  grid-auto-rows:minmax(150px,auto);
+}
+@media (min-width:760px){ .bento{grid-template-columns:repeat(4,1fr);gap:18px;} }
+@media (min-width:1060px){ .bento{grid-template-columns:repeat(6,1fr);} }
+
+.tile{
+  container-type:inline-size;
+  position:relative;isolation:isolate;overflow:hidden;
+  --lift:0px;
+  border-radius:20px;padding:24px;
+  background:var(--card);border:1px solid var(--rule);
+  display:flex;flex-direction:column;justify-content:space-between;gap:18px;
+  translate:0 var(--lift);
+  transition:translate .5s var(--ease),box-shadow .5s var(--ease),border-color .5s var(--ease);
+}
+@media (hover:hover){
+  .tile:hover{--lift:-5px;box-shadow:0 20px 40px rgb(var(--shade) / .13);border-color:color-mix(in oklab,var(--accent) 40%,var(--rule));}
+}
+/* pointer spotlight — JS only feeds two numbers, CSS does the rest */
+.tile::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:var(--spot-o,0);transition:opacity .45s var(--ease-soft);
+  background:radial-gradient(340px circle at var(--spot-x,50%) var(--spot-y,0%),
+    color-mix(in oklab, var(--accent) 22%, transparent), transparent 68%);
+}
+@media (hover:hover){ .tile:hover{--spot-o:1;} }
+
+.tile .t-lbl{
+  font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
+  color:var(--accent-t);margin:0;
+}
+.tile h3{
+  margin:0;font-size:1.28rem;line-height:1.16;letter-spacing:-.018em;
+  font-variation-settings:'opsz' 40,'wght' 600;
+}
+.tile p{margin:8px 0 0;font-size:.93rem;line-height:1.5;color:var(--soft);}
+.tile .ico{width:26px;height:26px;color:var(--accent);}
+.tile .ico svg{width:100%;height:100%;display:block;}
+
+/* container queries: a tile that gets wide sets its own type bigger */
+@container (min-width: 330px){
+  .tile h3{font-size:1.6rem;}
+  .tile p{font-size:.98rem;}
+}
+@container (min-width: 470px){
+  .tile h3{font-size:2rem;letter-spacing:-.026em;}
+}
+
+/* layout: the bento's rhythm. `dense` lets a small tile backfill the hole
+   a wide one leaves at the end of a row. */
+.bento{grid-auto-flow:dense;}
+.tile{grid-column:span 2;}
+@media (min-width:760px){
+  .t-power{grid-column:span 4;}
+  .t-table{grid-column:span 4;}
+}
+@media (min-width:1060px){
+  .t-power {grid-column:span 3;grid-row:span 2;}
+  .t-wifi  {grid-column:span 2;grid-row:span 2;}
+  .t-hours {grid-column:span 1;grid-row:span 2;}
+  .t-beans,.t-bake,.t-refill,.t-quiet{grid-column:span 2;}
+  .t-table {grid-column:span 4;}
+}
+
+/* the hero tile: a live gradient rim, animated through a typed property */
+.t-power{
+  color:var(--dark-ink);border-color:transparent;
+  background:
+    linear-gradient(var(--dark),var(--dark)) padding-box,
+    conic-gradient(from var(--sweep),
+      var(--accent), color-mix(in oklab,var(--accent) 30%, var(--dark)),
+      var(--accent-l), color-mix(in oklab,var(--accent) 30%, var(--dark)),
+      var(--accent)) border-box;
+  border:1.5px solid transparent;
+  justify-content:flex-end;min-height:280px;
+}
+.t-power .t-lbl{color:var(--accent-l);}
+.t-power p{color:var(--dark-soft);}
+.t-power .plug-art{
+  position:absolute;inset:0;z-index:-2;opacity:.5;
+  background:
+    radial-gradient(120% 90% at 82% 12%, color-mix(in oklab,var(--accent) 34%, transparent), transparent 60%),
+    url(images/quiet.jpg) center 38%/cover no-repeat;
+  filter:grayscale(.4) contrast(1.05) brightness(.5);
+}
+/* a scrim under the copy, so the text keeps its contrast over the photo */
+.t-power::after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,transparent 30%,
+    color-mix(in oklab, var(--dark) 62%, transparent) 62%,
+    color-mix(in oklab, var(--dark) 92%, transparent) 100%);
+}
+@keyframes sweep{ to{--sweep:360deg} }
+
+/* the counted tiles */
+.t-wifi,.t-hours{justify-content:space-between;}
+.tile .bignum{
+  font-family:var(--serif);font-variation-settings:'opsz' 120,'wght' 500;
+  font-size:clamp(3rem,30cqi,6rem);line-height:.88;letter-spacing:-.045em;
+  color:var(--accent);margin:6px 0 0;
+}
+.tile .bignum sup{font-size:.3em;vertical-align:super;letter-spacing:.02em;}
+
+/* ---------- The room — native CSS carousel ---------- */
+.room{padding:100px 0 96px;}
+.room h2{
+  font-size:clamp(1.9rem,3.8vw,2.9rem);line-height:1.1;letter-spacing:-.024em;
+  margin:0 0 14px;max-width:22ch;font-variation-settings:'opsz' 72,'wght' 600;
+}
+.room .lede{margin:0 0 40px;color:var(--soft);max-width:54ch;}
+
+.reel-shell{position:relative;}
+.reel{
+  display:flex;gap:24px;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline:34px;
+  padding:6px 34px 4px;
+  scrollbar-width:none;
+}
+.reel::-webkit-scrollbar{display:none;}
+@media (min-width:1248px){ .reel{scroll-padding-inline:calc(50vw - var(--wrap)/2 + 34px);padding-inline:calc(50vw - var(--wrap)/2 + 34px);} }
+.reel figure{
+  margin:0;flex:0 0 min(80vw,540px);scroll-snap-align:start;
+  transition:opacity .6s var(--ease-soft);
+}
+.reel .shot{overflow:hidden;border-radius:14px;}
+.reel img{width:100%;aspect-ratio:4/5;object-fit:cover;}
+.reel figure:nth-child(even) img{aspect-ratio:5/6;}
+.reel figcaption{margin-top:14px;font-size:.9rem;color:var(--soft);max-width:34ch;}
+.reel .lbl{
+  display:block;font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;
+  font-weight:600;color:var(--accent-t);margin-bottom:5px;
+}
+.reel-hint{
+  margin:22px 0 0;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);
+}
+
+/* native carousel affordances — Chromium ships these; everyone else keeps
+   a normal, perfectly usable snap-scroller. */
+@supports selector(::scroll-marker){
+  .reel{scroll-marker-group:after;}
+  .reel::scroll-marker-group{
+    display:flex;gap:10px;justify-content:center;align-items:center;
+    padding-top:30px;
   }
-  .print:hover{rotate:0deg;translate:0 -6px;box-shadow:0 26px 50px rgba(21,19,14,.26);}
-  .print .shot{overflow:hidden;}
-  .print img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 42%;}
-  .print .cap{
-    margin:16px 2px 0;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--soft);text-align:center;
+  .reel figure::scroll-marker{
+    content:"";width:9px;height:9px;border-radius:50%;
+    background:transparent;border:1px solid var(--rule);
+    transition:background-color .35s var(--ease),scale .35s var(--ease),border-color .35s var(--ease);
   }
-
-  /* ---------- Footer ---------- */
-  .site-foot{background:var(--dark);color:var(--cream);padding:72px 0 58px;}
-  .foot-logo{width:230px;max-width:60vw;height:auto;margin:0 0 4px;}
-  .foot-grid{display:grid;gap:34px;}
-  @media (min-width:820px){ .foot-grid{grid-template-columns:1.1fr 1fr;gap:60px;} }
-  .visit{font-size:1rem;color:#BCAB99;line-height:1.95;margin:22px 0 0;}
-  .site-foot .kicker{color:var(--accent-l);}
-  .visit .op{color:var(--accent-l);font-weight:600;}
-  .visit b{color:var(--cream);font-weight:600;}
-  .fineprint{
-    font-size:.78rem;color:#9D8C7C;letter-spacing:.02em;line-height:1.7;
-    margin:38px 0 0;padding-top:22px;border-top:1px solid rgba(240,226,206,.18);
+  .reel figure::scroll-marker:target-current{
+    background:var(--accent);border-color:var(--accent);scale:1.35;
   }
-
-  /* ================================================================
-     MOTION — CSS only, no JavaScript.
-
-     Above the fold  : one-shot @keyframes on page load, staggered
-                       with animation-delay, fill-mode `backwards`
-                       so hover transforms stay free afterwards.
-     Below the fold  : scroll-driven `view()` timelines; stagger comes
-                       from offset animation-range values, since
-                       animation-delay has no meaning on a timeline.
-     Progress + head : `scroll(root)` timeline.
-
-     Everything sits inside prefers-reduced-motion:no-preference and,
-     where relevant, @supports (animation-timeline: view()). A reduced
-     motion visitor — or a browser without scroll-driven animation —
-     gets the finished, fully visible page with no motion at all.
-     ================================================================ */
-
-  @keyframes fade-up   { from{opacity:0;translate:0 22px} to{opacity:1;translate:0 0} }
-  @keyframes fade-in   { from{opacity:0}                  to{opacity:1} }
-  @keyframes wipe-up   { from{opacity:.001;clip-path:inset(0 0 100% 0)} to{opacity:1;clip-path:inset(0 0 0 0)} }
-  @keyframes pan-out   { from{scale:1.12}                 to{scale:1} }
-  @keyframes draw-x    { from{scale:0 1}                  to{scale:1 1} }
-  @keyframes draw-y    { from{scale:1 0}                  to{scale:1 1} }
-  @keyframes drift     { from{translate:0 0}              to{translate:-140px -140px} }
-  @keyframes head-lift {
-    from{box-shadow:0 1px 0 rgba(226,214,195,0), 0 10px 26px rgba(35,27,21,0);}
-    to  {box-shadow:0 1px 0 var(--rule),          0 10px 26px rgba(35,27,21,.07);}
+  .reel-hint{display:none;}
+}
+@supports selector(::scroll-button(right)){
+  /* make room above the reel for the native scroll buttons */
+  .reel-shell{margin-top:62px;}
+  .reel::scroll-button(left),.reel::scroll-button(right){
+    position:absolute;top:-64px;z-index:3;
+    width:44px;height:44px;border-radius:50%;
+    border:1px solid var(--rule);background:var(--card);color:var(--ink);
+    font-size:1rem;line-height:1;cursor:pointer;
+    transition:background-color .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease);
   }
-  @keyframes mark-shrink { from{scale:1} to{scale:.84} }
-  @keyframes bg-float  { from{scale:1.20;translate:0 -2.5%} to{scale:1.08;translate:0 2.5%} }
+  .reel::scroll-button(left):hover,.reel::scroll-button(right):hover{
+    background:var(--accent);color:#fff;border-color:var(--accent);
+  }
+  .reel::scroll-button(*):disabled{opacity:.32;cursor:default;}
+  .reel::scroll-button(left) {content:"\2190";right:calc(max(34px, 50vw - var(--wrap)/2 + 34px) + 60px);}
+  .reel::scroll-button(right){content:"\2192";right:max(34px, calc(50vw - var(--wrap)/2 + 34px));}
+}
 
+/* ---------- The long table (dark community band) ---------- */
+.longtable{
+  position:relative;color:var(--dark-ink);background:var(--dark);
+  padding:104px 0 108px;overflow:hidden;
+}
+.longtable .bg{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:.4;filter:grayscale(.2) var(--img-filter);will-change:transform;
+}
+.longtable::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,
+    color-mix(in oklab, var(--dark) 94%, transparent) 0%,
+    color-mix(in oklab, var(--dark) 84%, transparent) 48%,
+    color-mix(in oklab, var(--dark) 40%, transparent) 100%);
+}
+.longtable .wrap{position:relative;z-index:2;}
+.brass-rule{width:54px;height:3px;background:var(--accent);margin:0 0 26px;transform-origin:left center;}
+.longtable blockquote{
+  margin:0;font-family:var(--serif);
+  font-size:clamp(1.6rem,4vw,2.7rem);line-height:1.14;letter-spacing:-.026em;
+  max-width:20ch;font-variation-settings:'opsz' 96,'wght' 500;
+}
+.longtable .cite{
+  margin:26px 0 0;font-size:.86rem;letter-spacing:.03em;color:var(--dark-soft);
+}
+.lt-grid{display:grid;gap:44px;}
+@media (min-width:900px){ .lt-grid{grid-template-columns:1.05fr .95fr;gap:80px;align-items:center;} }
+.gains{list-style:none;margin:0;padding:0;display:grid;gap:22px;}
+.gains li{
+  padding-left:32px;position:relative;font-size:1.06rem;line-height:1.55;
+  color:color-mix(in oklab, var(--dark-ink) 88%, transparent);
+}
+.gains li::before{
+  content:"";position:absolute;left:0;top:.72em;width:16px;height:2px;background:var(--accent);
+  transform-origin:left center;
+}
+.gains b{font-weight:600;color:var(--dark-ink);}
+
+/* ---------- The counter ---------- */
+.counter{padding-block:100px 96px;}
+.counter h2{
+  font-size:clamp(1.9rem,3.8vw,2.9rem);line-height:1.1;letter-spacing:-.024em;
+  margin:0 0 14px;max-width:18ch;font-variation-settings:'opsz' 72,'wght' 600;
+}
+.counter .lede{margin:0 0 44px;color:var(--soft);max-width:58ch;}
+.counter-grid{display:grid;gap:44px;}
+@media (min-width:940px){ .counter-grid{grid-template-columns:1.05fr .95fr;gap:72px;align-items:start;} }
+
+.menu{border-top:1px solid var(--rule);}
+.menu details{border-bottom:1px solid var(--rule);}
+.menu summary{
+  list-style:none;cursor:pointer;padding:22px 2px;
+  display:flex;align-items:baseline;justify-content:space-between;gap:20px;
+  font-family:var(--serif);font-size:1.3rem;letter-spacing:-.016em;
+  font-variation-settings:'opsz' 40,'wght' 500;
+  transition:color .3s var(--ease);
+}
+.menu summary::-webkit-details-marker{display:none;}
+.menu summary:hover{color:var(--accent-t);}
+.menu summary .sign{
+  flex:none;width:20px;height:20px;position:relative;align-self:center;
+}
+.menu summary .sign::before,.menu summary .sign::after{
+  content:"";position:absolute;inset:50% 0 auto 0;height:1.5px;background:var(--accent);
+  translate:0 -50%;transition:rotate .4s var(--ease),opacity .4s var(--ease);
+}
+.menu summary .sign::after{rotate:90deg;}
+.menu details[open] summary .sign::after{rotate:0deg;opacity:0;}
+.menu .body{padding:0 2px 26px;}
+.menu dl{margin:0;display:grid;gap:2px;}
+.menu .row{
+  display:flex;align-items:baseline;gap:12px;padding:9px 0;
+  border-bottom:1px dotted color-mix(in oklab, var(--rule) 90%, transparent);
+}
+.menu .row:last-child{border-bottom:0;}
+.menu dt{margin:0;flex:1;}
+.menu dd{margin:0;flex:none;color:var(--soft);font-variant-numeric:tabular-nums;}
+.menu .note{margin:14px 0 0;font-size:.9rem;color:var(--soft);}
+
+/* height:auto transitions, courtesy of interpolate-size */
+@supports (interpolate-size: allow-keywords){
   @media (prefers-reduced-motion:no-preference){
-
-    /* ---- on load: header + hero, staggered ---- */
-    .head-bar     {animation:fade-in .7s var(--ease) backwards;}
-    .sig          {animation:draw-x .8s var(--ease) .10s backwards;}
-    .hero h1      {animation:fade-up .95s var(--ease) .16s backwards;}
-    .standfirst   {animation:fade-up .95s var(--ease) .26s backwards;}
-    .meta li      {animation:fade-up .9s var(--ease) var(--d,.34s) backwards;}
-    .meta li::before{animation:draw-x .8s var(--ease) calc(var(--d,.34s) + .12s) backwards;}
-    .meta li:nth-child(1){--d:.34s}
-    .meta li:nth-child(2){--d:.42s}
-    .meta li:nth-child(3){--d:.50s}
-    .hero-figure img{animation:wipe-up 1.1s var(--ease) .42s backwards, pan-out 1.6s var(--ease) .42s backwards;}
-    .hero-figure figcaption{animation:fade-in 1s var(--ease) 1.1s backwards;}
-
-    /* the standfirst highlight paints itself in, left to right */
-    .standfirst .em{
-      animation:draw-hl .9s var(--ease) 1.0s backwards;
+    .menu details::details-content{
+      block-size:0;overflow:clip;opacity:0;
+      transition:block-size .5s var(--ease), opacity .4s var(--ease-soft),
+                 content-visibility .5s allow-discrete;
     }
-    @keyframes draw-hl{ from{background-size:0% 100%} to{background-size:100% 100%} }
-
-    /* ---- always-on: the paper grain breathes ---- */
-    .grain{animation:drift 24s linear infinite;}
-
-    /* ---- scroll-driven ---- */
-    @supports (animation-timeline: view()){
-
-      .reveal,.nots li,.trip figcaption{
-        animation:fade-up 1s var(--ease) both;
-        animation-timeline:view();
-        animation-range:entry 4% entry 48%;
-      }
-
-      /* images wipe rather than move, leaving `scale` free for hover */
-      .fig img,.trip img,.print img{
-        animation:wipe-up 1s var(--ease) both;
-        animation-timeline:view();
-        animation-range:entry 2% entry 46%;
-      }
-
-      /* rules and bars draw themselves */
-      .num::after,.brass-rule,.exclusion blockquote::before,.trip-rule{
-        animation:draw-x .9s var(--ease) both;
-        animation-timeline:view();
-        animation-range:entry 8% entry 56%;
-      }
-      .room h2::before,.panel::before{
-        animation:draw-y .9s var(--ease) both;
-        animation-timeline:view();
-        animation-range:entry 6% entry 50%;
-      }
-      .nots li::before{
-        animation:draw-x .8s var(--ease) both;
-        animation-timeline:view();
-      }
-
-      /* stagger = offset ranges (animation-delay is inert on a timeline) */
-      .trip figure:nth-child(1) img{animation-range:entry 4%  entry 44%;}
-      .trip figure:nth-child(2) img{animation-range:entry 10% entry 50%;}
-      .trip figure:nth-child(3) img{animation-range:entry 16% entry 56%;}
-      .trip figure:nth-child(1) figcaption{animation-range:entry 6%  entry 46%;}
-      .trip figure:nth-child(2) figcaption{animation-range:entry 12% entry 52%;}
-      .trip figure:nth-child(3) figcaption{animation-range:entry 18% entry 58%;}
-      .nots li:nth-child(1){animation-range:entry 6%  entry 40%;}
-      .nots li:nth-child(2){animation-range:entry 11% entry 45%;}
-      .nots li:nth-child(3){animation-range:entry 16% entry 50%;}
-      .nots li:nth-child(1)::before{animation-range:entry 10% entry 34%;}
-      .nots li:nth-child(2)::before{animation-range:entry 15% entry 39%;}
-      .nots li:nth-child(3)::before{animation-range:entry 20% entry 44%;}
-
-      /* slow parallax behind "who this isn't for" */
-      .exclusion .bg{
-        animation:bg-float linear both;
-        animation-timeline:view();
-        animation-range:cover 0% cover 100%;
-      }
-
-      /* progress hairline + header lift, on the root scroller */
-      .progress{
-        animation:draw-x linear both;
-        animation-timeline:scroll(root block);
-      }
-      .site-head{
-        animation:head-lift linear both;
-        animation-timeline:scroll(root block);
-        animation-range:0 120px;
-      }
-      .wm-mark{
-        animation:mark-shrink linear both;
-        animation-timeline:scroll(root block);
-        animation-range:0 120px;
-      }
-    }
-
-    /* ---- hover / focus ---- */
-    .fig img,.trip img,.hero-figure img,.print img{
-      transition:scale .8s var(--ease),filter .8s var(--ease);
-    }
-    .fig:hover img,.trip .shot:hover img,.hero-figure:hover img,.print:hover img{
-      scale:1.035;
-    }
-    .wordmark .wm-mark{transition:rotate .6s var(--ease);}
-    .wordmark:hover .wm-mark{rotate:-6deg;}
+    .menu details[open]::details-content{block-size:auto;opacity:1;}
   }
+}
 
-  /* ---------- Print ---------- */
-  @media print{
-    .grain,.head-nav,.progress{display:none;}
-    body{font-size:11pt;background:#fff;}
-    .site-head{position:static;}
-    *,*::before,*::after{animation:none!important;transition:none!important;}
-    .print{rotate:none;box-shadow:none;}
-    .exclusion,.room,.site-foot{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-    section,figure{break-inside:avoid;}
-    .hero-figure img{height:280px;}
+.counter-aside{
+  background:var(--panel);border-radius:20px;padding:32px 32px 30px;
+  position:relative;border:1px solid var(--rule);
+}
+.counter-aside h3{
+  margin:0 0 14px;font-size:1.35rem;letter-spacing:-.018em;
+  font-variation-settings:'opsz' 40,'wght' 600;
+}
+.counter-aside p{margin:0 0 14px;color:var(--soft);font-size:1rem;}
+.counter-aside .price-line{
+  font-family:var(--serif);font-size:1.1rem;color:var(--ink);
+  font-variation-settings:'opsz' 32,'wght' 500;
+}
+
+/* popover + anchor positioning */
+.note-btn{
+  anchor-name:--organic;
+  background:none;border:0;padding:0;cursor:pointer;
+  font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+  color:var(--accent-t);border-bottom:1px solid color-mix(in oklab,var(--accent) 50%, transparent);
+  transition:color .3s var(--ease),border-color .3s var(--ease);
+}
+.note-btn:hover{color:var(--accent);border-color:var(--accent);}
+#organic-note{
+  border:1px solid var(--rule);border-radius:14px;
+  background:var(--card);color:var(--ink);
+  padding:20px 22px;max-width:min(330px,86vw);margin:auto;
+  box-shadow:0 22px 50px rgb(var(--shade) / .22);
+  font-size:.94rem;line-height:1.55;
+}
+#organic-note p{margin:0;color:var(--soft);}
+#organic-note strong{color:var(--ink);font-weight:600;}
+@supports (anchor-name: --a){
+  #organic-note{
+    position:absolute;margin:0;position-anchor:--organic;
+    position-area:block-end span-inline-end;
+    margin-block-start:10px;
+    position-try-fallbacks:flip-block, flip-inline;
   }
-  /* ================================================================
-     ENHANCEMENT LAYER
-     Additive only — appended last so it overrides by cascade order
-     without touching the rules above. Same two guards as the rest of
-     the sheet: prefers-reduced-motion, and @supports for anything
-     scroll-driven. A reduced-motion visitor still gets the finished,
-     static page.
-     ================================================================ */
-
-  /* modern text niceties — no motion, safe unguarded */
-  .hero h1{text-wrap:balance;}
-  .standfirst,.room h2,.price h2,.close .line{text-wrap:pretty;}
-
-  @keyframes blur-up{
-    from{opacity:0;translate:0 26px;filter:blur(14px);}
-    to  {opacity:1;translate:0 0;   filter:blur(0);}
+}
+@media (prefers-reduced-motion:no-preference){
+  #organic-note{
+    opacity:0;translate:0 -8px;
+    transition:opacity .3s var(--ease-soft), translate .3s var(--ease),
+               overlay .3s allow-discrete, display .3s allow-discrete;
   }
-  @keyframes word-rise{
-    from{opacity:0;translate:0 .5em;filter:blur(10px);}
-    to  {opacity:1;translate:0 0;   filter:blur(0);}
-  }
-  @keyframes hero-exit{
-    from{scale:1;   opacity:1; filter:blur(0);}
-    to  {scale:.94; opacity:.55; filter:blur(3px);}
-  }
+  #organic-note:popover-open{opacity:1;translate:0 0;}
+  @starting-style{ #organic-note:popover-open{opacity:0;translate:0 -8px;} }
+}
 
-  @media (prefers-reduced-motion:no-preference){
+/* ---------- Close ---------- */
+.close{padding-block:20px 92px;}
+.close-grid{display:grid;gap:48px;align-items:stretch;grid-template-columns:1fr;}
+@media (min-width:900px){ .close-grid{grid-template-columns:1.1fr .9fr;gap:76px;} }
+.close-col{display:flex;flex-direction:column;justify-content:space-between;gap:32px;}
+.close .line{
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,4.4vw,3.1rem);line-height:1.1;letter-spacing:-.028em;
+  margin:0 0 28px;max-width:16ch;font-variation-settings:'opsz' 96,'wght' 600;
+}
+.visit-inline{margin:0;color:var(--soft);font-size:1rem;line-height:1.9;}
+.visit-inline b{color:var(--ink);font-weight:600;}
+.print{
+  margin:0;justify-self:center;width:370px;max-width:100%;
+  background:var(--card);padding:16px 16px 54px;
+  box-shadow:0 18px 34px rgb(var(--shade) / .2);
+  rotate:-2.2deg;
+  transition:rotate .6s var(--ease),box-shadow .6s var(--ease),translate .6s var(--ease);
+}
+.print:hover{rotate:0deg;translate:0 -6px;box-shadow:0 26px 50px rgb(var(--shade) / .26);}
+.print .shot{overflow:hidden;}
+.print img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 42%;}
+.print .cap{
+  margin:16px 2px 0;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--soft);text-align:center;
+}
 
-    /* ---- hero headline now rises word by word ---- */
-    .hero h1{animation:none;}
-    .hero h1 .w{
-      display:inline-block;
-      animation:word-rise .9s var(--ease) var(--wd,.16s) backwards;
+/* ---------- Footer ---------- */
+.site-foot{background:var(--dark);color:var(--dark-ink);padding:76px 0 58px;}
+.foot-logo{width:230px;max-width:60vw;height:auto;margin:0 0 4px;}
+.foot-grid{display:grid;gap:36px;}
+@media (min-width:840px){ .foot-grid{grid-template-columns:1.1fr 1fr;gap:64px;} }
+.visit{font-size:1rem;color:var(--dark-soft);line-height:1.95;margin:22px 0 0;}
+.site-foot .kicker{color:var(--accent-l);}
+.visit .op{color:var(--accent-l);font-weight:600;}
+.visit b{color:var(--dark-ink);font-weight:600;}
+.fineprint{
+  font-size:.77rem;color:color-mix(in oklab, var(--dark-soft) 78%, transparent);
+  letter-spacing:.02em;line-height:1.7;
+  margin:40px 0 0;padding-top:22px;
+  border-top:1px solid color-mix(in oklab, var(--dark-ink) 20%, transparent);
+}
+
+/* ==========================================================================
+   MOTION
+
+   Above the fold : one-shot @keyframes on load, staggered with
+                    animation-delay and fill-mode `backwards`, so hover
+                    transforms stay free once they finish.
+   Below the fold : scroll-driven `view()` timelines. Stagger comes from
+                    offset animation-range values, because animation-delay
+                    is inert on a scroll timeline.
+   Chrome         : `scroll(root)` for the progress rail and the header.
+
+   All of it is inside prefers-reduced-motion:no-preference, and anything
+   scroll-driven is additionally inside @supports (animation-timeline: view()).
+   A reduced-motion visitor, or a browser without scroll timelines, gets the
+   finished page with everything already in place.
+   ========================================================================== */
+
+@keyframes fade-up  { from{opacity:0;translate:0 22px} to{opacity:1;translate:0 0} }
+@keyframes fade-in  { from{opacity:0}                  to{opacity:1} }
+@keyframes wipe-up  { from{opacity:.001;clip-path:inset(0 0 100% 0)} to{opacity:1;clip-path:inset(0 0 0 0)} }
+@keyframes pan-out  { from{scale:1.12}                 to{scale:1} }
+@keyframes draw-x   { from{scale:0 1}                  to{scale:1 1} }
+@keyframes draw-y   { from{scale:1 0}                  to{scale:1 1} }
+@keyframes drift    { from{translate:0 0}              to{translate:-140px -140px} }
+@keyframes reel-focus{ from{opacity:.3} to{opacity:1} }
+@keyframes bg-float { from{scale:1.2;translate:0 -2.5%} to{scale:1.08;translate:0 2.5%} }
+@keyframes blur-up  {
+  from{opacity:0;translate:0 26px;filter:blur(14px);}
+  to  {opacity:1;translate:0 0;   filter:blur(0);}
+}
+@keyframes cue-run  { 0%{scale:0 1;transform-origin:left center}
+                      50%{scale:1 1;transform-origin:left center}
+                      51%{scale:1 1;transform-origin:right center}
+                      100%{scale:0 1;transform-origin:right center} }
+@keyframes head-shrink{ from{padding-block:20px} to{padding-block:11px} }
+@keyframes head-edge  { from{border-bottom-color:transparent} to{border-bottom-color:var(--rule)} }
+@keyframes mark-shrink{ from{scale:1} to{scale:.84} }
+@keyframes pulse-dot{
+  0%  {box-shadow:0 0 0 0   color-mix(in oklab, var(--accent) 55%, transparent);}
+  70% {box-shadow:0 0 0 9px color-mix(in oklab, var(--accent)  0%, transparent);}
+  100%{box-shadow:0 0 0 0   color-mix(in oklab, var(--accent)  0%, transparent);}
+}
+
+/* --- kinetic variable type: the headline gains weight and optical size
+       as each word arrives. Only possible because Fraunces is variable. --- */
+@keyframes word-set{
+  from{opacity:0;translate:0 .55em;filter:blur(11px);font-variation-settings:'opsz' 9,'wght' 200;}
+  to  {opacity:1;translate:0 0;    filter:blur(0);   font-variation-settings:'opsz' 96,'wght' 600;}
+}
+@keyframes word-set-thin{
+  from{opacity:0;translate:0 .55em;filter:blur(11px);font-variation-settings:'opsz' 9,'wght' 150;}
+  to  {opacity:1;translate:0 0;    filter:blur(0);   font-variation-settings:'opsz' 96,'wght' 380;}
+}
+/* the headline keeps breathing on scroll — opsz tightens as it leaves */
+@keyframes head-optical{
+  from{font-variation-settings:'opsz' 96,'wght' 600;letter-spacing:-.03em;}
+  to  {font-variation-settings:'opsz' 20,'wght' 700;letter-spacing:-.005em;}
+}
+@keyframes hero-exit{
+  from{scale:1;   opacity:1;  filter:blur(0);}
+  to  {scale:.94; opacity:.5; filter:blur(3px);}
+}
+
+@media (prefers-reduced-motion:no-preference){
+
+  /* ---- on load ---- */
+  .head-bar    {animation:fade-in .7s var(--ease) backwards;}
+  .sig         {animation:draw-x .8s var(--ease) .10s backwards;}
+  .hero h1 .w  {animation:word-set .95s var(--ease) var(--wd,.16s) backwards;}
+  .hero h1 .thin .w{animation-name:word-set-thin;}
+  .hero h1 .thin .w:nth-of-type(1){--wd:.14s}
+  .hero h1 .thin .w:nth-of-type(2){--wd:.22s}
+  .thin + .w{--wd:.30s} .thin + .w + .w{--wd:.38s} .thin + .w + .w + .w{--wd:.46s}
+  .standfirst  {animation:fade-up .95s var(--ease) .30s backwards;}
+  .meta li     {animation:fade-up .9s var(--ease) var(--d,.38s) backwards;}
+  .meta li::before{animation:draw-x .8s var(--ease) calc(var(--d,.38s) + .12s) backwards;}
+  .meta li:nth-child(1){--d:.38s} .meta li:nth-child(2){--d:.46s} .meta li:nth-child(3){--d:.54s}
+  .cta-row     {animation:fade-up .9s var(--ease) .62s backwards;}
+  .scroll-cue  {animation:fade-in 1s var(--ease) .9s backwards;}
+  .scroll-cue i::after{animation:cue-run 2.6s var(--ease-soft) 1.2s infinite backwards;}
+  .hero-figure img{animation:wipe-up 1.1s var(--ease) .5s backwards, pan-out 1.7s var(--ease) .5s backwards;}
+  .hero-figure figcaption{animation:fade-in 1s var(--ease) 1.2s backwards;}
+  .standfirst .em{animation:draw-hl .9s var(--ease) 1.05s backwards;}
+  @keyframes draw-hl{ from{background-size:0% 100%} to{background-size:100% 100%} }
+
+  /* ---- always on ---- */
+  .grain{animation:drift 24s linear infinite;}
+  .status[data-open="yes"] .dot{animation:pulse-dot 2.6s var(--ease-soft) infinite;}
+  .t-power{animation:sweep 9s linear infinite;}
+
+  /* ---- hover ---- */
+  .plates img,.reel img,.hero-figure img,.print img,.t-power .plug-art{
+    transition:scale .8s var(--ease),filter .8s var(--ease);
+  }
+  .plates figure:hover img,.reel .shot:hover img,.hero-figure:hover img,.print:hover img{scale:1.04;}
+  .t-power:hover .plug-art{scale:1.06;}
+  .wordmark .wm-mark{transition:rotate .6s var(--ease);}
+  .wordmark:hover .wm-mark{rotate:-6deg;}
+
+  /* ---- scroll-driven ---- */
+  @supports (animation-timeline: view()){
+
+    .reveal,.gains li,.reel figcaption,.tile{
+      animation:fade-up 1s var(--ease) both;
+      animation-timeline:view();
+      animation-range:entry 4% entry 46%;
     }
-    .hero h1 .w:nth-of-type(1){--wd:.16s}
-    .hero h1 .w:nth-of-type(2){--wd:.24s}
-    .thin + .w{--wd:.32s}
-    .thin + .w + .w{--wd:.40s}
-    .thin + .w + .w + .w{--wd:.48s}
-
-    /* cards lift on hover — depth without moving the layout */
-    .trip figure{
-      transition:translate .55s var(--ease), filter .55s var(--ease);
+    /* images wipe rather than move, which leaves `scale` free for hover */
+    .plates img,.reel img,.print img{
+      animation:wipe-up 1s var(--ease) both;
+      animation-timeline:view();
+      animation-range:entry 2% entry 44%;
     }
-    .trip figure:hover{
-      translate:0 -8px;
-      filter:drop-shadow(0 18px 34px rgba(35,27,21,.16));
+    /* headings resolve out of a blur */
+    .chapter h2,.amen h2,.room h2,.counter h2,.close .line,.longtable blockquote{
+      animation:blur-up 1s var(--ease) both;
+      animation-timeline:view();
+      animation-range:entry 5% entry 48%;
     }
-    .panel{transition:translate .55s var(--ease), box-shadow .55s var(--ease);}
-    .panel:hover{translate:0 -4px;box-shadow:0 16px 40px rgba(35,27,21,.10);}
+    .num{
+      animation:blur-up .9s var(--ease) both;
+      animation-timeline:view();
+      animation-range:entry 2% entry 36%;
+    }
+    /* rules and bars draw themselves */
+    .num::after,.brass-rule,.gains li::before{
+      animation:draw-x .9s var(--ease) both;
+      animation-timeline:view();
+      animation-range:entry 8% entry 54%;
+    }
 
-    @supports (animation-timeline: view()){
+    /* bento stagger — animation-delay is inert on a timeline, so the
+       stagger is expressed as offset ranges instead */
+    .tile:nth-child(1){animation-range:entry 3%  entry 40%;}
+    .tile:nth-child(2){animation-range:entry 6%  entry 43%;}
+    .tile:nth-child(3){animation-range:entry 9%  entry 46%;}
+    .tile:nth-child(4){animation-range:entry 12% entry 49%;}
+    .tile:nth-child(5){animation-range:entry 15% entry 52%;}
+    .tile:nth-child(6){animation-range:entry 18% entry 55%;}
+    .tile:nth-child(7){animation-range:entry 21% entry 58%;}
+    /* the power tile needs both: a scroll-driven reveal and its own
+       time-based rim sweep. Two animations, two timelines. */
+    .t-power{
+      animation:fade-up 1s var(--ease) both, sweep 9s linear infinite;
+      animation-timeline:view(), auto;
+      animation-range:entry 3% entry 40%, normal;
+    }
+    .gains li:nth-child(1){animation-range:entry 6%  entry 40%;}
+    .gains li:nth-child(2){animation-range:entry 11% entry 45%;}
+    .gains li:nth-child(3){animation-range:entry 16% entry 50%;}
+    .gains li:nth-child(4){animation-range:entry 21% entry 55%;}
 
-      /* headings resolve out of a blur as they enter */
-      .room h2,.price h2,.close .line,.exclusion blockquote{
-        animation:blur-up 1s var(--ease) both;
-        animation-timeline:view();
-        animation-range:entry 5% entry 50%;
-      }
+    /* the hero headline re-cuts its optical size as the fold leaves */
+    .hero h1{
+      animation:head-optical linear both;
+      animation-timeline:view();
+      animation-range:exit 0% exit 90%;
+    }
+    .hero-figure{
+      animation:hero-exit linear both;
+      animation-timeline:view();
+      animation-range:exit 0% exit 100%;
+      transform-origin:50% 0;
+    }
+    /* slow parallax behind the long-table band */
+    .longtable .bg{
+      animation:bg-float linear both;
+      animation-timeline:view();
+      animation-range:cover 0% cover 100%;
+    }
+    /* the reel dims the plates that are off to the side */
+    .reel figure{
+      animation:reel-focus linear both;
+      animation-timeline:view(inline);
+      animation-range:entry 15% entry 90%;
+    }
 
-      /* the hero photo recedes as it leaves — gives the fold real depth */
-      .hero-figure{
-        animation:hero-exit linear both;
-        animation-timeline:view();
-        animation-range:exit 0% exit 100%;
-        transform-origin:50% 0;
-      }
-
-      /* section numerals count up out of the margin */
-      .num{
-        animation:blur-up .9s var(--ease) both;
-        animation-timeline:view();
-        animation-range:entry 2% entry 38%;
-      }
+    /* chrome, on the root scroller */
+    .progress{animation:draw-x linear both;animation-timeline:scroll(root block);}
+    .site-head{
+      animation:head-shrink linear both, head-edge linear both;
+      animation-timeline:scroll(root block);
+      animation-range:0 140px;
+    }
+    .wm-mark{
+      animation:mark-shrink linear both;
+      animation-timeline:scroll(root block);
+      animation-range:0 140px;
     }
   }
+}
+
+/* ==========================================================================
+   @scope — real style encapsulation, no build step.
+   Menu typography is scoped to .menu and stops at .body, so the price rows
+   below keep the sans stack while the headings above stay in the serif.
+   ========================================================================== */
+@scope (.menu) to (.body) {
+  :scope summary { font-family: var(--serif); }
+  :scope details[open] > summary { color: var(--accent-t); }
+}
+
+/* ==========================================================================
+   View Transitions — the day/dusk switch.
+   The circular reveal itself is driven from JS (it needs the click point);
+   here we just stop the default cross-fade from fighting it.
+   ========================================================================== */
+@view-transition{ navigation:auto; }
+::view-transition-old(root),
+::view-transition-new(root){ animation:none;mix-blend-mode:normal; }
+::view-transition-old(root){ z-index:1; }
+::view-transition-new(root){ z-index:9999; }
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important;}
+}
+
+/* ---------- Print ---------- */
+@media print{
+  .grain,.head-nav,.progress,.pointer-light,.theme-btn,.band,.scroll-cue,.cta-row{display:none;}
+  :root{--paper:#fff;--ink:#111;--soft:#444;--img-filter:none;}
+  body{font-size:11pt;background:#fff;}
+  .site-head{position:static;background:none;backdrop-filter:none;}
+  *,*::before,*::after{animation:none!important;transition:none!important;}
+  .print{rotate:none;box-shadow:none;}
+  .longtable,.amen,.site-foot{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  section,figure,.tile{break-inside:avoid;}
+  .hero-figure img{height:280px;}
+  .menu details::details-content{block-size:auto!important;opacity:1!important;}
+  .reel{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;margin-inline:0;padding-inline:0;}
+}
 </style>
 </head>
 <body id="top">
 
 <div class="grain" aria-hidden="true"></div>
+<div class="pointer-light" aria-hidden="true"></div>
 <div class="progress" aria-hidden="true"></div>
 <a class="skip" href="#main">Skip to content</a>
 
@@ -636,12 +1075,22 @@
         <span class="wm-sub">Coffee, conversation, big ideas</span>
       </span>
     </a>
-    <nav class="head-nav" aria-label="Primary">
-      <a class="lnk" href="#quiet">The room</a>
-      <a class="lnk" href="#who">Who it&rsquo;s for</a>
-      <a class="lnk" href="#visit">Visit</a>
-      <span class="hrs">7am&ndash;7pm, every day</span>
-    </nav>
+
+    <div class="head-right">
+      <nav class="head-nav" aria-label="Primary">
+        <a href="#amenities">Amenities</a>
+        <a href="#room">The room</a>
+        <a href="#counter">The counter</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <p class="status" id="status" data-open="yes">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="txt">Open until 7pm</span>
+      </p>
+      <button class="theme-btn" id="theme" type="button" aria-pressed="false">
+        <span class="lbl">Switch between the daylight and evening palette</span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -652,15 +1101,20 @@
     <div class="sig"></div>
     <h1><span class="thin"><span class="w">Where</span> <span class="w">ambition</span></span> <span class="w">and</span> <span class="w">coffee</span> <span class="w">unite.</span></h1>
     <p class="standfirst">
-      Whatever you&rsquo;re building needs two things on the same afternoon: a few uninterrupted hours, and
-      <span class="em">one person who will tell you what they actually think</span>.
-      Most places give you one or the other. This room is built for both.
+      A bright, unhurried room in the South End: organic coffee, pastries out of the oven at five,
+      gigabit wi-fi and <span class="em">an outlet at every single seat</span>.
+      Come for a few good hours of work &mdash; stay for whoever ends up at the next table.
     </p>
     <ul class="meta">
-      <li><span>Open</span>Seven in the morning until seven, every day of the week.</li>
-      <li><span>Counter</span>Organic coffee, and pastries baked fresh that morning.</li>
-      <li><span>House rule</span>Nobody will ever ask you how long you&rsquo;ve been sitting there.</li>
+      <li><span>Open</span>Seven in the morning until seven at night, every day of the week.</li>
+      <li><span>At the counter</span>Certified-organic beans, roasted a mile away. Pastries baked that morning.</li>
+      <li><span>At your seat</span>Power within arm&rsquo;s reach, gigabit fibre, and no password to ask for.</li>
     </ul>
+    <div class="cta-row">
+      <a class="btn magnetic" href="#visit">Come find us <span class="arw" aria-hidden="true">&rarr;</span></a>
+      <a class="btn ghost magnetic" href="#amenities">What&rsquo;s in the room</a>
+    </div>
+    <p class="scroll-cue"><i aria-hidden="true"></i> Scroll</p>
   </section>
 
   <figure class="hero-figure bleed bleed-figure">
@@ -668,95 +1122,308 @@
     <figcaption>Half past three on a Tuesday. Six people in the room, none of them in a hurry.</figcaption>
   </figure>
 
-  <!-- 01 -->
-  <section class="wrap feature" id="quiet">
-    <div class="feature-grid">
-      <figure class="fig">
-        <img src="images/quiet.jpg" alt="A person working alone at a small table beside a tall window, afternoon light falling across the table." width="1100" height="1400" loading="lazy" decoding="async">
-      </figure>
-      <div class="col">
-        <p class="num">01</p>
-        <div class="reveal">
-        <h2>Quiet on purpose</h2>
-        <p>
-          You can take a three-hour stretch here and have nothing asked of you. No music engineered
-          to move you along, no table-turning, no line noise at your elbow. Come in with a hard
-          problem and get it out of your head and onto the page.
-        </p>
-        </div>
+  <!-- TICKER -->
+  <div class="wrap">
+    <div class="band" id="band" aria-hidden="true">
+      <div class="band-track">
+        <ul>
+          <li>Organic coffee</li><li>Gigabit wi&#8209;fi</li><li>An outlet at every seat</li>
+          <li>Pastries baked at five</li><li>Free refills on drip</li><li>Thirty-one seats, two rooms</li>
+          <li>Open 7 to 7, every day</li><li>Nobody watching the clock</li>
+        </ul>
+        <ul>
+          <li>Organic coffee</li><li>Gigabit wi&#8209;fi</li><li>An outlet at every seat</li>
+          <li>Pastries baked at five</li><li>Free refills on drip</li><li>Thirty-one seats, two rooms</li>
+          <li>Open 7 to 7, every day</li><li>Nobody watching the clock</li>
+        </ul>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 02 -->
-  <section class="wrap feature flip">
-    <div class="feature-grid">
-      <figure class="fig">
-        <img src="images/lookup.jpg" alt="Three people leaning over one table mid-conversation while someone at the next table works on their own, in a bright room with windows onto the street." width="1400" height="1050" loading="lazy" decoding="async">
-      </figure>
-      <div class="col">
-        <p class="num">02</p>
-        <div class="reveal">
-        <h2>And then look up</h2>
-        <p>
-          The person two tables over is also mid-build. Ours is a room where saying
-          &ldquo;what are you working on&rdquo; is normal, not an intrusion, and where staff who&rsquo;ve
-          heard both sides of a problem will point you at each other. Some afternoons you&rsquo;ll work
-          straight through. Some afternoons a fifteen-minute conversation changes what you do next.
-        </p>
+  <!-- CHAPTERS -->
+  <div class="wrap chapters">
+
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-say">
+          <p class="num">01</p>
+          <h2>Settle in, and stay settled</h2>
+          <p>
+            Deep chairs, wide tables, and light that lasts all afternoon. No music engineered to move
+            you along, no table-turning, no one hovering with the check. Take a three-hour stretch and
+            have nothing at all asked of you.
+          </p>
+          <p>
+            Every seat has power in reach and a signal that holds through a video call, so the room
+            works whether you brought a laptop, a legal pad, or a co-founder.
+          </p>
+          <p class="pull">Nobody here will ever ask how long you&rsquo;ve been sitting there.</p>
         </div>
+        <div class="plates">
+          <figure>
+            <img src="images/quiet.jpg" alt="A person working alone at a small table beside a tall window, afternoon light falling across the table." width="1100" height="1400" loading="lazy" decoding="async">
+            <figcaption>The window tables hold the light until about five.</figcaption>
+          </figure>
+          <figure>
+            <img src="images/room-table.jpg" alt="A cup of coffee and a notebook resting on a wooden window bar, looking out onto a stone building across the street." width="900" height="1125" loading="lazy" decoding="async">
+            <figcaption>Ten seats along the window bar, each with its own outlet.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter flip">
+      <div class="chapter-grid">
+        <div class="chapter-say">
+          <p class="num">02</p>
+          <h2>Then look up</h2>
+          <p>
+            The best thing in the room isn&rsquo;t the coffee &mdash; it&rsquo;s who else came in.
+            Founders on draft twelve, a doctoral student two chapters from done, someone
+            sketching a menu for a restaurant that doesn&rsquo;t exist yet.
+          </p>
+          <p>
+            &ldquo;What are you working on?&rdquo; is a normal question here, not an intrusion. Whoever&rsquo;s on
+            bar has heard both sides of most problems and will happily point two tables at each other.
+            Some afternoons you work straight through. Some afternoons fifteen minutes with a stranger
+            changes what you do next.
+          </p>
+          <p class="pull">The person two tables over is building something too.</p>
+        </div>
+        <div class="plates">
+          <figure>
+            <img src="images/lookup.jpg" alt="Three people leaning over one table mid-conversation while someone at the next table works on their own, in a bright room with windows onto the street." width="1400" height="1050" loading="lazy" decoding="async">
+            <figcaption>The long table seats eight, and rarely stays quiet past noon.</figcaption>
+          </figure>
+          <figure>
+            <img src="images/room-corner.jpg" alt="A quiet corner with a banquette, plants, green tile and a small round table holding a drink." width="900" height="1125" loading="lazy" decoding="async">
+            <figcaption>The back corner, where fifteen minutes turns into an hour.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- AMENITIES / BENTO -->
+  <section class="amen bleed" id="amenities">
+    <div class="wrap">
+      <p class="kicker reveal">Everything already handled</p>
+      <h2>The small stuff, sorted, so the big stuff gets your attention.</h2>
+      <p class="lede reveal">No hunting for a socket. No asking for the password. No fifteen-minute
+        timer on the wi-fi. The room is set up the way you would set it up.</p>
+
+      <div class="bento">
+
+        <article class="tile t-power">
+          <div class="plug-art" aria-hidden="true"></div>
+          <p class="t-lbl">Power</p>
+          <div>
+            <h3>An outlet at every single seat.</h3>
+            <p>Not one shared strip by the window. Thirty-one seats, thirty-one outlets, plus
+              USB&#8209;C at the long table and the banquette. Bring the laptop that stopped
+              holding a charge two years ago.</p>
+          </div>
+        </article>
+
+        <article class="tile t-wifi">
+          <div>
+            <p class="t-lbl">Wi-fi</p>
+            <p class="bignum">1<sup>Gb</sup></p>
+          </div>
+          <div>
+            <h3>Symmetrical fibre</h3>
+            <p>No password, no captive portal, no timer. Calls hold in both rooms, uploads
+              go as fast as downloads.</p>
+          </div>
+        </article>
+
+        <article class="tile t-hours">
+          <div>
+            <p class="t-lbl">Hours</p>
+            <p class="bignum">7&ndash;7</p>
+          </div>
+          <div>
+            <h3>Every day</h3>
+            <p>Weekends included. Holidays mostly included.</p>
+          </div>
+        </article>
+
+        <article class="tile t-beans">
+          <p class="t-lbl">The beans</p>
+          <div>
+            <h3>Certified organic</h3>
+            <p>Single-origin, roasted a mile from here, ground to order. Oat, whole and
+              lactose-free milk, none of them an upcharge.</p>
+          </div>
+        </article>
+
+        <article class="tile t-bake">
+          <p class="t-lbl">Baked at five</p>
+          <div>
+            <h3>Still warm at seven</h3>
+            <p>Croissants, morning buns, a seeded loaf. From eleven, soup and something
+              on good bread.</p>
+          </div>
+        </article>
+
+        <article class="tile t-refill">
+          <p class="t-lbl">Refills</p>
+          <div>
+            <h3>Free on drip, all day</h3>
+            <p>However long the day runs. Filtered water and sparkling are free too, and
+              they come to the table.</p>
+          </div>
+        </article>
+
+        <article class="tile t-table">
+          <p class="t-lbl">Room to meet</p>
+          <div>
+            <h3>A long table for eight, and a back corner for two.</h3>
+            <p>No booking, no minimum, no one asking you to wrap up. Take the corner for a
+              first conversation, take the long table when the group grows. There&rsquo;s a
+              screen on the wall if you need to put something up on it.</p>
+          </div>
+        </article>
+
+        <article class="tile t-quiet">
+          <p class="t-lbl">Sound</p>
+          <div>
+            <h3>Kept low on purpose</h3>
+            <p>Soft acoustic panels, quiet grinder, no playlist designed to speed you up.</p>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
 
   <!-- THE ROOM -->
-  <section class="room bleed">
+  <section class="room" id="room">
     <div class="wrap">
       <p class="kicker reveal">The room itself</p>
-      <h2 class="reveal">Built for a long sitting, and for the chance you&rsquo;ll want company partway through.</h2>
-      <p class="lede reveal">Two rooms, thirty-one seats, and a counter that has heard most versions of the problem you walked in with. Three plates from the same afternoon.</p>
-      <div class="trip">
+      <h2>Two rooms, thirty-one seats, and a counter that has heard most versions of your problem.</h2>
+      <p class="lede reveal">Five plates from the same afternoon.</p>
+    </div>
+    <div class="reel-shell">
+      <div class="reel" tabindex="0" role="group" aria-label="Photographs of the cafe">
         <figure>
           <div class="shot"><img src="images/room-light.jpg" alt="A barista at the espresso machine, silhouetted against morning sun coming through a striped awning." width="900" height="1125" loading="lazy" decoding="async"></div>
-          <figcaption><span class="lbl">Mornings</span>We open at seven. The first two hours are the quietest ones we have.</figcaption>
+          <figcaption><span class="lbl">Mornings</span>We open at seven. The first two hours are the quietest we have.</figcaption>
         </figure>
         <figure>
           <div class="shot"><img src="images/room-table.jpg" alt="A cup of coffee and a notebook resting on a wooden window bar, looking out onto a stone building across the street." width="900" height="1125" loading="lazy" decoding="async"></div>
-          <figcaption><span class="lbl">The window bar</span>Ten seats facing out, for the stretch of work you need to do alone.</figcaption>
+          <figcaption><span class="lbl">The window bar</span>Ten seats facing out, each one with power under the lip.</figcaption>
         </figure>
         <figure>
           <div class="shot"><img src="images/room-corner.jpg" alt="A quiet corner with a banquette, plants, green tile and a small round table holding a drink." width="900" height="1125" loading="lazy" decoding="async"></div>
-          <figcaption><span class="lbl">The back corner</span>Where two people end up when fifteen minutes turns into an hour.</figcaption>
+          <figcaption><span class="lbl">The back corner</span>Plants, a banquette, and the best seat for a real conversation.</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="images/quiet.jpg" alt="A person working alone at a small table beside a tall window in the afternoon light." width="1100" height="1400" loading="lazy" decoding="async"></div>
+          <figcaption><span class="lbl">Afternoons</span>Deep work hours. The room goes quiet around two.</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="images/lookup.jpg" alt="Three people leaning over one table mid-conversation while someone at the next table works alone." width="1400" height="1050" loading="lazy" decoding="async"></div>
+          <figcaption><span class="lbl">The long table</span>Eight seats, a screen on the wall, and no booking sheet.</figcaption>
         </figure>
       </div>
-      <div class="trip-rule reveal" aria-hidden="true"></div>
+      <p class="wrap reel-hint">Scroll the strip sideways &rarr;</p>
     </div>
   </section>
 
-  <!-- WHO THIS ISN'T FOR -->
-  <section class="exclusion bleed" id="who">
+  <!-- THE LONG TABLE -->
+  <section class="longtable bleed on-dark-block">
     <img class="bg" src="images/not-for.jpg" alt="" aria-hidden="true" width="2000" height="1100" loading="lazy" decoding="async">
-    <div class="wrap">
-      <div class="brass-rule"></div>
-      <p class="kicker on-dark reveal">Who this isn&rsquo;t for</p>
-      <ul class="nots">
-        <li>If you want coffee in ninety seconds, the corner will beat us.</li>
-        <li>If you&rsquo;re hunting for the cheapest seat in the neighborhood, that isn&rsquo;t this one.</li>
-        <li>And if you want to sit all day in headphones and speak to nobody, you&rsquo;ll find us in your way.</li>
+    <div class="wrap lt-grid">
+      <div>
+        <div class="brass-rule"></div>
+        <p class="kicker on-dark reveal">Who you&rsquo;ll meet</p>
+        <blockquote>A room is only as good as the people who keep coming back to it.</blockquote>
+        <p class="cite">&mdash; painted above the pass, since the week we opened</p>
+      </div>
+      <ul class="gains">
+        <li><b>Regulars, not traffic.</b> The same forty or so faces most weeks, which is why introductions actually stick.</li>
+        <li><b>Staff who connect people.</b> Ask what the long table is working on today. You&rsquo;ll get a real answer.</li>
+        <li><b>Thursday evenings.</b> An open hour from five: bring the messy version of an idea, leave with three opinions on it.</li>
+        <li><b>A board by the door.</b> Cards for what people are looking for &mdash; a designer, a test reader, a second pair of hands.</li>
       </ul>
-      <blockquote class="reveal">We&rsquo;d rather lose those three customers than dilute the room for the people we built it for.</blockquote>
     </div>
   </section>
 
-  <!-- PRICE -->
-  <section class="wrap price">
-    <p class="kicker reveal">What you&rsquo;re paying for</p>
-    <div class="price-grid">
-      <h2 class="reveal">Our prices run about 15% above the chains.</h2>
-      <div class="panel reveal">
-        <p>You&rsquo;re paying for a room kept calm on purpose, and for who else is sitting in it.</p>
-        <p class="fine">Drip $4.25 &middot; Cortado $5.00 &middot; Refills on drip are free, all day, no matter how long the day runs.</p>
+  <!-- THE COUNTER -->
+  <section class="wrap counter" id="counter">
+    <p class="kicker reveal">The counter</p>
+    <h2>Organic, roasted in Boston, ground to order.</h2>
+    <p class="lede reveal">Small menu, done properly. Refills on drip are free all day, no matter
+      how long the day runs.</p>
+
+    <div class="counter-grid">
+      <div class="menu">
+        <details name="menu" open>
+          <summary>Coffee <span class="sign" aria-hidden="true"></span></summary>
+          <div class="body">
+            <dl>
+              <div class="row"><dt>Drip, single origin</dt><dd>4.25</dd></div>
+              <div class="row"><dt>Cortado</dt><dd>5.00</dd></div>
+              <div class="row"><dt>Pour-over, by the cup</dt><dd>5.50</dd></div>
+              <div class="row"><dt>Latte or cappuccino</dt><dd>5.25</dd></div>
+              <div class="row"><dt>Cold brew, on nitro</dt><dd>5.00</dd></div>
+            </dl>
+            <p class="note">Oat, whole and lactose-free milk. No upcharge on any of them.</p>
+          </div>
+        </details>
+        <details name="menu">
+          <summary>Tea &amp; not-coffee <span class="sign" aria-hidden="true"></span></summary>
+          <div class="body">
+            <dl>
+              <div class="row"><dt>Loose-leaf, by the pot</dt><dd>4.00</dd></div>
+              <div class="row"><dt>Ceremonial matcha</dt><dd>5.25</dd></div>
+              <div class="row"><dt>Drinking chocolate</dt><dd>4.75</dd></div>
+              <div class="row"><dt>Still or sparkling water</dt><dd>free</dd></div>
+            </dl>
+          </div>
+        </details>
+        <details name="menu">
+          <summary>Out of the oven at five <span class="sign" aria-hidden="true"></span></summary>
+          <div class="body">
+            <dl>
+              <div class="row"><dt>Butter croissant</dt><dd>4.00</dd></div>
+              <div class="row"><dt>Morning bun</dt><dd>4.50</dd></div>
+              <div class="row"><dt>Seeded loaf, toasted</dt><dd>5.00</dd></div>
+              <div class="row"><dt>Quiche of the day</dt><dd>8.50</dd></div>
+            </dl>
+          </div>
+        </details>
+        <details name="menu">
+          <summary>Lunch, from eleven <span class="sign" aria-hidden="true"></span></summary>
+          <div class="body">
+            <dl>
+              <div class="row"><dt>Soup and bread</dt><dd>8.00</dd></div>
+              <div class="row"><dt>Sandwich of the week</dt><dd>12.00</dd></div>
+              <div class="row"><dt>Big salad</dt><dd>11.50</dd></div>
+            </dl>
+            <p class="note">Everything is made here, and everything can be boxed to take back to your seat.</p>
+          </div>
+        </details>
       </div>
+
+      <aside class="counter-aside reveal">
+        <h3>About the price</h3>
+        <p>We run roughly 15% above the chain on the corner, and we&rsquo;d rather explain that than hide it.</p>
+        <p class="price-line">That difference buys the room: the outlets, the fibre, the seat nobody
+          asks you to give up, and beans bought at a price the farm agreed to.</p>
+        <p style="margin-bottom:0">
+          <button class="note-btn" type="button" id="organic-anchor" popovertarget="organic-note">
+            What &ldquo;organic&rdquo; means here
+          </button>
+        </p>
+        <div popover id="organic-note">
+          <p><strong>Certified organic, and traceable.</strong> Every lot we pour is USDA-certified
+            and bought on a published farm-gate price. The current origin is chalked on the board
+            behind the espresso machine &mdash; ask, and someone will tell you the farm&rsquo;s name.</p>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -764,12 +1431,17 @@
   <section class="wrap close" id="visit">
     <div class="close-grid">
       <div class="close-col reveal">
-        <p class="line">Walk out with more momentum on your idea than you walked in with.</p>
-        <p class="visit-inline">
-          <b>Harrison Ave at Waltham Street</b>, South End, Boston<br>
-          Open 7am&ndash;7pm, every day<br>
-          Come with the messy version. That&rsquo;s the one worth talking about.
-        </p>
+        <div>
+          <p class="line">Walk out with more momentum than you walked in with.</p>
+          <p class="visit-inline">
+            <b>Harrison Ave at Waltham Street</b>, South End, Boston<br>
+            Open 7am&ndash;7pm, every day of the week<br>
+            Bring the messy version. That&rsquo;s the one worth talking about.
+          </p>
+        </div>
+        <div class="cta-row" style="margin-top:0">
+          <a class="btn magnetic" href="#top">Back to the top <span class="arw" aria-hidden="true">&uarr;</span></a>
+        </div>
       </div>
       <figure class="print">
         <div class="shot"><img src="images/storefront.jpg" alt="The Great Minds Cafe storefront: a plain white facade on a quiet street, with a dark open doorway and a bench just inside the glass." width="1100" height="1375" loading="lazy" decoding="async"></div>
@@ -780,7 +1452,7 @@
 
 </main>
 
-<footer class="site-foot bleed">
+<footer class="site-foot bleed on-dark-block">
   <div class="wrap foot-grid">
     <div class="foot-mark reveal">
       <img class="foot-logo" src="images/logo-full.png" alt="Great Minds Cafe — coffee, conversation, big ideas" width="606" height="722" loading="lazy" decoding="async">
@@ -794,8 +1466,8 @@
       <p class="kicker" style="margin-bottom:6px">Before you come in</p>
       <p class="visit" style="margin-top:0">
         <b>Bring:</b> the draft, the deck, the thing you keep rewriting.<br>
-        <b>Expect:</b> a seat for as long as you need it.<br>
-        <b>Risk:</b> someone asking a question you hadn&rsquo;t thought of.
+        <b>Leave at home:</b> the charger, if you like. There&rsquo;s one at the counter.<br>
+        <b>Expect:</b> a seat for as long as you need it, and a room worth looking up from.
       </p>
     </div>
   </div>
@@ -807,6 +1479,143 @@
     </p>
   </div>
 </footer>
+
+<script>
+/* ==========================================================================
+   Progressive enhancement only. Every block below checks for the API it
+   needs, and the page is complete and usable with this file removed.
+   ========================================================================== */
+(function(){
+  'use strict';
+  var root   = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var fine   = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var clamp  = function(v,a,b){ return v < a ? a : v > b ? b : v; };
+
+  /* ---------------------------------------------------------------- theme
+     Day / dusk, remembered, revealed with the View Transitions API as a
+     circle expanding out of the switch itself. Falls back to an instant
+     swap wherever startViewTransition is missing or motion is reduced. */
+  var btn = document.getElementById('theme');
+  if (btn) {
+    var sync = function(){
+      var dusk = root.dataset.theme === 'dusk';
+      btn.setAttribute('aria-pressed', dusk ? 'true' : 'false');
+      btn.querySelector('.lbl').textContent =
+        dusk ? 'Switch to the daylight palette' : 'Switch to the evening palette';
+    };
+    sync();
+
+    btn.addEventListener('click', function(){
+      var next  = root.dataset.theme === 'dusk' ? 'day' : 'dusk';
+      var apply = function(){
+        root.dataset.theme = next;
+        try { localStorage.setItem('gmc-theme', next); } catch(e){}
+        sync();
+      };
+
+      if (!document.startViewTransition || reduce.matches) { apply(); return; }
+
+      var r = btn.getBoundingClientRect();
+      var x = r.left + r.width / 2, y = r.top + r.height / 2;
+      var end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+      document.startViewTransition(apply).ready.then(function(){
+        root.animate(
+          { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)',
+                       'circle(' + end + 'px at ' + x + 'px ' + y + 'px)'] },
+          { duration: 640, easing: 'cubic-bezier(.22,.7,.2,1)',
+            pseudoElement: '::view-transition-new(root)' }
+        );
+      }).catch(function(){});
+    });
+  }
+
+  /* -------------------------------------------------------------- open now
+     The pill reads the visitor's own clock against 7am-7pm. */
+  var pill = document.getElementById('status');
+  if (pill) {
+    var now  = new Date(), h = now.getHours(), m = now.getMinutes();
+    var open = h >= 7 && h < 19;
+    var txt;
+    if (open)          txt = (h === 18 && m > 30) ? 'Closing at 7pm' : 'Open until 7pm';
+    else if (h < 7)    txt = 'Opens at 7am';
+    else               txt = 'Opens 7am tomorrow';
+    pill.dataset.open = open ? 'yes' : 'no';
+    pill.querySelector('.txt').textContent = txt;
+  }
+
+  /* --------------------------------------------------------- pointer light
+     One rAF loop, lerped, desktop pointers only. */
+  var light = document.querySelector('.pointer-light');
+  if (light && fine.matches && !reduce.matches) {
+    var lx = innerWidth / 2, ly = innerHeight / 2, tx = lx, ty = ly, lightRaf = 0;
+    var run = function(){
+      lx += (tx - lx) * 0.12; ly += (ty - ly) * 0.12;
+      light.style.translate = (lx - 260) + 'px ' + (ly - 260) + 'px';
+      lightRaf = (Math.abs(tx - lx) + Math.abs(ty - ly) > 0.5) ? requestAnimationFrame(run) : 0;
+    };
+    addEventListener('pointermove', function(e){
+      if (e.pointerType !== 'mouse') return;
+      tx = e.clientX; ty = e.clientY;
+      light.dataset.on = '';
+      if (!lightRaf) lightRaf = requestAnimationFrame(run);
+    }, { passive: true });
+    addEventListener('pointerleave', function(){ delete light.dataset.on; });
+  }
+
+  /* ------------------------------------------------------- bento spotlight
+     JS hands CSS two numbers; the gradient itself lives in the stylesheet. */
+  var bento = document.querySelector('.bento');
+  if (bento && fine.matches) {
+    bento.addEventListener('pointermove', function(e){
+      var tile = e.target.closest ? e.target.closest('.tile') : null;
+      if (!tile) return;
+      var b = tile.getBoundingClientRect();
+      tile.style.setProperty('--spot-x', ((e.clientX - b.left) / b.width  * 100).toFixed(1) + '%');
+      tile.style.setProperty('--spot-y', ((e.clientY - b.top)  / b.height * 100).toFixed(1) + '%');
+    }, { passive: true });
+  }
+
+  /* -------------------------------------------------------- magnetic pills
+     Buttons lean a few pixels toward the cursor. */
+  if (fine.matches && !reduce.matches) {
+    Array.prototype.forEach.call(document.querySelectorAll('.magnetic'), function(el){
+      el.addEventListener('pointermove', function(e){
+        var b = el.getBoundingClientRect();
+        el.style.setProperty('--mag-x', clamp((e.clientX - (b.left + b.width  / 2)) * 0.22, -12, 12).toFixed(1) + 'px');
+        el.style.setProperty('--mag-y', clamp((e.clientY - (b.top  + b.height / 2)) * 0.30,  -8,  8).toFixed(1) + 'px');
+      }, { passive: true });
+      el.addEventListener('pointerleave', function(){
+        el.style.setProperty('--mag-x', '0px');
+        el.style.setProperty('--mag-y', '0px');
+      });
+    });
+  }
+
+  /* ------------------------------------------------------- reactive ticker
+     Scroll velocity skews and nudges the marquee, then springs back.
+     The loop only runs while there is momentum left to spend. */
+  var band = document.getElementById('band');
+  if (band && !reduce.matches) {
+    var lastY = scrollY, impulse = 0, vel = 0, bandRaf = 0;
+    var spin = function(){
+      vel += (impulse - vel) * 0.14;
+      impulse *= 0.88;
+      band.style.setProperty('--band-skew',  (vel * -0.16).toFixed(2) + 'deg');
+      band.style.setProperty('--band-nudge', (vel * -1.4).toFixed(1)  + 'px');
+      band.style.setProperty('--band-rot',   (-0.6 + vel * 0.01).toFixed(3) + 'deg');
+      bandRaf = (Math.abs(vel) > 0.05 || Math.abs(impulse) > 0.05) ? requestAnimationFrame(spin) : 0;
+    };
+    addEventListener('scroll', function(){
+      var y = scrollY;
+      impulse = clamp(y - lastY, -70, 70);
+      lastY = y;
+      if (!bandRaf) bandRaf = requestAnimationFrame(spin);
+    }, { passive: true });
+  }
+})();
+</script>
 
 </body>
 </html>

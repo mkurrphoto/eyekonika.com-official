@@ -12,7 +12,7 @@ Everything this page needs is inside this folder:
 
 ```
 questrom/
-├── index.html            single file — all HTML, CSS inline; zero JavaScript
+├── index.html            single file — all HTML, CSS and JS inline
 ├── fonts/                2 woff2 files
 └── images/               11 jpg/png files
 ```
@@ -41,6 +41,25 @@ rm -rf questrom/
 
 Then remove the two `/questrom/` lines from the site-root `robots.txt`, and the
 "Course assignment page" section from `CLAUDE.md`. Nothing else needs changing.
+
+## What's in the page
+
+Deliberately a showcase of current (2026) platform features, all progressively
+enhanced — the page is complete and readable with JavaScript off and none of
+these supported:
+
+- CSS scroll-driven animations (`animation-timeline: view()` / `scroll(root)`)
+- View Transitions API — the day/dusk switch reveals as a circle out of the toggle
+- variable-font axis animation (Fraunces `opsz` + `wght`) on the headline
+- `@property`-typed custom properties (animated conic rim, pointer spotlight)
+- container queries, `@scope`, `:has()`, `color-mix()`, `text-wrap`
+- native CSS carousel (`::scroll-marker`, `::scroll-button()`)
+- CSS anchor positioning + the Popover API
+- `interpolate-size` + `::details-content` for height:auto transitions
+
+The inline `<script>` only adds: theme persistence, the live open/closed pill,
+the pointer light, the bento spotlight, magnetic buttons, and scroll-velocity
+on the ticker. Nothing structural depends on it.
 
 ## Notes
 

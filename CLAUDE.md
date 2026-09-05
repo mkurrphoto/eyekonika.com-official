@@ -211,7 +211,7 @@ All interactions (rail scroll-spy, rail jump, deep-link resync, observer, tilt, 
 built for a Questrom group assignment. It is **not** Eyekonika content and is
 not part of the redesign.
 
-- Fully self-contained: `questrom/index.html` (inline CSS, no JS) + `questrom/fonts/` + `questrom/images/`
+- Fully self-contained: `questrom/index.html` (inline CSS + inline JS, no CDN) + `questrom/fonts/` + `questrom/images/`
 - Nothing outside the folder references it; nothing inside it references the site
 - `noindex, nofollow` on the page, `Disallow: /questrom/` in `robots.txt`, absent from `sitemap.xml`
 - Do not modify it, link to it, or fold it into the site's CSS/JS
