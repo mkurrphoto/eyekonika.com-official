@@ -211,8 +211,20 @@ All interactions (rail scroll-spy, rail jump, deep-link resync, observer, tilt, 
 built for a Questrom group assignment. It is **not** Eyekonika content and is
 not part of the redesign.
 
-- Fully self-contained: `questrom/index.html` (inline CSS + inline JS, no CDN) + `questrom/fonts/` + `questrom/images/`
-- Nothing outside the folder references it; nothing inside it references the site
-- `noindex, nofollow` on the page, `Disallow: /questrom/` in `robots.txt`, absent from `sitemap.xml`
-- Do not modify it, link to it, or fold it into the site's CSS/JS
+Two pages, one per course week:
+
+- `questrom/index.html` — Week 1 landing page. Inline CSS + inline JS, no CDN.
+- `questrom/growth-strategy/index.html` — Week 3 "Build Your Growth Campaign":
+  the brief, three pieces in funnel order (awareness → purchase → repeat), then a
+  shareholder debrief with a cost-vs-return chart. Served at
+  `/questrom/growth-strategy`.
+
+Rules for both:
+
+- Fully self-contained: each page sits with its own `fonts/` and `images/`. `growth-strategy/` copies the fonts and logos rather than referencing `../`, so the folder can be submitted on its own
+- Nothing outside the folder references them; nothing inside them references the site
+- `noindex, nofollow` on both pages, `Disallow: /questrom/` in `robots.txt` (the prefix covers the subfolder), absent from `sitemap.xml`
+- Do not modify them, link to them, or fold them into the site's CSS/JS
+- `growth-strategy/` carries **no JavaScript at all** — the assignment's output rules forbid it, so there is no theme toggle and day/dusk comes from `prefers-color-scheme` alone. Don't "restore" the toggle to match the Week 1 page
+- Its debrief band is pinned to `#1B211F` in both colour schemes so the chart's two series (`#C2802A` return, `#4E8FD6` cost) keep their validated contrast and CVD separation. Don't make that band theme-responsive
 - To remove: `rm -rf questrom/`, drop the `/questrom/` lines from `robots.txt`, and delete this section. See `questrom/DELETE-ME-README.md`
