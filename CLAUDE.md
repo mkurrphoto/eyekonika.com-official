@@ -211,20 +211,34 @@ All interactions (rail scroll-spy, rail jump, deep-link resync, observer, tilt, 
 built for a Questrom group assignment. It is **not** Eyekonika content and is
 not part of the redesign.
 
-Two pages, one per course week:
+Three pages, one per course week:
 
 - `questrom/index.html` — Week 1 landing page. Inline CSS + inline JS, no CDN.
 - `questrom/growth-strategy/index.html` — Week 3 "Build Your Growth Campaign":
   the brief, three pieces in funnel order (awareness → purchase → repeat), then a
   shareholder debrief with a cost-vs-return chart. Served at
   `/questrom/growth-strategy`.
+- `questrom/flow-constraint-map/index.html` — Week 4 "Flow & Constraint Map".
+  Served at `/questrom/flow-constraint-map`. See its own section below.
 
-Rules for both:
+Rules for all three:
 
-- Fully self-contained: each page sits with its own `fonts/` and `images/`. `growth-strategy/` copies the fonts and logos rather than referencing `../`, so the folder can be submitted on its own
+- Fully self-contained: each page sits with its own `fonts/` and `images/`. `growth-strategy/` copies the fonts and logos rather than referencing `../`, so the folder can be submitted on its own; `flow-constraint-map/` goes further and is a single file with nothing beside it
 - Nothing outside the folder references them; nothing inside them references the site
-- `noindex, nofollow` on both pages, `Disallow: /questrom/` in `robots.txt` (the prefix covers the subfolder), absent from `sitemap.xml`
+- `noindex, nofollow` on all three pages, `Disallow: /questrom/` in `robots.txt` (the prefix covers the subfolders), absent from `sitemap.xml`
 - Do not modify them, link to them, or fold them into the site's CSS/JS
 - `growth-strategy/` carries **no JavaScript at all** — the assignment's output rules forbid it, so there is no theme toggle and day/dusk comes from `prefers-color-scheme` alone. Don't "restore" the toggle to match the Week 1 page
 - Its debrief band is pinned to `#1B211F` in both colour schemes so the chart's two series (`#C2802A` return, `#4E8FD6` cost) keep their validated contrast and CVD separation. Don't make that band theme-responsive
 - To remove: `rm -rf questrom/`, drop the `/questrom/` lines from `robots.txt`, and delete this section. See `questrom/DELETE-ME-README.md`
+
+### `flow-constraint-map/` — MS718 Week 4
+
+An interactive operations console for Great Minds Cafe at Saturday peak. Its
+constraints come from the assignment rather than from taste:
+
+- **One file, nothing beside it.** The brief requires a single `index.html` with all CSS, JS and drawing inside — "no images folder and no zip" — so the map is inline SVG and both woff2 fonts are base64 data URIs. That is why it is 220 KB. Do not split it, and do not add an `images/` or `fonts/` folder to that directory
+- **No frameworks and no CDN**, also from the brief. Vanilla JS only
+- **The numbers live in one place.** `MOVES` in the script stores only primitives (labor, orders, remakes, queue depth, crew, spend); operating cost, completed journeys, cost to serve and the dollar line are all derived from them. The proof table's figures are written into the markup so the page works without JS — if you change a primitive, re-check the table against it
+- The page opens in a guided six-beat walkthrough ("both chairs" — alternating customer and cafe) that sets moves as you play; the console with all six moves is what remains afterwards, and is what renders when scripting is off
+- Red / amber / green appear in exactly one place, the constraint's state. Everything else is the Week 1 paper-and-ink palette
+- Below 760px the plan stops scaling and scrolls sideways instead, because its labels become unreadable under about 660px of drawing width
