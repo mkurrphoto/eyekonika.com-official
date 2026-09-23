@@ -25,11 +25,14 @@
 <!-- Theme resolved before first paint so the page never flashes. -->
 <script>
   (function(){
-    try{
-      var t = localStorage.getItem('gmc-theme');
-      if(!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dusk' : 'day';
-      document.documentElement.dataset.theme = t;
-    }catch(e){}
+    /* Unconditional, and first: the reveal styles are gated on this class, and
+       localStorage throws outright on an opaque origin (some file:// setups,
+       blocked site data), which would otherwise skip it. */
+    document.documentElement.classList.add('js');
+    var t = null;
+    try{ t = localStorage.getItem('gmc-theme'); }catch(e){}
+    try{ if(!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dusk' : 'day'; }catch(e){}
+    document.documentElement.dataset.theme = t || 'day';
   })();
 </script>
 
@@ -362,6 +365,10 @@ section + section{border-top:1px solid var(--rule);}
 
 /* ---------- The panel ---------- */
 .panel-body{padding:18px;}
+.cue{display:inline-flex;align-items:center;gap:7px;color:var(--accent-t);}
+.cue i{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;
+}
 
 /* play card */
 .play-eyebrow{
@@ -375,15 +382,20 @@ section + section{border-top:1px solid var(--rule);}
 .play-scene em{font-style:italic;}
 .choices{display:grid;gap:9px;}
 .choice{
-  display:block;width:100%;text-align:left;cursor:pointer;
+  display:block;position:relative;overflow:hidden;
+  width:100%;text-align:left;cursor:pointer;
   background:var(--paper);border:1px solid var(--rule);border-radius:4px;
-  padding:13px 15px;
+  padding:13px 38px 13px 15px;
   transition:border-color .22s var(--ease),background-color .22s var(--ease),
              transform .22s var(--ease);
 }
 .choice:hover{border-color:var(--accent);background:var(--panel);}
 .choice:active{transform:translateY(1px);}
 .choice b{display:block;font-size:.95rem;font-weight:500;line-height:1.35;}
+.choice .go{
+  position:absolute;right:15px;top:50%;translate:0 -50%;
+  color:var(--accent-t);font-size:1rem;line-height:1;opacity:.5;
+}
 .choice small{
   display:block;margin-top:3px;font-size:.78rem;color:var(--soft);line-height:1.45;
 }
@@ -584,6 +596,112 @@ footer{background:var(--putty);padding:54px 0 62px;}
 footer p{font-size:.85rem;color:var(--soft);max-width:66ch;}
 footer .fine{font-size:.76rem;color:var(--faint);}
 footer .mark{margin-bottom:22px;}
+
+/* ==========================================================================
+   MOTION
+   Two jobs only: make the plan read as a system that is running, and make it
+   obvious the panel is waiting on you. Everything here is inside a
+   prefers-reduced-motion guard, and nothing here carries information that
+   isn't also carried by the static page.
+   ========================================================================== */
+
+/* the panel says it is waiting on you with or without motion */
+.box.is-live{ border-color:color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+
+/* the travelling light on the customer route — drawn over the solid path, so
+   the legend's "solid = customer" still holds */
+.flow-pulse{
+  fill:none;stroke:var(--accent);stroke-width:2.8;stroke-linecap:round;
+  stroke-dasharray:14 46;opacity:0;
+}
+
+/* scroll reveal — gated on html.js so the page is never hidden without script */
+html.js :is(.facts > div,.frictions li,.verdict-line,.floor-grid > .box,
+            .proof-scroll,.hole,.brief li){
+  opacity:0;translate:0 18px;
+  transition:opacity .6s var(--ease),translate .6s var(--ease);
+}
+html.js :is(.facts > div,.frictions li,.verdict-line,.floor-grid > .box,
+            .proof-scroll,.hole,.brief li).in{opacity:1;translate:none;}
+
+@media (prefers-reduced-motion:reduce){
+  html.js :is(.facts > div,.frictions li,.verdict-line,.floor-grid > .box,
+              .proof-scroll,.hole,.brief li){opacity:1;translate:none;transition:none;}
+}
+
+@media (prefers-reduced-motion:no-preference){
+
+  /* stagger, so a row arrives as a row */
+  html.js :is(.facts > div,.hole,.brief li,.floor-grid > .box):nth-child(2){transition-delay:.08s;}
+  html.js :is(.facts > div,.hole,.brief li):nth-child(3){transition-delay:.16s;}
+  html.js :is(.facts > div,.hole,.brief li):nth-child(4){transition-delay:.24s;}
+  html.js :is(.brief li):nth-child(5){transition-delay:.32s;}
+
+  /* --- the plan is running --- */
+  .flow-pulse{
+    opacity:.95;
+    animation:flow var(--flow-dur,4.6s) linear infinite;
+  }
+  @keyframes flow{ to{ stroke-dashoffset:-60; } }
+
+  .flow-staff{ animation:march 2.2s linear infinite; }
+  @keyframes march{ to{ stroke-dashoffset:-9; } }
+
+  /* people shifting their weight in a line that is not moving */
+  .queue-dot{ animation:shuffle 2.8s ease-in-out infinite; }
+  @keyframes shuffle{
+    0%,100%{ translate:0 0; }
+    50%    { translate:-1.8px 0; }
+  }
+
+  /* the constraint keeps breathing while it is still binding */
+  #constraint-ring.state-slow{ animation:pulse 3.2s var(--ease) infinite; }
+
+  /* the readout acknowledges that it changed */
+  .readout .big{display:inline-block;}
+  .readout .big.bump{ animation:bump .52s var(--ease); }
+  @keyframes bump{ 0%{scale:1;} 34%{scale:1.05;} 100%{scale:1;} }
+
+  /* --- the panel is waiting on you --- */
+  .box.is-live{ animation:awake 2.9s var(--ease) infinite; }
+  @keyframes awake{
+    0%,100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 22%, transparent); }
+    50%    { box-shadow:0 0 0 5px color-mix(in srgb, var(--accent) 0%, transparent); }
+  }
+
+  .cue i{ animation:blip 1.6s ease-in-out infinite; }
+  @keyframes blip{
+    0%,100%{ opacity:1; scale:1; }
+    50%    { opacity:.3; scale:.72; }
+  }
+
+  .play-dots i.now{ animation:nowdot 1.8s ease-in-out infinite; }
+  @keyframes nowdot{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+  /* the choices ask to be pressed: a slow border breath, a nudging chevron
+     and one sheen passing down the stack */
+  .choice{ animation:breathe 2.9s var(--ease) infinite var(--d,0ms); }
+  @keyframes breathe{
+    0%,100%{ border-color:var(--rule); }
+    50%    { border-color:color-mix(in srgb, var(--accent) 60%, var(--rule)); }
+  }
+  .choice .go{ animation:nudge 1.5s var(--ease) infinite var(--d,0ms); }
+  @keyframes nudge{
+    0%,100%{ translate:0 -50%; opacity:.5; }
+    50%    { translate:5px -50%; opacity:1; }
+  }
+  .choice::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(105deg, transparent 38%,
+      color-mix(in srgb, var(--accent) 15%, transparent) 50%, transparent 62%);
+    translate:-120% 0;
+    animation:sheen 3.8s var(--ease) infinite var(--d,0ms);
+  }
+  @keyframes sheen{ 0%{translate:-120% 0;} 55%,100%{translate:120% 0;} }
+
+  /* once the pointer is on it, the hint has done its job */
+  .choice:hover,.choice:hover::after,.choice:hover .go{ animation-play-state:paused; }
+}
 
 /* ---------- No-JS ---------- */
 .nojs{
@@ -816,6 +934,14 @@ footer .mark{margin-bottom:22px;}
             <path class="flow-cust" d="M490,343 L466,343 L466,171 L490,171"/>
             <path class="flow-cust" d="M490,171 L352,171" marker-end="url(#arrow-c)"/>
 
+            <!-- the same three legs again, carrying a travelling light. Purely a
+                 restatement of the path above, so nothing is lost without motion. -->
+            <g aria-hidden="true">
+              <path class="flow-pulse" d="M120,452 L120,422 L436,422 L436,343 L490,343"/>
+              <path class="flow-pulse" d="M490,343 L466,343 L466,171 L490,171"/>
+              <path class="flow-pulse" d="M490,171 L352,171"/>
+            </g>
+
             <!-- who is actually on the clock -->
             <g id="crew">
               <circle class="crew" id="crew-cashier" cx="670" cy="342" r="5.2"/>
@@ -879,7 +1005,7 @@ footer .mark{margin-bottom:22px;}
       <aside class="box">
         <div class="box-head">
           <h3>Your move</h3>
-          <span>Find it · fix it · prove it</span>
+          <span id="panel-cue">Find it · fix it · prove it</span>
         </div>
 
         <div class="panel-body">
@@ -1177,7 +1303,7 @@ var TICKET = 7.90;  /* average Saturday ticket, from our own receipts */
 var MOVES = {
   base: {
     code:'—', name:'Leave it alone',
-    labor:158, orders:152, remakes:8,  queue:9, crew:4, spend:0,
+    labor:158, orders:152, remakes:8,  queue:9, crew:4, spend:0, flow:4.8,
     constraint:'reg', state:'stop', notes:[],
     regSub:'one lane · one order at a time',
     verdict:'Thirty-eight people get as far as the door and turn around. The register runs '+
@@ -1187,7 +1313,7 @@ var MOVES = {
   },
   A: {
     code:'A', name:'Cut the floater’s Saturday',
-    labor:124, orders:128, remakes:12, queue:13, crew:3, spend:-34,
+    labor:124, orders:128, remakes:12, queue:13, crew:3, spend:-34, flow:6.2,
     constraint:'reg', state:'stop', notes:[],
     floaterOff:true, caseDim:true,
     regSub:'also the case and the pass · 58s',
@@ -1199,7 +1325,7 @@ var MOVES = {
   },
   B: {
     code:'B', name:'Pre-batch, and post the wait',
-    labor:158, orders:168, remakes:8,  queue:6, crew:4, spend:0,
+    labor:158, orders:168, remakes:8,  queue:6, crew:4, spend:0, flow:3.4,
     constraint:'reg', state:'slow', notes:['note-wait','note-batch'],
     regSub:'one lane · 39s a customer',
     verdict:'Free, and it works. The constraint is still one register — but it is a faster '+
@@ -1208,7 +1334,7 @@ var MOVES = {
   },
   C: {
     code:'C', name:'Open the second lane',
-    labor:202, orders:186, remakes:10, queue:2, crew:5, spend:44,
+    labor:202, orders:186, remakes:10, queue:2, crew:5, spend:44, flow:2.6,
     constraint:'bar', state:'slow', notes:[],
     lanes:true,
     regSub:'two lanes · one order each',
@@ -1219,7 +1345,7 @@ var MOVES = {
   },
   D: {
     code:'D', name:'Order in the line, pay at the pass',
-    labor:158, orders:188, remakes:9,  queue:2, crew:4, spend:0,
+    labor:158, orders:188, remakes:9,  queue:2, crew:4, spend:0, flow:2.3,
     constraint:'bar', state:'slow', leadInLine:true, notes:['note-order','note-pay'],
     regLabel:'Pay point', regSub:'no longer the gate · 14s',
     barSub:'two groups · now the ceiling',
@@ -1229,7 +1355,7 @@ var MOVES = {
   },
   E: {
     code:'E', name:'D, plus a $22 floor at peak',
-    labor:176, orders:188, remakes:3,  queue:2, crew:4, spend:18,
+    labor:176, orders:188, remakes:3,  queue:2, crew:4, spend:18, flow:2.1,
     constraint:'bar', state:'go', leadInLine:true, notes:['note-order','note-pay','note-wage'],
     regLabel:'Pay point', regSub:'no longer the gate · 14s',
     barSub:'held crew · one remake in sixty',
@@ -1265,6 +1391,24 @@ var $  = function(id){ return document.getElementById(id); };
 var svg = 'http://www.w3.org/2000/svg';
 
 /* where the constraint marker sits, per station */
+var REVEAL = '.facts > div,.frictions li,.verdict-line,.floor-grid > .box,' +
+             '.proof-scroll,.hole,.brief li';
+(function(){
+  var els = document.querySelectorAll(REVEAL);
+  var showAll = function(){ els.forEach(function(el){ el.classList.add('in'); }); };
+  try{
+    if(!('IntersectionObserver' in window)) return showAll();
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      });
+    }, { rootMargin:'0px 0px -12% 0px', threshold:0.12 });
+    els.forEach(function(el){ io.observe(el); });
+  }catch(err){ showAll(); }
+})();
+
 var SPOT = { reg:{y:318, mid:342}, bar:{y:261, mid:285} };
 var ALL_NOTES = ['note-wait','note-batch','note-order','note-pay','note-wage'];
 
@@ -1277,6 +1421,7 @@ function drawQueue(n){
     c.setAttribute('cx', 412 - i*24);
     c.setAttribute('cy', 422);
     c.setAttribute('r', 4.4);
+    c.style.animationDelay = (i * 190) + 'ms';
     if(!reduced){
       c.style.opacity = 0;
       c.style.transition = 'opacity .3s ease ' + (i*34) + 'ms';
@@ -1321,6 +1466,9 @@ function paintMap(m){
     $(id).classList.toggle('is-on', m.notes.indexOf(id) > -1);
   });
 
+  /* the travelling light runs at the pace the floor actually runs at */
+  $('map').style.setProperty('--flow-dur', m.flow + 's');
+
   drawQueue(m.queue);
   $('legend-queue').textContent = m.queue;
   $('legend-crew').textContent  = m.crew;
@@ -1344,12 +1492,20 @@ function tween(el, from, to, fmt){
   })(t0);
 }
 
-var shown = { j: base.journeys, c: base.cts };
+var shown = { j: base.journeys, c: base.cts }, first = true;
 
 function paintReadouts(m){
   tween($('ro-journeys'), shown.j, m.journeys, function(v){ return Math.round(v); });
   tween($('ro-cost'),     shown.c, m.cts,      function(v){ return money(v); });
   shown.j = m.journeys; shown.c = m.cts;
+
+  if(!first) ['ro-journeys','ro-cost'].forEach(function(id){
+    var el = $(id);
+    el.classList.remove('bump');
+    void el.offsetWidth;            /* restart the animation */
+    el.classList.add('bump');
+  });
+  first = false;
 
   var jd = $('ro-journeys-d'), cd = $('ro-cost-d');
   if(m.key === 'base'){
@@ -1551,14 +1707,18 @@ function val(x){ return typeof x === 'function' ? x(st) : x; }
 
 function renderStep(){
   var s = STEPS[step];
-  dots.forEach(function(d,i){ d.classList.toggle('done', i <= step); });
+  dots.forEach(function(d,i){
+    d.classList.toggle('done', i <= step);
+    d.classList.toggle('now',  i === step);
+  });
   if(s.move) show(s.move);
 
   var html = '<div class="fade-in"><p class="play-eyebrow">' + s.eye + '</p>' +
              '<p class="play-scene">' + val(s.scene) + '</p><div class="choices">';
   s.opts.forEach(function(o,i){
-    html += '<button class="choice" type="button" data-i="' + i + '"><b>' + o.b +
-            '</b><small>' + o.s + '</small></button>';
+    html += '<button class="choice" type="button" data-i="' + i +
+            '" style="--d:' + (i*420) + 'ms"><b>' + o.b + '</b><small>' + o.s +
+            '</small><span class="go" aria-hidden="true">\u2192</span></button>';
   });
   body.innerHTML = html + '</div></div>';
 
@@ -1583,7 +1743,15 @@ function choose(o){
   });
 }
 
+function live(on){
+  stage.closest('.box').classList.toggle('is-live', on);
+  $('panel-cue').innerHTML = on
+    ? '<span class="cue"><i></i>Your turn &mdash; pick one</span>'
+    : 'Find it \u00b7 fix it \u00b7 prove it';
+}
+
 function finish(){
+  live(false);
   stage.hidden = true;
   panel.hidden = false;
   replay.hidden = false;
@@ -1591,6 +1759,7 @@ function finish(){
 }
 
 function start(){
+  live(true);
   step = 0; st = {};
   panel.hidden = true;
   stage.hidden = false;
