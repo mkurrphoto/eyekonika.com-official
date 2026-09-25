@@ -233,12 +233,14 @@ Rules for all three:
 
 ### `flow-constraint-map/` — MS718 Week 4
 
-An interactive operations console for Great Minds Cafe at Saturday peak. Its
-constraints come from the assignment rather than from taste:
+A presentable flow & constraint deck for Great Minds Cafe (GMT BizCafe, Week 11
+vs Week 12 staffing). Its constraints come from the assignment rather than from taste:
 
-- **One file, nothing beside it.** The brief requires a single `index.html` with all CSS, JS and drawing inside — "no images folder and no zip" — so the map is inline SVG and both woff2 fonts are base64 data URIs. That is why it is 220 KB. Do not split it, and do not add an `images/` or `fonts/` folder to that directory
+- **One file, nothing beside it.** The brief requires a single `index.html` with all CSS, JS and drawing inside — "no images folder and no zip" — so the map is inline SVG and both woff2 fonts are base64 data URIs. That is why it is ~215 KB. Do not split it, and do not add an `images/` or `fonts/` folder to that directory
 - **No frameworks and no CDN**, also from the brief. Vanilla JS only
-- **The numbers live in one place.** `MOVES` in the script stores only primitives (labor, orders, remakes, queue depth, crew, spend); operating cost, completed journeys, cost to serve and the dollar line are all derived from them. The proof table's figures are written into the markup so the page works without JS — if you change a primitive, re-check the table against it
-- The page opens in a guided six-beat walkthrough ("both chairs" — alternating customer and cafe) that sets moves as you play; the console with all six moves is what remains afterwards, and is what renders when scripting is off
-- Red / amber / green appear in exactly one place, the constraint's state. Everything else is the Week 1 paper-and-ink palette
-- Below 760px the plan stops scaling and scrolls sideways instead, because its labels become unreadable under about 660px of drawing width
+- **Data source:** the team's GMT BizCafe export (Week 11 current vs Week 12 proposed — 28 → 38 servers). Figures are the export's as given, including its internal inconsistencies (e.g. the $12,839 "net weekly impact" vs the +$4,000 net income row); don't silently "fix" them
+- **The numbers live in one place.** `WEEKS` in the script stores only primitives (servers, cups, abandoned, staff cost, wait, utilization, satisfaction); cups per server, cost per cup and the walk-away share are derived. The comparison table and waterfall are written into the markup so the page works without JS — if you change a primitive, re-check them
+- **It's a presentation deck.** Six full-viewport slides (`section.beat`), sized to fit 1280×720 / 1366×768 / 1920×1080 exactly (see the `max-height:860px` block). → / Space / PageDown / clickers advance, ← / PageUp go back, F full screen, T theme, 1 / 2 pick a week. The flow slide has one build: the first "next" flips Week 11 → Week 12 before advancing
+- The flow slide is a live particle run: queue speed follows the wait, so Week 11 bunches up and Week 12 drains. All motion is behind `prefers-reduced-motion`; reduced motion gets a static queue
+- Red / amber / green appear in exactly one place, the constraint's state (ring, utilization bar, secondary-constraint chips, walk-aways). Everything else is the Week 1 paper-and-ink palette
+- Below 760px the diagram stops scaling and scrolls sideways instead
