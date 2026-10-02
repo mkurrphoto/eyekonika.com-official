@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Great Minds Cafe · The Great Minds Card &amp; Big Idea Night</title>
+<style>
+  :root{
+    --espresso:#3E2A20; --cream:#F5E9D7; --copper:#C6772F;
+    --paper:#FBF5EC; --ink:#2A1D16; --muted:#7A6556; --line:#E3D3BD;
+    --serif: Georgia, "Lora", "Times New Roman", serif;
+    --sans: "Helvetica Neue", Helvetica, "Liberation Sans", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink)}
+  body{font-family:var(--serif);font-size:15px;line-height:1.55;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:860px;margin:0 auto;padding:0 44px}
+  svg{display:block;max-width:100%;height:auto}
+
+  header.top{border-bottom:1px solid var(--line)}
+  header.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:22px;padding-bottom:18px}
+  .brandmark{display:flex;align-items:center;gap:12px}
+  .brandmark .wm{font-family:var(--serif);font-weight:700;line-height:1;color:var(--espresso);letter-spacing:.04em;font-size:15px}
+  .brandmark .wm small{display:block;font-size:9px;letter-spacing:.3em;color:var(--copper);margin-top:4px;font-family:var(--sans)}
+  .toplabel{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);font-weight:700}
+
+  .eyebrow{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);font-weight:700;margin-bottom:10px}
+  .label{font-family:var(--sans);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 6px}
+
+  .brief{padding:40px 0 38px;border-bottom:1px solid var(--line)}
+  .brief .grid{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;align-items:start}
+  .brief h1{font-family:var(--serif);font-size:44px;line-height:1.02;color:var(--espresso);letter-spacing:-.01em}
+  .brief h1 em{color:var(--copper);font-style:italic}
+  .brief p{font-size:15.5px;line-height:1.6}
+  .brief p + p{margin-top:12px}
+  .brief .tag{margin-top:18px;font-family:var(--sans);font-size:11px;color:var(--muted)}
+
+  section.piece{padding:24px 0 22px;border-bottom:1px solid var(--line);break-inside:avoid;page-break-inside:avoid}
+  .piecehead{display:flex;align-items:flex-end;gap:14px;margin-bottom:18px}
+  .pb{break-before:page;page-break-before:always}
+  .num{font-family:var(--serif);font-size:44px;line-height:.9;color:var(--copper);font-weight:700}
+  .piecehead h2{font-family:var(--serif);font-size:24px;color:var(--espresso);line-height:1.1}
+  .piecehead .eyebrow{margin-bottom:4px}
+  .piece .grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:34px;align-items:start}
+  .art{border-radius:3px;overflow:hidden;background:var(--espresso)}
+
+  .headline{font-family:var(--serif);font-size:25px;line-height:1.18;color:var(--espresso);font-weight:700;margin-bottom:16px}
+  .copy{font-size:14.5px;color:#4a372c;margin-bottom:16px}
+  .cta{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--copper);text-decoration:underline;text-underline-offset:3px;margin-bottom:16px;display:inline-block}
+  .answers{font-family:var(--sans);font-size:11px;font-style:italic;color:var(--muted);border-left:2px solid var(--copper);padding-left:10px;line-height:1.5;margin-top:6px}
+  .answers b{font-style:normal;color:var(--espresso)}
+
+  .boxed{border:2px solid var(--espresso);background:#fff;padding:12px 16px;font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.25;color:var(--espresso);margin-bottom:16px}
+  .boxed.big{font-size:22px;padding:18px 18px}
+
+  ol.steps{list-style:none;margin:4px 0 14px;border-top:1px solid var(--line)}
+  ol.steps li{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+  ol.steps .dot{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--copper);color:var(--copper);font-family:var(--sans);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  ol.steps strong{display:block;font-family:var(--sans);font-size:13px;color:var(--espresso)}
+  ol.steps span{font-family:var(--sans);font-size:12px;color:var(--muted)}
+  .fine{font-family:var(--sans);font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+
+  .earn{padding:40px 0 32px;break-before:page;page-break-before:always;border-bottom:1px solid var(--line);break-inside:avoid;page-break-inside:avoid}
+  .earn table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:12px;margin-top:8px}
+  .earn th{text-align:left;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--espresso);padding:6px 8px 6px 0}
+  .earn td{border-bottom:1px solid var(--line);padding:8px 8px 8px 0;vertical-align:top;color:#4a372c}
+  .earn td:first-child{font-weight:700;color:var(--espresso);width:26%}
+  .earn h2{font-family:var(--serif);font-size:24px;color:var(--espresso)}
+
+  footer{margin-top:24px;background:var(--espresso);color:var(--cream);break-inside:avoid;page-break-inside:avoid}
+  footer .wrap{padding-top:30px;padding-bottom:30px}
+  footer p{font-size:15px;margin:14px 0 12px;max-width:520px}
+  footer small{font-family:var(--sans);font-size:10.5px;color:#cbb9a3}
+  footer .brandmark .wm{color:var(--cream)}
+
+  @media (max-width:700px){
+    .brief .grid,.piece .grid{grid-template-columns:1fr}
+    .brief h1{font-size:36px}
+    .wrap{padding:0 22px}
+  }
+  @page{size:8.5in 11in;margin:0}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="brandmark">
+    <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
+      <circle cx="21" cy="21" r="20" fill="#3E2A20"/>
+      <path d="M12 19h15v6a7 7 0 0 1-7 7h-1a7 7 0 0 1-7-7z" fill="#F5E9D7"/>
+      <path d="M27 21h2a3 3 0 0 1 0 6h-2" fill="none" stroke="#F5E9D7" stroke-width="2"/>
+      <path d="M16 16c-1.5-2 1.5-3 0-5M20 16c-1.5-2 1.5-3 0-5M24 16c-1.5-2 1.5-3 0-5" fill="none" stroke="#C6772F" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <div class="wm">GREAT MINDS<small>CAFE</small></div>
+  </div>
+  <div class="toplabel">The Great Minds Card</div>
+</div></header>
+
+<main>
+<section class="brief"><div class="wrap">
+  <div class="eyebrow">The brief</div>
+  <div class="grid">
+    <h1>Work alone. <em>Don't think alone.</em></h1>
+    <div>
+      <p>The Great Minds Card is a free loyalty card for the solo builders who already work out of our café &mdash; every drink earns a stamp, and every card is a front-of-the-line seat at <strong>Big Idea Night</strong>, our Thursday evening of short talks and real introductions.</p>
+      <p>Winning a member costs us a card and a free eighth coffee; keeping one pays for years &mdash; the weekday focus visits, the second cup and the pastry, the evening seats that would otherwise sit empty, and the friend they bring next Thursday. And Big Idea Night is what makes it worthwhile for our members: they leave with focused hours <em>and</em> one useful connection, not just a caffeine buzz.</p>
+      <div class="tag">Coffee, conversation, big ideas.</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 01 AWARENESS -->
+<section class="piece"><div class="wrap">
+  <div class="piecehead"><div class="num">01</div><div><div class="eyebrow">Awareness</div><h2>The ad</h2></div></div>
+  <div class="grid">
+    <div class="art">
+      <svg viewBox="0 0 400 300" role="img" aria-label="Big Idea Night event poster pinned above a café table">
+        <rect width="400" height="300" fill="#3E2A20"/>
+        <rect y="220" width="400" height="80" fill="#2E1F17"/>
+        <rect x="0" y="214" width="400" height="8" fill="#5a3e2f"/>
+        <!-- string lights -->
+        <path d="M0 22 Q100 48 200 24 T400 26" fill="none" stroke="#6b4e3c" stroke-width="1.5"/>
+        <g fill="#F2C46D"><circle cx="30" cy="30" r="4"/><circle cx="80" cy="40" r="4"/><circle cx="130" cy="40" r="4"/><circle cx="180" cy="29" r="4"/><circle cx="230" cy="20" r="4"/><circle cx="280" cy="17" r="4"/><circle cx="330" cy="22" r="4"/><circle cx="380" cy="27" r="4"/></g>
+        <!-- poster -->
+        <g transform="translate(118 52) rotate(-2)">
+          <rect x="4" y="4" width="164" height="210" fill="#1c130e" opacity=".35"/>
+          <rect width="164" height="210" fill="#F5E9D7"/>
+          <circle cx="82" cy="4" r="4" fill="#C6772F"/>
+          <text x="82" y="26" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="7" letter-spacing="2" fill="#C6772F" font-weight="700">GREAT MINDS CAFE PRESENTS</text>
+          <text x="82" y="58" text-anchor="middle" font-family="Georgia, Lora, serif" font-size="25" font-weight="700" fill="#3E2A20">Big Idea</text>
+          <text x="82" y="84" text-anchor="middle" font-family="Georgia, Lora, serif" font-size="25" font-weight="700" fill="#3E2A20" font-style="italic">Night</text>
+          <!-- bulb in cup -->
+          <path d="M60 104h44v18a18 18 0 0 1-18 18h-8a18 18 0 0 1-18-18z" fill="#3E2A20"/>
+          <path d="M104 108h5a7 7 0 0 1 0 14h-5" fill="none" stroke="#3E2A20" stroke-width="3"/>
+          <circle cx="82" cy="98" r="11" fill="#F2C46D"/>
+          <path d="M77 94l5 6 5-6" fill="none" stroke="#C6772F" stroke-width="1.5"/>
+          <text x="82" y="164" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="9" font-weight="700" fill="#3E2A20">THURSDAYS · 7 PM</text>
+          <text x="82" y="178" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="7.5" fill="#7A6556">3 short talks · 1 good introduction</text>
+          <rect x="34" y="188" width="96" height="12" fill="#C6772F"/>
+          <text x="82" y="197" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="6.8" font-weight="700" fill="#fff" letter-spacing="1">CARD HOLDERS RSVP FIRST</text>
+        </g>
+        <!-- laptop + cup on table -->
+        <g transform="translate(40 180)">
+          <path d="M0 40h70l-8-38H8z" fill="#9a8a7c"/><rect x="-6" y="40" width="82" height="4" fill="#bfb0a2"/>
+        </g>
+        <g transform="translate(318 190)">
+          <path d="M0 10h26v16a10 10 0 0 1-10 10h-6A10 10 0 0 1 0 26z" fill="#F5E9D7"/>
+          <path d="M26 14h4a5 5 0 0 1 0 10h-4" fill="none" stroke="#F5E9D7" stroke-width="2.5"/>
+          <rect x="0" y="16" width="26" height="4" fill="#C6772F"/>
+        </g>
+      </svg>
+    </div>
+    <div>
+      <div class="label">Headline</div>
+      <div class="headline">Working alone? You don&rsquo;t have to think alone.</div>
+      <div class="label">Subline</div>
+      <p class="copy">Great Minds Cafe gives builders quiet, focused hours by day &mdash; and Big Idea Night on Thursdays: three short talks, good coffee, and one introduction worth making.</p>
+      <div class="label">Call to action</div>
+      <div class="cta">Save your seat for Thursday &rarr;</div>
+      <p class="answers"><b>Answers:</b> brings the promise to life; reaches the solo builder (25&ndash;40) where they already look &mdash; LinkedIn, Meetup, Instagram, campus and co-working boards; leaves a measurable path from ad click to RSVP to card.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- 02 PURCHASE -->
+<section class="piece pb"><div class="wrap">
+  <div class="piecehead"><div class="num">02</div><div><div class="eyebrow">Purchase</div><h2>The in-store surface</h2></div></div>
+  <div class="grid">
+    <div class="art">
+      <svg viewBox="0 0 400 330" role="img" aria-label="Table tent and stamp card beside a latte on a café counter">
+        <rect width="400" height="330" fill="#4a3226"/>
+        <rect y="0" width="400" height="150" fill="#3E2A20"/>
+        <g stroke="#56392b" stroke-width="2"><line x1="0" y1="50" x2="400" y2="50"/><line x1="0" y1="100" x2="400" y2="100"/></g>
+        <g fill="#6b4e3c"><rect x="30" y="20" width="24" height="30"/><rect x="60" y="28" width="20" height="22"/><rect x="310" y="70" width="30" height="30"/><rect x="346" y="76" width="22" height="24"/></g>
+        <rect y="150" width="400" height="180" fill="#8a6a52"/>
+        <rect y="150" width="400" height="6" fill="#a5846a"/>
+        <!-- table tent -->
+        <g transform="translate(56 64)">
+          <path d="M150 8 L178 14 L178 172 L150 170 Z" fill="#c9b79e"/>
+          <rect x="4" y="12" width="150" height="160" fill="#1c130e" opacity=".25"/>
+          <rect x="0" y="8" width="150" height="162" fill="#F5E9D7"/>
+          <text x="75" y="30" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="7" letter-spacing="1.6" fill="#C6772F" font-weight="700">GREAT MINDS CARD</text>
+          <text x="75" y="58" text-anchor="middle" font-family="Georgia, Lora, serif" font-size="15" font-weight="700" fill="#3E2A20">Get your</text>
+          <text x="75" y="76" text-anchor="middle" font-family="Georgia, Lora, serif" font-size="15" font-weight="700" fill="#3E2A20">card stamped.</text>
+          <text x="75" y="100" text-anchor="middle" font-family="Georgia, Lora, serif" font-size="10" font-style="italic" fill="#3E2A20">Your next idea might be</text>
+          <text x="75" y="114" text-anchor="middle" font-family="Georgia, Lora, serif" font-size="10" font-style="italic" fill="#3E2A20">at the next table.</text>
+          <g fill="none" stroke="#C6772F" stroke-width="1.4">
+            <circle cx="51" cy="140" r="6"/><circle cx="67" cy="140" r="6"/><circle cx="83" cy="140" r="6"/><circle cx="99" cy="140" r="6"/>
+          </g>
+          <g fill="#C6772F"><circle cx="51" cy="140" r="3.5"/><circle cx="67" cy="140" r="3.5"/></g>
+        </g>
+        <!-- stamp card on table -->
+        <g transform="translate(236 244) rotate(-8)">
+          <rect x="3" y="4" width="130" height="78" rx="6" fill="#2a1c15" opacity=".3"/>
+          <rect width="130" height="78" rx="6" fill="#3E2A20"/>
+          <text x="12" y="20" font-family="Georgia, Lora, serif" font-size="11" font-weight="700" fill="#F5E9D7">Great Minds Card</text>
+          <g fill="none" stroke="#C6772F" stroke-width="1.3">
+            <circle cx="20" cy="42" r="7"/><circle cx="40" cy="42" r="7"/><circle cx="60" cy="42" r="7"/><circle cx="80" cy="42" r="7"/>
+            <circle cx="20" cy="62" r="7"/><circle cx="40" cy="62" r="7"/><circle cx="60" cy="62" r="7"/>
+          </g>
+          <g fill="#C6772F"><circle cx="20" cy="42" r="4.5"/><circle cx="40" cy="42" r="4.5"/><circle cx="60" cy="42" r="4.5"/></g>
+          <circle cx="80" cy="62" r="8" fill="#F2C46D"/>
+          <text x="80" y="65" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="7" font-weight="700" fill="#3E2A20">8</text>
+          <text x="96" y="66" font-family="Helvetica, Arial, sans-serif" font-size="6" fill="#F5E9D7">on us</text>
+        </g>
+        <!-- latte -->
+        <g transform="translate(300 170)">
+          <ellipse cx="30" cy="62" rx="40" ry="9" fill="#F5E9D7"/>
+          <path d="M4 20h52l-5 38a6 6 0 0 1-6 5H15a6 6 0 0 1-6-5z" fill="#F5E9D7"/>
+          <ellipse cx="30" cy="20" rx="26" ry="6" fill="#b88a5e"/>
+          <path d="M24 19c3-4 9-4 12 0-3 2-9 2-12 0z" fill="#F5E9D7"/>
+          <path d="M56 28h5a8 8 0 0 1 0 16h-7" fill="none" stroke="#F5E9D7" stroke-width="3"/>
+        </g>
+      </svg>
+    </div>
+    <div>
+      <div class="label">Table tent</div>
+      <div class="boxed">Get your card stamped. Your next idea might be at the next table.</div>
+      <div class="label">How it works</div>
+      <ol class="steps">
+        <li><div class="dot">1</div><div><strong>Grab a Great Minds Card at the counter.</strong><span>Free, takes ten seconds. Every drink earns a stamp.</span></div></li>
+        <li><div class="dot">2</div><div><strong>Let the stamps add up.</strong><span>Your eighth drink is on us &mdash; and card holders RSVP first for Big Idea Night.</span></div></li>
+        <li><div class="dot">3</div><div><strong>Come Thursday. Meet someone.</strong><span>Three seven-minute talks, then we make the introductions. Bring the question you&rsquo;re stuck on.</span></div></li>
+      </ol>
+      <p class="fine">One stamp per visit. Big Idea Night is free with any drink; seating is limited, so your RSVP holds your chair until 7:10.</p>
+      <p class="answers"><b>Answers:</b> proves the Great Minds promise in person; turns an ordinary coffee purchase into a card sign-up; creates a trackable stamp and RSVP for every member.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- 03 REPEAT -->
+<section class="piece"><div class="wrap">
+  <div class="piecehead"><div class="num">03</div><div><div class="eyebrow">Repeat &amp; Recommendation</div><h2>The membership</h2></div></div>
+  <div class="grid">
+    <div class="art">
+      <svg viewBox="0 0 400 300" role="img" aria-label="Hand holding a Great Minds Card with stamps">
+        <defs><radialGradient id="glow" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#6b4a36"/><stop offset="1" stop-color="#3E2A20"/></radialGradient></defs>
+        <rect width="400" height="300" fill="url(#glow)"/>
+        <g fill="#F2C46D" opacity=".25"><circle cx="60" cy="50" r="18"/><circle cx="340" cy="70" r="24"/><circle cx="300" cy="250" r="14"/></g>
+        <!-- card -->
+        <g transform="translate(90 70) rotate(-6)">
+          <rect x="5" y="7" width="220" height="136" rx="10" fill="#1c130e" opacity=".4"/>
+          <rect width="220" height="136" rx="10" fill="#F5E9D7"/>
+          <rect width="220" height="34" rx="10" fill="#3E2A20"/><rect y="24" width="220" height="10" fill="#3E2A20"/>
+          <text x="14" y="22" font-family="Georgia, Lora, serif" font-size="13" font-weight="700" fill="#F5E9D7">Great Minds Card</text>
+          <text x="206" y="22" text-anchor="end" font-family="Helvetica, Arial, sans-serif" font-size="7" letter-spacing="1.5" fill="#C6772F" font-weight="700">MEMBER</text>
+          <g fill="none" stroke="#C6772F" stroke-width="1.6">
+            <circle cx="30" cy="62" r="11"/><circle cx="62" cy="62" r="11"/><circle cx="94" cy="62" r="11"/><circle cx="126" cy="62" r="11"/>
+            <circle cx="30" cy="94" r="11"/><circle cx="62" cy="94" r="11"/><circle cx="94" cy="94" r="11"/>
+          </g>
+          <g fill="#C6772F">
+            <ellipse cx="30" cy="62" rx="5" ry="7"/><ellipse cx="62" cy="62" rx="5" ry="7"/><ellipse cx="94" cy="62" rx="5" ry="7"/><ellipse cx="126" cy="62" rx="5" ry="7"/><ellipse cx="30" cy="94" rx="5" ry="7"/>
+          </g>
+          <g stroke="#F5E9D7" stroke-width="1"><line x1="30" y1="56" x2="30" y2="68"/><line x1="62" y1="56" x2="62" y2="68"/><line x1="94" y1="56" x2="94" y2="68"/><line x1="126" y1="56" x2="126" y2="68"/><line x1="30" y1="88" x2="30" y2="100"/></g>
+          <circle cx="126" cy="94" r="12" fill="#3E2A20"/>
+          <text x="126" y="98" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#F2C46D">8</text>
+          <text x="156" y="60" font-family="Helvetica, Arial, sans-serif" font-size="7.5" fill="#7A6556">Big Idea</text>
+          <text x="156" y="70" font-family="Helvetica, Arial, sans-serif" font-size="7.5" fill="#7A6556">Night RSVP:</text>
+          <text x="156" y="84" font-family="Georgia, Lora, serif" font-size="11" font-weight="700" fill="#3E2A20">Thu · 7 PM</text>
+          <text x="14" y="126" font-family="Georgia, Lora, serif" font-size="8.5" font-style="italic" fill="#7A6556">coffee, conversation, big ideas</text>
+        </g>
+        <rect y="238" width="400" height="62" fill="#2E1F17"/>
+        <g transform="translate(24 214)"><rect width="70" height="50" rx="3" fill="#F5E9D7" transform="rotate(-10)"/><g stroke="#c9b79e" stroke-width="1.2" transform="rotate(-10)"><line x1="10" y1="14" x2="58" y2="14"/><line x1="10" y1="24" x2="52" y2="24"/><line x1="10" y1="34" x2="46" y2="34"/></g></g>
+        <g transform="translate(318 206)"><path d="M0 10h30v20a12 12 0 0 1-12 12h-6A12 12 0 0 1 0 30z" fill="#F5E9D7"/><path d="M30 14h5a6 6 0 0 1 0 12h-5" fill="none" stroke="#F5E9D7" stroke-width="3"/><rect y="18" width="30" height="5" fill="#C6772F"/><path d="M8 4c-2-3 2-4 0-7M16 4c-2-3 2-4 0-7M24 4c-2-3 2-4 0-7" fill="none" stroke="#F5E9D7" stroke-width="1.4" opacity=".6"/></g>
+      </svg>
+    </div>
+    <div>
+      <div class="label">Membership card</div>
+      <div class="boxed big">You&rsquo;re one of the Great Minds now. Come back tomorrow for the focus. Come back Thursday for the people.</div>
+      <div class="label">Bring a friend</div>
+      <p class="copy">Know someone building alone? Bring them to Big Idea Night &mdash; you both get a stamp.</p>
+      <p class="answers"><b>Answers:</b> keeps the relationship working after the first purchase; gives members two reasons to return (weekday focus, Thursday people) and one reason to recommend; gives Great Minds visit frequency, event attendance, and referral behavior to measure.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- THE EARN -->
+<section class="earn"><div class="wrap">
+  <div class="eyebrow">The earn</div>
+  <h2>What we measure, and why it pays</h2>
+  <table>
+    <tr><th>Signal</th><th>What we track</th><th>Why it earns</th></tr>
+    <tr><td>Card sign-ups</td><td>Cards issued per week; share of customers carrying one</td><td>Turns anonymous cups into a known, returning customer base</td></tr>
+    <tr><td>Visit frequency</td><td>Stamps per member per month; time between visits</td><td>Repeat weekday visits are the core revenue; the free 8th drink is the only discount we give</td></tr>
+    <tr><td>Average ticket</td><td>Member vs. non-member spend; pastry and second-cup attach</td><td>Members who stay for focused hours buy more than one item</td></tr>
+    <tr><td>Big Idea Night</td><td>RSVPs, show-ups, drinks sold per event</td><td>Fills evening seats that would otherwise earn nothing; every attendee buys a drink</td></tr>
+    <tr><td>Referrals</td><td>Bring-a-friend stamps; first-timers who sign up same night</td><td>Cheapest customer acquisition we have &mdash; members recruit people like themselves</td></tr>
+  </table>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="brandmark">
+    <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
+      <circle cx="21" cy="21" r="20" fill="#F5E9D7"/>
+      <path d="M12 19h15v6a7 7 0 0 1-7 7h-1a7 7 0 0 1-7-7z" fill="#3E2A20"/>
+      <path d="M27 21h2a3 3 0 0 1 0 6h-2" fill="none" stroke="#3E2A20" stroke-width="2"/>
+      <path d="M16 16c-1.5-2 1.5-3 0-5M20 16c-1.5-2 1.5-3 0-5M24 16c-1.5-2 1.5-3 0-5" fill="none" stroke="#C6772F" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <div class="wm">GREAT MINDS<small>CAFE</small></div>
+  </div>
+  <p>Coffee, conversation, big ideas &mdash; focused hours for people building something, and a table where they meet the next person who can help.</p>
+  <small>Great Minds Cafe &mdash; Team B-3&rsquo;s Biz Caf&eacute; brand, built for MS718, Week 3. Matthew Kurr.</small>
+</div></footer>
+
+</body>
+</html>
