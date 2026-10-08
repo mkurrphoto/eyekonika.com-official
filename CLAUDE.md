@@ -231,6 +231,14 @@ Rules for all three:
 - Its debrief band is pinned to `#1B211F` in both colour schemes so the chart's two series (`#C2802A` return, `#4E8FD6` cost) keep their validated contrast and CVD separation. Don't make that band theme-responsive
 - To remove: `rm -rf questrom/`, drop the `/questrom/` lines from `robots.txt`, and delete this section. See `questrom/DELETE-ME-README.md`
 
+### `presentation.html` — one-time deck (temporary)
+
+`questrom/presentation.html` + `questrom/presentation-assets/` is Matthew's
+"Scalable Operations" investor driver pitch, rebuilt from
+`Great_Minds_Cafe_Matthew_Scalable_Operations_v2.pptx` as a 5-slide web deck
+(on-screen ← / → arrows, keyboard, swipe; charts are inline SVG drawn from the
+PPT's chart data). Unlisted, for one presentation. Delete both when done.
+
 ### `flow-constraint-map/` — MS718 Week 4
 
 A presentable flow & constraint deck for Great Minds Cafe (GMT BizCafe, Week 11
