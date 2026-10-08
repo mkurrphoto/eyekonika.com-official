@@ -235,7 +235,8 @@ Rules for all three:
 
 `questrom/presentation.html` + `questrom/presentation-assets/` is Matthew's
 "Scalable Operations" investor driver pitch, rebuilt from
-`Great_Minds_Cafe_Matthew_Scalable_Operations_v2.pptx` as a 5-slide web deck
+`Great_Minds_Cafe_Matthew_Scalable_Operations_v2.pptx` as a 6-slide web deck (slide 5, "Happy staff = happy customers", was added
+after the PPT, built around `presentation-assets/team.jpg`)
 (on-screen ← / → arrows, keyboard, swipe; charts are inline SVG drawn from the
 PPT's chart data). Unlisted, for one presentation. Delete both when done.
 

@@ -132,6 +132,36 @@
   .stat-r b { color: var(--rust); }
   .vr { width: 2px; height: 134px; background: var(--sand); }
 
+  /* ── Slide 5: happy staff = happy customers ── */
+  .s-joy { --joy-staff: #F2B27B; --joy-cust: #FFF6EA; --joy-ink: #22130C; background: var(--joy-ink); }
+  .joy-photo { left: 0; top: 0; width: 1280px; height: 560px; overflow: hidden; }
+  .joy-photo img {
+    width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%;
+    transform: scale(1.12); filter: saturate(.25) brightness(.7);
+    transition: transform 10s cubic-bezier(.2,.6,.2,1), filter 2.4s ease .2s;
+  }
+  .s-joy.is-live .joy-photo img { transform: scale(1); filter: saturate(1.05) brightness(1); }
+  .joy-shade {
+    left: 0; top: 0; width: 1280px; height: 720px;
+    background: linear-gradient(180deg, rgba(34,19,12,0) 0%, rgba(34,19,12,0) 34%, rgba(34,19,12,.72) 52%, var(--joy-ink) 66%);
+  }
+  .joy-eyebrow { left: 58px; top: 362px; font-size: 14px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--joy-staff); text-shadow: 0 1px 12px rgba(0,0,0,.6); }
+  .joy-title { left: 56px; top: 386px; font-size: 54px; font-weight: 700; letter-spacing: -1px; color: var(--joy-cust); text-shadow: 0 2px 24px rgba(0,0,0,.45); white-space: nowrap; }
+  .joy-title span { color: var(--joy-staff); }
+  .joy-chips { left: 870px; top: 396px; width: 360px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+  .joy-chips p {
+    font-size: 14px; color: rgba(255,246,234,.82); white-space: nowrap;
+    padding: 6px 12px; border-radius: 99px; background: rgba(255,246,234,.08); border: 1px solid rgba(255,246,234,.14);
+  }
+  .joy-chips b { color: var(--joy-cust); font-weight: 700; }
+  .joy-chips i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 0; }
+  .s-joy .source.joy-source { top: 683px; width: 1060px; color: rgba(255,246,234,.48); line-height: 1.35; }
+  .s-joy .chart .tick { fill: rgba(255,246,234,.42); font-size: 12px; }
+  .s-joy .chart .grid line { stroke: rgba(255,246,234,.09); }
+  .joy-end { font-size: 15px; font-weight: 700; }
+  .joy-end tspan { font-weight: 400; opacity: .7; }
+  .joy-note { font-size: 15px; font-style: italic; fill: rgba(255,246,234,.75); }
+
   /* ── Navigation ── */
   .nav-btn {
     position: fixed; top: 50%; z-index: 10;
@@ -273,8 +303,28 @@
       <p class="abs pnum">4</p>
     </section>
 
-    <!-- ═════════ 5 · The ask ═════════ -->
-    <section class="slide" aria-label="Slide 5">
+    <!-- ═════════ 5 · Happy staff = happy customers ═════════ -->
+    <section class="slide s-joy" id="joy" aria-label="Slide 5">
+      <div class="abs joy-photo"><img src="presentation-assets/team.jpg" alt="A smiling café team posing together outside their café"></div>
+      <div class="abs joy-shade"></div>
+      <div class="abs topbar a grow-x"></div>
+
+      <p class="abs joy-eyebrow a up" style="--d:500">Playbook step 2 · Pay at the top of the market</p>
+      <h2 class="abs joy-title a wipe" style="--d:700">Happy staff <span>=</span> happy customers</h2>
+
+      <div class="abs joy-chips">
+        <p class="a right" style="--d:1100"><i style="background:var(--joy-staff)"></i>Staff satisfaction <b>71 → 88</b> · 1st of 7</p>
+        <p class="a right" style="--d:1250"><i style="background:var(--joy-cust)"></i>Customer satisfaction <b>47.5 → 78.7</b> · 2nd of 7</p>
+      </div>
+
+      <div class="chart" id="c-joy" style="left:40px;top:478px;width:1200px;height:196px"></div>
+
+      <p class="abs source joy-source">Source: Great Minds Café weekly results, Weeks 1-14 (employee and customer satisfaction). Holding the week constant, each +1 point of staff satisfaction went with about +0.4 points of customer satisfaction. Associations, not proven causes. Photo: illustrative.</p>
+      <p class="abs pnum" style="color:var(--joy-staff)">5</p>
+    </section>
+
+    <!-- ═════════ 6 · The ask ═════════ -->
+    <section class="slide" aria-label="Slide 6">
       <div class="abs topbar a grow-x"></div>
       <h2 class="abs s-title a up" style="--d:100">Our ask: fund hiring ahead of demand</h2>
       <div class="abs brand">GREAT MINDS CAFÉ</div>
@@ -303,7 +353,7 @@
 
       <div class="abs footline a grow-x" style="--d:200"></div>
       <p class="abs source">Source: BizCafe Simulation Results, Week 14, seven teams. Recommendation is forward-looking and remains subject to testing.</p>
-      <p class="abs pnum">5</p>
+      <p class="abs pnum">6</p>
     </section>
 
   </div>
@@ -469,6 +519,99 @@
     note.textContent = 'Each dot is one café in one week';
   })();
 
+  /* ── Slide 5: two satisfaction lines drawn by a glowing tip; customers trail staff ── */
+  var joy = (function () {
+    var box = document.getElementById('c-joy'), svg = svgFor(box);
+    var w = box.clientWidth, h = box.clientHeight;
+    var x0 = 44, x1 = w - 170, y0 = h - 26, y1 = 10, lo = 35, hi = 95;
+    var sx = function (i) { return x0 + i * (x1 - x0) / 13; };
+    var sy = function (v) { return y0 - (v - lo) / (hi - lo) * (y0 - y1); };
+    var staff = [71,67,73,74,73,88,87,85,86,86,74,69,77,88];
+    var cust = [47.5,43.1,41.9,39.7,47.5,56.7,61.9,70.4,74.7,67.5,67.2,63.6,67.4,78.7];
+    var CS = '#F2B27B', CC = '#FFF6EA';
+
+    var defs = el('defs', {}, svg);
+    var glow = el('filter', { id: 'joyGlow', x: '-200%', y: '-200%', width: '500%', height: '500%' }, defs);
+    el('feGaussianBlur', { stdDeviation: 5 }, glow);
+    var grad = el('linearGradient', { id: 'joyFill', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+    el('stop', { offset: 0, 'stop-color': '#F2B27B', 'stop-opacity': .28 }, grad);
+    el('stop', { offset: 1, 'stop-color': '#F2B27B', 'stop-opacity': 0 }, grad);
+
+    var g = el('g', { 'class': 'grid' }, svg);
+    [40, 60, 80].forEach(function (v) {
+      el('line', { x1: x0, x2: x1, y1: sy(v), y2: sy(v) }, g);
+      var t = el('text', { x: x0 - 10, y: sy(v) + 4, 'text-anchor': 'end', 'class': 'tick' }, svg); t.textContent = v;
+    });
+    W.forEach(function (lab, i) { var t = el('text', { x: sx(i), y: y0 + 20, 'text-anchor': 'middle', 'class': 'tick' }, svg); t.textContent = lab; });
+
+    function build(data, color, fill) {
+      var pts = data.map(function (v, i) { return [sx(i), sy(v)]; });
+      var clip = el('clipPath', { id: 'jc' + color.slice(1) }, defs);
+      var rect = el('rect', { x: 0, y: 0, width: 0, height: h }, clip);
+      var grp = el('g', { 'clip-path': 'url(#jc' + color.slice(1) + ')' }, svg);
+      if (fill) el('path', { d: pathD(pts) + 'L' + x1 + ' ' + y0 + 'L' + x0 + ' ' + y0 + 'Z', fill: 'url(#joyFill)' }, grp);
+      el('path', { d: pathD(pts), fill: 'none', stroke: color, 'stroke-width': 3.6, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, grp);
+      pts.forEach(function (p) { el('circle', { cx: p[0], cy: p[1], r: 3.6, fill: color }, grp); });
+      var tip = el('g', { opacity: 0 }, svg);
+      el('circle', { r: 11, fill: color, opacity: .7, filter: 'url(#joyGlow)' }, tip);
+      el('circle', { r: 5.5, fill: color }, tip);
+      return { pts: pts, rect: rect, tip: tip };
+    }
+    var S = build(staff, CS, false), Cu = build(cust, CC, true);
+
+    var endS = el('text', { x: x1 + 18, y: sy(88) + 5, fill: CS, 'class': 'joy-end', opacity: 0 }, svg);
+    endS.innerHTML = 'Staff <tspan dx="4">88</tspan>';
+    var endC = el('text', { x: x1 + 18, y: sy(78.7) + 5, fill: CC, 'class': 'joy-end', opacity: 0 }, svg);
+    endC.innerHTML = 'Customers <tspan dx="4">78.7</tspan>';
+    var note = el('text', { x: sx(5.6), y: sy(41), 'class': 'joy-note', opacity: 0 }, svg);
+    note.textContent = 'Staff lifted first. Customers followed.';
+    var arrow = el('path', { d: 'M' + sx(5) + ' ' + sy(81) + 'L' + sx(5) + ' ' + sy(63), stroke: 'rgba(255,246,234,.5)', 'stroke-width': 1.5, 'stroke-dasharray': '3 4', fill: 'none', opacity: 0 }, svg);
+    [endS, endC, note, arrow].forEach(function (n) { n.style.transition = 'opacity .7s ease'; });
+
+    function yAt(pts, x) {
+      for (var i = 1; i < pts.length; i++) if (x <= pts[i][0]) {
+        var a = pts[i - 1], b = pts[i], k = (x - a[0]) / (b[0] - a[0]);
+        return a[1] + (b[1] - a[1]) * k;
+      }
+      return pts[pts.length - 1][1];
+    }
+    function setLine(L, x) {
+      L.rect.setAttribute('width', x <= x0 ? 0 : x + 6);
+      L.tip.setAttribute('transform', 'translate(' + x + ' ' + yAt(L.pts, x) + ')');
+    }
+    var raf = null, t0 = 0;
+    // The customer line runs the same course 0.9 s behind the staff line
+    var START = 1300, DUR = 3200, LAG = 900;
+    function frame(t) {
+      var done = true;
+      [[S, START], [Cu, START + LAG]].forEach(function (pair) {
+        var L = pair[0], k = Math.max(0, Math.min(1, (t - t0 - pair[1]) / DUR));
+        var e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+        setLine(L, x0 + e * (x1 - x0));
+        L.tip.setAttribute('opacity', k > 0 && k < 1 ? 1 : 0);
+        if (k < 1) done = false;
+      });
+      var el2 = t - t0;
+      if (el2 > START + LAG + DUR * .45) { note.setAttribute('opacity', 1); arrow.setAttribute('opacity', 1); }
+      if (el2 > START + DUR) endS.setAttribute('opacity', 1);
+      if (el2 > START + LAG + DUR) endC.setAttribute('opacity', 1);
+      raf = done ? null : requestAnimationFrame(frame);
+    }
+    return {
+      enter: function () {
+        this.reset();
+        if (reduce) { setLine(S, x1); setLine(Cu, x1); [endS, endC, note, arrow].forEach(function (n) { n.setAttribute('opacity', 1); }); return; }
+        t0 = performance.now(); raf = requestAnimationFrame(frame);
+      },
+      reset: function () {
+        if (raf) cancelAnimationFrame(raf); raf = null;
+        [S, Cu].forEach(function (L) { setLine(L, x0); L.tip.setAttribute('opacity', 0); });
+        [endS, endC, note, arrow].forEach(function (n) { n.setAttribute('opacity', 0); });
+      }
+    };
+  })();
+  var hooks = { joy: joy };
+
   /* ── Deck navigation ── */
   var track = document.getElementById('track'), stage = document.getElementById('stage');
   var slides = [].slice.call(track.children), hud = document.getElementById('hud');
@@ -523,10 +666,11 @@
     // Restart the incoming slide's builds; let the outgoing one finish sliding before it resets
     slides[n].classList.remove('is-live'); void slides[n].offsetWidth;
     slides[n].classList.add('is-live'); bands(slides[n], true);
+    if (hooks[slides[n].id]) hooks[slides[n].id].enter();
     countUp(slides[n]);
     if (old >= 0) {
       var o = slides[old];
-      setTimeout(function () { if (slides.indexOf(o) !== cur) { o.classList.remove('is-live'); bands(o, false); } }, reduce ? 0 : 900);
+      setTimeout(function () { if (slides.indexOf(o) !== cur) { o.classList.remove('is-live'); bands(o, false); if (hooks[o.id]) hooks[o.id].reset(); } }, reduce ? 0 : 900);
     }
     prev.disabled = n === 0; next.disabled = n === slides.length - 1;
     [].forEach.call(hud.children, function (b, i) { b.setAttribute('aria-current', i === n); });
