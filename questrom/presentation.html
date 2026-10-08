@@ -186,7 +186,35 @@
   }
   .hud button { width: 9px; height: 9px; border-radius: 99px; border: 0; background: rgba(255,255,255,.4); cursor: pointer; transition: width .35s var(--ease), background .3s; }
   .hud button[aria-current="true"] { width: 26px; background: #fff; }
-  body.idle .nav-btn, body.idle .hud { opacity: 0; }
+  .fs-btn {
+    position: fixed; right: 18px; bottom: 14px; z-index: 10;
+    width: 42px; height: 42px; border-radius: 12px; border: 1px solid rgba(255,255,255,.25);
+    background: rgba(58,32,22,.55); color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    transition: opacity .35s, background .2s;
+  }
+  .fs-btn:hover { background: rgba(184,90,51,.9); }
+  .fs-btn svg { width: 20px; height: 20px; }
+  .fs-btn .fs-off, body.is-fs .fs-btn .fs-on { display: none; }
+  body.is-fs .fs-btn .fs-off { display: block; }
+  body.is-fs { background: #000; }
+  body.is-fs .stage { box-shadow: none; }
+  .hint {
+    position: fixed; left: 50%; top: 18px; transform: translateX(-50%); z-index: 11;
+    display: flex; gap: 18px; align-items: center; white-space: nowrap;
+    padding: 10px 18px; border-radius: 99px; font-size: 14px; color: #fff;
+    background: rgba(34,19,12,.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    transition: opacity .6s, transform .6s var(--ease); pointer-events: none;
+  }
+  .hint.gone { opacity: 0; transform: translate(-50%, -12px); }
+  .hint kbd {
+    display: inline-block; min-width: 24px; padding: 2px 6px; margin-right: 4px; border-radius: 5px;
+    font-family: inherit; font-size: 12px; font-weight: 700; line-height: 1.4; text-align: center; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25);
+  }
+  .hint-focus { color: #F2B27B; }
+  .nav-btn:focus-visible, .fs-btn:focus-visible, .hud button:focus-visible { outline: 2px solid #F2B27B; outline-offset: 3px; }
+  body.idle .nav-btn, body.idle .hud, body.idle .fs-btn { opacity: 0; }
   body.idle { cursor: none; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -366,6 +394,15 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
 </button>
 <nav class="hud" id="hud" aria-label="Slides"></nav>
+<button class="fs-btn" id="fs" aria-label="Full screen" title="Full screen (F)">
+  <svg class="fs-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+  <svg class="fs-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+</button>
+<div class="hint" id="hint" role="status">
+  <span><kbd>←</kbd><kbd>→</kbd> or Space to move</span>
+  <span><kbd>F</kbd> full screen</span>
+  <span class="hint-focus" hidden>Click the slide once if keys don't respond</span>
+</div>
 
 <script>
 (function () {
@@ -622,7 +659,7 @@
   slides.forEach(function (s, i) {
     var b = document.createElement('button');
     b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-    b.addEventListener('click', function () { go(i); });
+    b.addEventListener('click', function () { go(i); this.blur(); });
     hud.appendChild(b);
   });
 
@@ -677,18 +714,56 @@
     history.replaceState(null, '', '#' + (n + 1));
   }
 
-  prev.addEventListener('click', function () { go(cur - 1); });
-  next.addEventListener('click', function () { go(cur + 1); });
-  document.addEventListener('keydown', function (e) {
-    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].indexOf(e.key) > -1) { e.preventDefault(); go(cur + 1); }
-    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].indexOf(e.key) > -1) { e.preventDefault(); go(cur - 1); }
-    else if (e.key === 'Home') go(0);
-    else if (e.key === 'End') go(slides.length - 1);
-    else if (e.key === 'f' || e.key === 'F') {
-      if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
-      else document.exitFullscreen();
+  // Buttons drop focus after a click so a later Space/Enter can't re-press them
+  function press(fn) { return function (e) { fn(); this.blur(); }; }
+  prev.addEventListener('click', press(function () { go(cur - 1); }));
+  next.addEventListener('click', press(function () { go(cur + 1); }));
+
+  /* ── Full screen (standard API, plus the webkit prefix for Safari) ── */
+  var root = document.documentElement, fsBtn = document.getElementById('fs');
+  function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement; }
+  function toggleFS() {
+    if (fsEl()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    else {
+      var req = root.requestFullscreen || root.webkitRequestFullscreen;
+      if (req) { var r = req.call(root); if (r && r.catch) r.catch(function () {}); }
     }
-  });
+  }
+  function onFS() {
+    var on = !!fsEl();
+    document.body.classList.toggle('is-fs', on);
+    fsBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+    fit(); setTimeout(fit, 120); // some browsers report the final size a beat late
+  }
+  document.addEventListener('fullscreenchange', onFS);
+  document.addEventListener('webkitfullscreenchange', onFS);
+  if (!(root.requestFullscreen || root.webkitRequestFullscreen)) fsBtn.hidden = true;
+  fsBtn.addEventListener('click', press(toggleFS));
+
+  /* ── Keyboard: captured at the window so nothing focused can swallow it ── */
+  var FWD = ['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Spacebar', 'Enter', 'n', 'N'];
+  var BACK = ['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace', 'p', 'P'];
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key, handled = true;
+    if (FWD.indexOf(k) > -1) go(cur + 1);
+    else if (BACK.indexOf(k) > -1) go(cur - 1);
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+    else if (k === 'f' || k === 'F') toggleFS();
+    else if (/^[1-9]$/.test(k)) go(+k - 1);
+    else handled = false;
+    if (handled) { e.preventDefault(); e.stopPropagation(); hideHint(); }
+  }, true);
+
+  // Clicking the slide itself gives the page keyboard focus (e.g. if the address bar still had it)
+  stage.addEventListener('mousedown', function () { window.focus(); });
+
+  /* ── Start-up hint ── */
+  var hint = document.getElementById('hint'), hintT = setTimeout(hideHint, 5000);
+  function hideHint() { clearTimeout(hintT); hint.classList.add('gone'); }
+  if (!document.hasFocus()) hint.querySelector('.hint-focus').hidden = false;
+  window.addEventListener('focus', function () { hint.querySelector('.hint-focus').hidden = true; });
 
   // Swipe on touch screens
   var tx = null;
