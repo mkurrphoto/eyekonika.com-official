@@ -130,6 +130,17 @@ The page opens in a short guided walkthrough that alternates between the custome
 chair and the cafe's; finishing or skipping it leaves the full console, which is
 also what renders with JavaScript off.
 
+## `final-presentation.html` — one-time deck (temporary)
+
+The MS 718 final investor pitch: 20 slides rebuilt from the team's PPTX, with
+images in `final-presentation-assets/`. Unlisted, nothing links to it, and the
+`Disallow: /questrom/` line already covers it. Delete both when the presentation
+is done:
+
+```bash
+rm -rf questrom/final-presentation.html questrom/final-presentation-assets/
+```
+
 ## Notes
 
 - The original delivery (`assignmentmim1/`) also shipped `.htaccess` and its own

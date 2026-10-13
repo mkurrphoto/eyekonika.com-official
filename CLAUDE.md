@@ -240,6 +240,17 @@ after the PPT, built around `presentation-assets/team.jpg`)
 (on-screen ← / → arrows, keyboard, swipe; charts are inline SVG drawn from the
 PPT's chart data). Unlisted, for one presentation. Delete both when done.
 
+### `final-presentation.html` — one-time deck (temporary)
+
+`questrom/final-presentation.html` + `questrom/final-presentation-assets/` is the
+team's MS 718 final investor pitch, rebuilt from
+`Great Minds Cafe - Investor Pitch v5 (20 slides ready to host).pptx` as a 20-slide
+web deck. Same navigation as `presentation.html`, but the stage is the PPT's own
+960×540 canvas, so positions match the PPT one-to-one. Typed digits jump, and two
+typed quickly reach slides 10–20. Charts are inline SVG drawn from the PPT's chart
+data; the slide 13 trend line is the least-squares fit of those 21 points (r = −0.59).
+Unlisted, for one presentation. Delete both when done.
+
 ### `flow-constraint-map/` — MS718 Week 4
 
 A presentable flow & constraint deck for Great Minds Cafe (GMT BizCafe, Week 11
