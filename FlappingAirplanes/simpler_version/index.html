@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<title>Simpler version | Prepared for Flapping Airplanes | Eyekonika</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gallery:#05070a;
+  --panel:#0b1016;
+  --rule:#1b2530;
+  --rule-strong:#2a3946;
+  --text:#e2e8ed;
+  --quiet:#8796a4;
+  --eyk:#2b6cc4;
+  --signal:#67d4e4;
+  --serif:"Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans:"IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top, 0px);
+  padding-bottom:env(safe-area-inset-bottom, 0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top, 0px)}
+body{height:100%;margin:0;background:var(--gallery);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.45;overflow:hidden;-webkit-font-smoothing:antialiased}
+#app{display:grid;grid-template-columns:minmax(0,1fr) 360px;height:100%}
+#stage{position:relative;overflow:hidden;cursor:grab;touch-action:none}
+#stage.dragging{cursor:grabbing}
+#c{display:block;width:100%;height:100%}
+
+/* masthead: reads like a gallery wall label */
+.mast{position:absolute;left:40px;top:34px;max-width:440px;pointer-events:none}
+.brand{display:inline-flex;align-items:center;gap:10px;pointer-events:auto;color:var(--text);text-decoration:none;margin-bottom:22px}
+.brand img{height:30px;width:auto;display:none}
+.brand.has-logo img{display:block}
+.brand.has-logo .wordmark{display:none}
+.wordmark{font-family:var(--serif);font-size:19px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:9px}
+.wordmark::before{content:"";width:14px;height:20px;border:1.5px solid var(--eyk);background:linear-gradient(160deg,rgba(43,108,196,.35),rgba(43,108,196,0) 70%);border-radius:1px}
+.mast h1{font-family:var(--serif);font-weight:300;font-size:40px;line-height:1.08;letter-spacing:-.01em;margin:0 0 12px}
+.mast p{margin:0;color:var(--quiet);font-size:13.5px;max-width:36ch}
+
+/* live summary placard */
+#spec{position:absolute;left:40px;bottom:34px;width:min(430px,calc(100% - 80px));pointer-events:none;border-left:1px solid var(--rule-strong);padding:2px 0 2px 16px}
+#spec h2{font-family:var(--serif);font-weight:400;font-size:17px;margin:0 0 8px}
+#spec ul{list-style:none;margin:0;padding:0}
+#spec li{font-size:12.5px;color:#b9c5cf;padding:2px 0;display:grid;grid-template-columns:132px 1fr;gap:10px}
+#spec li b{font-weight:500;color:var(--text)}
+.hint{position:absolute;right:22px;bottom:18px;font-size:12px;color:#5d6b78;pointer-events:none}
+
+/* control panel */
+#panel{background:var(--panel);border-left:1px solid var(--rule);overflow-y:auto;display:flex;flex-direction:column}
+.panel-head{padding:30px 24px 18px;border-bottom:1px solid var(--rule)}
+.panel-head h2{font-family:var(--serif);font-weight:400;font-size:21px;margin:0 0 4px}
+.panel-head p{margin:0;color:var(--quiet);font-size:12.5px}
+.group{padding:18px 24px;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:12px}
+.group h3{font-size:13px;font-weight:600;margin:0}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;cursor:pointer}
+.switch input{appearance:none;width:34px;height:19px;border-radius:19px;background:#26323d;position:relative;cursor:pointer;flex:none;transition:background .15s;margin:0}
+.switch input::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#c9d3db;transition:transform .15s}
+.switch input:checked{background:var(--signal)}
+.switch input:checked::after{transform:translateX(15px);background:#04161a}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font:inherit;font-size:12.5px;color:var(--quiet);background:transparent;border:1px solid var(--rule-strong);border-radius:20px;padding:4px 11px;cursor:pointer}
+.chips button[aria-pressed=true]{color:#04161a;background:var(--signal);border-color:var(--signal)}
+.note{font-size:12px;color:#6f7f8d;margin:-4px 0 0}
+.actions{padding:20px 24px 30px;display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.btn{font:inherit;font-size:13px;color:var(--text);background:transparent;border:1px solid var(--rule-strong);border-radius:6px;padding:9px 14px;cursor:pointer;width:100%;text-align:center;text-decoration:none;display:block}
+.btn:hover{border-color:var(--quiet)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+#err{position:absolute;inset:0;display:none;place-items:center;text-align:center;color:var(--quiet);padding:40px}
+@media (max-width:900px){#app{grid-template-columns:1fr;grid-template-rows:60vh 1fr}body{overflow:auto}#panel{border-left:0;border-top:1px solid var(--rule)}.mast h1{font-size:28px}#spec{display:none}}
+@media (prefers-reduced-motion:reduce){.switch input,.switch input::after{transition:none}}
+</style>
+</head>
+<body>
+<div id="app">
+  <main id="stage" aria-label="3D preview of the engraved crystal">
+    <canvas id="c"></canvas>
+    <header class="mast">
+      <a class="brand" id="brand" href="/" aria-label="Eyekonika home"><img id="eykLogo" alt="Eyekonika"><span class="wordmark">Eyekonika</span></a>
+      <h1>Prepared for Flapping Airplanes</h1>
+      <p>Simpler version: the airplane and two clouds, laser engraved inside a 6 × 6 × 10 cm crystal block. Drag to turn it, scroll to move closer.</p>
+    </header>
+    <section id="spec" aria-live="polite">
+      <h2>This configuration</h2>
+      <ul id="specList"></ul>
+    </section>
+    <div class="hint">Double-click to reset the view</div>
+    <div id="err">This preview needs WebGL. Try a recent version of Chrome, Firefox or Safari.</div>
+  </main>
+
+  <aside id="panel" aria-label="Configuration">
+    <div class="panel-head">
+      <h2>Simpler Premium</h2>
+      <p>One technique, done cleanly: 3D subsurface engraving in optical crystal.</p>
+    </div>
+
+    <div class="group">
+      <h3>Orientation</h3>
+      <div class="chips" data-key="orient">
+        <button data-v="vertical" aria-pressed="false">Vertical</button>
+        <button data-v="horizontal" aria-pressed="true">Horizontal</button>
+      </div>
+      <p class="note">Vertical stands the block upright with a smaller plane. Horizontal turns it on its side with the plane at full size.</p>
+    </div>
+
+    <div class="group">
+      <h3>Engraving density</h3>
+      <div class="chips" data-key="density">
+        <button data-v="fine" aria-pressed="false">Fine</button>
+        <button data-v="standard" aria-pressed="true">Standard</button>
+        <button data-v="bold" aria-pressed="false">Bold</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Display</h3>
+      <div class="chips" data-key="display">
+        <button data-v="oak" aria-pressed="true">Wood stand</button>
+        <button data-v="led" aria-pressed="false">LED base</button>
+        <button data-v="none" aria-pressed="false">No stand</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Scene</h3>
+      <label class="switch">Moving light<input type="checkbox" id="moveLight" checked></label>
+      <label class="switch">Turn slowly<input type="checkbox" id="spin" checked></label>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="reset">Reset view</button>
+      <a class="btn" href="/FlappingAirplanes/">See the full concept</a>
+    </div>
+  </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// Logo: same lookup idea as the main /FlappingAirplanes page. Falls back to the text wordmark.
+const EYEKONIKA_LOGO_CANDIDATES = ["/images/brand/eyekonika-logo-white.png", "/images/brand/logo-white.png", "/images/brand/logo.png"];
+
+(function () {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // logo lookup
+  (function tryLogo(i) {
+    if (i >= EYEKONIKA_LOGO_CANDIDATES.length) return;
+    const img = document.getElementById("eykLogo"), probe = new Image();
+    probe.onload = () => { img.src = probe.src; document.getElementById("brand").classList.add("has-logo"); };
+    probe.onerror = () => tryLogo(i + 1);
+    probe.src = EYEKONIKA_LOGO_CANDIDATES[i];
+  })(0);
+
+  const stage = document.getElementById("stage"), canvas = document.getElementById("c");
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); }
+  catch (e) { document.getElementById("err").style.display = "grid"; return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x05070a, 1);
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x05070a, 45, 90);
+  const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 200);
+
+  scene.add(new THREE.HemisphereLight(0xcfdcff, 0x05070a, 0.55));
+  const key = new THREE.DirectionalLight(0xffffff, 0.95); scene.add(key);
+  const rim = new THREE.PointLight(0x67d4e4, 0.6, 40); scene.add(rim);
+
+  // gallery floor
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(40, 64), new THREE.MeshStandardMaterial({ color: 0x0b1016, roughness: 0.85, metalness: 0.2 }));
+  floor.rotation.x = -Math.PI / 2; scene.add(floor);
+
+  // ---------- crystal (1 unit = 1 cm) ----------
+  const crystalGroup = new THREE.Group(); scene.add(crystalGroup);
+  const glass = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshPhysicalMaterial({
+    color: 0xd6e6ff, transparent: true, opacity: 0.1, roughness: 0.05, metalness: 0.1, clearcoat: 1, side: THREE.DoubleSide, depthWrite: false
+  }));
+  crystalGroup.add(glass);
+  const edgeGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
+  const edges = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({ color: 0xd8e6ff, transparent: true, opacity: 0.7 }));
+  const bevel = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({ color: 0x9fbfff, transparent: true, opacity: 0.2 }));
+  crystalGroup.add(edges, bevel);
+
+  // ---------- stands ----------
+  const grain = document.createElement("canvas"); grain.width = 256; grain.height = 64;
+  const gc = grain.getContext("2d"); gc.fillStyle = "#c8a274"; gc.fillRect(0, 0, 256, 64);
+  for (let i = 0; i < 70; i++) {
+    gc.strokeStyle = `rgba(${Math.random() < 0.5 ? "120,82,46" : "226,196,150"},${0.12 + Math.random() * 0.2})`;
+    gc.lineWidth = 0.6 + Math.random() * 1.6; const y = Math.random() * 64;
+    gc.beginPath(); gc.moveTo(0, y);
+    for (let x = 0; x <= 256; x += 16) gc.lineTo(x, y + Math.sin(x / 40 + i) * 2.5);
+    gc.stroke();
+  }
+  const oakTex = new THREE.CanvasTexture(grain);
+  const OAK_H = 1.6, GROOVE = 0.6, LED_H = 1.4;
+  const oak = new THREE.Mesh(new THREE.BoxGeometry(1, OAK_H, 1), new THREE.MeshStandardMaterial({ map: oakTex, roughness: 0.75, metalness: 0 }));
+  oak.position.y = OAK_H / 2; scene.add(oak);
+  const led = new THREE.Mesh(new THREE.BoxGeometry(1, LED_H, 1), new THREE.MeshStandardMaterial({ color: 0x0d1015, roughness: 0.4, metalness: 0.6 }));
+  led.position.y = LED_H / 2; scene.add(led);
+  const glow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: 0xcfe1ff, transparent: true, opacity: 0.9 }));
+  glow.rotation.x = -Math.PI / 2; glow.position.y = LED_H + 0.01; scene.add(glow);
+
+  // LED lighting: light rising through the crystal, a light under the block, and spill on the floor
+  const gradTex = (stops, w, h, radial) => {
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d");
+    const gr = radial ? x.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2) : x.createLinearGradient(0, h, 0, 0);
+    stops.forEach(([o, col]) => gr.addColorStop(o, col));
+    x.fillStyle = gr; x.fillRect(0, 0, w, h);
+    return new THREE.CanvasTexture(c);
+  };
+  const beamSide = new THREE.MeshBasicMaterial({
+    map: gradTex([[0, "rgba(150,195,255,0.55)"], [0.25, "rgba(120,170,255,0.22)"], [0.7, "rgba(110,160,255,0.06)"], [1, "rgba(110,160,255,0)"]], 4, 256),
+    transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending
+  });
+  const beamBottom = new THREE.MeshBasicMaterial({ color: 0x9cc2ff, transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending });
+  const beamTop = new THREE.MeshBasicMaterial({ visible: false });
+  const beam = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), [beamSide, beamSide, beamTop, beamBottom, beamSide, beamSide]);
+  scene.add(beam);
+  const ledLight = new THREE.PointLight(0x8fb8ff, 1.6, 22); scene.add(ledLight);
+  const halo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({
+    map: gradTex([[0, "rgba(120,170,255,0.35)"], [0.45, "rgba(90,140,255,0.12)"], [1, "rgba(90,140,255,0)"]], 256, 256, true),
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+  }));
+  halo.rotation.x = -Math.PI / 2; halo.position.y = 0.02; scene.add(halo);
+
+  // ---------- airplane point clouds ----------
+  const dot = document.createElement("canvas"); dot.width = dot.height = 64;
+  const dc = dot.getContext("2d"), dg = dc.createRadialGradient(32, 32, 0, 32, 32, 32);
+  dg.addColorStop(0, "rgba(255,255,255,1)"); dg.addColorStop(0.35, "rgba(255,255,255,0.55)"); dg.addColorStop(1, "rgba(255,255,255,0)");
+  dc.fillStyle = dg; dc.fillRect(0, 0, 64, 64);
+  const pointMat = new THREE.PointsMaterial({
+    size: 0.07, map: new THREE.CanvasTexture(dot), color: 0xe6f0ff,
+    transparent: true, opacity: 0.42, depthWrite: false, blending: THREE.AdditiveBlending
+  });
+
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const jit = () => (Math.random() - 0.5) * 0.025;
+
+  function toPoints(pts) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(pts), 3));
+    return new THREE.Points(geo, pointMat);
+  }
+
+  // Airplane in its own frame: nose toward +x, wings along z
+  function buildPlane() {
+    const pts = [];
+    const add = (x, y, z) => pts.push(x + jit(), y + jit(), z + jit());
+
+    const R = 0.42;
+    const radius = x => x > 2.6 ? R * Math.sqrt(Math.max(0, 1 - Math.pow((x - 2.6) / 1.4, 2)))
+                     : x < -1.2 ? R - (R - 0.12) * ((-1.2 - x) / 2.8) : R;
+    for (let i = 0; i < 16000; ) {
+      const x = rnd(-4, 4), r = radius(x);
+      if (Math.random() > r / R) continue;
+      const t = rnd(0, Math.PI * 2);
+      let y = r * Math.cos(t); const z = r * Math.sin(t);
+      if (x > 1.4 && x < 2.8 && y > 0) y += 0.18 * Math.sin(Math.PI * (x - 1.4) / 1.4) * (y / r);
+      add(x, y, z); i++;
+    }
+
+    // tailplane
+    for (let i = 0; i < 4200; i++) {
+      const side = Math.random() < 0.5 ? -1 : 1, s = rnd(0.15, 1.2), f = (s - 0.15) / 1.05;
+      const le = -2.75 - f * 0.45, c = 0.95 - f * 0.5;
+      let u = Math.random();
+      if (Math.random() < 0.18) u = Math.random() < 0.6 ? Math.random() * 0.05 : 1 - Math.random() * 0.04;
+      const h = 0.1 * c * Math.sin(Math.PI * Math.sqrt(u)) * 0.5;
+      add(le - u * c, 0.08 + s * 0.04 + (Math.random() < 0.5 ? h : -h), side * s);
+    }
+    // vertical fin
+    for (let i = 0; i < 3800; i++) {
+      const y = rnd(0.3, 1.65), f = (y - 0.3) / 1.35, le = -2.85 - f * 0.75, c = 1.15 - f * 0.6;
+      let u = Math.random();
+      if (Math.random() < 0.18) u = Math.random() < 0.6 ? Math.random() * 0.05 : 1 - Math.random() * 0.04;
+      const h = 0.1 * c * Math.sin(Math.PI * Math.sqrt(u)) * 0.5;
+      add(le - u * c, y, Math.random() < 0.5 ? h : -h);
+    }
+
+    // feathered wings, raised slightly at the shoulder
+    const ROOT = 0.38, RAISE = 0.36, cr = Math.cos(RAISE), sr = Math.sin(RAISE);
+    const WY = -0.1, DIH = 0.06;
+    const addWing = (x, y, z) => {
+      const side = z < 0 ? -1 : 1, s = Math.abs(z) - ROOT;
+      add(x, y * cr + s * sr, side * (ROOT + s * cr - y * sr * 0.2));
+    };
+    const leX = s => s < 1.0 ? 0.95 - (s - 0.38) * 0.32 : 0.75 - (s - 1.0) * 0.45;
+    const chord = s => 0.95 - (s - 0.38) / 1.47 * 0.4;
+    // one feather: base (bx,bz), ang 0 = straight back, PI/2 = straight out
+    const feather = (side, bx, bz, ang, L, W, y0, n, asym) => {
+      const dx = -Math.cos(ang), dz = Math.sin(ang), px = Math.sin(ang), pz = Math.cos(ang);
+      const nb = Math.max(8, Math.round(22 * L));
+      for (let i = 0; i < n; i++) {
+        let t, u; const r = Math.random();
+        if (r < 0.14) { t = Math.random(); u = 0; }
+        else if (r < 0.3) { t = Math.random(); u = Math.random() < 0.5 ? -1 : 1; }
+        else { u = rnd(-1, 1); t = Math.min(1, (Math.floor(Math.random() * nb) + 0.5) / nb + Math.abs(u) * 0.09); }
+        let w = W * Math.sin(Math.PI * Math.pow(Math.min(t, 0.999), 0.7));
+        if (u < 0) w *= asym;
+        addWing(bx + dx * t * L + px * u * w, y0 + bz * DIH - 0.06 * t * t * L, side * (bz + dz * t * L + pz * u * w));
+      }
+    };
+    for (const side of [-1, 1]) {
+      for (let i = 0; i < 2600; i++) {
+        const s = rnd(0.38, 1.85), c = chord(s);
+        let u = Math.random(); if (Math.random() < 0.25) u *= 0.08;
+        const h = 0.07 * Math.sin(Math.PI * Math.sqrt(u));
+        addWing(leX(s) - u * c * 0.75, WY + s * DIH + (Math.random() < 0.5 ? h : -h), side * s);
+      }
+      for (let k = 0; k < 11; k++) { const f = k / 10, s = 0.45 + f * 1.35; feather(side, leX(s) - 0.18, s, 0.25 + f * 0.35, 0.5, 0.11, WY + 0.06, 260, 0.8); }
+      for (let k = 0; k < 10; k++) { const f = k / 9, s = 0.45 + f * 1.1; feather(side, leX(s) - chord(s) * 0.6, s, 0.12 + f * 0.25, 1.05, 0.16, WY - 0.02, 620, 0.85); }
+      for (let k = 0; k < 9; k++) {
+        const f = k / 8, s = 1.45 + f * 0.3, L = 0.95 + 0.3 * Math.sin(Math.PI * f * 0.9);
+        feather(side, leX(s) - 0.3, s, 0.5 + f * 0.83, L, 0.14, WY - 0.01 + f * 0.03, 720, 0.55);
+      }
+    }
+    return toPoints(pts);
+  }
+
+  // Puffy cloud: outer shell of overlapping spheres with a flat underside
+  function buildCloud(cx, cy, cz, k, n) {
+    const puffs = [[-0.95, 0, 0, 0.42], [-0.4, 0.22, 0.05, 0.58], [0.25, 0.36, -0.05, 0.66], [0.9, 0.08, 0.05, 0.46],
+                   [-0.1, 0.02, 0.32, 0.5], [0.2, 0.0, -0.36, 0.48]].map(([x, y, z, r]) => [x * k, y * k, z * k, r * k]);
+    const cut = -0.18 * k, total = puffs.reduce((a, q) => a + q[3] * q[3], 0);
+    const inside = (x, y, z, skip) => puffs.some((q, i) => i !== skip && (x - q[0]) ** 2 + (y - q[1]) ** 2 + (z - q[2]) ** 2 < q[3] * q[3] * 0.985);
+    const pts = [];
+    while (pts.length < n * 3) {
+      let x, y, z;
+      if (Math.random() < 0.82) {                       // shell
+        let pick = Math.random() * total, i = 0;
+        while (pick > puffs[i][3] ** 2) pick -= puffs[i++][3] ** 2;
+        const [px, py, pz, pr] = puffs[i];
+        const u = rnd(-1, 1), t = rnd(0, Math.PI * 2), w = Math.sqrt(1 - u * u);
+        x = px + pr * w * Math.cos(t); y = py + pr * u; z = pz + pr * w * Math.sin(t);
+        if (y < cut || inside(x, y, z, i)) continue;
+      } else {                                          // flat underside
+        x = rnd(-1.4, 1.4) * k; z = rnd(-0.9, 0.9) * k; y = cut;
+        if (!inside(x, y, z, -1)) continue;
+      }
+      pts.push(cx + x + jit(), cy + y + jit(), cz + z + jit());
+    }
+    return toPoints(pts);
+  }
+
+  // Composition (full size fills the 10 × 6 × 6 cm horizontal block)
+  const comp = new THREE.Group(); crystalGroup.add(comp);
+  const pitch = new THREE.Group(); comp.add(pitch);
+  pitch.add(buildPlane());
+  pitch.quaternion.setFromEuler(new THREE.Euler(0.26, -0.15, THREE.MathUtils.degToRad(20)));
+  pitch.position.set(0.2, -0.2, 0);
+  comp.add(buildCloud(-3.45, 1.3, -1.4, 0.95, 3200));   // behind and above the tail
+  comp.add(buildCloud(3.15, -1.55, 0.9, 1.05, 3800));      // ahead and below the nose
+
+  // ---------- state ----------
+  const state = { orient: "horizontal", density: "standard", display: "oak" };
+  const DENSITY = { fine: [0.055, 0.34], standard: [0.07, 0.42], bold: [0.09, 0.55] };
+  const dims = { vertical: new THREE.Vector3(6, 10, 6), horizontal: new THREE.Vector3(10, 6, 6) };
+  const SMALL = 0.56;
+  let modeT = 1;
+  const cur = new THREE.Vector3();
+  const target = new THREE.Vector3(0, 6, 0);
+
+  function sinkDepth() { return state.display === "oak" ? OAK_H - GROOVE : state.display === "led" ? LED_H : 0; }
+
+  function applyLayout(t) {
+    const e = t * t * (3 - 2 * t);
+    cur.copy(dims.vertical).lerp(dims.horizontal, e);
+    glass.scale.copy(cur); edges.scale.copy(cur);
+    bevel.scale.set(cur.x - 0.12, cur.y - 0.12, cur.z - 0.12);
+    crystalGroup.position.y = cur.y / 2 + sinkDepth();
+    const k = SMALL + (1 - SMALL) * e;
+    comp.scale.set(k, k, k);
+    comp.position.y = 0.5 * (1 - e) + 0.3 * e;
+    oak.scale.set(cur.x + 1.4, 1, cur.z + 1.4);
+    led.scale.set(cur.x + 1.2, 1, cur.z + 1.2);
+    glow.scale.set(cur.x * 0.85, cur.z * 0.85, 1);
+    beam.scale.set(cur.x - 0.06, cur.y - 0.06, cur.z - 0.06);
+    beam.position.y = crystalGroup.position.y;
+    ledLight.position.set(0, LED_H + 0.4, 0);
+    halo.scale.set(cur.x + 9, cur.z + 9, 1);
+    target.y = crystalGroup.position.y;
+  }
+
+  function refresh() {
+    const lit = state.display === "led";
+    const [sz, op] = DENSITY[state.density]; pointMat.size = sz; pointMat.opacity = lit ? Math.min(0.85, op * 1.6) : op;
+    pointMat.color.setHex(lit ? 0xd4e6ff : 0xe6f0ff);
+    edges.material.color.setHex(lit ? 0xbcd6ff : 0xd8e6ff);
+    oak.visible = state.display === "oak";
+    led.visible = glow.visible = beam.visible = ledLight.visible = halo.visible = lit;
+    const rows = [
+      ["Tier", "Simpler Premium prototype"],
+      ["Crystal", "6 × 6 × 10 cm optical crystal"],
+      ["Orientation", state.orient === "vertical" ? "Vertical, 10 cm tall" : "Horizontal, 10 cm wide"],
+      ["Inner engraving", "3D subsurface, white points"],
+      ["Motif", "Climbing airplane, feathered wings, two clouds"],
+      ["Density", state.density[0].toUpperCase() + state.density.slice(1)],
+      ["Display", { oak: "Natural wood stand", led: "LED light base", none: "Freestanding" }[state.display]]
+    ];
+    document.getElementById("specList").innerHTML = rows.map(([k, v]) => `<li>${k}<b>${v}</b></li>`).join("");
+  }
+
+  document.querySelectorAll(".chips").forEach(group => {
+    group.addEventListener("click", e => {
+      const b = e.target.closest("button"); if (!b) return;
+      state[group.dataset.key] = b.dataset.v;
+      group.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+      if (group.dataset.key === "orient" && reduceMotion) modeT = state.orient === "horizontal" ? 1 : 0;
+      refresh();
+    });
+  });
+  const lightBox = document.getElementById("moveLight"), spinBox = document.getElementById("spin");
+  if (reduceMotion) { lightBox.checked = false; spinBox.checked = false; }
+
+  // ---------- camera orbit ----------
+  const HOME = { theta: 0.35, phi: 1.33, dist: 34 };
+  let theta = HOME.theta, phi = HOME.phi, dist = HOME.dist;
+  function placeCamera() {
+    camera.position.set(target.x + dist * Math.sin(phi) * Math.sin(theta), target.y + dist * Math.cos(phi), target.z + dist * Math.sin(phi) * Math.cos(theta));
+    camera.lookAt(target);
+  }
+  function resetView() { theta = HOME.theta; phi = HOME.phi; dist = HOME.dist; }
+  document.getElementById("reset").onclick = resetView;
+  stage.addEventListener("dblclick", resetView);
+
+  const pointers = new Map(); let pinch0 = 0, dist0 = dist;
+  stage.addEventListener("pointerdown", e => {
+    stage.setPointerCapture(e.pointerId); pointers.set(e.pointerId, { x: e.clientX, y: e.clientY }); stage.classList.add("dragging");
+    if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); dist0 = dist; }
+  });
+  stage.addEventListener("pointermove", e => {
+    if (!pointers.has(e.pointerId)) return;
+    const p = pointers.get(e.pointerId);
+    if (pointers.size === 1) { theta -= (e.clientX - p.x) * 0.008; phi = Math.min(1.62, Math.max(0.35, phi - (e.clientY - p.y) * 0.006)); }
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 2 && pinch0) { const [a, b] = [...pointers.values()]; dist = Math.min(50, Math.max(14, dist0 * pinch0 / Math.hypot(a.x - b.x, a.y - b.y))); }
+  });
+  const end = e => { pointers.delete(e.pointerId); if (pointers.size < 2) pinch0 = 0; if (!pointers.size) stage.classList.remove("dragging"); };
+  stage.addEventListener("pointerup", end); stage.addEventListener("pointercancel", end);
+  stage.addEventListener("wheel", e => { e.preventDefault(); dist = Math.min(50, Math.max(14, dist * (1 + e.deltaY * 0.001))); }, { passive: false });
+
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(stage); resize();
+
+  const clock = new THREE.Clock(); let lightA = 0.6;
+  function frame() {
+    const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime;
+    const goal = state.orient === "horizontal" ? 1 : 0;
+    if (modeT !== goal) { modeT += Math.sign(goal - modeT) * dt * 1.6; if (Math.abs(goal - modeT) < dt * 1.6) modeT = goal; }
+    applyLayout(modeT);
+
+    if (lightBox.checked) lightA += dt * 0.25;
+    key.position.set(Math.cos(lightA) * 16, 18, Math.sin(lightA) * 16);
+    rim.position.set(Math.cos(lightA + Math.PI) * 10, target.y + 4, Math.sin(lightA + Math.PI) * 10);
+    if (spinBox.checked && !pointers.size) theta += dt * 0.12;
+
+    placeCamera();
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  refresh(); applyLayout(1); frame();
+})();
+</script>
+</body>
+</html>
