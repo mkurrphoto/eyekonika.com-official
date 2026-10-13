@@ -244,11 +244,14 @@ PPT's chart data). Unlisted, for one presentation. Delete both when done.
 
 `questrom/final-presentation.html` + `questrom/final-presentation-assets/` is the
 team's MS 718 final investor pitch, rebuilt from
-`Great Minds Cafe - Investor Pitch v5 (20 slides ready to host).pptx` as a 20-slide
-web deck. Same navigation as `presentation.html`, but the stage is the PPT's own
+`second_version_to_host.pptx` (which replaced the earlier `Investor Pitch v5`) as a
+20-slide web deck. Same navigation as `presentation.html`, but the stage is the PPT's own
 960×540 canvas, so positions match the PPT one-to-one. Typed digits jump, and two
 typed quickly reach slides 10–20. Charts are inline SVG drawn from the PPT's chart
 data; the slide 13 trend line is the least-squares fit of those 21 points (r = −0.59).
+The second version leans on the rust accent, and the builds echo it: rust text
+arrives in ink and warms into rust (`.warm`), and the slide 14 cross-café links
+draw in rust and cool to the PPT's brown.
 Unlisted, for one presentation. Delete both when done.
 
 ### `flow-constraint-map/` — MS718 Week 4
