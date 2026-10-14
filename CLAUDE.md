@@ -255,6 +255,8 @@ draw in rust and cool to the PPT's brown.
 It opens on a 5-second countdown (the `timer/` ring; a "next" key or a click skips
 it), then auto-advances every 20 s, with a thin bar along the bottom filling over
 each slide. Any manual move restarts the 20 s; the last slide stays up.
+`final-presentation0.html` is the same deck without the countdown or auto-advance
+(manual only); it shares `final-presentation-assets/`.
 Unlisted, for one presentation. Delete both when done.
 
 ### `timer/` — 20-second loop timer (temporary)
