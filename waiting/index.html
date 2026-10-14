@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Great Minds Café — Waiting</title>
+<style>
+  :root { --ink: #361C0F; --rust: #BC5B33; --taupe: #6B5A4E; --card: #F7F2EB; --ease: cubic-bezier(0.16, 1, 0.3, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    min-height: 100vh; min-height: 100dvh; background: var(--card); color: var(--ink);
+    font-family: Calibri, Carlito, "Segoe UI", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased;
+    display: flex; align-items: center; justify-content: center; text-align: center; padding: 6vmin 24px;
+  }
+  main { display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 4vmin, 40px); max-width: 900px; }
+  .logo { width: min(300px, 62vw); height: auto; }
+  .slogan { font-size: clamp(12px, 2vmin, 16px); font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--rust); }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: clamp(30px, 6vw, 64px); line-height: 1.15; }
+  .btn {
+    display: inline-block; padding: 18px 40px; border-radius: 6px; background: var(--rust); color: #fff; text-decoration: none;
+    font-size: clamp(16px, 2.4vmin, 20px); font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    box-shadow: 0 10px 30px rgba(188,91,51,.35); transition: transform .25s var(--ease), background .2s;
+  }
+  .btn:hover { background: #a84e2a; transform: translateY(-2px); }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+  .in { opacity: 0; transform: translateY(18px); animation: in .9s var(--ease) forwards; animation-delay: calc(var(--d) * 1ms); }
+  @keyframes in { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .in { animation: none; opacity: 1; transform: none; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <img class="logo in" style="--d:100" src="logo.png" alt="Great Minds Café" width="640" height="559">
+  <p class="slogan in" style="--d:400">Where great minds meet</p>
+  <h1 class="in" style="--d:700">We’re ready for the future of networking, are you?</h1>
+  <a class="btn in" style="--d:1000" href="/questrom/final-presentation">Start presentation</a>
+</main>
+</body>
+</html>

@@ -266,6 +266,14 @@ venn, plan and gates slide of its own. Assets added for it carry new names
 but left in place. To change the deck, edit one file and mirror it in the other.
 Unlisted, for one presentation. Delete both when done.
 
+### `waiting/` — pre-presentation landing page (temporary)
+
+`waiting/index.html` (served at `/waiting`) is a single page with the Great Minds Café
+logo, the slogan, a bold question and a "Start presentation" button linking to
+`/questrom/final-presentation`. It is the one deliberate exception to "nothing outside
+`questrom/` references it". Own `logo.png` beside it; `noindex`, `Disallow: /waiting/` in
+`robots.txt`, absent from `sitemap.xml`. Delete the folder and the robots line when done.
+
 ### `timer/` — 20-second loop timer (temporary)
 
 `questrom/timer/index.html` (served at `/questrom/timer`) is a single-file countdown
