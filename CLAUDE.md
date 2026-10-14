@@ -254,6 +254,13 @@ arrives in ink and warms into rust (`.warm`), and the slide 14 cross-café links
 draw in rust and cool to the PPT's brown.
 Unlisted, for one presentation. Delete both when done.
 
+### `timer/` — 20-second loop timer (temporary)
+
+`questrom/timer/index.html` (served at `/questrom/timer`) is a single-file countdown
+ring that empties every 20 s and restarts forever. Whole seconds until the last two,
+which show hundredths in rust. Palette and fonts copied from `final-presentation.html`.
+Unlisted, no controls. Delete the folder when done.
+
 ### `flow-constraint-map/` — MS718 Week 4
 
 A presentable flow & constraint deck for Great Minds Cafe (GMT BizCafe, Week 11

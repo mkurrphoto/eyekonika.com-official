@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Timer — Great Minds Café</title>
+<style>
+  :root {
+    --ink: #361C0F;
+    --rust: #BC5B33;
+    --taupe: #6B5A4E;
+    --line: #E6DDD1;
+    --card: #F7F2EB;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: Calibri, Carlito, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4vmin;
+    background: var(--card); color: var(--ink); font-family: var(--sans);
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  .ey { font-size: clamp(12px, 2vmin, 18px); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); }
+  .dial { position: relative; width: min(78vmin, 640px); aspect-ratio: 1; }
+  .dial svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .track { stroke: var(--line); }
+  .tick { stroke: var(--taupe); opacity: .35; }
+  .tick.past { opacity: .08; }
+  .arc { stroke: var(--rust); stroke-linecap: round; }
+  .num {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: min(26vmin, 210px); line-height: 1;
+    font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  }
+  .num.ms { font-size: min(19vmin, 155px); color: var(--rust); }
+  .dial.end .arc { animation: pulse .5s ease-in-out infinite alternate; }
+  @keyframes pulse { to { opacity: .45; } }
+  @media (prefers-reduced-motion: reduce) { .dial.end .arc { animation: none; } }
+</style>
+</head>
+<body>
+  <p class="ey">Great Minds Café</p>
+  <div class="dial" id="dial">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle class="track" cx="100" cy="100" r="88" fill="none" stroke-width="6"/>
+      <g id="ticks"></g>
+      <circle class="arc" id="arc" cx="100" cy="100" r="88" fill="none" stroke-width="6" pathLength="1" stroke-dasharray="1 1"/>
+    </svg>
+    <div class="num" id="num" role="timer" aria-live="off">20</div>
+  </div>
+
+<script>
+  const PERIOD = 20000;
+  const dial = document.getElementById('dial');
+  const arc = document.getElementById('arc');
+  const num = document.getElementById('num');
+  const ticksG = document.getElementById('ticks');
+
+  // One tick per second, just outside the ring.
+  const ticks = [];
+  for (let i = 0; i < 20; i++) {
+    const a = (i / 20) * 2 * Math.PI;
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', 100 + 95 * Math.cos(a)); l.setAttribute('y1', 100 + 95 * Math.sin(a));
+    l.setAttribute('x2', 100 + 99 * Math.cos(a)); l.setAttribute('y2', 100 + 99 * Math.sin(a));
+    l.setAttribute('stroke-width', i % 5 ? 1 : 2);
+    l.setAttribute('class', 'tick');
+    ticksG.appendChild(l);
+    ticks.push(l);
+  }
+
+  const start = performance.now();
+  let last = '';
+  function frame(now) {
+    const left = PERIOD - ((now - start) % PERIOD);   // ms remaining, (0, 20000]
+    const frac = left / PERIOD;
+    arc.style.strokeDashoffset = 1 - frac;              // full ring → empty
+
+    const final = left <= 2000;
+    const text = final ? (left / 1000).toFixed(2) : String(Math.ceil(left / 1000));
+    if (text !== last) {
+      num.textContent = text;
+      num.classList.toggle('ms', final);
+      dial.classList.toggle('end', final);
+      const elapsed = 20 - Math.ceil(left / 1000);
+      ticks.forEach((t, i) => t.classList.toggle('past', i > 20 - elapsed));
+      last = text;
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
+</body>
+</html>
