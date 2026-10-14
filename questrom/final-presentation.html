@@ -300,7 +300,37 @@
   body.idle .nav-btn, body.idle .hud, body.idle .fs-btn { opacity: 0; }
   body.idle { cursor: none; }
 
+  /* ── Opening countdown (same ring as timer/), then the deck runs itself ── */
+  .cd {
+    position: fixed; inset: 0; z-index: 20;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4vmin;
+    background: var(--card); color: var(--ink);
+    transition: opacity .7s var(--ease), visibility 0s .7s;
+  }
+  .cd.gone { opacity: 0; visibility: hidden; }
+  .cd-ey { font-size: clamp(12px, 2vmin, 18px); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); }
+  .cd-dial { position: relative; width: min(78vmin, 640px); aspect-ratio: 1; }
+  .cd-dial svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .cd-track { stroke: var(--line); }
+  .cd-tick { stroke: var(--taupe); opacity: .35; }
+  .cd-tick.past { opacity: .08; }
+  .cd-arc { stroke: var(--rust); stroke-linecap: round; }
+  .cd-num {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: min(26vmin, 210px); line-height: 1;
+    font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  }
+  .cd-num.ms { font-size: min(19vmin, 155px); color: var(--rust); }
+  .cd-dial.end .cd-arc { animation: cd-pulse .5s ease-in-out infinite alternate; }
+  @keyframes cd-pulse { to { opacity: .45; } }
+
+  /* Thin bar along the bottom edge that fills over each slide's 20 s */
+  .autobar { position: fixed; left: 0; bottom: 0; z-index: 10; height: 3px; width: 100%; background: #E07B4C; transform-origin: left; transform: scaleX(0); opacity: .8; }
+  .autobar.run { animation: autobar var(--dur) linear forwards; }
+  @keyframes autobar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
   @media (prefers-reduced-motion: reduce) {
+    .cd-dial.end .cd-arc { animation: none; }
     .track { transition: none; }
     .a, .reveal, .dot, .bar, .seq span, .s1 .photo img, .s2 .persona img, .s15 .photo img, .opt4 img, .warm, .draw, .net-n { transition: none !important; }
     .is-live .ping, .is-live .btn-ping, .is-live .gm4-glow, .is-live .net-x { animation: none; }
@@ -718,7 +748,20 @@
 <div class="hint" id="hint" role="status">
   <span><kbd>←</kbd><kbd>→</kbd> or Space to move</span>
   <span><kbd>F</kbd> full screen</span>
+  <span>Advances every 20 s</span>
   <span class="hint-focus" hidden>Click the slide once if keys don't respond</span>
+</div>
+<div class="autobar" id="autobar" aria-hidden="true"></div>
+<div class="cd" id="cd">
+  <p class="cd-ey">Great Minds Café</p>
+  <div class="cd-dial" id="cd-dial">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle class="cd-track" cx="100" cy="100" r="88" fill="none" stroke-width="6"/>
+      <g id="cd-ticks"></g>
+      <circle class="cd-arc" id="cd-arc" cx="100" cy="100" r="88" fill="none" stroke-width="6" pathLength="1" stroke-dasharray="1 1"/>
+    </svg>
+    <div class="cd-num" id="cd-num" role="timer" aria-live="off">5</div>
+  </div>
 </div>
 
 <script>
@@ -905,6 +948,7 @@
   }
 
   function go(n) {
+    if (counting) return;
     n = Math.max(0, Math.min(slides.length - 1, n));
     if (n === cur) return;
     var old = cur; cur = n;
@@ -921,6 +965,7 @@
     prev.disabled = n === 0; next.disabled = n === slides.length - 1;
     [].forEach.call(hud.children, function (b, i) { b.setAttribute('aria-current', i === n); });
     history.replaceState(null, '', '#' + (n + 1));
+    arm();
   }
 
   // Buttons drop focus after a click so a later Space/Enter can't re-press them
@@ -957,6 +1002,11 @@
   window.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     var k = e.key, handled = true;
+    // During the opening countdown a "next" key skips it; F still works
+    if (counting && k !== 'f' && k !== 'F') {
+      if (FWD.indexOf(k) > -1) { e.preventDefault(); e.stopPropagation(); endCountdown(); }
+      return;
+    }
     if (FWD.indexOf(k) > -1) go(cur + 1);
     else if (BACK.indexOf(k) > -1) go(cur - 1);
     else if (k === 'Home') go(0);
@@ -977,7 +1027,7 @@
   stage.addEventListener('mousedown', function () { window.focus(); });
 
   /* ── Start-up hint ── */
-  var hint = document.getElementById('hint'), hintT = setTimeout(hideHint, 5000);
+  var hint = document.getElementById('hint'), hintT;
   function hideHint() { clearTimeout(hintT); hint.classList.add('gone'); }
   if (!document.hasFocus()) hint.querySelector('.hint-focus').hidden = false;
   window.addEventListener('focus', function () { hint.querySelector('.hint-focus').hidden = true; });
@@ -996,10 +1046,56 @@
   function wake() { document.body.classList.remove('idle'); clearTimeout(idle); idle = setTimeout(function () { document.body.classList.add('idle'); }, 2500); }
   document.addEventListener('mousemove', wake); wake();
 
+  /* ── Auto-advance: every slide holds for 20 s, then moves on; any manual move restarts the clock ── */
+  var AUTO = 20000, autoT, bar = document.getElementById('autobar');
+  bar.style.setProperty('--dur', AUTO + 'ms');
+  function arm() {
+    clearTimeout(autoT);
+    bar.classList.remove('run'); void bar.offsetWidth;
+    if (counting || cur === slides.length - 1) return;   // the last slide stays up
+    bar.classList.add('run');
+    autoT = setTimeout(function () { go(cur + 1); }, AUTO);
+  }
+
+  /* ── Opening 5-second countdown (the timer/ ring); the deck starts when it empties ── */
+  var CD = 5000, counting = true, cd = document.getElementById('cd');
+  var cdDial = document.getElementById('cd-dial'), cdArc = document.getElementById('cd-arc'), cdNum = document.getElementById('cd-num');
+  var cdTicks = [];
+  for (var ti = 0; ti < 5; ti++) {
+    var ang = (ti / 5) * 2 * Math.PI;
+    cdTicks.push(el('line', { x1: 100 + 95 * Math.cos(ang), y1: 100 + 95 * Math.sin(ang), x2: 100 + 99 * Math.cos(ang), y2: 100 + 99 * Math.sin(ang), 'stroke-width': 2, 'class': 'cd-tick' }, document.getElementById('cd-ticks')));
+  }
+  var cdStart = performance.now(), cdLast = '';
+  function cdFrame(now) {
+    if (!counting) return;
+    var left = CD - (now - cdStart);
+    if (left <= 0) { endCountdown(); return; }
+    cdArc.style.strokeDashoffset = 1 - left / CD;          // full ring → empty
+    var final = left <= 2000;
+    var text = final ? (left / 1000).toFixed(2) : String(Math.ceil(left / 1000));
+    if (text !== cdLast) {
+      cdNum.textContent = text;
+      cdNum.classList.toggle('ms', final);
+      cdDial.classList.toggle('end', final);
+      var elapsed = 5 - Math.ceil(left / 1000);
+      cdTicks.forEach(function (t, i) { t.classList.toggle('past', i > 5 - elapsed); });
+      cdLast = text;
+    }
+    requestAnimationFrame(cdFrame);
+  }
+  requestAnimationFrame(cdFrame);
+  cd.addEventListener('click', endCountdown);
+
   var start = parseInt(location.hash.slice(1), 10);
-  track.style.transition = 'none';
-  go(isNaN(start) ? 0 : start - 1);
-  void track.offsetWidth; track.style.transition = '';
+  function endCountdown() {
+    if (!counting) return;
+    counting = false;
+    cd.classList.add('gone');
+    track.style.transition = 'none';
+    go(isNaN(start) ? 0 : start - 1);
+    void track.offsetWidth; track.style.transition = '';
+    hintT = setTimeout(hideHint, 5000);
+  }
 })();
 </script>
 </body>
