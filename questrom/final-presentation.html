@@ -66,6 +66,7 @@
   .a.pop { transform: scale(.4); transition-timing-function: ease, cubic-bezier(.34,1.56,.64,1), ease; }
   .a.grow-x { opacity: 1; transform: scaleX(0); transform-origin: left; }
   .a.grow-y { opacity: 1; transform: scaleY(0); transform-origin: top; }
+  .a.grow-b { opacity: 1; transform: scaleY(0); transform-origin: bottom; transition-duration: .8s, 1.2s, 1.2s; }
   .a.wipe { opacity: 1; clip-path: inset(0 100% 0 0); transition-duration: .8s, .9s, 1.6s; }
   .is-live .a { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
   .slide:not(.is-live) .a { transition: none; }
@@ -102,21 +103,39 @@
   .s1.is-live .photo.a.wipe { clip-path: inset(0 0 0 0); }
 
   /* ── 2 · Maya ── */
-  .s2 .persona { left: 58px; top: 139px; width: 317px; height: 331px; overflow: hidden; }
-  .s2 .persona img { display: block; width: 317px; height: 168px; object-fit: cover; object-position: 50% 40%; transform: scale(1.1); transition: transform 6s cubic-bezier(.2,.6,.2,1); }
+  .s2 .persona { left: 58px; top: 141px; width: 316px; height: 331px; }
+  .s2 .persona .ph { position: absolute; left: 0; top: -24px; width: 316px; height: 191px; overflow: hidden; border-radius: 8px 8px 0 0; }
+  .s2 .persona img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; transform: scale(1.1); transition: transform 6s cubic-bezier(.2,.6,.2,1); }
   .s2.is-live .persona img { transform: scale(1); }
-  .s2 .persona div { padding: 12px 24px 0; }
+  .s2 .persona .tx { padding: 181px 24px 0; }
   .s2 .persona h3 { font-size: 22.7px; font-weight: 700; line-height: 1.15; }
   .s2 .persona p { font-size: 18.7px; line-height: 1.22; }
   .s2 .opt h3 { font-size: 21.3px; font-weight: 700; color: var(--rust); margin-bottom: 8px; }
   .s2 .opt p { font-size: 24px; line-height: 1.28; }
 
-  /* ── 3 · Venn ── */
-  .venn { width: 317px; height: 317px; border-radius: 50%; }
-  .venn-l { left: 86px; top: 154px; background: rgba(188,91,51,.16); border: 1.5px solid var(--rust); }
-  .venn-r { left: 278px; top: 154px; background: rgba(107,90,78,.16); border: 1.5px solid var(--ink); }
-  .vlab h3 { font-family: var(--serif); font-weight: 400; font-size: 26.7px; line-height: 1.2; }
-  .vlab p { font-size: 18.7px; line-height: 1.15; }
+  /* ── 3 · Networking is uncomfortable: the ring sweeps round to 89% ── */
+  .ring { stroke-dasharray: 0 1; transition: stroke-dasharray 1.7s cubic-bezier(.45,.05,.25,1); transition-delay: calc(var(--d, 0) * 1ms); }
+  .is-live .ring { stroke-dasharray: .89 1; }
+  .slide:not(.is-live) .ring { transition: none; }
+
+  /* ── 4 · Boston is full of our customers ── */
+  .st4 { left: 58px; width: 410px; height: 86px; display: flex; align-items: center; gap: 23px; }
+  .st4 .ci { flex: 0 0 59px; height: 59px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+  .st4 .ci img { width: 27px; height: 27px; }
+  .st4 .big { font-family: var(--serif); font-size: 34.7px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .st4 p:last-child { font-size: 18.7px; line-height: 1.2; color: var(--taupe); }
+  .hbar { transform-box: fill-box; transform-origin: left; transform: scaleX(0); transition: transform 1.1s var(--ease); transition-delay: calc(var(--d, 0) * 1ms); }
+  .is-live .hbar { transform: scaleX(1); }
+  .slide:not(.is-live) .hbar { transition: none; }
+
+  /* ── 5 · Why choose Great Minds: three overlapping circles ── */
+  .venn { width: 216px; height: 216px; border-radius: 50%; }
+  .v-coffee { left: 88px; top: 136px; background: rgba(188,91,51,.16); border: 1.5px solid var(--rust); }
+  .v-focus { left: 232px; top: 136px; background: rgba(107,90,78,.16); border: 1.5px solid var(--ink); }
+  .v-people { left: 160px; top: 258px; background: rgba(79,122,74,.16); border: 1.5px solid var(--green); }
+  .vlab { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .vlab h3 { font-family: var(--serif); font-weight: 400; font-size: 22.7px; line-height: 1.2; }
+  .vlab p { font-size: 16px; line-height: 1.15; color: var(--taupe); }
 
   /* Orange accents: text that ends up rust arrives in ink and warms into it */
   .warm { color: inherit; transition: color 1.4s ease; transition-delay: calc(var(--w, 0) * 1ms); }
@@ -127,26 +146,14 @@
   .is-live .draw { stroke-dashoffset: 0; }
   .slide:not(.is-live) .draw { transition: none; }
 
-  /* ── 4 · Three places, one café ── */
-  .opt4 { top: 139px; width: 259px; height: 154px; border-radius: 6px; overflow: hidden; }
-  .opt4 img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transition: transform 6s cubic-bezier(.2,.6,.2,1); transition-delay: calc(var(--d, 0) * 1ms); }
-  .is-live .opt4 img { transform: scale(1); }
-  .cap4 { top: 301px; width: 259px; text-align: center; font-family: var(--serif); font-size: 22.7px; line-height: 1.2; }
-  .gm4 { left: 163px; top: 371px; width: 355px; height: 113px; border-radius: 8px 0 0 8px; }
-  .gm4-photo { left: 518px; top: 371px; width: 278px; height: 113px; border-radius: 0 6px 6px 0; overflow: hidden; }
-  .gm4-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .gm4-glow { left: 163px; top: 371px; width: 633px; height: 113px; border-radius: 8px; box-shadow: 0 0 0 0 rgba(188,91,51,.55); opacity: 0; pointer-events: none; }
-  .is-live .gm4-glow { animation: glow4 2.6s ease-out 2 forwards; animation-delay: 2700ms; }
-  @keyframes glow4 { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(188,91,51,.5); } 100% { opacity: 1; box-shadow: 0 0 0 18px rgba(188,91,51,0); } }
-
-  /* ── 5 · Journey ── */
+  /* ── 6 · Journey ── */
   .jc { top: 163px; width: 69px; height: 69px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; }
   .jc img { width: 32px; height: 32px; }
   .jc.r { background: var(--rust); }
   .jt { top: 244px; width: 169px; text-align: center; font-family: var(--serif); font-size: 24px; line-height: 38px; }
   .jb { top: 346px; width: 150px; height: 96px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 18.7px; font-weight: 700; line-height: 1.15; }
 
-  /* ── 14 · Network ── */
+  /* ── 15 · Network ── */
   .net-n { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform .5s cubic-bezier(.34,1.56,.64,1); transition-delay: calc(var(--d, 0) * 1ms); }
   .is-live .net-n { transform: scale(1); }
   .slide:not(.is-live) .net-n { transition: none; }
@@ -158,7 +165,7 @@
   .mult .big { font-family: var(--serif); font-size: 34.7px; line-height: 1.15; font-variant-numeric: tabular-nums; }
   .mult p:last-child { font-size: 16px; }
 
-  /* ── 6 · CRM screen ── */
+  /* ── 7 · CRM screen ── */
   .crm { left: 58px; top: 149px; width: 480px; height: 307px; background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 30px rgba(54,28,15,.08); }
   .crm-f { font-size: 18.7px; }
   .crm-k { font-size: 12.7px; font-weight: 700; letter-spacing: 2.4px; color: var(--taupe); }
@@ -168,62 +175,69 @@
   .is-live .btn-ping { animation: btnping 2.2s ease-out infinite; animation-delay: 3200ms; }
   @keyframes btnping { 0% { transform: scale(1); opacity: .9; } 80%, 100% { transform: scale(1.12, 1.4); opacity: 0; } }
 
-  /* ── 7 · People ── */
+  /* ── 8 · People ── */
   .ic { width: 53px; height: 53px; border-radius: 50%; background: var(--rust); display: flex; align-items: center; justify-content: center; }
   .ic img { width: 24px; height: 24px; }
   .row-t { left: 472px; width: 427px; height: 69px; display: flex; flex-direction: column; justify-content: center; }
   .row-t h3 { font-size: 20px; font-weight: 700; }
   .row-t p { font-size: 18.7px; color: var(--taupe); }
 
-  /* ── 9 · Scorecard ── */
-  .score { left: 58px; top: 134px; width: 845px; border-collapse: collapse; font-size: 18.7px; }
-  .score th { background: var(--ink); color: #fff; font-size: 16px; font-weight: 700; text-align: left; padding: 0 12px; height: 38px; }
-  .score td { padding: 0 12px; height: 38px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  /* ── 9 · Investing in our team: result tiles ── */
+  .tile { left: 537px; width: 364px; height: 145px; padding: 0 19px; display: flex; flex-direction: column; justify-content: center; }
+  .tile .ey { font-size: 13.3px; margin-bottom: 2px; }
+  .tile .big2 { font-size: 32px; line-height: 1.15; margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+  /* ── 11 · Scorecard ── */
+  .score { left: 58px; top: 148px; width: 845px; border-collapse: collapse; font-size: 20px; }
+  .score th { background: var(--ink); color: #fff; font-size: 17.3px; font-weight: 700; text-align: left; padding: 0 12px; height: 50px; white-space: nowrap; }
+  .score td { padding: 0 12px; height: 50px; border-bottom: 1px solid var(--line); white-space: nowrap; }
   .score .r { text-align: right; font-variant-numeric: tabular-nums; }
   .score td:first-child { font-weight: 700; }
   .score td:nth-child(2) { color: var(--taupe); }
   .score td:last-child { font-weight: 700; }
-  .pill { top: 389px; width: 307px; height: 62px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 24px; }
 
-  /* ── 11 · Insight ── */
-  .ins { width: 259px; }
-  .ins .rule { height: 1px; background: rgba(188,91,51,.7); margin-bottom: 14px; }
-  .ins .big { font-family: var(--serif); font-size: 48px; line-height: 1.05; color: var(--rust); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
-  .ins p { font-size: 18.7px; line-height: 1.2; color: rgba(245,233,215,.92); }
+  /* ── 12 · We've built a community ── */
+  .ic12 { left: 58px; width: 48px; height: 48px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+  .ic12 img { width: 22px; height: 22px; }
+  .bl { left: 124px; width: 384px; height: 57px; display: flex; align-items: center; }
+  .bl .serif { font-size: 26.7px; font-variant-numeric: tabular-nums; }
+  .bl .lb { font-size: 18.7px; margin-left: 12px; }
+  .opt12 { top: 406px; width: 412px; height: 59px; border: 2px solid var(--rust); border-radius: 8px; display: flex; align-items: center; gap: 12px; padding: 0 22px; }
+  .opt12 .serif:first-child { font-size: 24px; }
+  .opt12 .serif.b { font-size: 21.3px; }
 
-  /* ── 12 · People engine ── */
-  .node { top: 163px; width: 221px; height: 82px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 21.3px; font-weight: 700; color: #fff; }
-  .coef { top: 130px; width: 91px; text-align: center; font-size: 17.3px; font-weight: 700; color: var(--green); }
-  .wk { top: 288px; width: 413px; height: 168px; padding: 22px 24px; }
-  .wk p { font-size: 18.7px; color: var(--taupe); margin-top: 8px; }
-  .wk p.b { color: var(--ink); font-size: 20px; margin-top: 2px; line-height: 1.2; }
+  /* ── 14 · Two tiers ── */
+  .tier { top: 129px; width: 393px; height: 345px; border-radius: 8px; }
+  .tier > * { position: absolute; }
+  .t-free { background: #fff; border: 1.7px solid var(--line); }
+  .tier .tn { left: 29px; }
+  .tier .tp { left: 29px; width: 336px; }
+  .tier .pr { font-size: 34.7px; line-height: 1.1; }
+  .tier .tr { left: 29px; top: 130px; width: 336px; height: 1px; background: var(--line); }
+  .tier .tl { left: 29px; top: 148px; width: 336px; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .tier .tl li { display: flex; align-items: flex-start; gap: 10px; font-size: 17.3px; line-height: 1.12; }
+  .tier .tl li img { width: 17px; height: 17px; margin-top: 1.5px; flex: none; }
+  .tier .tb { left: 29px; top: 277px; width: 336px; height: 48px; border-radius: 6px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 12px; font-size: 16.7px; font-weight: 700; line-height: 1.2; }
+  .tier .badge2 { top: 20px; right: 14px; width: 168px; height: 26px; border-radius: 5px; background: var(--rust); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; white-space: nowrap; }
 
-  /* ── 15 · Relationships ── */
-  .s15 .photo { left: 58px; top: 149px; width: 346px; height: 230px; overflow: hidden; }
-  .s15 .photo img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transition: transform 7s cubic-bezier(.2,.6,.2,1); }
-  .s15.is-live .photo img { transform: scale(1); }
-  .nc { left: 437px; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-  .nt { left: 499px; width: 182px; }
-  .nt h3 { font-size: 20px; font-weight: 700; line-height: 1.15; }
-  .nt p { font-size: 17.3px; color: var(--taupe); }
-
-  /* ── 16 · Three moves ── */
-  .mv { top: 144px; width: 264px; height: 235px; padding: 14px 24px; }
-  .mv .n { font-family: var(--serif); font-size: 40px; line-height: 1.2; color: var(--rust); }
-  .mv .ey { margin-top: 10px; font-size: 14px; }
-  .mv h3 { font-family: var(--serif); font-weight: 400; font-size: 24px; margin-top: 4px; }
-  .mv .rl { width: 48px; height: 2px; background: var(--rust); margin: 14px 0 12px; }
-  .mv p { font-size: 18.7px; }
-  .mv.dk h3, .mv.dk p { color: var(--cream); }
-  .seq { left: 58px; top: 403px; width: 845px; height: 58px; border-radius: 6px; background: var(--rust); color: #fff; display: flex; align-items: center; justify-content: center; gap: 26px; font-size: 20px; font-weight: 700; letter-spacing: 4px; }
-  .seq span { opacity: 0; transform: translateX(-10px); transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--d, 0) * 1ms); }
-  .is-live .seq span { opacity: 1; transform: none; }
-  .slide:not(.is-live) .seq span { transition: none; }
+  /* ── 16 · Plan ── */
+  .step { width: 268px; padding: 12px 24px 0; border-radius: 8px; }
+  .step .sr { display: flex; align-items: center; justify-content: space-between; height: 48px; }
+  .step .n { font-family: var(--serif); font-size: 34.7px; color: var(--rust); }
+  .step .mo { font-size: 16px; font-weight: 700; }
+  .step .ey { margin-top: 3px; font-size: 14px; }
+  .step h3 { font-family: var(--serif); font-weight: 400; font-size: 22.7px; line-height: 1.2; margin-top: 4px; }
+  .step .bd { font-size: 16px; line-height: 1.22; color: var(--taupe); margin-top: 4px; }
+  .step.dk h3, .step.dk .mo { color: var(--cream); }
+  .step.dk .bd { color: rgba(245,233,215,.82); }
 
   /* ── 17 · Valuation ── */
-  .calc { left: 470px; top: 149px; width: 432px; height: 250px; }
-  .calc-v { font-family: var(--serif); font-size: 29.3px; line-height: 1.15; }
-  .calc-x { font-size: 18.7px; color: var(--taupe); }
+  .calc { left: 470px; top: 144px; width: 432px; height: 148px; }
+  .calc-v { font-family: var(--serif); font-size: 24px; line-height: 1.2; }
+  .calc-x { font-size: 17.3px; color: var(--taupe); }
+  .rng { top: 412px; width: 172px; height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 14.7px; line-height: 1.2; color: var(--taupe); }
+  .rng .serif { color: var(--ink); }
+  .rng.hot, .rng.hot .serif { color: var(--rust); font-weight: 700; }
 
   /* ── 18 · The ask ── */
   .stage-c { top: 187px; width: 408px; height: 274px; }
@@ -233,17 +247,21 @@
   .use b { font-family: var(--serif); font-weight: 400; font-size: 21.3px; color: var(--rust); margin-right: 6px; }
 
   /* ── 19 · Gates ── */
-  .gate { top: 144px; width: 264px; height: 211px; padding: 16px 24px; }
-  .gate .big { font-family: var(--serif); font-size: 48px; line-height: 72px; color: #fff; margin-top: 6px; font-variant-numeric: tabular-nums; }
-  .gate .lab { font-size: 14.7px; font-weight: 700; letter-spacing: 2.6px; color: #fff; margin-top: 4px; }
-  .gate p { font-size: 17.3px; color: rgba(245,233,215,.72); margin-top: 10px; }
+  .pilot { left: 58px; top: 153px; width: 139px; height: 192px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .gate { top: 153px; width: 214px; height: 192px; padding: 12px 20px 0; border-radius: 8px; }
+  .gate .ey { font-size: 13.3px; }
+  .gate h3 { font-family: var(--serif); font-weight: 400; font-size: 21.3px; line-height: 1.2; margin: 6px 0 8px; }
+  .gate p:not(.ey) { font-size: 16px; line-height: 1.2; }
+  .out { top: 369px; width: 331px; height: 67px; border-radius: 8px; display: flex; align-items: center; padding: 0 19px; font-size: 18.7px; font-weight: 700; line-height: 1.25; }
+  .out .ol { font-size: 16px; letter-spacing: 2.4px; text-transform: uppercase; margin-right: 10px; }
 
-  /* ── 20 · Close ── */
-  .fin { top: 154px; width: 269px; }
-  .fin .big { font-family: var(--serif); font-size: 53.3px; line-height: 1.1; color: var(--rust); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .fin p { font-size: 18.7px; color: var(--cream); }
-  .term { left: 58px; width: 845px; font-size: 17.3px; color: rgba(245,233,215,.9); }
-  .term b { color: var(--rust); margin-right: 8px; }
+  /* ── 20 · What you get ── */
+  .lb20 { width: 158px; height: 38px; display: flex; align-items: flex-end; justify-content: center; line-height: 1; }
+  .lc20 { width: 158px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; }
+  .step20 { left: 428px; width: 475px; height: 59px; display: flex; align-items: center; gap: 17px; }
+  .step20 .nn { flex: 0 0 40px; height: 40px; border-radius: 50%; background: var(--ink); color: #fff; font-family: var(--serif); font-size: 18.7px; display: flex; align-items: center; justify-content: center; }
+  .step20 h3 { font-size: 20px; font-weight: 700; line-height: 1.2; }
+  .step20 p { font-size: 16.7px; line-height: 1.2; color: var(--taupe); }
 
   /* ── Navigation ── */
   .nav-btn {
@@ -332,9 +350,11 @@
   @media (prefers-reduced-motion: reduce) {
     .cd-dial.end .cd-arc { animation: none; }
     .track { transition: none; }
-    .a, .reveal, .dot, .bar, .seq span, .s1 .photo img, .s2 .persona img, .s15 .photo img, .opt4 img, .warm, .draw, .net-n { transition: none !important; }
-    .is-live .ping, .is-live .btn-ping, .is-live .gm4-glow, .is-live .net-x { animation: none; }
+    .a, .reveal, .dot, .bar, .hbar, .ring, .s1 .photo img, .s2 .persona img, .warm, .draw, .net-n { transition: none !important; }
+    .is-live .ping, .is-live .btn-ping, .is-live .net-x { animation: none; }
     .net-x { stroke: #4A2C1E; }
+    .ring { stroke-dasharray: .89 1; }
+    .hbar { transform: none; }
   }
 </style>
 </head>
@@ -345,11 +365,11 @@
 
     <!-- ═════════ 1 · Title ═════════ -->
     <section class="slide s1" aria-label="Slide 1">
-      <div class="abs photo a wipe" style="--d:100"><img src="final-presentation-assets/cafe.jpg" alt="Great Minds Café cups on a table in a busy café"></div>
-      <img class="abs a up" style="left:58px;top:48px;width:221px;--d:350" src="final-presentation-assets/logo.png" alt="Great Minds Café — Where Great Minds Meet">
-      <h1 class="abs serif a up" style="left:58px;top:270px;width:451px;font-size:29.3px;line-height:1.2;--d:600">A café where founders work and meet collaborators</h1>
+      <div class="abs photo a wipe" style="--d:100"><img src="final-presentation-assets/cafe-v3.jpg" alt="Great Minds Café cups on a table in a busy café"></div>
+      <img class="abs a up" style="left:58px;top:44px;width:221px;--d:350" src="final-presentation-assets/logo.png" alt="Great Minds Café — Where Great Minds Meet">
+      <h1 class="abs serif a up" style="left:58px;top:270px;width:451px;font-size:32px;line-height:1.2;--d:600">A Café for work and meeting collaborators</h1>
       <p class="abs muted a up" style="left:58px;top:370px;width:442px;font-size:18.7px;line-height:1.22;--d:850">A staged investment to test the model, then open café #2</p>
-      <p class="abs ey a up" style="left:58px;top:446px;--d:1100">MS 718 Final &nbsp;·&nbsp; Team 3, Blue Industry</p>
+      <p class="abs ey a up" style="left:58px;top:446px;--d:1100">MS 718 Final &nbsp;·&nbsp; Team 3, Blue Section</p>
       <p class="abs a up" style="left:58px;top:470px;font-size:16px;white-space:nowrap;--d:1250">Chris &nbsp;·&nbsp; Franzi &nbsp;·&nbsp; Krisha &nbsp;·&nbsp; Matthew &nbsp;·&nbsp; Yelizaveta</p>
       <p class="abs muted a up" style="left:58px;top:495px;font-size:14.7px;--d:1400">October 14, 2026</p>
     </section>
@@ -358,8 +378,8 @@
     <section class="slide s2" aria-label="Slide 2">
       <h2 class="abs t a up" style="--d:100">Founders need a place to work and people to build with</h2>
       <div class="abs persona card a up" style="--d:300">
-        <img src="final-presentation-assets/maya-cafe.jpg" alt="A founder working on a laptop in a café">
-        <div>
+        <div class="ph"><img src="final-presentation-assets/maya-cafe.jpg" alt="A founder working on a laptop in a café"></div>
+        <div class="tx">
           <h3>Meet Maya, 29</h3>
           <p class="muted">Building a health-tech app</p>
           <p class="ey" style="font-size:13.3px;margin:8px 0 2px">She needs</p>
@@ -369,59 +389,77 @@
       </div>
       <div class="abs opt a right" style="left:432px;top:158px;width:470px;--d:800">
         <h3>At a café</h3>
-        <p>A place to work.</p>
+        <p>A pleasant place to work.</p>
         <p class="muted">No easy way to meet collaborators.</p>
       </div>
       <div class="abs hr a grow-x" style="left:432px;top:293px;width:470px;--d:1200"></div>
       <div class="abs opt a right" style="left:432px;top:321px;width:470px;--d:1400">
         <h3>At a networking event</h3>
-        <p>People to meet.</p>
-        <p class="muted">Another evening to set aside.</p>
+        <p>A place to meet people.</p>
+        <p class="muted">Another evening to set aside and prepare for.</p>
       </div>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 3 · Venn ═════════ -->
+    <!-- ═════════ 3 · Networking is uncomfortable ═════════ -->
     <section class="slide" aria-label="Slide 3">
-      <h2 class="abs t a up" style="--d:100">Our baristas connect founders with people who can help</h2>
-      <div class="abs venn venn-l a left" style="--d:300"></div>
-      <div class="abs venn venn-r a right" style="--d:300"></div>
-      <div class="abs vlab center a up" style="left:106px;top:258px;width:158px;--d:700"><h3>Work</h3><p>A quiet place to focus</p></div>
-      <div class="abs vlab center a up" style="left:413px;top:258px;width:168px;--d:850"><h3>Connect</h3><p>People working on relevant projects</p></div>
-      <img class="abs a pop" style="left:314px;top:216px;width:54px;height:66px;--d:1300" src="final-presentation-assets/mark.png" alt="">
-      <p class="abs center rust b a up" style="left:278px;top:290px;width:125px;font-size:17.3px;line-height:1.15;--d:1500">Barista introductions</p>
-      <p class="abs serif rust a wipe" style="left:648px;top:182px;width:254px;font-size:29.3px;line-height:1.2;--d:1900">Tell us what you’re building.</p>
-      <p class="abs serif a wipe" style="left:648px;top:282px;width:254px;font-size:29.3px;line-height:1.2;--d:2500">We look for someone worth meeting.</p>
+      <h2 class="abs t a up" style="--d:100">Most people find networking uncomfortable</h2>
+      <svg class="abs" style="left:62px;top:134px" width="259" height="259" viewBox="0 0 259 259" role="img" aria-label="89 percent hold back">
+        <circle cx="129.5" cy="129.5" r="111.5" fill="none" stroke="#E6DDD1" stroke-width="36"/>
+        <circle class="ring" pathLength="1" cx="129.5" cy="129.5" r="111.5" fill="none" stroke="#BC5B33" stroke-width="36" transform="rotate(-90 129.5 129.5)" style="--d:300"/>
+      </svg>
+      <div class="abs center a pop" style="left:110px;top:211px;width:163px;height:105px;display:flex;flex-direction:column;align-items:center;justify-content:center;--d:500">
+        <p class="serif" style="font-size:48px;line-height:1.1" data-count="89" data-suffix="%">89%</p>
+        <p class="muted" style="font-size:17.3px">hold back</p>
+      </div>
+      <p class="abs center a up" style="left:57px;top:398px;width:278px;height:48px;display:flex;align-items:center;justify-content:center;font-size:17.3px;line-height:1.2;--d:1500">of U.S. workers say something holds them back from networking</p>
+      <p class="abs serif a up" style="left:385px;top:144px;width:120px;height:67px;display:flex;align-items:center;font-size:40px;--d:1000" data-count="70" data-suffix="%">70%</p>
+      <p class="abs a right" style="left:498px;top:145px;width:393px;height:67px;display:flex;align-items:center;font-size:20px;line-height:1.2;--d:1100">say who you know matters more than what is on your résumé</p>
+      <p class="abs serif rust a up" style="left:385px;top:220px;width:120px;height:67px;display:flex;align-items:center;font-size:40px;--d:1500" data-count="42" data-suffix="%">42%</p>
+      <p class="abs a right" style="left:498px;top:222px;width:393px;height:67px;display:flex;align-items:center;font-size:20px;line-height:1.2;--d:1600">hold back because they feel they are bothering someone</p>
+      <div class="abs card a up" style="left:384px;top:312px;width:518px;height:148px;--d:2100"></div>
+      <div class="abs a up" style="left:408px;top:319px;width:475px;height:134px;display:flex;flex-direction:column;justify-content:center;--d:2300">
+        <p class="ey" style="font-size:13.3px">What research shows</p>
+        <p class="serif" style="font-size:21.3px;line-height:1.2;margin-top:8px">Networking feels more natural when it happens by chance than when it is planned.</p>
+        <p class="serif rust b" style="font-size:17.3px;margin-top:10px">That is how introductions happen at Great Minds.</p>
+      </div>
+      <p class="abs fn a" style="--d:2600">Sources: Resume Now, Networking in the New Job Market (2025; 1,000 U.S. workers); Casciaro, Gino &amp; Kouchaki, Administrative Science Quarterly (2014).</p>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 4 · Three places, one café ═════════ -->
+    <!-- ═════════ 4 · Boston is full of our customers ═════════ -->
     <section class="slide" aria-label="Slide 4">
+      <h2 class="abs t a up" style="--d:100">Boston is full of our customers</h2>
+      <div class="abs st4 a up" style="top:148px;--d:300"><div class="ci"><img src="final-presentation-assets/i-students.png" alt=""></div><div><p class="big" data-count="162458" data-comma="1">162,458</p><p>students at Boston colleges and universities</p></div></div>
+      <div class="abs st4 a up" style="top:252px;--d:700"><div class="ci"><img src="final-presentation-assets/i-home.png" alt=""></div><div><p class="big" data-count="18" data-prefix="~" data-suffix="%">~18%</p><p>of Boston-area workers work from home</p></div></div>
+      <div class="abs st4 a up" style="top:356px;--d:1100"><div class="ci"><img src="final-presentation-assets/i-rocket.png" alt=""></div><div><p class="big" data-count="5" data-prefix="#">#5</p><p>startup ecosystem in the world</p></div></div>
+      <p class="abs chart-l a up" style="left:489px;top:152px;width:412px;font-size:16px;--d:1500">Cost of a day of focused work outside home</p>
+      <div class="chart" id="c-cost" style="left:480px;top:172px;width:440px;height:230px"></div>
+      <p class="abs a up" style="left:489px;top:396px;width:410px;height:43px;display:flex;align-items:center;font-size:17.3px;font-weight:700;line-height:1.2;--d:3300">Boston coworking memberships run a median $235 a month.</p>
+      <p class="abs fn a" style="top:474px;--d:3500">Sources: City of Boston, Student Housing Report (Fall 2024 data); U.S. Census Bureau ACS 2023, via Axios Boston; Startup Genome, Global Startup Ecosystem Report 2025; CoworkingCafe Q3 2025 report, via Axios Boston (Jan 2026). $6.42 = our Week 14 average price.</p>
+      <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
+    </section>
+
+    <!-- ═════════ 5 · Why choose Great Minds Café ═════════ -->
+    <section class="slide" aria-label="Slide 5">
       <h2 class="abs t a up" style="--d:100">Why choose Great Minds Café?</h2>
-      <div class="abs opt4 a up" style="left:58px;--d:300"><img src="final-presentation-assets/regular.jpg" alt="A latte and a croissant on a café table"></div>
-      <p class="abs cap4 a up" style="left:58px;--d:450">Regular Cafe</p>
-      <div class="abs opt4 a up" style="left:350px;--d:600"><img src="final-presentation-assets/coworking.jpg" alt="People working on laptops at a shared coworking table"></div>
-      <p class="abs cap4 a up" style="left:350px;--d:750">Coworking Space</p>
-      <div class="abs opt4 a up" style="left:643px;--d:900"><img src="final-presentation-assets/networking.jpg" alt="People talking at a networking event"></div>
-      <p class="abs cap4 a up" style="left:643px;--d:1050">Networking Event</p>
-      <svg class="abs" style="left:0;top:0;pointer-events:none" width="960" height="540" viewBox="0 0 960 540" fill="none" stroke="#BC5B33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path class="draw" pathLength="1" style="--d:1400" d="M186 341L301 365M292.2 368.3L301 365L294.2 358.5"/>
-        <path class="draw" pathLength="1" style="--d:1550" d="M480 337V365M475 357L480 365L485 357"/>
-        <path class="draw" pathLength="1" style="--d:1700" d="M774 341L659 365M665.8 368.3L659 365L667.8 358.5"/>
-      </svg>
-      <div class="abs gm4-glow"></div>
-      <div class="abs gm4-photo a wipe" style="--d:2200"><img src="final-presentation-assets/gm-strip.jpg" alt="Founders meeting over coffee at Great Minds Café"></div>
-      <div class="abs gm4 dk a up" style="--d:1950"></div>
-      <img class="abs a pop" style="left:186px;top:396px;width:49px;height:60px;--d:2200" src="final-presentation-assets/mark-cream.png" alt="">
-      <div class="abs a right" style="left:252px;top:371px;width:248px;height:113px;display:flex;flex-direction:column;justify-content:center;color:var(--cream);--d:2350">
-        <p class="serif" style="font-size:26.7px;line-height:1.2">Great Minds Café</p>
-        <p class="warm" style="font-size:14.7px;--w:2700">All three, for the price of a coffee</p>
+      <div class="abs venn v-coffee a left" style="--d:300"></div>
+      <div class="abs venn v-focus a right" style="--d:600"></div>
+      <div class="abs venn v-people a up" style="--d:900"></div>
+      <div class="abs vlab center a up" style="left:97px;top:187px;width:120px;height:72px;--d:700"><h3>Coffee</h3><p>what a café offers</p></div>
+      <div class="abs vlab center a up" style="left:319px;top:193px;width:120px;height:72px;--d:1000"><h3>Focus</h3><p>what coworking offers</p></div>
+      <div class="abs vlab center a up" style="left:191px;top:376px;width:153px;height:72px;--d:1300"><h3>People</h3><p>what networking events offer</p></div>
+      <img class="abs a pop" style="left:247px;top:258px;width:42px;height:51px;--d:1700" src="final-presentation-assets/mark.png" alt="">
+      <div class="abs a" style="left:528px;top:155px;width:374px;height:278px;display:flex;flex-direction:column;justify-content:center;--d:100">
+        <p class="serif rust a wipe" style="font-size:29.3px;line-height:1.2;--d:2100">Tell us what you’re building.</p>
+        <p class="serif a wipe" style="font-size:29.3px;line-height:1.2;margin-top:13px;--d:2700">We look for someone worth meeting.</p>
+        <p class="serif muted b a up" style="font-size:20px;line-height:1.25;margin-top:19px;--d:3400">All three, for the price of a coffee.</p>
       </div>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 5 · Guest journey ═════════ -->
-    <section class="slide" aria-label="Slide 5">
+    <!-- ═════════ 6 · Guest journey ═════════ -->
+    <section class="slide" aria-label="Slide 6">
       <h2 class="abs t a up" style="--d:100">Every visit is an opportunity</h2>
       <p class="abs ey a" style="left:58px;top:134px;--d:250">Guest</p>
       <div class="abs a grow-x" style="left:142px;top:197px;width:676px;height:2px;background:var(--sand);--d:250;transition-duration:.8s,.9s"></div>
@@ -432,8 +470,8 @@
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 6 · CRM ═════════ -->
-    <section class="slide" aria-label="Slide 6">
+    <!-- ═════════ 7 · CRM ═════════ -->
+    <section class="slide" aria-label="Slide 7">
       <h2 class="abs t a up" style="--d:100">Our CRM lets the barista ask the <i class="warm" style="--w:700">best questions</i> and make the <i class="warm" style="--w:1000">best introductions</i></h2>
       <div class="abs crm a up" style="--d:250"></div>
       <img class="abs a pop" style="left:86px;top:173px;width:58px;height:58px;--d:500" src="final-presentation-assets/maya.png" alt="">
@@ -456,9 +494,9 @@
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 7 · Staff ═════════ -->
-    <section class="slide" aria-label="Slide 7">
-      <h2 class="abs t a up" style="--d:100">Baristas trained as connectors and paid accordingly</h2>
+    <!-- ═════════ 8 · Staff ═════════ -->
+    <section class="slide" aria-label="Slide 8">
+      <h2 class="abs t a up" style="--d:100">EVP: Baristas as connectors and paid accordingly</h2>
       <div class="abs dk a up" style="left:58px;top:149px;width:307px;height:312px;padding:0 28px;display:flex;flex-direction:column;justify-content:center;--d:250">
         <p class="serif rust" style="font-size:72px;line-height:1" data-count="88">88</p>
         <p style="font-size:18.7px;line-height:1.2">Employee satisfaction, 2nd of 21</p>
@@ -473,112 +511,87 @@
       <div class="abs row-t a right" style="top:308px;--d:1700"><h3>Top-of-market pay</h3><p>Paid to build relationships, not rush cups</p></div>
       <div class="abs ic a pop" style="left:398px;top:396px;--d:1950"><img src="final-presentation-assets/i-cup.png" alt=""></div>
       <div class="abs row-t a right" style="top:388px;--d:2050"><h3>Friends &amp; family</h3><p>Free coffee for the people closest in their lives</p></div>
-      <p class="abs fn a" style="--d:2300">Week 14; 21 active cafes across the Blue, Green and Red industries.</p>
+      <p class="abs fn a" style="--d:2300">Week 14; 21 active cafés across the Blue, Green and Red sections.</p>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 8 · Net income ═════════ -->
-    <section class="slide" aria-label="Slide 8">
+    <!-- ═════════ 9 · Investing in our team ═════════ -->
+    <section class="slide" aria-label="Slide 9">
+      <h2 class="abs t a up" style="--d:100">Investing in our team grew customer satisfaction and market share</h2>
+      <p class="abs chart-l a up" style="top:139px;width:470px;--d:250">Customer satisfaction, Weeks 1–14</p>
+      <div class="chart" id="c-sat" style="left:48px;top:170px;width:465px;height:288px"></div>
+      <div class="abs tile card a right" style="top:139px;--d:2400">
+        <p class="ey">Week 6 raise</p>
+        <p class="serif muted" style="font-size:16px">Pay $17.75 → $18.71; servers 12 → 23</p>
+        <p class="serif big2">#1</p>
+        <p class="b" style="font-size:17.3px">in Blue section revenue by Week 7</p>
+      </div>
+      <div class="abs tile card a right" style="top:305px;--d:3000">
+        <p class="ey">Weeks 13–14 raise</p>
+        <p class="serif muted" style="font-size:16px">Pay $18.91 → $23.50; servers 25 → 48</p>
+        <p class="serif big2">12.7% → 17.9%</p>
+        <p class="b" style="font-size:17.3px">market share in two weeks</p>
+      </div>
+      <p class="abs fn a" style="--d:3500">Across 84 team-weeks in our section, higher pay went with higher staff satisfaction (+0.69), and staff satisfaction with market share (+0.34). Standardized coefficients.</p>
+      <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
+    </section>
+
+    <!-- ═════════ 10 · Net income ═════════ -->
+    <section class="slide" aria-label="Slide 10">
       <h2 class="abs t a up" style="--d:100">In 14 weeks we went from a $3.6k weekly loss to $45.8k of weekly net income</h2>
       <p class="abs chart-l a up" style="--d:250">Weekly net income, Weeks 1–14</p>
       <div class="chart" id="c-ni" style="left:48px;top:178px;width:566px;height:288px"></div>
       <div class="abs side card a right" style="--d:2600">
         <p class="big" data-count="24" data-suffix="%">24%</p>
         <p>of our 14-week net income came in Week 14 alone</p>
-        <p class="b green">4th-steepest finish of 21 cafes</p>
+        <p class="b green">4th-steepest finish of 21 cafés</p>
       </div>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 9 · Scorecard ═════════ -->
-    <section class="slide" aria-label="Slide 9">
+    <!-- ═════════ 11 · Scorecard ═════════ -->
+    <section class="slide" aria-label="Slide 11">
       <h2 class="abs t a up" style="--d:100">Our performance: strengths and levers</h2>
       <table class="abs score">
-        <thead><tr class="a" style="--d:250"><th style="width:220px">Metric</th><th style="width:250px">Our measure</th><th class="r" style="width:100px">Week 14</th><th>Where it stands</th></tr></thead>
+        <thead><tr class="a" style="--d:250"><th style="width:200px">Metric</th><th style="width:230px">Our measure</th><th class="r" style="width:110px">Week 14</th><th>Where it stands</th></tr></thead>
         <tbody>
           <tr class="a up" style="--d:450"><td>Employee retention</td><td>Employee satisfaction*</td><td class="r" data-count="88">88</td><td class="green">Strength: 2nd of 21</td></tr>
           <tr class="a up" style="--d:600"><td>Completed journeys</td><td>Cups sold*</td><td class="r" data-count="9750" data-comma="1">9,750</td><td class="green">Strength: 3rd of 21</td></tr>
           <tr class="a up" style="--d:750"><td>Engagement</td><td>Revenue per cup*</td><td class="r" data-count="8.65" data-dec="2" data-prefix="$">$8.65</td><td>In line with market</td></tr>
           <tr class="a up" style="--d:900"><td>Preference</td><td>Average price</td><td class="r" data-count="6.42" data-dec="2" data-prefix="$">$6.42</td><td class="rust">Lever: earn via the CRM</td></tr>
-          <tr class="a up" style="--d:1050"><td>Profitability</td><td>Net margin</td><td class="r" data-count="54.3" data-dec="1" data-suffix="%">54.3%</td><td class="rust">Lever: fill to 85%</td></tr>
+          <tr class="a up" style="--d:1050"><td>Profitability</td><td>Net margin</td><td class="r" data-count="54.3" data-dec="1" data-suffix="%">54.3%</td><td class="rust">Lever: monetize network system</td></tr>
         </tbody>
       </table>
-      <div class="abs pill card a up" style="left:125px;--d:2000">Steady Flight</div>
-      <svg class="abs a grow-x" style="left:444px;top:413px;--d:2400" width="72" height="14" viewBox="0 0 72 14"><path d="M2 7H68M61 2l7 5-7 5" fill="none" stroke="#BC5B33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div class="abs pill a pop" style="left:528px;background:var(--rust);color:#fff;box-shadow:0 10px 30px rgba(188,91,51,.35);--d:2700">New Heights!</div>
-      <p class="abs fn a" style="--d:2900">*Proxy measure from the simulation exports. Week 14; 21 active cafes across the Blue, Green and Red industries.</p>
+      <p class="abs fn a" style="--d:2000">*Proxy measure from the simulation exports. Week 14; 21 active cafés across the Blue, Green and Red sections.</p>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 10 · Satisfaction ═════════ -->
-    <section class="slide" aria-label="Slide 10">
-      <h2 class="abs t a up" style="--d:100">As we invested in our team, customer satisfaction climbed from 47.5 to 78.7</h2>
-      <p class="abs chart-l a up" style="--d:250">Satisfaction scores, Weeks 1–14</p>
-      <div class="abs legend a up" style="left:110px;top:180px;--d:350">
-        <span><span class="ln" style="background:var(--ink)"></span>Employee satisfaction</span>
-        <span><span class="ln" style="background:var(--rust)"></span>Customer satisfaction</span>
-      </div>
-      <div class="chart" id="c-sat" style="left:48px;top:200px;width:566px;height:266px"></div>
-      <div class="abs side card a right" style="--d:3000">
-        <p class="big" data-count="31" data-prefix="+">+31</p>
-        <p>points of customer satisfaction in 14 weeks</p>
-        <p class="b green">Week 14: 6th of 21 cafes for customers, 2nd for staff</p>
-      </div>
-      <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
-    </section>
-
-    <!-- ═════════ 11 · Insight ═════════ -->
-    <section class="slide dark" aria-label="Slide 11">
-      <h2 class="abs serif a wipe" style="left:58px;top:62px;width:845px;font-size:37.3px;line-height:1.2;color:var(--cream);--d:200">The system already wins people and traffic.</h2>
-      <h2 class="abs serif rust a wipe" style="left:58px;top:126px;width:760px;font-size:37.3px;line-height:1.2;--d:1100">But much of the value it creates is still uncaptured.</h2>
-      <div class="abs ins" style="left:58px;top:274px">
-        <div class="rule a grow-x" style="--d:1900"></div>
-        <p class="big a pop" style="--d:2000">$0</p>
-        <p class="a up" style="--d:2100">earned so far from the relationships our CRM holds</p>
-      </div>
-      <div class="abs ins" style="left:343px;top:274px">
-        <div class="rule a grow-x" style="--d:2300"></div>
-        <p class="big a up" style="--d:2400" data-count="78.7" data-dec="1">78.7</p>
-        <p class="a up" style="--d:2500">customer satisfaction: goodwill we can turn into revenue</p>
-      </div>
-      <div class="abs ins" style="left:628px;top:274px">
-        <div class="rule a grow-x" style="--d:2700"></div>
-        <p class="big a up" style="--d:2800"><span data-count="1">1</span> café</p>
-        <p class="a up" style="--d:2900">every member’s network stops at our front door</p>
-      </div>
-      <img class="abs mk" src="final-presentation-assets/mark-cream.png" alt="">
-    </section>
-
-    <!-- ═════════ 12 · People engine ═════════ -->
+    <!-- ═════════ 12 · Built a community, now monetize it ═════════ -->
     <section class="slide" aria-label="Slide 12">
-      <h2 class="abs t a up" style="--d:100">Invest in people: a proven path to higher market share</h2>
-      <div class="abs node a up" style="left:58px;background:var(--ink);--d:300">Server pay</div>
-      <svg class="abs a grow-x" style="left:288px;top:197px;--d:700" width="72" height="14" viewBox="0 0 72 14"><path d="M2 7H68M61 2l7 5-7 5" fill="none" stroke="#4F7A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <p class="abs coef a pop" style="left:278px;--d:900" data-count="0.69" data-dec="2" data-prefix="+">+0.69</p>
-      <div class="abs node a up" style="left:370px;background:var(--ink);--d:1100">Staff satisfaction</div>
-      <svg class="abs a grow-x" style="left:600px;top:197px;--d:1500" width="72" height="14" viewBox="0 0 72 14"><path d="M2 7H68M61 2l7 5-7 5" fill="none" stroke="#4F7A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <p class="abs coef a pop" style="left:590px;--d:1700" data-count="0.34" data-dec="2" data-prefix="+">+0.34</p>
-      <div class="abs node a pop" style="left:682px;background:var(--green);box-shadow:0 10px 26px rgba(79,122,74,.3);--d:1900">Market share</div>
-      <div class="abs wk card a up" style="left:58px;--d:2400">
-        <p class="ey" style="margin:0">Week 6</p>
-        <p>Pay $17.75 → $18.71; servers 12 → 23</p>
-        <p class="b">Net income +$5.5k; staff satisfaction +15</p>
+      <h2 class="abs t a up" style="--d:100">We’ve built a community: now it needs to be monetized.</h2>
+      <p class="abs ey a" style="left:58px;top:139px;height:24px;display:flex;align-items:center;--d:250">What we have built</p>
+      <div class="abs ic12 a pop" style="top:177px;--d:500"><img src="final-presentation-assets/i-smile.png" alt=""></div>
+      <div class="abs bl a right" style="top:172px;--d:600"><p><span class="serif" data-count="78.7" data-dec="1">78.7</span><span class="lb">customer satisfaction, up 31 points</span></p></div>
+      <div class="abs ic12 a pop" style="top:242px;--d:1000"><img src="final-presentation-assets/i-people.png" alt=""></div>
+      <div class="abs bl a right" style="top:238px;--d:1100"><p><span class="serif" data-count="88">88</span><span class="lb">staff satisfaction, 2nd of 21</span></p></div>
+      <div class="abs ic12 a pop" style="top:308px;--d:1500"><img src="final-presentation-assets/i-idcard.png" alt=""></div>
+      <div class="abs bl a right" style="top:303px;--d:1600"><p><span class="serif">Daily</span><span class="lb">profiles and introductions</span></p></div>
+      <div class="abs card a up" style="left:537px;top:139px;width:364px;height:206px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;--d:2200">
+        <p class="serif rust" style="font-size:72px;line-height:1.05">$0</p>
+        <p class="b" style="font-size:20px;line-height:1.2">earned from the network today</p>
       </div>
-      <div class="abs wk card a up" style="left:490px;--d:2650">
-        <p class="ey" style="margin:0">Week 14</p>
-        <p>Pay $20.00 → $23.50; servers 45 → 48</p>
-        <p class="b">Net income +$19.2k; customer satisfaction +11</p>
-      </div>
-      <p class="abs fn a" style="--d:2900">Standardized coefficients; Blue industry, Weeks 1–14, week and team controls, n = 84. Weekly moves are same-week associations.</p>
+      <p class="abs ey a" style="left:58px;top:374px;height:24px;display:flex;align-items:center;--d:2800">How do we capture more?</p>
+      <div class="abs opt12 a up" style="left:58px;--d:3100"><span class="serif rust">A</span><span class="serif b">Raise menu prices</span></div>
+      <div class="abs opt12 a up" style="left:490px;--d:3400"><span class="serif rust">B</span><span class="serif b">Charge for the network</span></div>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
     <!-- ═════════ 13 · Price vs satisfaction ═════════ -->
     <section class="slide" aria-label="Slide 13">
-      <h2 class="abs t a up" style="--d:100">Menu price hikes cost satisfaction, so we will earn more per guest through the CRM</h2>
-      <p class="abs chart-l a up" style="--d:250">Average price vs. customer satisfaction, Week 14, 21 cafes</p>
+      <h2 class="abs t a up" style="--d:100">Higher prices cost satisfaction</h2>
+      <p class="abs chart-l a up" style="--d:250">Average price vs. customer satisfaction, Week 14, 21 cafés</p>
       <div class="abs legend a up" style="left:244px;top:180px;--d:350">
-        <span><i style="background:var(--sand)"></i>Other cafes</span>
+        <span><i style="background:var(--sand)"></i>Other cafés</span>
         <span><i style="background:var(--rust)"></i>Great Minds</span>
         <span><span class="ln" style="background:none;border-top:2px dashed var(--taupe);height:0;vertical-align:4px"></span>Trend</span>
       </div>
@@ -586,52 +599,45 @@
       <div class="abs side card a right" style="--d:2800">
         <p class="big" style="font-size:48px">r = −0.6</p>
         <p>Higher cup prices go with lower satisfaction</p>
-        <p class="b">Our move: keep coffee accessible and charge for priority connections</p>
+        <p class="b">Option A would erode what we built. So we take option B.</p>
       </div>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 14 · Relationships ═════════ -->
-    <section class="slide s15" aria-label="Slide 14">
-      <h2 class="abs t a up" style="--d:100">Relationships are our next revenue stream</h2>
-      <div class="abs photo a up" style="--d:250"><img src="final-presentation-assets/community.jpg" alt="Founders talking over coffee at Great Minds Café"></div>
-      <div class="abs a up" style="left:58px;top:392px;width:346px;--d:500">
-        <p class="ey" style="font-size:12.7px;letter-spacing:1.8px">The CRM already builds the community</p>
-        <p class="muted" style="font-size:17.3px;line-height:1.2;margin-top:2px">Opt-in profiles, follow-ups, introductions and repeat visits</p>
+    <!-- ═════════ 14 · Two tiers ═════════ -->
+    <section class="slide" aria-label="Slide 14">
+      <h2 class="abs t a up" style="--d:100">Two tiers: Free and Premium</h2>
+      <div class="abs tier t-free a up" style="left:58px;--d:250">
+        <p class="ey tn" style="font-size:18.7px;letter-spacing:3px;top:21px">Free</p>
+        <div class="tp" style="top:50px"><p class="serif pr">$0</p><p class="muted" style="font-size:16px">with any coffee</p></div>
+        <div class="tr"></div>
+        <ul class="tl">
+          <li class="a right" style="--d:900"><img src="final-presentation-assets/i-check-green.png" alt="">Barista builds your profile</li>
+          <li class="a right" style="--d:1050"><img src="final-presentation-assets/i-check-green.png" alt="">Introductions when a match is in the room</li>
+          <li class="a right" style="--d:1200"><img src="final-presentation-assets/i-check-green.png" alt="">Follow-ups on your project each visit</li>
+          <li class="a right" style="--d:1350"><img src="final-presentation-assets/i-check-green.png" alt="">Talks and events calendar</li>
+        </ul>
+        <div class="tb" style="background:var(--card);color:var(--green)">Included for every customer</div>
       </div>
-      <div class="abs a grow-y" style="left:458px;top:190px;width:2px;height:230px;background:var(--sand);--d:800;transition-duration:.8s,1.8s"></div>
-      <div class="abs nc a pop" style="top:168px;--d:900">01</div>
-      <div class="abs nt a right" style="top:166px;--d:1000"><h3>Profile</h3><p>Opt-in goals</p></div>
-      <div class="abs nc a pop" style="top:245px;--d:1300">02</div>
-      <div class="abs nt a right" style="top:243px;--d:1400"><h3>Follow up</h3><p>Remember needs</p></div>
-      <div class="abs nc a pop" style="top:322px;background:var(--rust);--d:1700">03</div>
-      <div class="abs nt a right" style="top:320px;--d:1800"><h3>Introduce</h3><p>Relevant matches</p></div>
-      <div class="abs nc a pop" style="top:398px;--d:2100">04</div>
-      <div class="abs nt a right" style="top:396px;--d:2200"><h3>Return</h3><p>Build regulars</p></div>
-      <div class="abs dk a right" style="left:701px;top:149px;width:202px;height:312px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;--d:2600">
-        <p class="serif rust" style="font-size:58.7px;line-height:1.1">$0</p>
-        <p style="font-size:14px;font-weight:700;letter-spacing:2.6px;margin-top:4px">CRM REVENUE<br>TODAY</p>
-        <p class="serif" style="font-size:21.3px;font-style:italic;margin-top:24px">Upside, not proof</p>
+      <div class="abs tier t-prem dk a up" style="left:508px;--d:1700">
+        <span class="badge2">More introductions</span>
+        <p class="ey tn" style="font-size:18.7px;letter-spacing:3px;top:19px">Premium</p>
+        <div class="tp" style="top:54px"><p class="serif pr" style="color:var(--cream)">Under $25/mo</p><p style="font-size:16px;color:rgba(245,233,215,.78)">Final price set in the pilot</p></div>
+        <div class="tr" style="top:139px;background:rgba(245,233,215,.2)"></div>
+        <ul class="tl" style="top:159px">
+          <li class="a right" style="--d:2500"><img src="final-presentation-assets/i-check-rust.png" alt="">Everything in Free</li>
+          <li class="a right" style="--d:2650"><img src="final-presentation-assets/i-check-rust.png" alt="">Scheduled introductions, even if they are not in today</li>
+          <li class="a right" style="--d:2800"><img src="final-presentation-assets/i-check-rust.png" alt="">Baristas mention you to relevant guests</li>
+        </ul>
+        <div class="tb a pop" style="background:var(--rust);color:#fff;--d:3200">A month of introductions for less than one coworking day pass</div>
       </div>
-      <p class="abs fn a" style="--d:2800">AI-generated photo for illustration.</p>
+      <p class="abs fn a" style="top:480px;--d:3500">Boston median coworking day pass: $45 (CoworkingCafe Q3 2025 report, via Axios Boston (Jan 2026)).</p>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 15 · Three moves ═════════ -->
+    <!-- ═════════ 15 · Two cafés, one network ═════════ -->
     <section class="slide" aria-label="Slide 15">
-      <h2 class="abs t a up" style="--d:100">3 moves. One disciplined sequence.</h2>
-      <div class="abs mv card a up" style="left:58px;--d:300"><p class="n">01</p><p class="ey">Monetize</p><h3>Connections</h3><div class="rl"></div><p>Test a freemium tier.</p></div>
-      <div class="abs mv dk a up" style="left:348px;--d:700"><p class="n">02</p><p class="ey">Grow</p><h3>The community</h3><div class="rl"></div><p>Events and introductions build regulars.</p></div>
-      <div class="abs mv card a up" style="left:638px;--d:1100"><p class="n">03</p><p class="ey">Expand</p><h3>Only after proof</h3><div class="rl"></div><p>Café #2</p></div>
-      <div class="abs seq a grow-x" style="--d:1600">
-        <span style="--d:2100">TEST VALUE</span><span style="--d:2350">→</span><span style="--d:2600">GROW COMMUNITY</span><span style="--d:2850">→</span><span style="--d:3100">SCALE</span>
-      </div>
-      <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
-    </section>
-
-    <!-- ═════════ 16 · Network ═════════ -->
-    <section class="slide" aria-label="Slide 16">
-      <h2 class="abs t a up" style="--d:100">A second café doubles each member’s network and quadruples the possible introductions</h2>
+      <h2 class="abs t a up" style="--d:100">Two cafés, one network</h2>
       <div class="abs card a up" style="left:58px;top:144px;width:317px;height:317px;border-radius:6px;--d:200"></div>
       <p class="abs ey a" style="left:82px;top:160px;font-size:14px;letter-spacing:4px;--d:250">One café</p>
       <div class="abs mult a up" style="left:82px;top:388px;--d:1500"><p class="big">1×</p><p class="muted">possible introductions</p></div>
@@ -644,19 +650,45 @@
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
+    <!-- ═════════ 16 · Plan ═════════ -->
+    <section class="slide" aria-label="Slide 16">
+      <h2 class="abs t a up" style="--d:100">Our plan: test, grow, then scale</h2>
+      <div class="abs step card a up" style="left:58px;top:268px;height:187px;--d:300">
+        <div class="sr"><span class="n">01</span><span class="mo">Months 0–3</span></div>
+        <p class="ey">Test</p><h3>Launch Premium in café #1</h3><p class="bd">Free stays free; the coffee side must hold steady</p>
+      </div>
+      <div class="abs step a up" style="left:346px;top:206px;height:249px;background:#E9D3C1;--d:900">
+        <div class="sr"><span class="n">02</span><span class="mo">Months 3–6</span></div>
+        <p class="ey">Grow</p><h3>Build the community</h3><p class="bd">Events and introductions turn guests into regulars</p>
+      </div>
+      <div class="abs step dk a up" style="left:634px;top:144px;height:312px;--d:1500">
+        <div class="sr"><span class="n">03</span><span class="mo">Months 6–12</span></div>
+        <p class="ey">Scale</p><h3>Open café #2</h3><p class="bd">One CRM, one network, more introductions for everyone</p>
+      </div>
+      <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
+    </section>
+
     <!-- ═════════ 17 · Valuation ═════════ -->
     <section class="slide" aria-label="Slide 17">
       <h2 class="abs t a up" style="--d:100">What is the business worth today?</h2>
       <div class="abs calc card a right" style="--d:250"></div>
-      <p class="abs calc-v a up" style="left:499px;top:176px;--d:500">$29.1K / week</p>
-      <p class="abs calc-x a up" style="left:499px;top:212px;--d:900">× 52 weeks</p>
-      <div class="abs a grow-x" style="left:499px;top:262px;width:374px;height:1px;background:var(--sand);--d:1200"></div>
-      <p class="abs calc-v a up" style="left:499px;top:284px;--d:1400"><span data-count="1.51" data-dec="2" data-prefix="$" data-suffix="M">$1.51M</span> annualized</p>
-      <p class="abs calc-x a up" style="left:499px;top:320px;--d:2000">× 2.2× café SDE benchmark</p>
-      <p class="abs serif a up" style="left:58px;top:208px;font-size:80px;line-height:1;--d:2400" data-count="3.3" data-dec="1" data-prefix="$" data-suffix="M">$3.3M</p>
-      <p class="abs ey a up" style="left:58px;top:300px;font-size:14.7px;--d:2600">Estimated enterprise value</p>
-      <p class="abs a" style="left:58px;top:436px;font-size:14.7px;font-weight:700;letter-spacing:2.6px;color:var(--taupe);--d:3000">ILLUSTRATIVE ESTIMATE &nbsp;·&nbsp; NOT A VERIFIED MARKET VALUATION</p>
-      <p class="abs fn a" style="--d:3000">Benchmark: BizBuySell Coffee Shop &amp; Café valuation benchmarks, 2021–2025 (average 2.2× SDE, seller’s discretionary earnings).</p>
+      <div class="abs a up" style="left:494px;top:148px;width:393px;height:139px;display:flex;flex-direction:column;justify-content:center;--d:500">
+        <p><span class="calc-v">$29.1K / week</span><span class="calc-x">&nbsp;&nbsp; × 52 weeks</span></p>
+        <div class="hr a grow-x" style="margin:10px 0;background:var(--sand);--d:1200"></div>
+        <p class="calc-v a up" style="--d:1400">= <span data-count="1.51" data-dec="2" data-prefix="$" data-suffix="M">$1.51M</span> annual net income</p>
+        <p class="calc-x a up" style="margin-top:6px;--d:2000">× 2.2&nbsp; average café earnings multiple</p>
+      </div>
+      <div class="abs a up" style="left:58px;top:144px;width:374px;height:144px;display:flex;flex-direction:column;justify-content:center;--d:2400">
+        <p class="serif" style="font-size:74.7px;line-height:1.05" data-count="3.3" data-dec="1" data-prefix="$" data-suffix="M">$3.3M</p>
+        <p class="ey" style="font-size:14.7px;margin-top:6px">Estimated enterprise value</p>
+      </div>
+      <p class="abs ey a" style="left:58px;top:317px;height:24px;display:flex;align-items:center;font-size:13.3px;--d:2800">Range of sale multiples</p>
+      <div class="abs a grow-x" style="left:258px;top:364px;width:506px;height:40px;background:var(--sand);--d:3000"></div>
+      <div class="abs a grow-y" style="left:593px;top:353px;width:5px;height:63px;background:var(--rust);--d:3500"></div>
+      <div class="abs rng a up" style="left:172px;--d:3200"><p class="serif" style="font-size:21.3px">$2.3M</p><p>1.5× lower quartile</p></div>
+      <div class="abs rng hot a up" style="left:510px;--d:3600"><p class="serif" style="font-size:21.3px">$3.3M</p><p>2.2× average</p></div>
+      <div class="abs rng a up" style="left:678px;--d:3400"><p class="serif" style="font-size:21.3px">$3.9M</p><p>2.55× upper quartile</p></div>
+      <p class="abs fn a" style="--d:3800">Illustrative estimate, not a verified market valuation. Multiples: BizBuySell Coffee Shop &amp; Café benchmarks, 2021–2025 (sale price ÷ owner earnings).</p>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
@@ -673,7 +705,7 @@
       <p class="abs amt a up" style="left:82px;top:250px;--d:900" data-count="75" data-prefix="$" data-suffix="K">$75K</p>
       <p class="abs ey a" style="left:232px;top:271px;width:210px;text-align:right;font-size:13.3px;letter-spacing:2px;white-space:nowrap;--d:1000">Prove café #1</p>
       <div class="abs hr a grow-x" style="left:82px;top:324px;width:360px;background:var(--sand);--d:1100"></div>
-      <p class="abs a up" style="left:82px;top:338px;font-size:18.7px;line-height:1.3;--d:1200">CRM + training &nbsp;·&nbsp; Freemium test<br>Events program &nbsp;·&nbsp; Café upgrades</p>
+      <p class="abs a up" style="left:82px;top:338px;font-size:18.7px;line-height:1.3;--d:1200">CRM + training &nbsp;·&nbsp; Premium pilot<br>Events program &nbsp;·&nbsp; Café upgrades</p>
       <p class="abs muted a up" style="left:82px;top:406px;font-size:16px;font-style:italic;--d:1300">Measured against agreed gates</p>
 
       <div class="abs stage-c dk a up" style="left:494px;--d:1600"></div>
@@ -682,7 +714,7 @@
       <p class="abs ey a" style="left:668px;top:271px;width:210px;text-align:right;font-size:13.3px;letter-spacing:2px;white-space:nowrap;--d:2000">Expand to café #2</p>
       <div class="abs a grow-x" style="left:518px;top:324px;width:360px;height:1px;background:rgba(245,233,215,.2);--d:2100"></div>
       <p class="abs use a up" style="left:518px;top:344px;--d:2300"><b>$175K</b>Acquisition</p>
-      <p class="abs use a up" style="left:706px;top:344px;--d:2450"><b>$100K</b>Refit (CapEx)</p>
+      <p class="abs use a up" style="left:706px;top:344px;--d:2450"><b>$100K</b>Refit</p>
       <p class="abs use a up" style="left:518px;top:392px;--d:2600"><b>$25K</b>CRM + training</p>
       <p class="abs use a up" style="left:706px;top:392px;--d:2750"><b>$50K</b>Working capital</p>
       <p class="abs fn a" style="top:474px;--d:3000">Estimates. BizBuySell median coffee-shop asking price $175K; South End Boston café listed at $195K; build-out $75–150 per sq ft (2026 industry guides).</p>
@@ -692,43 +724,40 @@
     <!-- ═════════ 19 · Gates ═════════ -->
     <section class="slide" aria-label="Slide 19">
       <h2 class="abs t a up" style="--d:100">No 2nd café until these gates are met</h2>
-      <div class="abs gate dk a up" style="left:58px;--d:300">
-        <p class="ey">Gate 1</p>
-        <p class="big" data-count="57" data-from="54.3" data-suffix="%+">57%+</p>
-        <p class="lab">NET MARGIN</p>
-        <p>from 54.3%</p>
-      </div>
-      <div class="abs gate dk a up" style="left:348px;--d:800">
-        <p class="ey">Gate 2</p>
-        <p class="big">TEST</p>
-        <p class="lab">PAID-TIER DEMAND</p>
-        <p>Opt-in + willingness to pay</p>
-      </div>
-      <div class="abs gate dk a up" style="left:638px;--d:1300">
-        <p class="ey">Gate 3</p>
-        <p class="big" data-count="78" data-from="70" data-suffix="+">78+</p>
-        <p class="lab">CUSTOMER SATISFACTION</p>
-        <p>Hold our Week 14 level</p>
-      </div>
-      <div class="abs card a up" style="left:58px;top:379px;width:845px;height:82px;--d:2000"></div>
-      <div class="abs a up" style="left:86px;top:395px;white-space:nowrap;--d:2200"><p class="ey" style="font-size:13.3px">People guardrail</p><p class="b" style="font-size:20px;margin-top:2px">Staff satisfaction ≥ 85</p></div>
-      <div class="abs a grow-y" style="left:456px;top:394px;width:1px;height:53px;background:var(--sand);--d:2400"></div>
-      <div class="abs a up" style="left:478px;top:395px;white-space:nowrap;--d:2500"><p class="ey" style="font-size:13.3px">Track</p><p style="font-size:18.7px;margin-top:2px">Intro → repeat visit &nbsp;·&nbsp; Retention &nbsp;·&nbsp; CLV:CAC</p></div>
+      <div class="abs pilot dk a up" style="--d:300"><p class="ey">Pilot</p><p class="serif" style="font-size:24px;line-height:1.2;margin-top:8px">Café #1</p><p style="font-size:16px">Months 0–6</p></div>
+      <svg class="abs a grow-x" style="left:198px;top:242px;--d:700" width="18" height="14" viewBox="0 0 18 14"><path d="M1 7H15M10 2l6 5-6 5" fill="none" stroke="#BC5B33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="abs gate card a up" style="left:217px;--d:900"><p class="ey">Gate 1</p><h3>Will guests pay for Premium?</h3><p class="b">Sign-ups and renewals</p><p class="muted">Targets agreed with you before launch</p></div>
+      <svg class="abs a grow-x" style="left:433px;top:242px;--d:1400" width="18" height="14" viewBox="0 0 18 14"><path d="M1 7H15M10 2l6 5-6 5" fill="none" stroke="#BC5B33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="abs gate card a up" style="left:453px;--d:1600"><p class="ey">Gate 2</p><h3>Does the café stay strong?</h3><p class="b">Customer and staff satisfaction</p><p class="muted">At least 78.7 and 85, our Week 14 levels</p></div>
+      <svg class="abs a grow-x" style="left:669px;top:242px;--d:2100" width="18" height="14" viewBox="0 0 18 14"><path d="M1 7H15M10 2l6 5-6 5" fill="none" stroke="#BC5B33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="abs gate card a up" style="left:688px;--d:2300"><p class="ey">Gate 3</p><h3>Does profit rise?</h3><p class="b">Net margin with Premium</p><p class="muted">Above 54.3%, our Week 14 level</p></div>
+      <div class="abs out a up" style="left:217px;background:var(--rust);color:#fff;--d:3000"><span><span class="ol">All yes</span>Release $350K and open café #2</span></div>
+      <div class="abs out a up" style="left:570px;border:1.7px solid var(--sand);--d:3400"><span><span class="ol">Any no</span>Stage 2 money is never drawn</span></div>
+      <p class="abs fn a" style="--d:3700">Every threshold is measured against our own Week 14 results, so passing means the network adds value without hurting the café.</p>
       <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
-    <!-- ═════════ 20 · Close ═════════ -->
-    <section class="slide dark" aria-label="Slide 20">
-      <h2 class="abs t a up" style="--d:100">A staged Buy lifts enterprise value from $3.3M to about $4.7M in two years</h2>
-      <div class="abs fin a up" style="left:58px;--d:400"><p class="big" data-count="3.3" data-dec="1" data-prefix="$" data-suffix="M">$3.3M</p><p>EV today</p></div>
-      <div class="abs fin a up" style="left:341px;--d:900"><p class="big" data-count="4.7" data-from="3.3" data-dec="1" data-prefix="~$" data-suffix="M">~$4.7M</p><p>Year-2 EV, two cafes</p></div>
-      <div class="abs fin a up" style="left:624px;--d:1400"><p class="big" data-count="2.2" data-from="1" data-dec="1" data-prefix="~" data-suffix="×">~2.2×</p><p>Investor MOIC in 2 years</p></div>
-      <div class="abs a grow-x" style="left:58px;top:288px;width:845px;height:1px;background:rgba(245,233,215,.16);--d:1900"></div>
-      <p class="abs term a up" style="top:302px;font-size:18.7px;line-height:1.25;--d:2100"><b>Terms</b>$425k for ~11% at a $3.3M pre-money; stake worth ~$0.54M plus ~$0.40M of distributions</p>
-      <p class="abs term a up" style="top:352px;--d:2300"><b>Year 2</b>café #1 run-rate +16% + café #2 SDE ≈ $1.86M earnings × 2.55× (upper-quartile multiple)</p>
-      <p class="abs term a up" style="top:384px;--d:2500"><b>Upside</b>freemium revenue from the CRM is not in these numbers</p>
-      <p class="abs fn a" style="top:478px;width:576px;color:rgba(245,233,215,.6);--d:2700">Illustrative estimates, not a verified market valuation.</p>
-      <img class="abs a up" style="left:763px;top:387px;width:139px;--d:2900" src="final-presentation-assets/logo-cream.png" alt="Great Minds Café">
+    <!-- ═════════ 20 · What you get ═════════ -->
+    <section class="slide" aria-label="Slide 20">
+      <h2 class="abs t a up" style="--d:100">What you get for $425K</h2>
+      <div class="abs a grow-x" style="left:58px;top:441px;width:326px;height:1px;background:var(--sand);--d:200"></div>
+      <div class="abs a grow-b" style="left:67px;top:304px;width:120px;height:137px;background:var(--ink);--d:400"></div>
+      <p class="abs lb20 serif a up" style="left:48px;top:261px;font-size:24px;--d:1300" data-count="425" data-prefix="$" data-suffix="K">$425K</p>
+      <p class="abs lc20 a up" style="left:48px;top:446px;--d:600">You invest</p>
+      <div class="abs a grow-b" style="left:240px;top:229px;width:120px;height:212px;background:var(--rust);--d:1700"></div>
+      <div class="abs a grow-b" style="left:240px;top:177px;width:120px;height:52px;background:#E7B9A0;--d:2700;transition-duration:.8s,.7s"></div>
+      <p class="abs a up" style="left:240px;top:229px;width:120px;height:43px;display:flex;align-items:center;justify-content:center;font-size:17.3px;font-weight:700;color:#fff;--d:2400" data-count="660" data-prefix="$" data-suffix="K">$660K</p>
+      <p class="abs a up" style="left:240px;top:177px;width:120px;height:51px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;--d:3200" data-count="160" data-prefix="$" data-suffix="K">$160K</p>
+      <p class="abs lb20 serif a up" style="left:211px;top:134px;width:177px;font-size:24px;--d:3300" data-count="820" data-prefix="~$" data-suffix="K">~$820K</p>
+      <p class="abs lc20 a up" style="left:211px;top:446px;width:177px;--d:1900">Yours by Year 2</p>
+
+      <p class="abs ey a" style="left:428px;top:139px;height:24px;display:flex;align-items:center;--d:3700">How you get paid</p>
+      <div class="abs step20 a up" style="top:172px;--d:3900"><span class="nn">1</span><div><h3>8% preferred return</h3><p>Paid to you before anyone else, every year</p></div></div>
+      <div class="abs step20 a up" style="top:241px;--d:4300"><span class="nn">2</span><div><h3>Your share of payouts</h3><p>~11% of quarterly payouts; we pay out half of net income</p></div></div>
+      <div class="abs step20 a up" style="top:311px;--d:4700"><span class="nn">3</span><div><h3>Your stake</h3><p>~11% of a two-café company, worth ~$5.8M in Year 2</p></div></div>
+      <div class="abs card a up" style="left:428px;top:388px;width:475px;height:72px;display:flex;align-items:center;padding:0 19px;font-size:17.3px;line-height:1.25;--d:5200"><span><b class="rust">If a gate fails</b>&nbsp; only $75K is drawn; you keep ~2% of café #1 and the 8% preferred return.</span></div>
+      <p class="abs fn a" style="--d:5500">Illustrative: $3.3M pre-money; 2.2× multiple held constant; equity value includes retained cash; Premium revenue excluded (upside). Not a verified valuation.</p>
+      <img class="abs mk" src="final-presentation-assets/mark.png" alt="">
     </section>
 
   </div>
@@ -812,14 +841,14 @@
     return { sx: sx, sy: sy };
   }
 
-  /* ── 5 · Guest journey: a warm thread runs along the stops; Order and Meet are the orange beats ── */
+  /* ── 6 · Guest journey: a warm thread runs along the stops; Order and Meet are the orange beats ── */
   (function () {
     var stops = [
       ['arrive', 'Arrive', 'Guest opts in at first order'],
-      ['order', 'Order', 'Barista logs the answer'],
+      ['order', 'Order', 'Barista logs new information'],
       ['work', 'Work', 'Profile grows each visit'],
       ['meet', 'Meet', 'CRM flags a match in the room'],
-      ['return', 'Return', 'Optional paid tier offered']
+      ['return', 'Return', 'New people every time']
     ], s = '';
     stops.forEach(function (st, i) {
       var d = 400 + i * 380, cx = 108 + Math.round(i * 168.75), r = i === 1 || i === 3;
@@ -831,7 +860,7 @@
     html('journey', s);
   })();
 
-  /* ── 8 · Weekly net income ── */
+  /* ── 10 · Weekly net income ── */
   lineChart({
     box: 'c-ni', pad: [10, 18, 30, 64], min: -10000, max: 50000, step: 10000, delay: 400,
     fmt: function (v) { return (v < 0 ? '-$' : '$') + Math.abs(v).toLocaleString('en-US'); },
@@ -839,16 +868,25 @@
       labels: { 0: { t: '-$3.6k', dy: 20 }, 13: { t: '$45.8k', dx: -8, dy: 4, anchor: 'end' } } }]
   });
 
-  /* ── 10 · Satisfaction ── */
+  /* ── 9 · Customer satisfaction, Weeks 1–14 ── */
   lineChart({
-    box: 'c-sat', pad: [12, 44, 30, 44], min: 30, max: 100, step: 10, delay: 500,
+    box: 'c-sat', pad: [12, 16, 30, 40], min: 30, max: 90, step: 10, delay: 500,
     fmt: function (v) { return v; },
-    series: [
-      { data: [71,67,73,74,73,88,87,85,86,86,74,69,77,88], color: C.ink, labels: { 13: { t: '88', dx: 10, dy: 4, anchor: 'start' } } },
-      { data: [47.5,43.1,41.9,39.7,47.5,56.7,61.9,70.4,74.7,67.5,67.2,63.6,67.4,78.7], color: C.rust, lag: 500,
-        labels: { 0: { t: '47.5', dy: 20 }, 13: { t: '78.7', dx: 10, dy: 4, anchor: 'start' } } }
-    ]
+    series: [{ data: [47.5,43.1,41.9,39.7,47.5,56.7,61.9,70.4,74.7,67.5,67.2,63.6,67.4,78.7], color: C.rust }]
   });
+
+  /* ── 4 · Cost of a day of focused work: a coffee vs a coworking day pass ── */
+  (function () {
+    var box = document.getElementById('c-cost'), svg = svgFor(box);
+    var x0 = 180, k = 185 / 45, bh = 70;
+    el('line', { x1: x0, x2: x0, y1: 12, y2: 218, stroke: C.sand, 'stroke-width': 1 }, svg);
+    [['Coworking day pass', 45, 170, C.sand, 0, '$45.00'], ['Great Minds (a coffee)', 6.42, 62, C.rust, 900, '$6.42']].forEach(function (r) {
+      var w = r[1] * k;
+      txt({ x: x0 - 12, y: r[2] + 5, 'text-anchor': 'end', fill: C.ink, style: 'font-size:16px' }, svg, r[0]);
+      el('rect', { x: x0, y: r[2] - bh / 2, width: w, height: bh, fill: r[3], 'class': 'hbar', style: '--d:' + (1700 + r[4]) }, svg);
+      txt({ x: x0 + w + 10, y: r[2] + 6, fill: C.ink, 'class': 'dot', style: 'font-size:17.3px;--d:' + (2700 + r[4]) }, svg, r[5]);
+    });
+  })();
 
   /* ── 13 · Price vs satisfaction scatter ── */
   (function () {
@@ -883,7 +921,7 @@
     txt({ x: gx + 16, y: gy + 5, 'text-anchor': 'start', 'class': 'lbl dot', fill: C.rust, style: '--d:2700' }, svg, 'Great Minds');
   })();
 
-  /* ── 14 · Network: one café, then two cafés on one CRM; the new cross-café links arrive in rust and cool down ── */
+  /* ── 15 · Network: one café, then two cafés on one CRM; the new cross-café links arrive in rust and cool down ── */
   (function () {
     var svg = el('svg', { width: 960, height: 540, viewBox: '0 0 960 540', style: 'position:absolute;left:0;top:0;pointer-events:none' }, document.getElementById('net'));
     // Node centres straight from the PPT; each café is a hexagon

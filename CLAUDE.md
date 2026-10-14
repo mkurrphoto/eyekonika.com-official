@@ -255,8 +255,15 @@ draw in rust and cool to the PPT's brown.
 It opens on a 5-second countdown (the `timer/` ring; a "next" key or a click skips
 it), then auto-advances every 20 s, with a thin bar along the bottom filling over
 each slide. Any manual move restarts the 20 s; the last slide stays up.
-`final-presentation0.html` is the same deck without the countdown or auto-advance
-(manual only); it shares `final-presentation-assets/`.
+Both decks are now built from `Final version for hosting.pptx` (20 slides; the earlier
+`second_version_to_host.pptx` version is gone). `final-presentation.html` is the timed
+one described above; `final-presentation0.html` is identical in content but manual only
+(no countdown, auto-advance or progress bar). The deck adds networking-research,
+Boston-market, two-tier (Free/Premium) and "What you get for $425K" slides, and has a
+venn, plan and gates slide of its own. Assets added for it carry new names
+(`cafe-v3.jpg`, `i-students/home/rocket/smile/people/idcard.png`,
+`i-check-green/rust.png`); older assets in `final-presentation-assets/` are now unused
+but left in place. To change the deck, edit one file and mirror it in the other.
 Unlisted, for one presentation. Delete both when done.
 
 ### `timer/` — 20-second loop timer (temporary)
